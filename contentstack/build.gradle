@@ -1,0 +1,63 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 22
+    buildToolsVersion "22.0.1"
+
+    defaultConfig {
+        //applicationId "com.builtio.contentstack"
+        minSdkVersion 15
+        targetSdkVersion 22
+        versionCode 1
+        versionName "1.0"
+
+        //testApplicationId "com.builtio.contentstack.test"
+        //testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    lintOptions {
+        abortOnError false
+    }
+
+}
+
+repositories {
+    flatDir {
+        dirs 'libs'
+    }
+
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile 'com.android.support:appcompat-v7:22.2.0'
+    compile 'com.android.support:support-v4:22.0.0'
+}
+
+task clearJar(type: Delete) {
+    delete 'build/libs/Contentstack.jar'
+}
+
+task unzip(type: Copy) {
+    def zipFile = file('build/intermediates/bundles/release/classes.jar')
+    def outputDir = file("${buildDir}/Contentstack-jar")
+
+    from zipTree(zipFile)
+    into outputDir
+}
+
+task createJar(type: Jar) {
+    archiveName='Contentstack.jar'
+    from ('build/Contentstack-jar/')
+
+    include 'com/builtio/'
+    include 'META-INF/'
+}
+
+createJar.dependsOn(clearJar, unzip, build)
+
