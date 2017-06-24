@@ -24,7 +24,6 @@ class AssetModel {
     int count = 0;
 
     protected WeakHashMap<String, Object> _metadata= null;
-    protected ArrayList<HashMap<String, Object>> publishDetails  = new ArrayList<HashMap<String, Object>>();
 
     public AssetModel(JSONObject responseJSON, boolean isArray, boolean isFromCache) {
 
@@ -67,19 +66,6 @@ class AssetModel {
             while (iterator.hasNext()) {
                 String key = iterator.next();
                 _metadata.put(key, _metadataJSON.optString(key));
-            }
-        }else if(json != null && json.has("publish_details")){
-
-            JSONArray publishArray = json.optJSONArray("publish_details");
-            for (int i = 0; i < publishArray.length(); i++) {
-                JSONObject jsonObject = publishArray.optJSONObject(i);
-                Iterator<String> iterator = jsonObject.keys();
-                HashMap<String, Object> hashMap = new HashMap<>();
-                while (iterator.hasNext()) {
-                    String key = iterator.next();
-                    hashMap.put(key, jsonObject.opt(key));
-                }
-                publishDetails.add(hashMap);
             }
         }
 

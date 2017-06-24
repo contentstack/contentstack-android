@@ -26,7 +26,6 @@ class EntryModel {
     protected String[] tags					   = null;
     protected WeakHashMap<String, Object> ownerMap = null;
     protected WeakHashMap<String, Object> _metadata= null;
-    protected ArrayList<HashMap<String, Object>> publishDetails  = new ArrayList<HashMap<String, Object>>();
 
     private JSONArray tagsArray = null;
 
@@ -74,25 +73,6 @@ class EntryModel {
                     }
                     _metadata.put(key, _metadataJSON.optString(key));
                 }
-            }else if(jsonObject != null && jsonObject.has("publish_details")){
-
-                JSONArray publishArray = jsonObject.optJSONArray("publish_details");
-                for (int i = 0; i < publishArray.length(); i++) {
-                    JSONObject jsonObject = publishArray.optJSONObject(i);
-                    Iterator<String> iterator = jsonObject.keys();
-                    HashMap<String, Object> hashMap = new HashMap<>();
-                    while (iterator.hasNext()) {
-                        String key = iterator.next();
-                        hashMap.put(key, jsonObject.opt(key));
-                    }
-                    publishDetails.add(hashMap);
-                }
-
-                if(_metadata == null) {
-                    _metadata = new WeakHashMap<>();
-                    _metadata.put("publish_details", publishArray);
-                }
-
             }
 
 

@@ -383,7 +383,6 @@ public class AssetLibrary implements INotifyClass{
                 asset.fileName     = model.fileName;
                 asset.json         = model.json;
                 asset.assetUid = model.uploadedUid;
-                asset.publishDetails =model.publishDetails;
                 asset.setTags(model.tags);
                 model = null;
 
@@ -476,7 +475,6 @@ public class AssetLibrary implements INotifyClass{
                 asset.fileName     = model.fileName;
                 asset.json         = model.json;
                 asset.assetUid = model.uploadedUid;
-                asset.publishDetails =model.publishDetails;
                 asset.setTags(model.tags);
                 model = null;
 

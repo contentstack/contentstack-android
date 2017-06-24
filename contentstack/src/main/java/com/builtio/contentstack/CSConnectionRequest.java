@@ -202,9 +202,6 @@ class CSConnectionRequest implements IRequestModelHTTP{
             if(model._metadata != null) {
                 entryInstance._metadata = new HashMap<>(model._metadata);
             }
-            if(model.publishDetails != null){
-                entryInstance.publishDetails = model.publishDetails;
-            }
 
             entryInstance.uid		   		= model.entryUid;
             entryInstance.setTags(model.tags);
@@ -230,7 +227,6 @@ class CSConnectionRequest implements IRequestModelHTTP{
             assetInstance.fileName     = model.fileName;
             assetInstance.json         = model.json;
             assetInstance.assetUid = model.uploadedUid;
-            assetInstance.publishDetails =model.publishDetails;
             assetInstance.setTags(model.tags);
 
             model = null;

@@ -42,7 +42,6 @@ public class Entry {
     protected String ownerUid                    = null;
     protected HashMap<String, Object> owner      = null;
     protected HashMap<String, Object> _metadata  = null;
-    protected ArrayList<HashMap<String, Object>> publishDetails  = null;
     protected String title                       = null;
     protected String url                         = null;
     private JSONArray referenceArray;
@@ -81,9 +80,6 @@ public class Entry {
         }
         if(model._metadata != null) {
             this._metadata = new HashMap<>(model._metadata);
-        }
-        if(model.publishDetails != null){
-            this.publishDetails = model.publishDetails;
         }
 
         this.uid		   		= model.entryUid;
@@ -1074,16 +1070,6 @@ public class Entry {
         return this;
     }
 
-    /**
-     * Get publish details.
-     *
-     * @return
-     *          {@link ArrayList} of the {@link HashMap} for publish details.
-     *
-     */
-    public ArrayList<HashMap<String, Object>> getPublishDetails(){
-        return publishDetails;
-    }
 
 
     protected void setTags(String[] tags) {
@@ -1271,9 +1257,7 @@ public class Entry {
         if(model._metadata != null) {
             this._metadata = new HashMap<>(model._metadata);
         }
-        if(model.publishDetails != null){
-            this.publishDetails = model.publishDetails;
-        }
+
 
         this.uid = model.entryUid;
         setTags(model.tags);
