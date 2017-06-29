@@ -2086,6 +2086,7 @@ public class Query implements INotifyClass{
                 entry._metadata = new HashMap<>(((EntryModel) objects.get(i))._metadata);
             }
 
+
             entry.setTags(((EntryModel) objects.get(i)).tags);
             objectList.add(entry);
         }

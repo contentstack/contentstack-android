@@ -25,23 +25,24 @@ public class Config {
      * BuiltConfig config = new BuiltConfig();
      * </pre>
      */
+
     public Config(){}
 
     /**
      * Sets host name of the Built.io Contentstack server.
      *
      * @param hostName
-     * 					host name.
+     * host name.
      *
      * <p>
      * <b>Note:</b> Default hostname sets to <a href ="https://cdn.contentstack.io"> cdn.contentstack.io </a>
      *  and default protocol is HTTPS.
-     *
      * <br><br><b>Example :</b><br>
      * <pre class="prettyprint">
      * config.setHost("cdn.contentstack.io");
      * </pre>
      */
+
     public void setHost(String hostName){
         if(!TextUtils.isEmpty(hostName)) {
             URL = hostName;
@@ -146,7 +147,6 @@ public class Config {
 
     /**
      * Get environment.
-     *
      *  <br><br><b>Example :</b><br>
      *  <pre class="prettyprint">
      *  String environment = config.getEnvironment();

@@ -165,9 +165,8 @@ public class Asset {
 
     /**
      * To set uid of media file which is uploaded on Built.io Contentstack server.
-     *
      * @param assetUid
-     * 					upload uid.
+     * upload uid.
      *
      * <br><br><b>Example :</b><br>
      * <pre class="prettyprint">
@@ -363,6 +362,8 @@ public class Asset {
     public String getDeletedBy(){
         return json.optString("deleted_by");
     }
+
+
 
     /**
      * Get tags.

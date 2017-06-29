@@ -259,7 +259,7 @@ public class Entry {
      * Get object value for key.
      *
      * @param key
-     *             field_uid as key.
+     * field_uid as key.
      *
      * <br><br><b>Example :</b><br>
      * <pre class="prettyprint">
@@ -691,7 +691,6 @@ public class Entry {
                 Asset asset = contentTypeInstance.stackInstance.asset().configure(assetArray.optJSONObject(i));
                 assets.add(asset);
             }
-
         }
         return assets;
     }
@@ -1258,7 +1257,6 @@ public class Entry {
             this._metadata = new HashMap<>(model._metadata);
         }
 
-
         this.uid = model.entryUid;
         setTags(model.tags);
         model = null;
@@ -1276,6 +1274,7 @@ public class Entry {
      *     entry.cancelRequest();
      * </pre>
      */
+
     public void cancelRequest() {
         CSAppConstants.cancelledCallController.add(CSAppConstants.callController.ENTRY.toString());
 
@@ -1288,9 +1287,9 @@ public class Entry {
      * To set cache policy using {@link Query} instance.
      *
      * @param cachePolicy
-     *                    {@link CachePolicy} instance.
+     * {@link CachePolicy} instance.
      * @return
-     *           {@link Query} object, so you can chain this call.
+     * {@link Query} object, so you can chain this call.
      *
      * <br><br><b>Example :</b><br>
      * <pre class="prettyprint">
@@ -1298,7 +1297,6 @@ public class Entry {
      *      //'blt6d0240b5sample254090d' is dummy access token.
      *      Stack stack = Contentstack.stack(context, "blt5d4sample2633b", "blt6d0240b5sample254090d", "stag", false);
      *      Entry entry = stack.contentType("form_name").entry();<br>
-     *
      *      entry.setCachePolicy(NETWORK_ELSE_CACHE);
      * </pre>
      */
@@ -1335,7 +1333,6 @@ public class Entry {
             while (iterator.hasNext()) {
                 String key = iterator.next();
                 Object value = otherPostJSON.get(key);
-
                 mainJson.put(key, value);
             }
 
@@ -1348,17 +1345,14 @@ public class Entry {
             if(objectUidForExcept != null && objectUidForExcept.length() > 0){
                 mainJson.put("except[BASE][]", objectUidForExcept);
                 objectUidForExcept = null;
-
             }
 
             if(exceptJsonObject != null && exceptJsonObject.length() > 0){
-
                 mainJson.put("except", exceptJsonObject);
                 exceptJsonObject = null;
             }
 
             if(onlyJsonObject != null && onlyJsonObject.length() > 0){
-
                 mainJson.put("only", onlyJsonObject);
                 onlyJsonObject = null;
             }

@@ -26,12 +26,9 @@ import java.io.File;
 public class Contentstack {
 
     private static final String TAG = "Contentstack";
-
     protected static RequestQueue requestQueue;
     protected static Context applicationContext = null;
-
     private Contentstack(){}
-
 
     /**
      *
@@ -41,20 +38,20 @@ public class Contentstack {
      * You can find your stack api key from web.
      *
      * @param context
-     *                   application context.
+     * application context.
      *
      * @param stackApiKey
-     *                   application api Key of your application on Built.io Contentstack.
+     * application api Key of your application on Built.io Contentstack.
      *
      * @param accessToken
-     *                   access token
+     * access token
      *
      * @param environment
-     *                   environment name
+     * environment name
      *
      *
      * @return
-     *         {@link Stack} instance.
+     * {@link Stack} instance.
      *
      * @throws Exception
      *
@@ -72,9 +69,7 @@ public class Contentstack {
                     if(!TextUtils.isEmpty(environment)) {
                         Config config = new Config();
                         config.setEnvironment(environment);
-
                         return initializeStack(context, stackApiKey, accessToken, config);
-
                     }else{
                         throw new Exception(CSAppConstants.ErrorMessage_Stack_Environment_IsNull);
                     }
@@ -96,19 +91,19 @@ public class Contentstack {
      * You can find your stack api key from web.
      *
      * @param context
-     *                   application context.
+     * application context.
      *
      * @param stackApiKey
-     *                   application api Key of your application on Built.io Contentstack.
+     * application api Key of your application on Built.io Contentstack.
      *
      * @param accessToken
-     *                   access token
+     * access token
      *
      * @param config
-     *                  {@link Config} instance to set environment and other configuration details.
+     * {@link Config} instance to set environment and other configuration details.
      *
      * @return
-     *         {@link Stack} instance.
+     * {@link Stack} instance.
      *
      * @throws Exception
      *
@@ -121,7 +116,10 @@ public class Contentstack {
      *
      * Stack stack = Contentstack.stack(context, "blt5d4sample2633b", "blt6d0240b5sample254090d", config);
      */
-    public static Stack stack(Context context, String stackApiKey, String accessToken, String environment, Config config) throws Exception{
+
+
+    public static Stack stack(Context context, String stackApiKey, String accessToken,
+                              String environment, Config config) throws Exception{
         if(context != null) {
             if(!TextUtils.isEmpty(stackApiKey)) {
                 if(!TextUtils.isEmpty(accessToken)) {
@@ -133,9 +131,7 @@ public class Contentstack {
                             config = new Config();
                             config.setEnvironment(environment);
                         }
-
                         return initializeStack(context, stackApiKey, accessToken, config);
-
                     }else{
                         throw new Exception(CSAppConstants.ErrorMessage_Stack_Environment_IsNull);
                     }
@@ -149,6 +145,7 @@ public class Contentstack {
             throw new Exception(CSAppConstants.ErrorMessage_StackContextIsNull);
         }
     }
+
 
     private static Stack initializeStack(Context context, String stackApiKey, String accessToken, Config config){
         Stack stack = new Stack(stackApiKey.trim());
@@ -172,10 +169,10 @@ public class Contentstack {
         return stack;
     }
 
+
     /********************************************************************************************************
      *
      * // Private Functionality
-     *
      *
      ********************************************************************************************************/
 
@@ -184,7 +181,6 @@ public class Contentstack {
         if (requestQueue == null) {
             requestQueue = Volley.newRequestQueue(applicationContext, new OkHttpClass(protocol));
         }
-
         return requestQueue;
     }
 
@@ -196,33 +192,30 @@ public class Contentstack {
 
     /**
      * To start schedule for clearing cache.
-     *
      * @param context
-     * 					application context.
+     * application context.
      */
+
     private static void clearCache(Context context) {
 
         Intent alarmIntent = new Intent("StartContentStackClearingCache");
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(), AlarmManager.INTERVAL_DAY, pendingIntent);
-
     }
 
     /**
      * To check network availability.
      */
     protected static void isNetworkAvailable(Context context) {
+
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-
         if (connectivityManager.getNetworkInfo(0) != null || connectivityManager.getNetworkInfo(1).getState() != null) {
-
             if (connectivityManager.getActiveNetworkInfo() == null) {
                 CSAppConstants.isNetworkAvailable = false;
             } else {
                 CSAppConstants.isNetworkAvailable = true;
             }
-
         }else if (connectivityManager.getNetworkInfo(0).getState() == NetworkInfo.State.CONNECTED ||
                 connectivityManager.getNetworkInfo(1).getState() == NetworkInfo.State.CONNECTED) {
             CSAppConstants.isNetworkAvailable = true;
