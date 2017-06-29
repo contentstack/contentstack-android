@@ -2036,9 +2036,7 @@ public class Query implements INotifyClass{
             if(((EntryModel)objects.get(i))._metadata != null) {
                 entry._metadata = new HashMap<>(((EntryModel) objects.get(i))._metadata);
             }
-            if(((EntryModel)objects.get(i)).publishDetails != null){
-                entry.publishDetails = ((EntryModel)objects.get(i)).publishDetails;
-            }
+
             entry.setTags(((EntryModel) objects.get(i)).tags);
             entries.add(entry);
         }
@@ -2086,10 +2084,6 @@ public class Query implements INotifyClass{
             }
             if(((EntryModel)objects.get(i))._metadata != null) {
                 entry._metadata = new HashMap<>(((EntryModel) objects.get(i))._metadata);
-            }
-
-            if(((EntryModel)objects.get(i)).publishDetails != null){
-                entry.publishDetails = ((EntryModel)objects.get(i)).publishDetails;
             }
 
             entry.setTags(((EntryModel) objects.get(i)).tags);

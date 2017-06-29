@@ -40,7 +40,6 @@ public class Asset {
     protected ArrayMap<String, Object> headerGroup_app;
     protected ArrayMap<String, Object> headerGroup_local;
     protected Stack stackInstance;
-    protected ArrayList<HashMap<String, Object>> publishDetails;
     private CachePolicy cachePolicyForCall = CachePolicy.IGNORE_CACHE;
 
     private long maxCachetimeForCall             = 0; //local cache time interval
@@ -366,21 +365,6 @@ public class Asset {
     }
 
     /**
-     * Get publish details.
-     *
-     * @return
-     *          {@link ArrayList} of the {@link HashMap} for publish details.
-     * <br><br><b>Example :</b><br>
-     * <pre class="prettyprint">
-     *
-     * ArrayList<HashMap<String, Object>> publishDetails = assetObject.getPublishDetails();
-     * </pre>
-     */
-    public ArrayList<HashMap<String, Object>> getPublishDetails(){
-        return publishDetails;
-    }
-
-    /**
      * Get tags.
      *
      * <br><br><b>Example :</b><br>
@@ -567,7 +551,6 @@ public class Asset {
         this.fileName     = model.fileName;
         this.json         = model.json;
         this.assetUid = model.uploadedUid;
-        this.publishDetails =model.publishDetails;
         this.setTags(model.tags);
 
         model = null;
