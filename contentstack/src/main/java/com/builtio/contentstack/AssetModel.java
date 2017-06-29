@@ -3,7 +3,6 @@ package com.builtio.contentstack;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.WeakHashMap;
@@ -24,7 +23,6 @@ class AssetModel {
     int count = 0;
 
     protected WeakHashMap<String, Object> _metadata= null;
-
     public AssetModel(JSONObject responseJSON, boolean isArray, boolean isFromCache) {
 
         if(isFromCache){

@@ -2,7 +2,6 @@ package com.builtio.contentstack;
 
 import com.builtio.contentstack.utilities.CSAppConstants;
 import com.builtio.contentstack.utilities.CSAppUtils;
-import com.builtio.contentstack.utilities.TLSSocketFactory;
 import com.builtio.okhttp.OkHttpClient;
 import com.builtio.okhttp.OkUrlFactory;
 import com.builtio.volley.toolbox.HurlStack;
@@ -29,7 +28,6 @@ class OkHttpClass extends HurlStack {
     private static String TAG = "OkHttpClass";
     private final OkUrlFactory mFactory;
     private SSLContext sslContext;
-    SSLSocketFactory sslSocketFactory;
 
     protected OkHttpClass(String protocol) {
         this(protocol, new OkHttpClient());
@@ -44,14 +42,6 @@ class OkHttpClass extends HurlStack {
             OkHttpClient okHttpClient = getUnsafeOkHttpClient(client);
             mFactory = new OkUrlFactory(okHttpClient);
         }else{
-
-            try {
-                sslSocketFactory = new TLSSocketFactory();
-                client.setSslSocketFactory(sslSocketFactory);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
             mFactory = new OkUrlFactory(client);
         }
     }
@@ -84,7 +74,7 @@ class OkHttpClass extends HurlStack {
             sslContext.init(null, trustAllCerts, new java.security.SecureRandom());
             final SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
 
-            okHttpClient.setSslSocketFactory(new TLSSocketFactory());
+            okHttpClient.setSslSocketFactory(sslSocketFactory);
             okHttpClient.setHostnameVerifier(new HostnameVerifier() {
                 @Override
                 public boolean verify(String hostname, SSLSession session) {

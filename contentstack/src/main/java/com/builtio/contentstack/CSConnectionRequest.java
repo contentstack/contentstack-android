@@ -202,7 +202,6 @@ class CSConnectionRequest implements IRequestModelHTTP{
             if(model._metadata != null) {
                 entryInstance._metadata = new HashMap<>(model._metadata);
             }
-
             entryInstance.uid		   		= model.entryUid;
             entryInstance.setTags(model.tags);
             model = null;
