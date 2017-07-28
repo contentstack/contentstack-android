@@ -3,6 +3,7 @@ package com.builtio.contentstack;
 import android.annotation.SuppressLint;
 import android.support.v4.util.ArrayMap;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.builtio.contentstack.utilities.CSAppConstants;
 import com.builtio.contentstack.utilities.CSAppUtils;
@@ -46,7 +47,7 @@ public class Query implements INotifyClass{
     private JSONArray objectUidForOnly           = null;
     private boolean isJsonProper                 = true;
     // cache policy
-    private long maxCachetimeForCall             = 0; //local cache time interval
+    private long maxCachetimeForCall             = 86400000; //local cache time interval
     private long defaultCacheTimeInterval        = 0;
     private CachePolicy cachePolicyForCall       = null;
     private QueryResultsCallBack queryResultCallback;
@@ -1864,7 +1865,9 @@ public class Query implements INotifyClass{
                 String md5Value = new CSAppUtils().getMD5FromString(mainStringForMD5.trim());
 
                 File cacheFile = new File(CSAppConstants.cacheFolderName + File.separator + md5Value);
+
                 CachePolicy cachePolicy = CachePolicy.NETWORK_ONLY;//contentTypeInstance.stackInstance.globalCachePolicyForCall;
+
 
                 if (cachePolicyForCall != null) {
                     cachePolicy = cachePolicyForCall;
@@ -1979,6 +1982,7 @@ public class Query implements INotifyClass{
     //fetch from cache.
     private void fetchFromCache(File cacheFile, QueryResultsCallBack callback, SingleQueryResultCallback callBack){
         Error error = null;
+
         if(cacheFile.exists()){
             boolean needToSendCall = false;
 

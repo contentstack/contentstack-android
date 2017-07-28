@@ -241,6 +241,7 @@ class CSConnectionRequest implements IRequestModelHTTP{
             JSONObject mainJsonObj = new JSONObject();
             JSONObject headerJson  = new JSONObject();
 
+
             jsonObj = paramsJSON;
 
             Calendar cal = Calendar.getInstance();

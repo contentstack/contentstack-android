@@ -7,7 +7,7 @@ import android.os.Bundle;
 /**
  * Created by chinmay on 5/8/15.
  */
- class TestActivity extends Application {
+  class TestActivity extends Application {
 
     @Override
     public void onCreate() {

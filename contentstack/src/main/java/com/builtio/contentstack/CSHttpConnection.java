@@ -277,6 +277,7 @@ class CSHttpConnection implements IURLRequestHTTP {
         };
 
         jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(CSAppConstants.TimeOutDuration, CSAppConstants.NumRetry, CSAppConstants.BackOFMultiplier));
+        jsonObjectRequest.setShouldCache(false);
         Contentstack.addToRequestQueue(httpsORhttp, jsonObjectRequest, info);
 
     }

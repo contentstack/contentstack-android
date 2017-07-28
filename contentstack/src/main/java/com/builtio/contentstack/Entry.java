@@ -2,6 +2,7 @@ package com.builtio.contentstack;
 
 import android.support.v4.util.ArrayMap;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.builtio.contentstack.utilities.CSAppConstants;
 import com.builtio.contentstack.utilities.CSAppUtils;
@@ -1125,6 +1126,7 @@ public class Entry {
                 String md5Value = new CSAppUtils().getMD5FromString(mainStringForMD5.trim());
 
                 File cacheFile = new File(CSAppConstants.cacheFolderName + File.separator + md5Value);
+
 
                 switch (cachePolicyForCall){
 

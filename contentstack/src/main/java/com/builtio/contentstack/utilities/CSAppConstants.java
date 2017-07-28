@@ -16,7 +16,7 @@ public class CSAppConstants {
     public static String URLSCHEMA_HTTP = "http://";
     public static String URLSCHEMA_HTTPS = "https://";
 
-    public static String SDK_VERSION = "3.1.2";
+    public static String SDK_VERSION = "3.1.3";
 
     public final static int NONETWORKCONNECTION = 408;
 
@@ -31,7 +31,7 @@ public class CSAppConstants {
      * Directory path to store offline data.
 	 * used to saved cached network calls with response.
 	 */
-    public static String cacheFolderName;
+    public static String cacheFolderName ;
 
     public static enum RequestMethod {
 
