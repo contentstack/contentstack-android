@@ -54,11 +54,10 @@ android:enabled="true">
 
 
 To initialize the SDK, specify application context, the API key, access token, and environment name of the stack as shown in the snippet given below:
-
+```sh
 Stack stack = Contentstack.stack(context, "siteApiKey", "accessToken", "enviroment_name");
-
+```
 Once you have initialized the SDK, you can query entries to fetch the required content.
-
 
 
 ### Key Concepts for using Contentstack
@@ -91,7 +90,7 @@ A publishing environment corresponds to one or more deployment servers or a cont
 
 To initialize the SDK, specify application context, the API key, access token, and environment name of the stack as shown in the snippet given below:
 
-Stack stack = Contentstack.stack(context, "siteApiKey", "accessToken", "enviroment_name");
+  Stack stack = Contentstack.stack(context, "siteApiKey", "accessToken", "enviroment_name");
 
 Once you have initialized the SDK, you can query entries to fetch the required content.
 
@@ -102,18 +101,18 @@ Once you have initialized the SDK, you can query entries to fetch the required c
 To retrieve a single entry from a content type use the code snippet given below:
 
 ContentType contentType = stack.contentType("content_type_uid");
-
+```sh
 Entry blogEntry = contentType.entry("entry_uid");blogEntry.fetch(new EntryResultCallBack() {@OverridepublicvoidonCompletion(ResponseType responseType, Error error) {
 if (error == null) {
 // Success block
 } else {
 // Error block
 }}});
-
+```
 ##### Get Multiple Entries
 
 To retrieve multiple entries of a particular content type, use the code snippet given below:
-
+```sh
 //stack is an instance of Stack class
 
 Query blogQuery = stack.contentType("content_type_uid").query();
@@ -123,7 +122,7 @@ if(error == null){
 }else{
 //Error block
 }}});
-
+```
 
 
 ### Advanced Queries
@@ -139,10 +138,23 @@ We have introduced Image Delivery APIs that let you retrieve images and then man
 For example, if you want to crop an image (with width as 300 and height as 400), you simply need to append query parameters at the end of the image URL, such as, https://images.contentstack.io/v3/assets/blteae40eb499811073/bltc5064f36b5855343/59e0c41ac0eddd140d5a8e3e/download?crop=300,400. There are several more parameters that you can use for your images.
 
 [Read Image Delivery API documentation](https://www.contentstack.com/docs/apis/image-delivery-api/).
+```sh
+// set the image quality to 100 
+LinkedHashMap imageParams = new LinkedHashMap(); 
+imageParams.put("quality", 100); 
+imageUrl = Stack.ImageTransform(imageUrl, imageParams);
 
-SDK functions for Image Delivery API coming soon.
+// resize the image by specifying width and height 
+LinkedHashMap imageParams = new LinkedHashMap(); 
+imageParams.put("width", 100); 
+imageParams.put("height",100); 
+imageUrl = Stack.ImageTransform(imageUrl, imageParams);
 
-
+// enable auto optimization for the image 
+LinkedHashMap imageParams = new LinkedHashMap(); 
+imageParams.put("auto", "webp"); 
+imageUrl = Stack.ImageTransform(imageUrl, imageParams);
+```
 
 ### Helpful Links
 
