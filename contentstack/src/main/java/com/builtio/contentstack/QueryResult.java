@@ -20,6 +20,7 @@ public class QueryResult {
     protected JSONObject receiveJson;
     protected JSONArray schemaArray;
     protected int count;
+    protected JSONObject contentObject;
     protected List<Entry> resultObjects;
 
     /**
@@ -63,6 +64,20 @@ public class QueryResult {
 
 
 
+    /**
+     * Returns class&#39;s content type if call to fetch contentType executed successfully.
+     * @return JSONObject contentObject
+     * <br><br><b>Example :</b><br>
+     * <pre class="prettyprint">
+     * JSONObject contentObject = queryResultObject.getContentType();<br>
+     * </pre>
+     */
+    public JSONObject getContentType() {
+        return contentObject;
+    }
+
+
+
     protected void setJSON(JSONObject jsonobject, List<Entry> objectList) {
         receiveJson = jsonobject;
         resultObjects = objectList;
@@ -78,6 +93,14 @@ public class QueryResult {
                     }
                 }
 
+                if(receiveJson.has("content_type")){
+
+                    JSONObject jsonObject  = receiveJson.getJSONObject("content_type");
+                    if(jsonObject != null){
+                        contentObject = jsonObject;
+                    }
+                }
+
                 if(receiveJson.has("count")){
                     count = receiveJson.optInt("count");
                 }
@@ -90,7 +113,7 @@ public class QueryResult {
             }
 
         }catch(Exception e){
-           //TODO ERROR HANDLE
+            //TODO ERROR HANDLE
             CSAppUtils.showLog(TAG, "----------------------QueryResult--setJSON--"+e.toString());
         }
     }
