@@ -12,6 +12,7 @@ import com.builtio.txtmark.Configuration;
 import com.builtio.txtmark.Processor;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -1403,5 +1404,46 @@ public class Entry {
         }else{
             return formHeader;
         }
+    }
+
+    /**
+     * This method adds key and value to an Entry.
+     * @param key The key as string which needs to be added to an Entry
+     * @param value The value as string which needs to be added to an Entry
+     * @return {@link Entry}
+     *
+     * <br><br><b>Example :</b><br>
+     * <pre class="prettyprint">
+     *    //'blt5d4sample2633b' is a dummy Stack API key
+     *    //'blt6d0240b5sample254090d' is dummy access token.
+     *    {@code
+     *
+     *    Stack stack = Contentstack.stack(context, "blt5d4sample2633b", "blt6d0240b5sample254090d", "stag", false);
+     *    final Entry entry = stack.contentType("user").entry("blt3b0aaebf6f1c3762"); <br>
+     *    entry.addParam("include_dimensions", "true"); <br>
+     *    entry.fetch(new BuiltResultCallBack() {<br>
+     *           &#64;Override
+     *           public void onCompletion(ResponseType responseType, BuiltError builtError) {
+     *
+     *           }<br>
+     *    });<br>
+     *
+     *      }
+     *   </pre>
+     *
+     *
+     */
+
+    public Entry addParam(String key, String value){
+
+        if(key != null && value != null){
+            try {
+                otherPostJSON.put(key, value);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return this;
     }
 }
