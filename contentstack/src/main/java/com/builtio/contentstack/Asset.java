@@ -633,4 +633,40 @@ public class Asset {
             return headerGroup_app;
         }
     }
+
+    /**
+     * This method adds key and value to an Entry.
+     * @param key The key as string which needs to be added to an Asset
+     * @param value The value as string which needs to be added to an Asset
+     * @return {@link Asset}
+     *
+     * <br><br><b>Example :</b><br>
+     * <pre class="prettyprint">
+     * final Asset asset = stack.asset("blt5312f71416d6e2c8");
+     * asset.addParam("key", "some_value");
+     *
+     *  asset.fetch(new FetchResultCallback() {
+     *    &#64;Override
+     *    public void onCompletion(ResponseType responseType, Error error) {
+     *          if(error == null){
+     *            //Success Block.
+     *          }else {
+     *            //Fail Block.
+     *          }
+     *    }
+     *  });
+     * </pre>
+     *
+     *
+     */
+
+    public Asset addParam(String key, String value){
+
+        if(key != null && value != null){
+            headerGroup_local.put(key, value);
+        }
+
+        return this;
+    }
+
 }

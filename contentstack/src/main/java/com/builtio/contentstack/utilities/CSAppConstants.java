@@ -16,7 +16,7 @@ public class CSAppConstants {
     public static String URLSCHEMA_HTTP = "http://";
     public static String URLSCHEMA_HTTPS = "https://";
 
-    public static String SDK_VERSION = "3.1.3";
+    public static String SDK_VERSION = "3.3.0";
 
     public final static int NONETWORKCONNECTION = 408;
 
