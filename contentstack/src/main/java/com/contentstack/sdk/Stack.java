@@ -319,9 +319,27 @@ public class Stack implements INotifyClass {
 
 
     /**
-     * @param @{@link SyncResultCallBack} returns syncCallBack
-     * returns sync result object
+     * The Initial Sync request performs a complete sync of your app data.
+     * It returns all the published entries and assets of the specified stack in response.
+     * The response also contains a sync token, which you need to store,
+     * since this token is used to get subsequent delta updates later.
+     *
+     *<br><br><b>Example :</b><br>
+     * <pre class="prettyprint">
+     *
+     *  stack.syncInit(new SyncResultCallBack() {
+     *            @Override
+     *             public void onCompletion(SyncStack syncStack, Error error) {
+     *
+     *                 if (error == null) {
+     *                     // implementation
+     *                 }
+     *
+     *             }});
+     *
+     * </pre>
      */
+
     public void syncInit(SyncResultCallBack syncCallBack){
 
         if (syncParams == null){
@@ -341,6 +359,23 @@ public class Stack implements INotifyClass {
     /**
      * @param from_date from @{@link Date}
      * @param @{@link SyncResultCallBack} returns syncCallBack
+     *
+     * You can also initialize sync with entries that satisfy multiple parameters.
+     * To do this, use syncWith and specify the parameters.
+     * However, if you do this, the subsequent syncs will only include the entries of the specified parameters
+     *
+     * <br><br><b>Example :</b><br>
+     * <pre class="prettyprint">
+     *
+     *   final Date start_date = sdf.parse("2018-10-07");
+     *   stack.syncWithDate(start_date, new SyncResultCallBack() {
+     *         @Override
+     *         public void onCompletion(SyncStack syncStack, Error error) {
+     *
+     *             }
+     *          });
+     *
+     *  </pre>
      */
     public void syncWithDate(Date from_date, SyncResultCallBack syncCallBack){
         start_from_date = convertUTCToISO(from_date);
@@ -372,8 +407,30 @@ public class Stack implements INotifyClass {
 
     /**
      *
-     * @param pagination_token @{@link String}
-     * @param @{@link SyncResultCallBack} returns syncCallBack
+     * If the result of the initial sync (or subsequent sync) contains more than 100 records,
+     * the response would be paginated. It provides pagination token in the response. However,
+     * you don’t have to use the pagination token manually to get the next batch;
+     * the SDK does that automatically until the sync is complete.
+     *
+     * @param pagination_token this is the parameter need to pass as pagination_token.
+     * @param @{@link SyncResultCallBack} returns syncCallBack.
+     *
+     * Pagination token can be used in case you want to fetch only selected batches.
+     * It is especially useful if the sync process is interrupted midway (due to network issues, etc.).
+     * In such cases, this token can be used to restart the sync process from where it was interrupted.
+     *
+     * <br><br><b>Example :</b><br>
+     * <pre class="prettyprint">
+     *
+     * String pagination_token = "blt4738747389474";
+     * stack.syncWithPaginationToken(pagination_token, new SyncResultCallBack() {
+     *    @Override
+     *    public void onCompletion(SyncStack syncStack, Error error) {
+     *
+     *    }
+     * });
+     *
+     * </pre>
      */
     public void syncWithPaginationToken(String pagination_token, SyncResultCallBack syncCallBack){
         this.pagination_token = pagination_token;
@@ -392,10 +449,29 @@ public class Stack implements INotifyClass {
     }
 
 
+
+
     /**
-     *
      * @param sync_token @{@link String}
      * @param @{@link SyncResultCallBack} returns syncCallBack
+     *
+     * You can use the sync token (that you receive after initial sync) to get the updated content next time.
+     * The sync token fetches only the content that was added after your last sync,
+     * and the details of the content that was deleted or updated.
+     *
+     *
+     *  <br><br><b>Example :</b><br>
+     *  <pre class="prettyprint">
+     *
+     *   String sync_token = "blt28937206743728463";
+     *   stack.syncWithSyncToken(sync_token, new SyncResultCallBack() {
+     *    @Override
+     *    public void onCompletion(SyncStack syncStack,Error error) {
+     *
+     *    }
+     * });
+     *
+     * </pre>
      */
     public void syncWithSyncToken(String sync_token, SyncResultCallBack syncCallBack){
 
@@ -414,10 +490,30 @@ public class Stack implements INotifyClass {
     }
 
 
+
+
+
     /**
      *
      * @param content_type {@link String}
      * @param @{@link SyncResultCallBack} returns syncCallBack
+     *
+     * You can also initialize sync with entries of only specific content types.
+     * To do this, use syncWithContentType and specify the content type UID as its value.
+     * However, if you do this, the subsequent syncs will only include the entries of the specified content types.
+     *
+     * <br><br><b>Example :</b><br>
+     * <pre class="prettyprint">
+     *
+     * stack.syncWithContentType(Stack.Types.type, new SyncResultCallBack() {
+     *    @Override
+     *    public void onCompletion(SyncStack syncStack,Error error) {
+     *
+     *    }
+     * });
+     *
+     *  </pre>
+     *
      */
     public void syncWithContentType(String content_type, SyncResultCallBack syncCallBack){
 
@@ -436,10 +532,28 @@ public class Stack implements INotifyClass {
     }
 
 
+
+
+
     /**
-     *
      * @param language @{@link Language}
      * @param @{@link SyncResultCallBack} returns syncCallBack
+     *
+     * You can also initialize sync with entries of only specific locales.
+     * To do this, use syncWithLocale and specify the locale code as its value.
+     * However, if you do this, the subsequent syncs will only include the entries of the specified locales.
+     *
+     *  <br><br><b>Example :</b><br>
+     *  <pre class="prettyprint">
+     *
+     * stackInstance.syncWithLocale(Language, new SyncResultCallBack() {
+     *    @Override
+     *    public void onCompletion(SyncStack syncStack,Error error) {
+     *
+     *    }
+     * });
+     *
+     * </pre>
      */
     public void syncWithLocale(Language language, SyncResultCallBack syncCallBack) {
         this.localeCode = getLanguageCode(language);
@@ -481,8 +595,30 @@ public class Stack implements INotifyClass {
 
     /**
      *
-     * @param type @{@link Types}
-     * @param @{@link SyncResultCallBack} returns syncCallBack
+     * @param type @{@link Types} first parameter accepts types for following
+     *
+     *         entry_published,
+     *         entry_published,
+     *         entry_unpublished ,
+     *         entry_deleted ,
+     *         asset_published ,
+     *         asset_unpublished ,
+     *         asset_deleted ,
+     *         content_type_deleted
+     *
+     * @param @{@link SyncResultCallBack} second parameter takes SyncResultCallBack
+     *
+     * <br><br><b>Example :</b><br>
+     * <pre class="prettyprint">
+     *
+     *   stackInstance.syncWithLocale(Types.entry_published, new SyncResultCallBack() {
+     *        @Override
+     *      public void onCompletion(SyncStack syncStack,Error error) {
+     *
+     *        }
+     *      });
+     *
+     *  </pre>
      */
     public void syncWithType(Types type, SyncResultCallBack syncCallBack){
         this.types = type;
@@ -502,11 +638,28 @@ public class Stack implements INotifyClass {
 
     /**
      *
-     * @param from_date @{@link Date}
-     * @param contentType {@link String}
-     * @param type @{@link Types}
-     * @param language @{@link Language}
-     * @param syncCallBack @{@link SyncResultCallBack}
+     * @param from_date @{@link Date} first parameter take date
+     * @param contentType {@link String} second parameter takes content_type
+     * @param type @{@link Types} third parameter takes Types of content
+     * @param language @{@link Language} four parameters takes Language
+     * @param syncCallBack @{@link SyncResultCallBack} fifth parameter is SyncResultCallback
+     *
+     * You can also initialize sync with entries that satisfy multiple parameters.
+     * To do this, use syncWith and specify the parameters.
+     * However, if you do this, the subsequent syncs will only include the entries of the specified parameters
+     *
+     *  <br><br><b>Example :</b><br>
+     *  <pre class="prettyprint">
+     *
+     *  stackInstance.syncWith(date,"content_type", Stack.Types.type, Language, new SyncResultCallBack() {
+     *    @Override
+     *    public void onCompletion(SyncStack syncStack,Error error) {
+     *
+     *    }
+     *  });
+     *
+     *
+     * </pre>
      */
     public void sync(Date from_date, String contentType, Types type, Language language, SyncResultCallBack syncCallBack){
         start_from_date = convertUTCToISO(from_date);
