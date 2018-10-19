@@ -2,25 +2,27 @@ apply plugin: 'com.android.library'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "25.0.1"
+    buildToolsVersion "25.0.3"
     publishNonDefault true
 
     defaultConfig {
-        //applicationId "com.builtio.contentstack"
-        minSdkVersion 15
+        //applicationId "com.contentstack.sdk"
+        minSdkVersion 19
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"
         useLibrary 'org.apache.http.legacy'
-        //testApplicationId "com.builtio.contentstack.test"
-        //testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        //testApplicationId "com.contentstack.sdk.test"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
     lintOptions {
         abortOnError false
     }
@@ -31,14 +33,22 @@ repositories {
     flatDir {
         dirs 'libs'
     }
-
 }
 
 dependencies {
+
+    configurations.all {
+        resolutionStrategy.force 'com.android.support:support-annotations:23.1.0'
+    }
+
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support:support-v4:25.3.1'
     testCompile 'junit:junit:4.12'
+
+    androidTestCompile('com.android.support.test.espresso:espresso-core:3.0.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
 }
 
 task clearJar(type: Delete) {
@@ -46,9 +56,9 @@ task clearJar(type: Delete) {
 }
 
 task unzip(type: Copy) {
+
     def zipFile = file('build/intermediates/bundles/release/classes.jar')
     def outputDir = file("${buildDir}/Contentstack-jar")
-
     from zipTree(zipFile)
     into outputDir
 }
@@ -56,8 +66,7 @@ task unzip(type: Copy) {
 task createJar(type: Jar) {
     archiveName='Contentstack.jar'
     from ('build/Contentstack-jar/')
-
-    include 'com/builtio/'
+    include 'com/contentstack/'
     include 'META-INF/'
 }
 
