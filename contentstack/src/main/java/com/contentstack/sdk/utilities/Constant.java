@@ -8,7 +8,7 @@ package com.contentstack.sdk.utilities;
  */
 public class Constant {
 
-    // Built.io content stack server error response status code.
+    // Contentstack server error response status code.
 
     public static final int UNAUTHORIZED_ACCESS 						= 105;
     public static final int FORGOT_PASSWORD_USER_NOT_FOUND 				= 107;
