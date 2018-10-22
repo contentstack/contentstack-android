@@ -164,7 +164,7 @@ public class Stack implements INotifyClass {
      *
      *
      * @return
-     *         {@link ContentType} instance.
+     * {@link ContentType} instance.
      *
      * <br><br><b>Example :</b><br>
      * <pre class="prettyprint">
