@@ -53,7 +53,7 @@ import java.util.List;
  * </pre>
  *
  *
- * @author René Jeschke &lt;rene_jeschke@yahoo.de&gt;
+ * @author René Jeschke &lt, rene_jeschke@yahoo.de&gt,
  * @since 0.7
  */
 public interface BlockEmitter

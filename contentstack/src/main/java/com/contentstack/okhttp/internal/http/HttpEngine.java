@@ -550,7 +550,7 @@ public final class HttpEngine {
    * Populates request with defaults and cookies.
    *
    * <p>This client doesn't specify a default {@code Accept} header because it
-   * doesn't know what content types the application is interested in.
+   * doesn't know what content publishType the application is interested in.
    */
   private Request networkRequest(Request request) throws IOException {
     Request.Builder result = request.newBuilder();

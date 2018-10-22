@@ -14,7 +14,7 @@ public class IOUtils {
      * Homebrewed simple serialization system used for reading and writing cache
      * headers on disk. Once upon a time, this used the standard Java
      * Object{Input,Output}Stream, but the default implementation relies heavily
-     * on reflection (even for standard types) and generates a ton of garbage.
+     * on reflection (even for standard publishType) and generates a ton of garbage.
      */
 
     /**

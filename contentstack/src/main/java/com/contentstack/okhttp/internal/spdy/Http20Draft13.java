@@ -165,7 +165,7 @@ public final class Http20Draft13 implements Variant {
           break;
 
         default:
-          // Implementations MUST discard frames that have unknown or unsupported types.
+          // Implementations MUST discard frames that have unknown or unsupported publishType.
           source.skip(length);
       }
       return true;
@@ -667,7 +667,7 @@ public final class Http20Draft13 implements Variant {
     // Visible for testing.
     static String formatFlags(byte type, byte flags) {
       if (flags == 0) return "";
-      switch (type) { // Special case types that have 0 or 1 flag.
+      switch (type) { // Special case publishType that have 0 or 1 flag.
         case TYPE_SETTINGS:
         case TYPE_PING:
           return flags == FLAG_ACK ? "ACK" : BINARY[flags];
@@ -678,7 +678,7 @@ public final class Http20Draft13 implements Variant {
           return BINARY[flags];
       }
       String result = flags < FLAGS.length ? FLAGS[flags] : BINARY[flags];
-      // Special case types that have overlap flag values.
+      // Special case publishType that have overlap flag values.
       if (type == TYPE_PUSH_PROMISE && (flags & FLAG_END_PUSH_PROMISE) != 0) {
         return result.replace("HEADERS", "PUSH_PROMISE"); // TODO: Avoid allocation.
       } else if (type == TYPE_DATA && (flags & FLAG_COMPRESSED) != 0) {
@@ -687,7 +687,7 @@ public final class Http20Draft13 implements Variant {
       return result;
     }
 
-    /** Lookup table for valid frame types. */
+    /** Lookup table for valid frame publishType. */
     private static final String[] TYPES = new String[] {
         "DATA",
         "HEADERS",

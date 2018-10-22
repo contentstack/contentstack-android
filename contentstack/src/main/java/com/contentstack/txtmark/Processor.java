@@ -36,7 +36,7 @@ import java.io.StringReader;
  * </code>
  * </pre>
  *
- * @author René Jeschke &lt;rene_jeschke@yahoo.de&gt;
+ * @author René Jeschke &lt, rene_jeschke@yahoo.de&gt,
  */
 public class Processor
 {

@@ -33,7 +33,7 @@ public interface Transport {
 
   /**
    * Returns an output stream where the request body can be written. The
-   * returned stream will of one of two types:
+   * returned stream will of one of two publishType:
    * <ul>
    * <li><strong>Direct.</strong> Bytes are written to the socket and
    * forgotten. This is most efficient, particularly for large request

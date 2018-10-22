@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 2011-2015 René Jeschke <rene_jeschke@yahoo.de>
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
+ * Licensed under the Apache License, Version 2.0 (the "License"),
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -18,7 +18,7 @@ package com.contentstack.txtmark;
 /**
  * Txtmark configuration.
  *
- * @author René Jeschke &lt;rene_jeschke@yahoo.de&gt;
+ * @author René Jeschke &lt, rene_jeschke@yahoo.de&gt,
  * @since 0.7
  */
 public class Configuration
@@ -92,7 +92,7 @@ public class Configuration
     /**
      * Configuration builder.
      *
-     * @author René Jeschke &lt;rene_jeschke@yahoo.de&gt;
+     * @author René Jeschke &lt, rene_jeschke@yahoo.de&gt,
      * @since 0.7
      */
     public static class Builder

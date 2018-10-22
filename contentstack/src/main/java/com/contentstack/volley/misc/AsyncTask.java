@@ -66,7 +66,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  *
  * <p>An asynchronous task is defined by a computation that runs on a background thread and
  * whose result is published on the UI thread. An asynchronous task is defined by 3 generic
- * types, called <code>Params</code>, <code>Progress</code> and <code>Result</code>,
+ * publishType, called <code>Params</code>, <code>Progress</code> and <code>Result</code>,
  * and 4 steps, called <code>onPreExecute</code>, <code>doInBackground</code>,
  * <code>onProgressUpdate</code> and <code>onPostExecute</code>.</p>
  *
@@ -112,8 +112,8 @@ import java.util.concurrent.atomic.AtomicInteger;
  * new DownloadFilesTask().execute(url1, url2, url3);
  * </pre>
  *
- * <h2>AsyncTask's generic types</h2>
- * <p>The three types used by an asynchronous task are the following:</p>
+ * <h2>AsyncTask's generic publishType</h2>
+ * <p>The three publishType used by an asynchronous task are the following:</p>
  * <ol>
  *     <li><code>Params</code>, the type of the parameters sent to the task upon
  *     execution.</li>
@@ -122,7 +122,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  *     <li><code>Result</code>, the type of the result of the background
  *     computation.</li>
  * </ol>
- * <p>Not all types are always used by an asynchronous task. To mark a type as unused,
+ * <p>Not all publishType are always used by an asynchronous task. To mark a type as unused,
  * simply use the type {@link Void}:</p>
  * <pre>
  * private class MyTask extends AsyncTask&lt;Void, Void, Void&gt; { ... }

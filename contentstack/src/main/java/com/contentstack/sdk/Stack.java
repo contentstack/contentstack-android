@@ -2,7 +2,6 @@ package com.contentstack.sdk;
 
 import android.util.ArrayMap;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.contentstack.sdk.utilities.CSAppConstants;
 import com.contentstack.sdk.utilities.CSAppUtils;
@@ -48,12 +47,12 @@ public class Stack implements INotifyClass {
     protected String pagination_token = null;
     protected String contentType;
     protected String localeCode ;
-    protected Types types;
+    protected PublishType publishType;
     protected String start_from_date;
     private  SyncResultCallBack syncCallBack;
 
 
-    public enum Types
+    public enum PublishType
     {
         entry_published,
         entry_unpublished ,
@@ -318,29 +317,26 @@ public class Stack implements INotifyClass {
 
 
 
+
+
+
+
     /**
+     * @param syncCallBack returns callback for sync result.
      * The Initial Sync request performs a complete sync of your app data.
      * It returns all the published entries and assets of the specified stack in response.
      * The response also contains a sync token, which you need to store,
      * since this token is used to get subsequent delta updates later.
      *
-     *<br><br><b>Example :</b><br>
+     * <br><br><b>Example :</b><br>
      * <pre class="prettyprint">
      *
-     *  stack.syncInit(new SyncResultCallBack() {
-     *            @Override
-     *             public void onCompletion(SyncStack syncStack, Error error) {
-     *
-     *                 if (error == null) {
-     *                     // implementation
-     *                 }
-     *
-     *             }});
+     * stack.sync(SyncResultCallBack syncCallBack){  }
      *
      * </pre>
      */
 
-    public void syncInit(SyncResultCallBack syncCallBack){
+    public void sync(SyncResultCallBack syncCallBack){
 
         if (syncParams == null){
             syncParams = new JSONObject();
@@ -356,28 +352,108 @@ public class Stack implements INotifyClass {
     }
 
 
+
+
+
+
     /**
-     * @param from_date from @{@link Date}
-     * @param @{@link SyncResultCallBack} returns syncCallBack
      *
-     * You can also initialize sync with entries that satisfy multiple parameters.
-     * To do this, use syncWith and specify the parameters.
-     * However, if you do this, the subsequent syncs will only include the entries of the specified parameters
+     * @param pagination_token this is the parameter need to pass as pagination_token.
+     * @param syncCallBack returns callback for sync result.
+     *
+     * If the result of the initial sync (or subsequent sync) contains more than 100 records,
+     * the response would be paginated. It provides pagination token in the response. However,
+     * you do not have to use the pagination token manually to get the next batch,
+     * the SDK does that automatically until the sync is complete.
+     * Pagination token can be used in case you want to fetch only selected batches.
+     * It is especially useful if the sync process is interrupted midway (due to network issues, etc.).
+     * In such cases, this token can be used to restart the sync process from where it was interrupted.
      *
      * <br><br><b>Example :</b><br>
      * <pre class="prettyprint">
      *
-     *   final Date start_date = sdf.parse("2018-10-07");
-     *   stack.syncWithDate(start_date, new SyncResultCallBack() {
-     *         @Override
-     *         public void onCompletion(SyncStack syncStack, Error error) {
+     * // dummy pagination_token = "blt7f35951d259183fba680e1";
+     *   stack.syncPaginationToken(pagination_token, new SyncResultCallBack()) {}
      *
-     *             }
-     *          });
+     *
+     * </pre>
+     */
+    public void syncPaginationToken(String pagination_token, SyncResultCallBack syncCallBack){
+        this.pagination_token = pagination_token;
+        if (syncParams == null){
+            syncParams = new JSONObject();
+        }
+
+        try {
+            syncParams.put("init", true);
+            syncParams.put("pagination_token", pagination_token);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        this.requestSync(syncCallBack);
+    }
+
+
+
+
+    /**
+     * @param sync_token this parameter is need to pass as sync_token
+     * @param syncCallBack returns callback for sync result.
+     *
+     * You can use the sync token (that you receive after initial sync) to get the updated content next time.
+     * The sync token fetches only the content that was added after your last sync,
+     * and the details of the content that was deleted or updated.
+     *
+     *
+     *  <br><br><b>Example :</b><br>
+     *  <pre class="prettyprint">
+     *
+     *  //dummy sync_token = "blt28937206743728463";
+     *  stack.syncToken(sync_token, new SyncResultCallBack() ){ }
+     *
+     * </pre>
+     */
+    public void syncToken(String sync_token, SyncResultCallBack syncCallBack){
+
+        this.sync_token = sync_token;
+        if (syncParams == null){
+            syncParams = new JSONObject();
+        }
+        try {
+            syncParams.put("init", true);
+            syncParams.put("sync_token", sync_token);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        this.requestSync(syncCallBack);
+    }
+
+
+
+
+
+
+
+
+    /**
+     * @param from_date this parameter is need to pass as start_date
+     * @param syncCallBack returns callback for sync result.
+     *
+     * You can also initialize sync with entries published after a specific date. To do this, use syncWithDate
+     * and specify the start date as its value.
+     *
+     * <br><br><b>Example :</b><br>
+     * <pre class="prettyprint">
+     *
+     *   // dummy date final Date start_date = sdf.parse("2018-10-07");
+     *   stack.syncFromDate(start_date, new SyncResultCallBack()) { }
+     *
      *
      *  </pre>
      */
-    public void syncWithDate(Date from_date, SyncResultCallBack syncCallBack){
+    public void syncFromDate(Date from_date, SyncResultCallBack syncCallBack){
         start_from_date = convertUTCToISO(from_date);
         if (syncParams == null){
             syncParams = new JSONObject();
@@ -407,115 +483,23 @@ public class Stack implements INotifyClass {
 
     /**
      *
-     * If the result of the initial sync (or subsequent sync) contains more than 100 records,
-     * the response would be paginated. It provides pagination token in the response. However,
-     * you don’t have to use the pagination token manually to get the next batch;
-     * the SDK does that automatically until the sync is complete.
+     * @param content_type is UID of your content_type
+     * @param syncCallBack returns callback for sync result.
      *
-     * @param pagination_token this is the parameter need to pass as pagination_token.
-     * @param @{@link SyncResultCallBack} returns syncCallBack.
-     *
-     * Pagination token can be used in case you want to fetch only selected batches.
-     * It is especially useful if the sync process is interrupted midway (due to network issues, etc.).
-     * In such cases, this token can be used to restart the sync process from where it was interrupted.
+     * You can also initialize sync with entries of only specific content_type.
+     * To do this, use syncContentType and specify the content type UID as its value.
+     * However, if you do this, the subsequent syncs will only include the entries of the specified content_type.
      *
      * <br><br><b>Example :</b><br>
      * <pre class="prettyprint">
      *
-     * String pagination_token = "blt4738747389474";
-     * stack.syncWithPaginationToken(pagination_token, new SyncResultCallBack() {
-     *    @Override
-     *    public void onCompletion(SyncStack syncStack, Error error) {
-     *
-     *    }
-     * });
-     *
-     * </pre>
-     */
-    public void syncWithPaginationToken(String pagination_token, SyncResultCallBack syncCallBack){
-        this.pagination_token = pagination_token;
-        if (syncParams == null){
-            syncParams = new JSONObject();
-        }
-
-        try {
-            syncParams.put("init", true);
-            syncParams.put("pagination_token", pagination_token);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        this.requestSync(syncCallBack);
-    }
-
-
-
-
-    /**
-     * @param sync_token @{@link String}
-     * @param @{@link SyncResultCallBack} returns syncCallBack
-     *
-     * You can use the sync token (that you receive after initial sync) to get the updated content next time.
-     * The sync token fetches only the content that was added after your last sync,
-     * and the details of the content that was deleted or updated.
-     *
-     *
-     *  <br><br><b>Example :</b><br>
-     *  <pre class="prettyprint">
-     *
-     *   String sync_token = "blt28937206743728463";
-     *   stack.syncWithSyncToken(sync_token, new SyncResultCallBack() {
-     *    @Override
-     *    public void onCompletion(SyncStack syncStack,Error error) {
-     *
-     *    }
-     * });
-     *
-     * </pre>
-     */
-    public void syncWithSyncToken(String sync_token, SyncResultCallBack syncCallBack){
-
-        this.sync_token = sync_token;
-        if (syncParams == null){
-            syncParams = new JSONObject();
-        }
-        try {
-            syncParams.put("init", true);
-            syncParams.put("sync_token", sync_token);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        this.requestSync(syncCallBack);
-    }
-
-
-
-
-
-    /**
-     *
-     * @param content_type {@link String}
-     * @param @{@link SyncResultCallBack} returns syncCallBack
-     *
-     * You can also initialize sync with entries of only specific content types.
-     * To do this, use syncWithContentType and specify the content type UID as its value.
-     * However, if you do this, the subsequent syncs will only include the entries of the specified content types.
-     *
-     * <br><br><b>Example :</b><br>
-     * <pre class="prettyprint">
-     *
-     * stack.syncWithContentType(Stack.Types.type, new SyncResultCallBack() {
-     *    @Override
-     *    public void onCompletion(SyncStack syncStack,Error error) {
-     *
-     *    }
-     * });
+     * // dummy content_type like "session"
+     * stack.syncContentType(String content_type, new SyncResultCallBack()){  }
      *
      *  </pre>
      *
      */
-    public void syncWithContentType(String content_type, SyncResultCallBack syncCallBack){
+    public void syncContentType(String content_type, SyncResultCallBack syncCallBack){
 
         this.contentType = content_type;
         if (syncParams == null){
@@ -536,8 +520,8 @@ public class Stack implements INotifyClass {
 
 
     /**
-     * @param language @{@link Language}
-     * @param @{@link SyncResultCallBack} returns syncCallBack
+     * @param language parameter provide content only for specific locales.
+     * @param syncCallBack returns callback for sync result.
      *
      * You can also initialize sync with entries of only specific locales.
      * To do this, use syncWithLocale and specify the locale code as its value.
@@ -546,16 +530,12 @@ public class Stack implements INotifyClass {
      *  <br><br><b>Example :</b><br>
      *  <pre class="prettyprint">
      *
-     * stackInstance.syncWithLocale(Language, new SyncResultCallBack() {
-     *    @Override
-     *    public void onCompletion(SyncStack syncStack,Error error) {
-     *
-     *    }
-     * });
+     * // dummy language- Language.ENGLISH_UNITED_STATES
+     * stackInstance.syncLocale(Language.ENGLISH_UNITED_STATES, new SyncResultCallBack() ) { }
      *
      * </pre>
      */
-    public void syncWithLocale(Language language, SyncResultCallBack syncCallBack) {
+    public void syncLocale(Language language, SyncResultCallBack syncCallBack) {
         this.localeCode = getLanguageCode(language);
 
         if (syncParams == null) {
@@ -595,38 +575,29 @@ public class Stack implements INotifyClass {
 
     /**
      *
-     * @param type @{@link Types} first parameter accepts types for following
+     * @param type - Use the type parameter to get a specific type of content
+     *             like  ( ‘asset_published,’ ‘entry_published,’ ‘asset_unpublished,’ ‘asset_deleted,’ ‘entry_unpublished,’ ‘entry_deleted,’ ‘content_type_deleted.’ )
+     * @param syncCallBack returns callback for sync result.
      *
-     *         entry_published,
-     *         entry_published,
-     *         entry_unpublished ,
-     *         entry_deleted ,
-     *         asset_published ,
-     *         asset_unpublished ,
-     *         asset_deleted ,
-     *         content_type_deleted
-     *
-     * @param @{@link SyncResultCallBack} second parameter takes SyncResultCallBack
+     * Use the type parameter to get a specific type of content. You can pass one of the following values:
+     * ‘asset_published,’ ‘entry_published,’ ‘asset_unpublished,’ ‘asset_deleted,’ ‘entry_unpublished,’ ‘entry_deleted,’ ‘content_type_deleted.’
+     * If you do not specify any value, it will bring all published entries and published assets.
      *
      * <br><br><b>Example :</b><br>
      * <pre class="prettyprint">
      *
-     *   stackInstance.syncWithLocale(Types.entry_published, new SyncResultCallBack() {
-     *        @Override
-     *      public void onCompletion(SyncStack syncStack,Error error) {
-     *
-     *        }
-     *      });
+     *   stackInstance.syncPublishType(Stack.PublishType.entry_published, new SyncResultCallBack()) { }
      *
      *  </pre>
      */
-    public void syncWithType(Types type, SyncResultCallBack syncCallBack){
-        this.types = type;
+
+    public void syncPublishType(PublishType type, SyncResultCallBack syncCallBack){
+        this.publishType = type;
         if (syncParams == null){ syncParams = new JSONObject(); }
 
         try {
             syncParams.put("init", true);
-            syncParams.put("type", types);
+            syncParams.put("type", publishType);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -638,11 +609,11 @@ public class Stack implements INotifyClass {
 
     /**
      *
-     * @param from_date @{@link Date} first parameter take date
-     * @param contentType {@link String} second parameter takes content_type
-     * @param type @{@link Types} third parameter takes Types of content
-     * @param language @{@link Language} four parameters takes Language
-     * @param syncCallBack @{@link SyncResultCallBack} fifth parameter is SyncResultCallback
+     * @param contentType
+     * @param from_date
+     * @param language
+     * @param type
+     * @param syncCallBack
      *
      * You can also initialize sync with entries that satisfy multiple parameters.
      * To do this, use syncWith and specify the parameters.
@@ -651,20 +622,16 @@ public class Stack implements INotifyClass {
      *  <br><br><b>Example :</b><br>
      *  <pre class="prettyprint">
      *
-     *  stackInstance.syncWith(date,"content_type", Stack.Types.type, Language, new SyncResultCallBack() {
-     *    @Override
-     *    public void onCompletion(SyncStack syncStack,Error error) {
-     *
-     *    }
-     *  });
+     *  stackInstance.syncString contentType, Date from_date, Language language, PublishType type,  SyncResultCallBack syncCallBack) { }
      *
      *
      * </pre>
      */
-    public void sync(Date from_date, String contentType, Types type, Language language, SyncResultCallBack syncCallBack){
+
+    public void sync( String contentType, Date from_date, Language language, PublishType type,  SyncResultCallBack syncCallBack){
         start_from_date = convertUTCToISO(from_date);
         this.contentType = contentType;
-        this.types = type;
+        this.publishType = type;
         this.localeCode = getLanguageCode(language);
 
         if (syncParams == null){
@@ -674,7 +641,7 @@ public class Stack implements INotifyClass {
             syncParams.put("init", true);
             syncParams.put("start_from",   this.start_from_date);
             syncParams.put("content_type_uid", this.contentType);
-            syncParams.put("type", types);
+            syncParams.put("type", publishType);
             syncParams.put("locale", this.localeCode);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -707,7 +674,7 @@ public class Stack implements INotifyClass {
                     if (error == null){
                         String paginationToken = syncStack.getPaginationToken();
                         if (paginationToken != null){
-                            syncWithPaginationToken(paginationToken, callback);
+                            syncPaginationToken(paginationToken, callback);
                         }
                     }
 

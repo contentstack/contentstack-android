@@ -18,7 +18,7 @@ package com.contentstack.txtmark;
 /**
  * Decorator interface.
  *
- * @author René Jeschke &lt;rene_jeschke@yahoo.de&gt;
+ * @author René Jeschke &lt, rene_jeschke@yahoo.de&gt,
  */
 public interface Decorator
 {
