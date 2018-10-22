@@ -1084,10 +1084,9 @@ public class Entry {
      * Fetches the latest version of the entries from Built.io content stack
      *
      * @param callBack
-     * 					{@link EntryResultCallBack} object to notify the application when the request has completed.
+     * {@link EntryResultCallBack} object to notify the application when the request has completed.
      *
-     * @return
-     * 			{@link Entry} object, so you can chain this call.
+     * {@link Entry} object, so you can chain this call.
      *
      * <br><br><b>Example :</b><br>
      * <pre class="prettyprint">

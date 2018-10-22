@@ -576,11 +576,11 @@ public class Stack implements INotifyClass {
     /**
      *
      * @param type - Use the type parameter to get a specific type of content
-     *             like  ( ‘asset_published,’ ‘entry_published,’ ‘asset_unpublished,’ ‘asset_deleted,’ ‘entry_unpublished,’ ‘entry_deleted,’ ‘content_type_deleted.’ )
+     * like  ( asset_published, entry_published, asset_unpublished, asset_deleted, entry_unpublished, entry_deleted, content_type_deleted.)
      * @param syncCallBack returns callback for sync result.
      *
      * Use the type parameter to get a specific type of content. You can pass one of the following values:
-     * ‘asset_published,’ ‘entry_published,’ ‘asset_unpublished,’ ‘asset_deleted,’ ‘entry_unpublished,’ ‘entry_deleted,’ ‘content_type_deleted.’
+     * asset_published, entry_published, asset_unpublished, asset_deleted, entry_unpublished, entry_deleted,  content_type_deleted.
      * If you do not specify any value, it will bring all published entries and published assets.
      *
      * <br><br><b>Example :</b><br>

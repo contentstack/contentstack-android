@@ -377,9 +377,9 @@ public class Asset {
      * To set cache policy using {@link Query} instance.
      *
      * @param cachePolicy
-     *                    {@link CachePolicy} instance.
-     * @return
-     *           {@link Query} object, so you can chain this call.
+     * {@link CachePolicy} instance.
+     *
+     * {@link Query} object, so you can chain this call.
      *
      * <br><br><b>Example :</b><br>
      * <pre class="prettyprint">

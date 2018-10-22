@@ -222,7 +222,7 @@ public class AssetLibrary implements INotifyClass{
      * Fetch a all asset.
      *
      * @param assetsCallback
-     *                      {@link FetchAssetsCallback} instance for success and failure result.
+     * {@link FetchAssetsCallback} instance for success and failure result.
      *
      * <br><br><b>Example :</b><br>
      * <pre class="prettyprint">
@@ -232,7 +232,7 @@ public class AssetLibrary implements INotifyClass{
      *
      *   assetLibObject.fetchAll(new FetchAssetsCallback() {
      *
-     *   @Override
+     *
      *   public void onCompletion(ResponseType responseType, List<Asset> assets, Error error) {
      *      if (error == null) {
      *         //Success Block.
