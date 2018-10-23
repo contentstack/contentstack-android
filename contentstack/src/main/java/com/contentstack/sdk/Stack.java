@@ -323,7 +323,9 @@ public class Stack implements INotifyClass {
 
     /**
      * @param syncCallBack returns callback for sync result.
-     * The Initial Sync request performs a complete sync of your app data.
+     *
+     *
+     * The Sync request performs a complete sync of your app data.
      * It returns all the published entries and assets of the specified stack in response.
      * The response also contains a sync token, which you need to store,
      * since this token is used to get subsequent delta updates later.
@@ -358,8 +360,8 @@ public class Stack implements INotifyClass {
 
     /**
      *
-     * @param pagination_token this is the parameter need to pass as pagination_token.
-     * @param syncCallBack returns callback for sync result.
+     * @param pagination_token If the response is paginated, use the pagination token under this parameter.
+     * @param syncCallBack returns callback for sync result
      *
      * If the result of the initial sync (or subsequent sync) contains more than 100 records,
      * the response would be paginated. It provides pagination token in the response. However,
@@ -398,8 +400,8 @@ public class Stack implements INotifyClass {
 
 
     /**
-     * @param sync_token this parameter is need to pass as sync_token
-     * @param syncCallBack returns callback for sync result.
+     * @param sync_token Use the sync token that you received in the previous/initial sync under this parameter.
+     * @param syncCallBack returns callback for sync result
      *
      * You can use the sync token (that you receive after initial sync) to get the updated content next time.
      * The sync token fetches only the content that was added after your last sync,
@@ -438,8 +440,8 @@ public class Stack implements INotifyClass {
 
 
     /**
-     * @param from_date this parameter is need to pass as start_date
-     * @param syncCallBack returns callback for sync result.
+     * @param from_date Enter the start date for initial sync.
+     * @param syncCallBack Returns callback for sync result.
      *
      * You can also initialize sync with entries published after a specific date. To do this, use syncWithDate
      * and specify the start date as its value.
@@ -483,11 +485,11 @@ public class Stack implements INotifyClass {
 
     /**
      *
-     * @param content_type is UID of your content_type
-     * @param syncCallBack returns callback for sync result.
+     * @param content_type Provide uid of your content_type
+     * @param syncCallBack Returns callback for sync result.
      *
      * You can also initialize sync with entries of only specific content_type.
-     * To do this, use syncContentType and specify the content type UID as its value.
+     * To do this, use syncContentType and specify the content type uid as its value.
      * However, if you do this, the subsequent syncs will only include the entries of the specified content_type.
      *
      * <br><br><b>Example :</b><br>
@@ -520,11 +522,11 @@ public class Stack implements INotifyClass {
 
 
     /**
-     * @param language parameter provide content only for specific locales.
-     * @param syncCallBack returns callback for sync result.
+     * @param language Select the required locale from the Language class.
+     * @param syncCallBack Returns callback for sync result.
      *
      * You can also initialize sync with entries of only specific locales.
-     * To do this, use syncWithLocale and specify the locale code as its value.
+     * To do this, use syncLocale and specify the locale code as its value.
      * However, if you do this, the subsequent syncs will only include the entries of the specified locales.
      *
      *  <br><br><b>Example :</b><br>
@@ -576,7 +578,9 @@ public class Stack implements INotifyClass {
     /**
      *
      * @param type - Use the type parameter to get a specific type of content
-     * like  ( asset_published, entry_published, asset_unpublished, asset_deleted, entry_unpublished, entry_deleted, content_type_deleted.)
+       like  ( asset_published, entry_published, asset_unpublished, asset_deleted, entry_unpublished, entry_deleted, content_type_deleted.)
+     *
+     *
      * @param syncCallBack returns callback for sync result.
      *
      * Use the type parameter to get a specific type of content. You can pass one of the following values:
@@ -622,7 +626,7 @@ public class Stack implements INotifyClass {
      *  <br><br><b>Example :</b><br>
      *  <pre class="prettyprint">
      *
-     *  stackInstance.syncString contentType, Date from_date, Language language, PublishType type,  SyncResultCallBack syncCallBack) { }
+     *  stackInstance.sync(String contentType, Date from_date, Language language, PublishType type,  SyncResultCallBack syncCallBack) { }
      *
      *
      * </pre>
