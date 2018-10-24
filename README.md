@@ -36,7 +36,7 @@ compile fileTree(dir: 'libs', include: ['*.jar'])
 <!-- Allows applications to access information about networks (Required) -->
 <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 <receiver
-android:name="com.builtio.contentstack.ConnectionStatus"
+android:name="com.contentstack.sdk.ConnectionStatus"
 android:enabled="true" >
 <intent-filter>
 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" >
@@ -44,7 +44,7 @@ android:enabled="true" >
 </intent-filter>
 </receiver>
 <receiver
-android:name="com.builtio.contentstack.ClearCache"
+android:name="com.contentstack.sdk.ClearCache"
 android:enabled="true">
 <intent-filter>
 <action android:name="StartContentStackClearingCache">
@@ -55,7 +55,7 @@ android:enabled="true">
 
 To initialize the SDK, specify application context, the API key, access token, and environment name of the stack as shown in the snippet given below:
 ```sh
-Stack stack = Contentstack.stack(context, "siteApiKey", "accessToken", "enviroment_name");
+Stack stack = Contentstack.stack(context, "api_key", "access_token", "enviroment_name");
 ```
 Once you have initialized the SDK, you can query entries to fetch the required content.
 
@@ -90,7 +90,7 @@ A publishing environment corresponds to one or more deployment servers or a cont
 
 To initialize the SDK, specify application context, the API key, access token, and environment name of the stack as shown in the snippet given below:
 
-  Stack stack = Contentstack.stack(context, "siteApiKey", "accessToken", "enviroment_name");
+  Stack stack = Contentstack.stack(context, "api_key", "access_token", "enviroment_name");
 
 Once you have initialized the SDK, you can query entries to fetch the required content.
 
@@ -102,7 +102,10 @@ To retrieve a single entry from a content type use the code snippet given below:
 
 ContentType contentType = stack.contentType("content_type_uid");
 ```sh
-Entry blogEntry = contentType.entry("entry_uid");blogEntry.fetch(new EntryResultCallBack() {@OverridepublicvoidonCompletion(ResponseType responseType, Error error) {
+Entry blogEntry = contentType.entry("entry_uid");
+blogEntry.fetch(new EntryResultCallBack() {
+@Override
+publicvoidonCompletion(ResponseType responseType, Error error) {
 if (error == null) {
 // Success block
 } else {
@@ -114,9 +117,10 @@ if (error == null) {
 To retrieve multiple entries of a particular content type, use the code snippet given below:
 ```sh
 //stack is an instance of Stack class
-
 Query blogQuery = stack.contentType("content_type_uid").query();
-blogQuery.find(new QueryResultsCallBack() {@OverridepublicvoidonCompletion(ResponseType responseType, QueryResult queryResult, Error error) {
+blogQuery.find(new QueryResultsCallBack() {
+ @Override
+ publicvoidonCompletion(ResponseType responseType, QueryResult queryResult, Error error) {
 if(error == null){
 //Success block
 }else{
@@ -139,22 +143,83 @@ For example, if you want to crop an image (with width as 300 and height as 400),
 
 [Read Image Delivery API documentation](https://www.contentstack.com/docs/apis/image-delivery-api/).
 ```sh
-// set the image quality to 100 
-LinkedHashMap imageParams = new LinkedHashMap(); 
-imageParams.put("quality", 100); 
+// set the image quality to 100
+LinkedHashMap imageParams = new LinkedHashMap();
+imageParams.put("quality", 100);
 imageUrl = Stack.ImageTransform(imageUrl, imageParams);
 
-// resize the image by specifying width and height 
-LinkedHashMap imageParams = new LinkedHashMap(); 
-imageParams.put("width", 100); 
-imageParams.put("height",100); 
+// resize the image by specifying width and height
+LinkedHashMap imageParams = new LinkedHashMap();
+imageParams.put("width", 100);
+imageParams.put("height",100);
 imageUrl = Stack.ImageTransform(imageUrl, imageParams);
 
-// enable auto optimization for the image 
-LinkedHashMap imageParams = new LinkedHashMap(); 
-imageParams.put("auto", "webp"); 
+// enable auto optimization for the image
+LinkedHashMap imageParams = new LinkedHashMap();
+imageParams.put("auto", "webp");
 imageUrl = Stack.ImageTransform(imageUrl, imageParams);
 ```
+
+### Using the Sync API with Android SDK
+The Sync API takes care of syncing your Contentstack data with your app and ensures that the data is always up-to-date by providing delta updates. Contentstack’s Android SDK supports Sync API, which you can use to build powerful apps. Read through to understand how to use the Sync API with Contentstack Android SDK.
+
+### Initial Sync
+
+The Initial sync request performs a complete sync of your app data. It returns all the published entries and assets of the specified stack in response. To start the Initial sync process, use the syncInit method.
+
+```sh
+//stack is an instance of Stack class
+stack.sync(new SyncResultCallBack() {
+    @Override
+    public void onCompletion(SyncStack syncStack,Error error) {
+    if(error == null){
+    //Success block
+    }else{
+    //Error block
+    }}});
+```
+
+
+### Pagination Sync
+
+If the result of the initial sync (or subsequent sync) contains more than 100 records, the response would be paginated. It provides pagination token in the response. However, you don’t have to use the pagination token manually to get the next batch; the SDK does that automatically until the sync is complete.
+
+Pagination token can be used in case you want to fetch only selected batches. It is especially useful if the sync process is interrupted midway (due to network issues, etc.). In such cases, this token can be used to restart the sync process from where it was interrupted.
+
+```sh
+//stack is an instance of Stack class
+stack.syncPaginationToken("pagination_token", new SyncResultCallBack() {
+   @Override
+   public void onCompletion(SyncStack syncStack, Error error) {
+   if(error == null){
+    //Success block
+    }else{
+    //Error block
+    }}});
+```
+
+
+### Subsequent sync
+
+If the result of the initial sync (or subsequent sync) contains more than 100 records, the response would be paginated. It provides pagination token in the response. However, you don’t have to use the pagination token manually to get the next batch; the SDK does that automatically until the sync is complete.
+
+Pagination token can be used in case you want to fetch only selected batches. It is especially useful if the sync process is interrupted midway (due to network issues, etc.). In such cases, this token can be used to restart the sync process from where it was interrupted.
+
+```sh
+//stack is an instance of Stack class
+stack.syncToken("sync_token", new SyncResultCallBack() {
+   @Override
+   public void onCompletion(SyncStack syncStack,Error error) {
+   if(error == null){
+    //Success block
+    }else{
+    //Error block
+    }}});
+```
+
+### Advanced sync
+
+You can use advanced sync queries to fetch custom results while performing initial sync. [Read advanced sync queries documentation ](http://www.contentstack.com/docs/guide/synchronization/using-the-sync-api-with-ios-sdk#advanced-sync-queries)
 
 ### Helpful Links
 
@@ -164,7 +229,7 @@ imageUrl = Stack.ImageTransform(imageUrl, imageParams);
 
 ### The MIT License (MIT)
 
-Copyright © 2012-2017 [Built.io](https://www.built.io/). All Rights Reserved
+Copyright © 2012-2017 [contentstack.com](https://www.contentstack.com/). All Rights Reserved
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
