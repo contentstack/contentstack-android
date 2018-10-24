@@ -201,9 +201,7 @@ stack.syncPaginationToken("pagination_token", new SyncResultCallBack() {
 
 ### Subsequent sync
 
-If the result of the initial sync (or subsequent sync) contains more than 100 records, the response would be paginated. It provides pagination token in the response. However, you don’t have to use the pagination token manually to get the next batch; the SDK does that automatically until the sync is complete.
-
-Pagination token can be used in case you want to fetch only selected batches. It is especially useful if the sync process is interrupted midway (due to network issues, etc.). In such cases, this token can be used to restart the sync process from where it was interrupted.
+ You can use the sync token (that you receive after initial sync) to get the updated content next time. The sync token fetches only the content that was added after your last sync, and the details of the content that was deleted or updated.
 
 ```sh
 //stack is an instance of Stack class
@@ -217,9 +215,8 @@ stack.syncToken("sync_token", new SyncResultCallBack() {
     }}});
 ```
 
-### Advanced sync
-
-You can use advanced sync queries to fetch custom results while performing initial sync. [Read advanced sync queries documentation ](http://www.contentstack.com/docs/guide/synchronization/using-the-sync-api-with-ios-sdk#advanced-sync-queries)
+### Advanced sync queries
+You can use advanced sync queries to fetch custom results while performing initial sync. [Read advanced sync queries](http://www.contentstack.com/docs/guide/synchronization/using-the-sync-api-with-ios-sdk#advanced-sync-queries) documentation.
 
 ### Helpful Links
 
@@ -229,7 +226,7 @@ You can use advanced sync queries to fetch custom results while performing initi
 
 ### The MIT License (MIT)
 
-Copyright © 2012-2017 [contentstack.com](https://www.contentstack.com/). All Rights Reserved
+Copyright © 2012-2017 [Contentstack.com](https://www.contentstack.com/). All Rights Reserved
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
