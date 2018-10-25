@@ -667,10 +667,8 @@ public class Stack implements INotifyClass {
             if (headers.containsKey("environment")) {
                 syncParams.put("environment", headers.get("environment"));
             }
-            //syncParams.put("web_ui_api_key", "607a456d7f3afc20cd9fcb1f");
-            syncParams.put("sync_cdn_api_key", "607a456d7f3afc20cd9fcb1f");
-            urlQueries = syncParams;
 
+            urlQueries = syncParams;
             fetchFromNetwork(URL, urlQueries, headers, null, new SyncResultCallBack() {
                 @Override
                 public void onCompletion(SyncStack syncStack, Error error) {
