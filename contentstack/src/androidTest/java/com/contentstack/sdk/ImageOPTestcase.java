@@ -36,7 +36,7 @@ public class ImageOPTestcase {
 
         appContext = InstrumentationRegistry.getTargetContext();
         Config config = new Config();
-        config.setHost("cdn.contentstack.io");
+        config.setHost(BuildConfig.base_url);
         stack = Contentstack.stack(appContext, DEFAULT_APPLICATION_KEY, DEFAULT_ACCESS_TOKEN, DEFAULT_ENV, config);
         startSignal = new CountDownLatch(1);
     }

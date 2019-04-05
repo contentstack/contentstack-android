@@ -25,7 +25,6 @@ class OkHttpClass extends HurlStack {
 
     private static String TAG = "OkHttpClass";
     private final OkUrlFactory mFactory;
-    private SSLContext sslContext;
 
     protected OkHttpClass(String protocol) {
         this(protocol, new OkHttpClient());
@@ -36,12 +35,7 @@ class OkHttpClass extends HurlStack {
             throw new NullPointerException("Client must not be null.");
         }
 
-        if(protocol.equals(CSAppConstants.URLSCHEMA_HTTP)){
-            OkHttpClient okHttpClient = getUnsafeOkHttpClient(client);
-            mFactory = new OkUrlFactory(okHttpClient);
-        }else{
-            mFactory = new OkUrlFactory(client);
-        }
+        mFactory = new OkUrlFactory(client);
     }
 
     @Override
@@ -49,41 +43,5 @@ class OkHttpClass extends HurlStack {
         return mFactory.open(url);
     }
 
-    protected OkHttpClient getUnsafeOkHttpClient(OkHttpClient okHttpClient) {
-        try {
-            final TrustManager[] trustAllCerts = new TrustManager[]{
-                    new X509TrustManager() {
-                        @Override
-                        public void checkClientTrusted(java.security.cert.X509Certificate[] chain, String authType) throws CertificateException {
-                        }
 
-                        @Override
-                        public void checkServerTrusted(java.security.cert.X509Certificate[] chain, String authType) throws CertificateException {
-                        }
-
-                        @Override
-                        public java.security.cert.X509Certificate[] getAcceptedIssuers() {
-                            return null;
-                        }
-                    }
-            };
-
-            final SSLContext sslContext = SSLContext.getInstance("TLS");
-            sslContext.init(null, trustAllCerts, new java.security.SecureRandom());
-            final SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
-
-            okHttpClient.setSslSocketFactory(sslSocketFactory);
-            okHttpClient.setHostnameVerifier(new HostnameVerifier() {
-                @Override
-                public boolean verify(String hostname, SSLSession session) {
-                    return true;
-                }
-            });
-
-            return okHttpClient;
-        } catch (Exception e) {
-            CSAppUtils.showLog(TAG, e.toString());
-        }
-        return null;
-    }
 }

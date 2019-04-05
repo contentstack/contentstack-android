@@ -2,13 +2,11 @@ package com.contentstack.sdk;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
-import android.support.test.runner.AndroidJUnit4;
 import android.util.Log;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
 import java.util.List;
+import android.support.test.runner.AndroidJUnit4;
 import java.util.concurrent.CountDownLatch;
 import static org.junit.Assert.assertEquals;
 
@@ -34,7 +32,7 @@ public class AssetCachePolicy  {
 
         appContext = InstrumentationRegistry.getTargetContext();
         Config config = new Config();
-        config.setHost("cdn.contentstack.io");
+        config.setHost(BuildConfig.base_url);
         stack = Contentstack.stack(appContext, DEFAULT_API_KEY, DEFAULT_ACCESS_TOKEN, DEFAULT_ENV, config);
         startSignal = new CountDownLatch(1);
     }

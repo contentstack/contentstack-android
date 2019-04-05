@@ -28,6 +28,8 @@ public class ContentType {
         this.stackHeader = stack.localHeader;
     }
 
+
+
     /**
      * To set headers for Built.io Contentstack rest calls.
      * <br>

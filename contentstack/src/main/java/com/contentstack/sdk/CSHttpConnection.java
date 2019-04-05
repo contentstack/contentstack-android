@@ -122,6 +122,7 @@ class CSHttpConnection implements IURLRequestHTTP {
         return responseJSON;
     }
 
+
     public String setFormParamsGET(HashMap<String, java.lang.Object> params){
         if(params != null && params.size() > 0){
             String urlParams = null;
@@ -141,6 +142,7 @@ class CSHttpConnection implements IURLRequestHTTP {
         }
         return null;
     }
+
 
     private String getParams(HashMap<String, Object> params) {
         String urlParams = "?";
@@ -216,6 +218,8 @@ class CSHttpConnection implements IURLRequestHTTP {
         return urlParams;
     }
 
+
+
     @Override
     public void send() {
         String url                      = null;
@@ -235,11 +239,6 @@ class CSHttpConnection implements IURLRequestHTTP {
             url = urlPath;
         }
 
-        if(url.contains(CSAppConstants.URLSCHEMA_HTTPS)){
-            httpsORhttp = CSAppConstants.URLSCHEMA_HTTPS;
-        }else if(url.contains(CSAppConstants.URLSCHEMA_HTTP)){
-            httpsORhttp = CSAppConstants.URLSCHEMA_HTTP;
-        }
 
         for (Map.Entry<String, Object> entry : this.headers.entrySet()) {
             String key = entry.getKey();
@@ -282,7 +281,7 @@ class CSHttpConnection implements IURLRequestHTTP {
 
     private String defaultUserAgent() {
         String agent = System.getProperty("http.agent");
-        return agent != null ? agent : ("Java" + System.getProperty("java.version"));
+        return agent != null ? agent : ("Android" + System.getProperty("java.version"));
     }
 
     private int getRequestId(CSAppConstants.RequestMethod requestMethod) {

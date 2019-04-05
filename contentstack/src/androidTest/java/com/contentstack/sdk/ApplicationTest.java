@@ -9,7 +9,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
 import java.lang.Override;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -45,7 +44,7 @@ public class ApplicationTest  {
 
         appContext = InstrumentationRegistry.getTargetContext();
         Config config = new Config();
-        config.setHost("cdn.contentstack.io");
+        config.setHost(BuildConfig.base_url);
         stack = Contentstack.stack(appContext, DEFAULT_APPLICATION_KEY, DEFAULT_ACCESS_TOKEN, DEFAULT_ENV,config);
         uidArray = new String[]{"blte88d9bec040e7c7c", "bltdf783472903c3e21"};
     }

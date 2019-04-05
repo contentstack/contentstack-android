@@ -38,6 +38,7 @@ class CSConnectionRequest implements IRequestModelHTTP{
     private JSONObject responseJSON;
     private INotifyClass notifyClass;
     private INotifyClass assetLibrary;
+
     private Stack stackInstance;
     private Entry entryInstance;
     private Query queryInstance;
