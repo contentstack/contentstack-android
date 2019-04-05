@@ -52,7 +52,7 @@ public class Config {
      * Sets the protocol in base url.
      *
      * @param isSSL
-     * 					true/false values initiating calls (HTTPS/HTTP) respectively.
+     * true/false values initiating calls (HTTPS/HTTP) respectively.
      *
      * <p>
      * <b>Note:</b> Default protocol is HTTPS.
@@ -62,13 +62,9 @@ public class Config {
      * config.setSSL(true);
      * </pre>
      */
+    @Deprecated
     public void setSSL(boolean isSSL){
-
-        if(isSSL){
-            URLSCHEMA = CSAppConstants.URLSCHEMA_HTTPS;
-        }else{
-            URLSCHEMA = CSAppConstants.URLSCHEMA_HTTP;
-        }
+        URLSCHEMA = CSAppConstants.URLSCHEMA_HTTPS;
     }
 
     /**
@@ -93,9 +89,9 @@ public class Config {
      * boolean protocol = config.isSSL();
      * </pre>
      */
+    @Deprecated
     public boolean isSSL(){
-
-        return URLSCHEMA.equalsIgnoreCase(CSAppConstants.URLSCHEMA_HTTPS) ? true : false;
+        return URLSCHEMA.equalsIgnoreCase(CSAppConstants.URLSCHEMA_HTTPS);
     }
 
     /**
