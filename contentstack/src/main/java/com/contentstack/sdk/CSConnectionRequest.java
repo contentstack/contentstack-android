@@ -43,6 +43,7 @@ class CSConnectionRequest implements IRequestModelHTTP{
     private Entry entryInstance;
     private Query queryInstance;
     private Asset assetInstance;
+    private ContentType contentTypeInstance;
     private JSONObject errorJObject;
     private Error errorObject = new Error() ;
 
@@ -64,6 +65,10 @@ class CSConnectionRequest implements IRequestModelHTTP{
         this.assetInstance = asset;
     }
 
+    public CSConnectionRequest(ContentType contentType) {
+        this.contentTypeInstance = contentType;
+    }
+
     public void setQueryInstance(Query queryInstance) {
         this.queryInstance = queryInstance;
     }
@@ -73,6 +78,8 @@ class CSConnectionRequest implements IRequestModelHTTP{
     }
 
     public void setStackInstance(Stack stackInstance) { this.stackInstance = stackInstance; }
+
+    public void setContentTypeInstance(ContentType contentTypeInstance) { this.contentTypeInstance = contentTypeInstance; }
 
     public void setParams(Object... objects){
         CSAppUtils.showLog(TAG, "ParallelTasks------|" + objects[0] + " started");
@@ -241,6 +248,14 @@ class CSConnectionRequest implements IRequestModelHTTP{
             model.setJSON(responseJSON);
             if(request.getCallBackObject() != null){
                 ((SyncResultCallBack) request.getCallBackObject()).onRequestFinish(model);
+            }
+
+        }else if(controller.equalsIgnoreCase(CSController.FETCHCONTENTTYPES)){
+
+            ContentTypesModel model = new ContentTypesModel();
+            model.setJSON(responseJSON);
+            if(request.getCallBackObject() != null){
+                ((ContentTypesCallback) request.getCallBackObject()).onRequestFinish(model);
             }
 
         }

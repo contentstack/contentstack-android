@@ -1,21 +1,27 @@
 [![Contentstack](https://www.contentstack.com/docs/static/images/contentstack.png)](https://www.contentstack.com/)
 ## Android SDK for Contentstack
 
-Contentstack is a headless CMS with an API-first approach. It is a CMS that developers can use to build powerful cross-platform applications in their favorite languages. Build your application frontend, and Contentstack will take care of the rest. [Read More](https://www.contentstack.com/).
+Contentstack is a headless CMS with an API-first approach. 
+It is a CMS that developers can use to build powerful cross-platform applications 
+in their favorite languages. Build your application frontend, and Contentstack will 
+take care of the rest. [Read More](https://www.contentstack.com/).
 
-Contentstack provides Android SDK to build application on top of Android. Given below is the detailed guide and helpful resources to get started with our Android SDK.
+Contentstack provides Android SDK to build application on top of Android. 
+Given below is the detailed guide and helpful resources to get started with our Android SDK.
 
 
 
 ### Prerequisite
 
-You will need one of the following: [Android Studio](https://developer.android.com/studio/install.html) or [Eclipse](https://eclipse.org/downloads/eclipse-packages/?show_instructions=TRUE).
+You will need one of the following: [Android Studio](https://developer.android.com/studio/install.html) 
+or [Eclipse](https://eclipse.org/downloads/eclipse-packages/?show_instructions=TRUE).
 
 ### Setup and Installation
 
 To add the Contentstack Android SDK to your existing project, perform the steps given below:
 
-1. [Download the Android SDK](https://docs.contentstack.com/platforms/android/android_sdk_latest) and extract the ZIP file to your local disk.
+1. [Download the Android SDK](https://docs.contentstack.com/platforms/android/android_sdk_latest) 
+and extract the ZIP file to your local disk.
 2. Add references/dependencies using Eclipse/Android Studio:
 
 ##### Android Studio:
@@ -226,10 +232,19 @@ You can use advanced sync queries to fetch custom results while performing initi
 
 ### The MIT License (MIT)
 
-Copyright © 2012-2017 [Contentstack](https://www.contentstack.com/). All Rights Reserved
+Copyright © 2012-2019 [Contentstack](https://www.contentstack.com/). All Rights Reserved
 
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software 
+and associated documentation files (the "Software"), to deal in the Software without restriction, 
+including without limitation the rights to use, copy, modify, merge, publish, distribute, 
+sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is 
+furnished to do so, subject to the following conditions:
 
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+The above copyright notice and this permission notice shall be included in all copies or 
+substantial portions of the Software.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. https://github.com/rjeschke/txtmark
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, 
+INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR 
+PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, 
+DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR 
+IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. https://github.com/rjeschke/txtmark

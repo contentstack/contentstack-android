@@ -48,24 +48,6 @@ public class Config {
         }
     }
 
-    /**
-     * Sets the protocol in base url.
-     *
-     * @param isSSL
-     * true/false values initiating calls (HTTPS/HTTP) respectively.
-     *
-     * <p>
-     * <b>Note:</b> Default protocol is HTTPS.
-     *
-     * <br><br><b>Example :</b><br>
-     * <pre class="prettyprint">
-     * config.setSSL(true);
-     * </pre>
-     */
-    @Deprecated
-    public void setSSL(boolean isSSL){
-        URLSCHEMA = CSAppConstants.URLSCHEMA_HTTPS;
-    }
 
     /**
      * Get URL.
@@ -80,19 +62,6 @@ public class Config {
         return URL;
     }
 
-    /**
-     * Get URL.
-     *
-     *
-     * <br><br><b>Example :</b><br>
-     * <pre class="prettyprint">
-     * boolean protocol = config.isSSL();
-     * </pre>
-     */
-    @Deprecated
-    public boolean isSSL(){
-        return URLSCHEMA.equalsIgnoreCase(CSAppConstants.URLSCHEMA_HTTPS);
-    }
 
     /**
      * Get version of the Built.io Contentstack server.

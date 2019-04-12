@@ -21,7 +21,7 @@ public class TicketsTestcase extends JUnitCore {
         stack = Contentstack.stack(appContext, STACK_API_KEY, ACCESS_TOKEN, ENV);
     }
 
-    /*@Test
+    @Test
     public void TicketONE(){
 
         Query query = stack.contentType("help_center_topic").query();
@@ -40,5 +40,40 @@ public class TicketsTestcase extends JUnitCore {
             }
         });
     }
-*/
+
+
+
+
+
+    @Test
+    public void getAllContentTypes() {
+
+        stack.getContentTypes( new ContentTypesCallback() {
+            @Override
+            public void onCompletion(ContentTypesModel contentTypesModel, Error error) {
+                Log.e("getAllContentTypes reponse: ", contentTypesModel.getResponse().toString());
+            }
+        });
+
+    }
+
+
+
+    @Test
+    public void getSingleContentType() {
+
+        ContentType  contentType = stack.contentType("schema");
+        contentType.fetch(new ContentTypesCallback() {
+            @Override
+            public void onCompletion(ContentTypesModel contentTypesModel, Error error) {
+                if (error==null){
+                    Log.e("single content:", contentTypesModel.getResponse().toString());
+                }else {
+                    Log.e("Error", error.getErrorMessage());
+                }
+            }
+        });
+
+        //assertEquals(100, itemsSize);
+    }
 }

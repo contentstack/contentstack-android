@@ -58,7 +58,8 @@ task clearJar(type: Delete) {
 
 task unzip(type: Copy) {
 
-    def zipFile = file('build/intermediates/bundles/release/classes.jar')
+    //def zipFile = file('build/intermediates/bundles/release/classes.jar')
+    def zipFile = file('build/intermediates/intermediate-jars/release/classes.jar')
     def outputDir = file("${buildDir}/Contentstack-jar")
     from zipTree(zipFile)
     into outputDir

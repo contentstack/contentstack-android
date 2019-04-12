@@ -18,4 +18,6 @@ public class CSController {
     public static final String FETCHASSETS = "getAssets";
 
     public static final String FETCHSYNC = "getSync";
+
+    public static final String FETCHCONTENTTYPES = "getContentTypes";
 }
