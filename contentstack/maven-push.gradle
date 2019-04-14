@@ -1,0 +1,50 @@
+apply plugin: 'maven'
+apply plugin: 'signing'
+
+group = "com.contentstack.sdk"
+archivesBaseName = "android"
+version = "3.5.0-SNAPSHOT"
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+                authentication(userName: ossrhUsername, password: ossrhPassword)
+            }
+
+            snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+                authentication(userName: ossrhUsername, password: ossrhPassword)
+            }
+
+            pom.project {
+                name 'contentstack-android'
+                packaging 'jar'
+                description 'Android SDK for Contentstack Content Delivery API, Contentstack is a headless CMS with an API-first approach'
+                url 'https://www.contentstack.com/docs/platforms/android'
+
+                scm {
+                    connection 'scm:svn:https://github.com/contentstack/contentstack-android/'
+                    developerConnection 'scm:svn:https://github.com/contentstack/contentstack-android.git'
+                    url 'https://github.com/contentstack/contentstack-android/'
+                }
+
+                licenses {
+                    license {
+                        name 'The MIT License'
+                        url 'http://www.opensource.org/licenses/mit-license.php'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id 'mshaileshr@gmail.com'
+                        name 'Shailesh Mishra'
+                        email 'mobile@contentstack.com'
+                    }
+                }
+            }
+        }
+    }
+}
+
