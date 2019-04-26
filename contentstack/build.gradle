@@ -5,6 +5,7 @@ apply plugin: 'signing'
 android {
 
     signingConfigs {
+
         debug {
             storeFile file("/Users/shaileshmishra/Documents/AndroidSdk/keystore/keystore")
             storePassword '123456'
@@ -18,10 +19,10 @@ android {
             keyAlias 'key0'
             keyPassword '123456'
         }
+
     }
 
     compileSdkVersion 26
-    //publishNonDefault true
 
     defaultConfig {
         minSdkVersion 19
@@ -44,7 +45,6 @@ android {
             buildConfigField "String", "default_env", "\"env1\""
         }
     }
-
 
     /*flavorDimensions "default"
 
@@ -100,23 +100,21 @@ android {
         }
     }*/
 
-
-    lintOptions {
-        abortOnError false
-    }
+    lintOptions { abortOnError false }
 }
 
 
 repositories {
-    flatDir {
-        dirs 'libs'
-    }
+    flatDir { dirs 'libs' }
+    mavenCentral()
+    mavenLocal()
 }
 
-
+configurations { archives }
 
 
 dependencies {
+
     configurations.all { resolutionStrategy.force 'com.android.support:support-annotations:23.1.0' }
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support:appcompat-v7:26.1.0'
@@ -127,9 +125,8 @@ dependencies {
     })
 }
 
-task clearJar(type: Delete) {
-    delete 'build/libs/Contentstack.jar'
-}
+
+task clearJar(type: Delete) { delete 'build/libs/Contentstack.jar' }
 
 task unzip(type: Copy) {
 
@@ -151,7 +148,6 @@ createJar.dependsOn(clearJar, unzip, build)
 
 
 
-
 /*=======================================================================================*/
 /*=============================== [ MAVEN-PUSH-UPLOAD ] =================================*/
 /*=======================================================================================*/
@@ -166,12 +162,16 @@ task sourceJar(type: Jar) {
     from android.sourceSets.main.java.srcDirs
     classifier "source"
 }
+
+
 task javadoc(type: Javadoc) {
     source = android.sourceSets.main.java.srcDirs
     classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
     destinationDir = file("../javadoc/")
     failOnError false
 }
+
+
 task javadocJar(type: Jar, dependsOn: javadoc) {
     classifier = 'javadoc'
     from tasks.javadoc.destinationDir
@@ -185,9 +185,9 @@ task androidSourcesJar(type: Jar) {
 artifacts {
     archives javadocJar
     archives androidSourcesJar
-    archives createJar
 }
 
+signing { sign configurations.archives }
 
 
 uploadArchives {
