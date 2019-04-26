@@ -318,6 +318,53 @@ public class Stack implements INotifyClass {
 
 
 
+    /**
+     * @param callback ContentTypesCallback
+     * This call returns comprehensive information of all the content types available in a particular stack in your account.
+     *
+     *  <br><br><b>Example :</b><br>
+     *  <pre class="prettyprint">
+     * stack.getContentTypes(false, new ContentTypesCallback() {
+     * @Override
+     * public void onCompletion(ContentTypesModel contentTypesModel, Error error) {
+     * System.out.println("contentTypesModel: "+ contentTypesModel.getResponseJSON());
+     * include_count = contentTypesModel.getCount();
+     *
+     * }
+     * });
+     *</pre>
+     */
+
+    public void getContentTypes( final ContentTypesCallback callback) {
+
+        try {
+            String URL = "/" + this.VERSION + "/content_types/";
+            ArrayMap<String,Object> headers = getHeader(localHeader);
+            JSONObject param = new JSONObject();
+            if (headers.containsKey("environment")) {
+                param.put("environment", headers.get("environment"));
+                param.put("include_count", true);
+            }
+
+            fetchContentTypes(URL, param, headers,null, callback);
+
+        }catch (Exception e){
+
+            Error error = new Error();
+            error.setErrorMessage(CSAppConstants.ErrorMessage_JsonNotProper);
+            callback.onRequestFail(ResponseType.UNKNOWN, error);
+        }
+    }
+
+
+    private void fetchContentTypes(String urlString, JSONObject urlQueries, ArrayMap<String, Object> headers, String cacheFilePath, ContentTypesCallback callback) {
+
+        if(callback != null) {
+
+            HashMap<String, Object> urlParams = getUrlParams(urlQueries);
+            new CSBackgroundTask(this, this, CSController.FETCHCONTENTTYPES, urlString, headers, urlParams, new JSONObject(), cacheFilePath, CSAppConstants.callController.CONTENTTYPES.toString(), false, CSAppConstants.RequestMethod.GET, callback);
+        }
+    }
 
 
 
