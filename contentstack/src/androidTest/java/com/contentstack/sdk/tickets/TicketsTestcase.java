@@ -1,25 +1,48 @@
-package com.contentstack.sdk;
+package com.contentstack.sdk.tickets;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
+import android.support.test.filters.MediumTest;
+import android.support.test.runner.AndroidJUnit4;
 import android.util.Log;
+
+import com.contentstack.sdk.Config;
+import com.contentstack.sdk.ContentType;
+import com.contentstack.sdk.ContentTypesCallback;
+import com.contentstack.sdk.ContentTypesModel;
+import com.contentstack.sdk.Contentstack;
+import com.contentstack.sdk.Entry;
+import com.contentstack.sdk.Error;
+import com.contentstack.sdk.Query;
+import com.contentstack.sdk.QueryResult;
+import com.contentstack.sdk.QueryResultsCallBack;
+import com.contentstack.sdk.ResponseType;
+import com.contentstack.sdk.Stack;
+
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.JUnitCore;
+import org.junit.runner.RunWith;
 
 
+@RunWith(AndroidJUnit4.class)
+@MediumTest
 public class TicketsTestcase extends JUnitCore {
 
-    private final String STACK_API_KEY = "blt4c0468fe43dc5bdd";
-    private final String ACCESS_TOKEN = "csbb1543164d7a0684b5a0f87f";
-    private final String ENV = "staging";
     private Stack stack;
 
-    public TicketsTestcase() throws Exception{
+
+    @Before
+    public void startApp() throws Exception {
         Context appContext = InstrumentationRegistry.getTargetContext();
         Config config = new Config();
         config.setHost("cdn.contentstack.io");
+        String STACK_API_KEY = "blt4c0468fe43dc5bdd";
+        String ACCESS_TOKEN = "csbb1543164d7a0684b5a0f87f";
+        String ENV = "staging";
         stack = Contentstack.stack(appContext, STACK_API_KEY, ACCESS_TOKEN, ENV);
     }
+
 
     @Test
     public void TicketONE(){
@@ -62,7 +85,7 @@ public class TicketsTestcase extends JUnitCore {
     @Test
     public void getSingleContentType() {
 
-        ContentType  contentType = stack.contentType("schema");
+        ContentType contentType = stack.contentType("schema");
         contentType.fetch(new ContentTypesCallback() {
             @Override
             public void onCompletion(ContentTypesModel contentTypesModel, Error error) {
