@@ -22,15 +22,16 @@ public class ContentstackUtil {
      * Converts the given date to user&#39;s timezone.
      *
      * @param date
-     * 				date in ISO format.
+     * date in ISO format.
+     *
      * @return
-     * 				{@link Calendar} object.
+     * {@link Calendar} object.
      *
      * @throws ParseException
      *
      * <br><br><b>Example :</b><br>
      * <pre class="prettyprint">
-     *   BuiltUtil.parseDate(dateString, TimeZone.getDefault());
+     *  BuiltUtil.parseDate(dateString, TimeZone.getDefault());
      * </pre>
      *
      */
