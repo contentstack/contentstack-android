@@ -16,10 +16,27 @@ Given below is the detailed guide and helpful resources to get started with our 
 You will need one of the following: [Android Studio](https://developer.android.com/studio/install.html) 
 or [Eclipse](https://eclipse.org/downloads/eclipse-packages/?show_instructions=TRUE).
 
-### Setup and Installation
+### Setup and Installation  
+To use the Contentstack Java SDK to your existing project, perform the steps given below:
 
-To add the Contentstack Android SDK to your existing project, perform the steps given below:
+1. **Gradle**
+```
+implementation 'com.contentstack.sdk:android:3.5.0'
+```
 
+2. **Maven**
+```
+<dependency>
+  <groupId>com.contentstack.sdk</groupId>
+  <artifactId>android</artifactId>
+  <version>3.5.0</version>
+  <type>aar</type>
+</dependency>
+```
+  
+ Or, 
+ 
+To add the Contentstack Android SDK to your existing project manually, perform the steps given below:
 1. [Download the Android SDK](https://docs.contentstack.com/platforms/android/android_sdk_latest) 
 and extract the ZIP file to your local disk.
 2. Add references/dependencies using Eclipse/Android Studio:
