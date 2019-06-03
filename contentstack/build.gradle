@@ -35,6 +35,14 @@ android {
 
     buildTypes {
 
+
+        debug{
+            buildConfigField "String", "base_url", "\"cdn.contentstack.io\""
+            buildConfigField "String", "default_api_key", "\"blt12c8ad610ff4ddc2\""
+            buildConfigField "String", "default_access_token", "\"blt43359585f471685188b2e1ba\""
+            buildConfigField "String", "default_env", "\"env1\""
+        }
+
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
@@ -46,10 +54,9 @@ android {
         }
     }
 
-    /*flavorDimensions "default"
+    flavorDimensions "default"
 
     productFlavors {
-
         prod {
             dimension "default"
             minSdkVersion 19
@@ -86,7 +93,6 @@ android {
             buildConfigField "String", "default_env", "\"env1\""
         }
 
-
         api {
             dimension "default"
             minSdkVersion 19
@@ -98,7 +104,7 @@ android {
             buildConfigField "String", "default_access_token", "\"blt43359585f471685188b2e1ba\""
             buildConfigField "String", "default_env", "\"env1\""
         }
-    }*/
+    }
 
     lintOptions { abortOnError false }
 }

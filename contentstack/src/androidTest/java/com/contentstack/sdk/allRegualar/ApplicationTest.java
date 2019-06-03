@@ -57,6 +57,7 @@ public class ApplicationTest  {
                 BuildConfig.default_api_key,
                 BuildConfig.default_access_token,
                 BuildConfig.default_env,config);
+
         uidArray = new String[]{"blte88d9bec040e7c7c", "bltdf783472903c3e21"};
     }
 
