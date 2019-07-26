@@ -1,7 +1,6 @@
 package com.contentstack.sdk;
 
 import com.contentstack.sdk.utilities.CSAppUtils;
-import com.contentstack.sdk.utilities.Constant;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import java.util.ArrayList;
