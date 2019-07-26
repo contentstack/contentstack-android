@@ -37,7 +37,7 @@ android {
 
 
         debug{
-            buildConfigField "String", "base_url", "\"cdn.contentstack.io\""
+            buildConfigField "String", "base_url", "\"stag-cdn.contentstack.io\""
             buildConfigField "String", "default_api_key", "\"blt12c8ad610ff4ddc2\""
             buildConfigField "String", "default_access_token", "\"blt43359585f471685188b2e1ba\""
             buildConfigField "String", "default_env", "\"env1\""

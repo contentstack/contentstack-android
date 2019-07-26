@@ -206,6 +206,7 @@ class CSConnectionRequest implements IRequestModelHTTP{
             entryInstance.ownerUid     		= model.ownerUid;
             entryInstance.title             = model.title;
             entryInstance.url               = model.url;
+            entryInstance.language          = model.language;
             if(model.ownerMap != null) {
                 entryInstance.owner = new HashMap<>(model.ownerMap);
             }

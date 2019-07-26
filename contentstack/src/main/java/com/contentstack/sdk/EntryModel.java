@@ -21,6 +21,7 @@ class EntryModel {
     protected String ownerUid 				   = null;
     protected String title                     = null;
     protected String url                       = null;
+    protected String language                  = null;
     protected String[] tags					   = null;
     protected WeakHashMap<String, Object> ownerMap = null;
     protected WeakHashMap<String, Object> _metadata= null;
@@ -57,6 +58,10 @@ class EntryModel {
 
             if(jsonObject != null && jsonObject.has("url")){
                 this.url = (String) (jsonObject.isNull("url") ? " " : jsonObject.opt("url"));
+            }
+
+            if(jsonObject != null && jsonObject.has("locale")){
+                this.language = (String) (jsonObject.isNull("locale") ? " " : jsonObject.opt("locale"));
             }
 
             if(jsonObject != null && jsonObject.has("_metadata")){

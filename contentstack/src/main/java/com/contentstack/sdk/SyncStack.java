@@ -51,7 +51,7 @@ public class SyncStack {
             try{
                 if(receiveJson != null){
 
-                    URL = Constant.REQUEST_URL;
+                    URL = "";
 
                     if(receiveJson.has("items")) {
                         JSONArray jsonarray = receiveJson.getJSONArray("items");

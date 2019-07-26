@@ -75,5 +75,4 @@ public class Constant {
      * Retrieve error details.
      */
     public static final String KEY_ERROR   = "errors";
-    public static String REQUEST_URL = "";
 }
