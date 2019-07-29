@@ -1,60 +1,138 @@
 apply plugin: 'com.android.library'
+apply plugin: 'maven'
+apply plugin: 'signing'
 
 android {
+
+    signingConfigs {
+
+        debug {
+            storeFile file("/Users/shaileshmishra/Desktop/debug.keystore")
+            storePassword 'android'
+            keyAlias 'androiddebugkey'
+            keyPassword 'android'
+        }
+
+        release {
+            storeFile file("/Users/shaileshmishra/Desktop/debug.keystore")
+            storePassword 'android'
+            keyAlias 'androiddebugkey'
+            keyPassword 'android'
+        }
+
+    }
+
     compileSdkVersion 26
-    publishNonDefault true
 
     defaultConfig {
-        //applicationId "com.contentstack.sdk"
         minSdkVersion 19
-        targetSdkVersion 26
         versionCode 1
         versionName "1.0"
         useLibrary 'org.apache.http.legacy'
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        signingConfig signingConfigs.release
     }
 
     buildTypes {
-        debug {
-            buildConfigField "String", "base_url", "\"cdn.contentstack.io\""
+
+
+        debug{
+            buildConfigField "String", "base_url", "\"stag-cdn.contentstack.io\""
+            buildConfigField "String", "default_api_key", "\"blt12c8ad610ff4ddc2\""
+            buildConfigField "String", "default_access_token", "\"blt43359585f471685188b2e1ba\""
+            buildConfigField "String", "default_env", "\"env1\""
         }
+
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+            buildConfigField "String", "base_url", "\"cdn.contentstack.io\""
+            buildConfigField "String", "default_api_key", "\"blt12c8ad610ff4ddc2\""
+            buildConfigField "String", "default_access_token", "\"blt43359585f471685188b2e1ba\""
+            buildConfigField "String", "default_env", "\"env1\""
         }
     }
 
-    lintOptions {
-        abortOnError false
+    flavorDimensions "default"
+
+    productFlavors {
+        prod {
+            dimension "default"
+            minSdkVersion 19
+            targetSdkVersion 26
+            signingConfig signingConfigs.debug
+
+            buildConfigField "String", "base_url", "\"cdn.contentstack.io\""
+            buildConfigField "String", "default_api_key", "\"blt12c8ad610ff4ddc2\""
+            buildConfigField "String", "default_access_token", "\"blt43359585f471685188b2e1ba\""
+            buildConfigField "String", "default_env", "\"env1\""
+        }
+
+        blz {
+            dimension "default"
+            minSdkVersion 19
+            targetSdkVersion 26
+            signingConfig signingConfigs.debug
+
+            buildConfigField "String", "base_url", "\"app.blz-contentstack.com\""
+            buildConfigField "String", "default_api_key", "\"bltdd35c1a9e76490cc\""
+            buildConfigField "String", "default_access_token", "\"blt19560ef8312fc727\""
+            buildConfigField "String", "default_env", "\"env1\""
+        }
+
+        stag {
+            dimension "default"
+            minSdkVersion 19
+            targetSdkVersion 26
+            signingConfig signingConfigs.debug
+
+            buildConfigField "String", "base_url", "\"stag-cdn.contentstack.io\""
+            buildConfigField "String", "default_api_key", "\"blt12c8ad610ff4ddc2\""
+            buildConfigField "String", "default_access_token", "\"blt43359585f471685188b2e1ba\""
+            buildConfigField "String", "default_env", "\"env1\""
+        }
+
+        api {
+            dimension "default"
+            minSdkVersion 19
+            targetSdkVersion 26
+            signingConfig signingConfigs.debug
+
+            buildConfigField "String", "base_url", "\"api-cdn.contentstack.io\""
+            buildConfigField "String", "default_api_key", "\"blt12c8ad610ff4ddc2\""
+            buildConfigField "String", "default_access_token", "\"blt43359585f471685188b2e1ba\""
+            buildConfigField "String", "default_env", "\"env1\""
+        }
     }
 
+    lintOptions { abortOnError false }
 }
+
 
 repositories {
-    flatDir {
-        dirs 'libs'
-    }
+    flatDir { dirs 'libs' }
+    mavenCentral()
+    mavenLocal()
 }
+
+configurations { archives }
+
 
 dependencies {
 
-    configurations.all {
-        resolutionStrategy.force 'com.android.support:support-annotations:23.1.0'
-    }
-
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    configurations.all { resolutionStrategy.force 'com.android.support:support-annotations:23.1.0' }
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support:appcompat-v7:26.1.0'
     implementation 'com.android.support:support-v4:26.1.0'
     testImplementation 'junit:junit:4.12'
-
     androidTestImplementation('com.android.support.test.espresso:espresso-core:3.0.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 }
 
-task clearJar(type: Delete) {
-    delete 'build/libs/Contentstack.jar'
-}
+
+task clearJar(type: Delete) { delete 'build/libs/Contentstack.jar' }
 
 task unzip(type: Copy) {
 
@@ -73,4 +151,100 @@ task createJar(type: Jar) {
 }
 
 createJar.dependsOn(clearJar, unzip, build)
+
+
+
+/*=======================================================================================*/
+/*=============================== [ MAVEN-PUSH-UPLOAD ] =================================*/
+/*=======================================================================================*/
+
+
+group = "com.contentstack.sdk"
+archivesBaseName = "android"
+version = "3.5.0"
+
+
+task sourceJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier "source"
+}
+
+
+task javadoc(type: Javadoc) {
+    source = android.sourceSets.main.java.srcDirs
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+    destinationDir = file("../javadoc/")
+    failOnError false
+}
+
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from tasks.javadoc.destinationDir
+}
+
+task androidSourcesJar(type: Jar) {
+    classifier = 'sources'
+    from android.sourceSets.main.java.srcDirs
+}
+
+artifacts {
+    archives javadocJar
+    archives androidSourcesJar
+}
+
+signing { sign configurations.archives }
+
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+
+            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+                authentication(userName: ossrhUsername, password: ossrhPassword)
+            }
+
+            snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+                authentication(userName: ossrhUsername, password: ossrhPassword)
+            }
+
+            pom.project {
+                name 'contentstack-android-sdk'
+                packaging 'jar'
+                description 'Android SDK for Contentstack Content Delivery API, Contentstack is a headless CMS with an API-first approach'
+                artifactId "android"
+                url 'https://github.com/contentstack/contentstack-android'
+
+                scm {
+                    url 'https://github.com/contentstack/contentstack-android/'
+                    connection 'scm:git@github.com:contentstack/contentstack-android'
+                    developerConnection 'scm:git@github.com:contentstack/contentstack-android.git'
+                }
+
+                licenses {
+                    license {
+                        name 'The MIT License'
+                        url 'http://www.opensource.org/licenses/mit-license.php'
+                        distribution 'repo'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id    'mshaileshr@gmail.com'
+                        name  'Shailesh Mishra'
+                        email 'mobile@contentstack.com'
+                    }
+                }
+
+            }
+        }
+    }
+}
+
+
+
+
 

@@ -7,6 +7,7 @@ import com.contentstack.sdk.utilities.CSAppConstants;
 import com.contentstack.sdk.utilities.CSAppUtils;
 import com.contentstack.sdk.utilities.CSController;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import java.io.File;
 import java.util.ArrayList;
@@ -1220,37 +1221,6 @@ public class Query implements INotifyClass{
         return this;
     }
 
-    /**
-     * Include schemas of all returned objects along with objects themselves.
-     *
-     * @deprecated  use {@link #includeContentType()} instead.
-     *
-     * @return
-     * {@link Query} object, so you can chain this call.
-     *
-     * <br><br><b>Example :</b><br>
-     * <pre class="prettyprint">
-     *     //'blt5d4sample2633b' is a dummy Stack API key
-     *     //'blt6d0240b5sample254090d' is dummy access token.
-     *     Stack stack = Contentstack.stack(context, "blt5d4sample2633b", "blt6d0240b5sample254090d", "stag", false);
-     *     Query csQuery = stack.contentType("contentType_name").query();<br>
-     *
-     *     csQuery.includeSchema();
-     *
-     * </pre>
-     */
-
-    @Deprecated
-    public Query includeSchema(){
-        try {
-            urlQueries.put("include_schema",true);
-        } catch (Exception e) {
-            throwException("includeSchema", CSAppConstants.ErrorMessage_QueryFilterException, e);
-        }
-        return this;
-    }
-
-
 
 
 
@@ -1582,6 +1552,7 @@ public class Query implements INotifyClass{
      *      csQuery.language(Language.ENGLISH_UNITED_STATES);
      * </pre>
      */
+    @Deprecated
     public Query language(Language language){
         if(language != null){
             try {
@@ -1605,14 +1576,48 @@ public class Query implements INotifyClass{
         return this;
     }
 
+
+
+
+    /**
+     *
+     * @param locale String value
+     * @return {@link Query} object, so you can chain this call.
+     *
+     * <br><br><b>Example :</b><br>
+     * <pre class="prettyprint">
+     *      //'blt5d4sample2633b' is a dummy Stack API key
+     *      //'blt6d0240b5sample254090d' is dummy access token.
+     *      Stack stack = Contentstack.stack(context, "blt5d4sample2633b", "blt6d0240b5sample254090d", "stag", false);
+     *      Query csQuery = stack.contentType("contentType_name").query();<br>
+     *      csQuery.locale("en-hi");
+     * </pre>
+     */
+    public Query locale(String locale){
+
+        if(locale != null){
+            try {
+                if (urlQueries !=null) {
+                    urlQueries.put("locale", locale);
+                }
+
+            }catch(Exception e){
+                throwException("locale", CSAppConstants.ErrorMessage_QueryFilterException, e);
+            }
+        }else{
+            throwException("locale", CSAppConstants.ErrorMessage_QueryFilterException, null);
+        }
+
+        return this;
+    }
+
+
+
     /**
      * This method provides only the entries matching the specified value.
      *
-     * @param value
-     *              value used to match or compare
-     *
-     * @return
-     *           {@link Query} object, so you can chain this call.
+     * @param value value used to match or compare
+     * @return {@link Query} object, so you can chain this call.
      *
      * <br><br><b>Example :</b><br>
      * <pre class="prettyprint">
@@ -2206,6 +2211,37 @@ public class Query implements INotifyClass{
             }
         } catch (Exception e) {
             throwException("and", CSAppConstants.ErrorMessage_QueryFilterException, e);
+        }
+        return this;
+    }
+
+
+
+    /**
+     * This method also includes the content type UIDs of the referenced entries returned in the response
+     * @return {@link Query}
+     *
+     * <br><br><b>Example :</b><br>
+     * <pre class="prettyprint">
+     *      //'blt5d4sample2633b' is a dummy Stack API key
+     *      //'blt6d0240b5sample254090d' is dummy access token.
+     *      Stack stack = Contentstack.stack(context, "blt5d4sample2633b", "blt6d0240b5sample254090d", "stag", false);
+     *      Query csQuery = stack.contentType("contentType_name").query();<br>
+     *      csQuery.addParam("key", "some_value");
+     *      csQuery.findOne(new QueryResultsCallBack() {<br>
+     *          &#64;Override
+     *          public void onCompletion(ResponseType responseType, ENTRY entry, Error error) {<br>
+     *
+     *          }
+     *      });<br>
+     * </pre>
+     *
+     */
+    public Query includeReferenceContentTypUid(){
+        try {
+            urlQueries.put("include_reference_content_type_uid", "true");
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
         return this;
     }
