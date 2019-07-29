@@ -1,7 +1,19 @@
 ﻿## CHANGELOG
 
+### Version: 3.6.0
+###### Date: 26-July-2019
+   - [Entry] - Added support for includeReferenceContentTypeUid support in Entry.
+   - [Query] - Added support for includeReferenceContentTypeUid support in Query.
+   - [Entry] - setLanguage and getLanguage Deprecated in Entry.
+   - [Query] - language deprecated in Query
+   - [Entry] - Added method for getLocale and setLocale(String locale) in Entry
+   - [Query] - Added method for locale in Query.
+   - [Query] - Removed deprecated method for includeSchema in Query
+   
+------------------------------------------------
+
 ### Version: 3.5.0
-Date: Apr-12-2019
+###### Date: Apr-12-2019
   Change: Added support of below methods in SDK 
 ```
  getContentTypes() in Stack class
@@ -12,10 +24,10 @@ Below two support from the Config class has been removed permanently
 - public void setSSL(boolean isSSL)setSSL()
 - public boolean isSSL() 
 
-====================================================================================
+------------------------------------------------
 
 ### Version: 3.4.1
-Date: Apr-05-2019
+###### Date: Apr-05-2019
 Change:
 
 - Removed support for unsafe (HTTP) request.
@@ -29,11 +41,11 @@ public boolean isSSL()
 ``` 
 
    
-====================================================================================
+------------------------------------------------
 
 
 ### Version: 3.4.0
-Date: Oct-22-2018
+###### Date: Oct-22-2018
 Change:
 
 New Features:
@@ -51,13 +63,13 @@ New Features:
 	SyncStack
 	Added New Class
  
-====================================================================================
+------------------------------------------------
 
 
 
 
 ### Version:3.3.0
-Date 15-Dec-2017
+###### Date 15-Dec-2017
 
 New Features:
 
@@ -71,10 +83,10 @@ New Features:
 	added method ‘addParam'
  
 
-====================================================================================
+------------------------------------------------
 
 ### Version:3.2.0
-Date 10-Nov-2017
+###### Date 10-Nov-2017
 
 New Features:
 
@@ -106,11 +118,11 @@ Bug Fixes:
     None
  
 
-====================================================================================
+------------------------------------------------
 
 
 ### Version: 3.1.3
-Date: 28-July-2017
+###### Date: 28-July-2017
 
 
 New Features:
@@ -134,13 +146,13 @@ Bug Fixes:
 
 
 
-====================================================================================
+------------------------------------------------
 
 
 
 
 ### Version: 3.1.2
-Date: 24-June-2017
+###### Date: 24-June-2017
 
 
 New Features:
@@ -163,13 +175,13 @@ Bug Fixes:
 	
     None.
 
-====================================================================================
+------------------------------------------------
 
 
 
 
 ### Version: 3.1.1
-Date: 17-May-2017
+###### Date: 17-May-2017
 
 New Features:
 
@@ -195,10 +207,11 @@ Bug Fixes:
 
 
 
-====================================================================================
+------------------------------------------------
+
 
 ### Version: 3.1.0
-Date: 19-December-2016
+###### Date: 19-December-2016
 
 
 New Features:
@@ -237,13 +250,10 @@ Bug Fixes:
 
 
 
-
-
-
-====================================================================================
+------------------------------------------------
 
 ### Version: 3.0.0
-Date: 27-October-2016
+###### Date: 27-October-2016
 
 
 New Features:
@@ -298,14 +308,11 @@ Bug Fixes:
 	None
 
 
+------------------------------------------------
 
-
-
-
-====================================================================================
 
 ### Version: 1.0.2
-Date: 28-September-2016
+###### Date: 28-September-2016
 
 
 New Features:
@@ -325,12 +332,11 @@ Bug Fixes:
 
 
 
+------------------------------------------------
 
 
-
-====================================================================================
 ### Version: 1.0.1
-Date: 22-September-2016
+###### Date: 22-September-2016
 
 
 New Features:
@@ -364,9 +370,11 @@ Bug Fixes:
 
 
 
-====================================================================================
+------------------------------------------------
+
+
 ### Initial release Version: 1.0.0
-Date: 05-August-2015
+###### Date: 05-August-2015
 
 Changes
 - Introduce content delivery API SDK for Android. 
