@@ -17,7 +17,7 @@ You will need one of the following: [Android Studio](https://developer.android.c
 or [Eclipse](https://eclipse.org/downloads/eclipse-packages/?show_instructions=TRUE).
 
 ### Setup and Installation  
-To use the Contentstack Java SDK to your existing project, perform the steps given below:
+To use the Contentstack Android SDK to your existing project, perform the steps given below:
 
 1. **Gradle**
 ```
