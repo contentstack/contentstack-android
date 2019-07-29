@@ -30,7 +30,6 @@ implementation 'com.contentstack.sdk:android:3.6.0'
   <groupId>com.contentstack.sdk</groupId>
   <artifactId>android</artifactId>
   <version>3.6.0</version>
-  <type>aar</type>
 </dependency>
 ```
   
