@@ -15,20 +15,45 @@ public class Config {
     protected String URL            = "cdn.contentstack.io";
     protected String VERSION        = "v3";
     protected String environment    = null;
+    protected ContentstackRegion region = ContentstackRegion.US;
+
+    public enum ContentstackRegion { US, EU }
+
+    public ContentstackRegion getRegion() { return this.region; }
 
     /**
-     * BuiltConfig constructor
+     * Sets region allow you to set your region for the Contentstack server.
+     *
+     * @param region
+     * host name.
+     *
+     * <p>
+     * <b>Note:</b> Default region sets to us </a>
      *
      * <br><br><b>Example :</b><br>
      * <pre class="prettyprint">
-     * BuiltConfig config = new BuiltConfig();
+     * config.setRegion(ContentstackRegion.US);
+     * </pre>
+     */
+
+    public ContentstackRegion setRegion(ContentstackRegion region) {
+        this.region = region;
+        return this.region;
+    }
+
+    /**
+     * Config constructor
+     *
+     * <br><br><b>Example :</b><br>
+     * <pre class="prettyprint">
+     * Config config = new Config();
      * </pre>
      */
 
     public Config(){}
 
     /**
-     * Sets host name of the Built.io Contentstack server.
+     * Sets host name of the Contentstack server.
      *
      * @param hostName
      * host name.
@@ -64,7 +89,7 @@ public class Config {
 
 
     /**
-     * Get version of the Built.io Contentstack server.
+     * Get version of the Contentstack server.
      *
      * <br><br><b>Example :</b><br>
      * <pre class="prettyprint">
@@ -76,7 +101,7 @@ public class Config {
     }
 
     /**
-     * Changes the Built.io Contentstack version to be used in the final URL.
+     * Changes the Contentstack version to be used in the final URL.
      *
      * @param version
      *                  version string.
@@ -95,8 +120,7 @@ public class Config {
     /**
      * set environment.
      *
-     * @param environment
-     *                      environment uid/name
+     * @param environment environment uid/name
      *
      *  <br><br><b>Example :</b><br>
      *  <pre class="prettyprint">

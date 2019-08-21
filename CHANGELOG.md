@@ -1,5 +1,14 @@
 ﻿## CHANGELOG
 
+### Version: 3.6.1
+###### Date: 23-Aug-2019
+   - [Query] - Added support for whereIn(String key) and whereNotIn(String key) methods in Query
+   - [Config] - Added support for setRegion(ContentstackRegion region) in Config class.
+
+
+------------------------------------------------
+
+
 ### Version: 3.6.0
 ###### Date: 26-July-2019
    - [Entry] - Added support for includeReferenceContentTypeUid support in Entry.

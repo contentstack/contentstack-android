@@ -84,6 +84,13 @@ public class Stack implements INotifyClass {
             setHeader("environment", config.environment);
         }
 
+        if (!TextUtils.isEmpty(config.region.name())){
+            String region = config.region.name().toLowerCase();
+            if (!region.equalsIgnoreCase("us")){
+                URL = region+"-"+URL;
+            }
+        }
+
     }
 
     /**

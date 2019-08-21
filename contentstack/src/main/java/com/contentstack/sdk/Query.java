@@ -2246,5 +2246,74 @@ public class Query implements INotifyClass{
         return this;
     }
 
+
+
+    /**
+     * Get entries having values based on referenced fields. This query retrieves all entries that satisfy the query conditions made on referenced fields.
+     * @param key The key to be constrained
+     * @return {@link Query} object, so you can chain this call.
+     *
+     * <br><br><b>Example :</b><br>
+     * <pre class="prettyprint">
+     *     //'blt5d4sample2633b' is a dummy Stack API key
+     *     //'blt6d0240b5sample254090d' is dummy access token.
+     *     Stack stack = Contentstack.stack(context, "blt5d4sample2633b", "blt6d0240b5sample254090d", "stag", false);
+     *     Query csQuery = stack.contentType("contentType_name").query();
+     *     csQuery.whereIn("due_date");
+     * </pre>
+     */
+    public Query whereIn(String key){
+
+        if(key != null){
+
+            try{
+
+                JSONObject inQueryObj = new JSONObject();
+                inQueryObj.put("$in_query", queryValueJSON);
+                queryValueJSON = new JSONObject();
+                queryValueJSON.put(key, inQueryObj);
+            }catch(Exception e){
+                throwException("in_query",CSAppConstants.ErrorMessage_QueryFilterException, e);
+            }
+        }else{
+            throwException("in_query",CSAppConstants.ErrorMessage_QueryFilterException, null);
+        }
+        return this;
+    }
+
+
+
+    /**
+     * Get entries having values based on referenced fields. This query works the opposite of $in_query and retrieves all entries that does not satisfy query conditions made on referenced fields.
+     * @param key The key to be constrained
+     * @return {@link Query} object, so you can chain this call.
+     *
+     * <br><br><b>Example :</b><br>
+     * <pre class="prettyprint">
+     *     //'blt5d4sample2633b' is a dummy Stack API key
+     *     //'blt6d0240b5sample254090d' is dummy access token.
+     *     Stack stack = Contentstack.stack(context, "blt5d4sample2633b", "blt6d0240b5sample254090d", "stag", false);
+     *     Query csQuery = stack.contentType("contentType_name").query();
+     *     csQuery.whereNotIn("due_date");
+     * </pre>
+     */
+    public Query whereNotIn(String key){
+
+        if(key != null){
+
+            try{
+                JSONObject inQueryObj = new JSONObject();
+                inQueryObj.put("$nin_query", queryValueJSON);
+                queryValueJSON = new JSONObject();
+                queryValueJSON.put(key, inQueryObj);
+            }catch(Exception e){
+                throwException("nin_query",CSAppConstants.ErrorMessage_QueryFilterException, e);
+            }
+        }else{
+            throwException("nin_query",CSAppConstants.ErrorMessage_QueryFilterException, null);
+        }
+        return this;
+    }
+
 }
 
