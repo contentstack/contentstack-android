@@ -25,7 +25,6 @@ public class Config {
      * Sets region allow you to set your region for the Contentstack server.
      *
      * @param region
-     * host name.
      *
      * <p>
      * <b>Note:</b> Default region sets to us </a>
