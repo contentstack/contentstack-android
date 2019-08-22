@@ -84,10 +84,13 @@ public class Stack implements INotifyClass {
             setHeader("environment", config.environment);
         }
 
-        if (!TextUtils.isEmpty(config.region.name())){
+        if (!config.region.name().isEmpty()){
             String region = config.region.name().toLowerCase();
             if (!region.equalsIgnoreCase("us")){
-                URL = region+"-"+URL;
+                if(URL.equalsIgnoreCase("cdn.contentstack.io")) {
+                    URL=URL.replace("io", "com");
+                    URL = region + "-" + URL;
+                }
             }
         }
 
