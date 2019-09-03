@@ -88,9 +88,9 @@ public class Stack implements INotifyClass {
             String region = config.region.name().toLowerCase();
             if (!region.equalsIgnoreCase("us")){
                 if(URL.equalsIgnoreCase("cdn.contentstack.io")) {
-                    URL=URL.replace("io", "com");
-                    URL = region + "-" + URL;
+                    URL = "cdn.contentstack.com";
                 }
+                URL = region + "-" + URL;
             }
         }
 
