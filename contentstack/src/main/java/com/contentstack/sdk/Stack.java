@@ -90,7 +90,7 @@ public class Stack implements INotifyClass {
                 if(URL.equalsIgnoreCase("cdn.contentstack.io")) {
                     URL = "cdn.contentstack.com";
                 }
-                URL = region + "-" + URL;
+                URL = "eu-"+URL;
             }
         }
 
