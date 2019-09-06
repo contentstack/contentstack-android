@@ -17,7 +17,7 @@ public class Config {
     protected String environment    = null;
     protected ContentstackRegion region = ContentstackRegion.US;
 
-    public enum ContentstackRegion { US, EUROPE }
+    public enum ContentstackRegion { US, EU }
 
     public ContentstackRegion getRegion() { return this.region; }
 
