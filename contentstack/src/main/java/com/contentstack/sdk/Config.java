@@ -19,6 +19,7 @@ public class Config {
 
     public enum ContentstackRegion { US, EU }
 
+
     public ContentstackRegion getRegion() { return this.region; }
 
     /**
