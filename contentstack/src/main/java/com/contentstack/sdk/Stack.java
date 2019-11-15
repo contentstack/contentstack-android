@@ -329,34 +329,49 @@ public class Stack implements INotifyClass {
 
 
     /**
+     * @param params query parameters
      * @param callback ContentTypesCallback
      * This call returns comprehensive information of all the content types available in a particular stack in your account.
      *
      *  <br><br><b>Example :</b><br>
      *  <pre class="prettyprint">
-     * stack.getContentTypes(false, new ContentTypesCallback() {
+     * JSONObject params = new JSONObject();
+     * params.put("include_snippet_schema", true);
+     * params.put("limit", 3);
+     * stack.getContentTypes(params, new ContentTypesCallback() {
      * @Override
      * public void onCompletion(ContentTypesModel contentTypesModel, Error error) {
-     * System.out.println("contentTypesModel: "+ contentTypesModel.getResponseJSON());
-     * include_count = contentTypesModel.getCount();
+     * if (error == null){
+     *   // do your stuff.
+     *  }
      *
      * }
      * });
      *</pre>
      */
 
-    public void getContentTypes( final ContentTypesCallback callback) {
+    public void getContentTypes(JSONObject params,  final ContentTypesCallback callback) {
 
         try {
-            String URL = "/" + this.VERSION + "/content_types/";
+            String URL = "/" + this.VERSION + "/content_types";
             ArrayMap<String,Object> headers = getHeader(localHeader);
-            JSONObject param = new JSONObject();
-            if (headers.containsKey("environment")) {
-                param.put("environment", headers.get("environment"));
-                param.put("include_count", true);
+            if (params == null){ params = new JSONObject(); }
+            Iterator keys = params.keys();
+            while(keys.hasNext()) {
+                // loop to get the dynamic key
+                String key = (String)keys.next();
+                // get the value of the dynamic key
+                Object value = params.opt(key);
+                // do something here with the value...
+                params.put(key, value);
             }
 
-            fetchContentTypes(URL, param, headers,null, callback);
+            if (headers.containsKey("environment")) {
+                params.put("environment", headers.get("environment"));
+                params.put("include_count", true);
+            }
+
+            fetchContentTypes(URL, params, headers,null, callback);
 
         }catch (Exception e){
 

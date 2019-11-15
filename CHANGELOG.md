@@ -1,5 +1,14 @@
 ﻿## CHANGELOG
 
+### Version: 3.7.0
+###### Date: 15-Nov-2019
+   - [Stack]: Added support for function getContentType()
+   - [ContentType]: updated function fetch()  
+   - [Query]: Updated support of whereIn(String KEY, Query queryObject) 
+   - [Query]: Updated support of whereNotIn(String KEY, Query queryObject) 
+
+------------------------------------------------
+
 ### Version: 3.6.1
 ###### Date: 23-Aug-2019
    - [Query] - Added support for whereIn(String key) and whereNotIn(String key) methods in Query
