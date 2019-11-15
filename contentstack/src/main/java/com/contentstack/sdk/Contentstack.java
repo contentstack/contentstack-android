@@ -8,12 +8,11 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.SystemClock;
 import android.text.TextUtils;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.Volley;
 import com.contentstack.sdk.utilities.CSAppConstants;
 import com.contentstack.sdk.utilities.CSAppUtils;
-import com.contentstack.volley.Request;
-import com.contentstack.volley.RequestQueue;
-import com.contentstack.volley.toolbox.Volley;
-
 import java.io.File;
 
 /**
@@ -26,8 +25,13 @@ public class Contentstack {
 
     private static final String TAG = "Contentstack";
     protected static RequestQueue requestQueue;
-    protected static Context applicationContext = null;
+    private static Contentstack instance;
+    protected static Context context = null;
     private Contentstack(){}
+
+    public Contentstack(Context applicationContext) {
+        context = applicationContext;
+    }
 
     /**
      *
@@ -52,7 +56,6 @@ public class Contentstack {
      * @return
      * {@link Stack} instance.
      *
-     * @throws Exception
      *
      * <br><br><b>Example :</b><br>
      * <pre class="prettyprint">
@@ -104,7 +107,6 @@ public class Contentstack {
      * @return
      * {@link Stack} instance.
      *
-     * @throws Exception
      *
      * <br><br><b>Example :</b><br>
      * <pre class="prettyprint">
@@ -146,11 +148,11 @@ public class Contentstack {
     }
 
 
-    private static Stack initializeStack(Context context, String stackApiKey, String accessToken, Config config){
+    private static Stack initializeStack(Context mContext, String stackApiKey, String accessToken, Config config){
         Stack stack = new Stack(stackApiKey.trim());
         stack.setHeader("api_key", stackApiKey);
         stack.setHeader("access_token", accessToken);
-        applicationContext = context;
+        context = mContext;
         stack.setConfig(config);
 
         if(context != null) {
@@ -175,12 +177,39 @@ public class Contentstack {
      *
      ********************************************************************************************************/
 
+
+
+    public static synchronized Contentstack getInstance(Context context) {
+        if (instance == null) {
+            instance = new Contentstack(context);
+        }
+        return instance;
+    }
+
+    public RequestQueue getRequestQueue() {
+        if (requestQueue == null) {
+            // getApplicationContext() is key, it keeps you from leaking the
+            // Activity or BroadcastReceiver if someone passes one in.
+            requestQueue = Volley.newRequestQueue(context);
+        }
+        return requestQueue;
+    }
+
+    public <T> void addToRequestQueue(Request<T> req) {
+        getRequestQueue().add(req);
+    }
+
+    //////////////////////////////////////////
+
+
     protected static RequestQueue getRequestQueue(String protocol) {
 
         if (requestQueue == null) {
-            requestQueue = Volley.newRequestQueue(applicationContext, new OkHttpClass(protocol));
+            requestQueue = Volley.newRequestQueue(context);
         }
         return requestQueue;
+
+
     }
 
     protected static <T> void addToRequestQueue(String protocol, Request<T> req, String tag) {

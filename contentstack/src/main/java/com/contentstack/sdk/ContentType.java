@@ -9,7 +9,6 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import static com.contentstack.volley.VolleyLog.TAG;
 
 /**
  * BuiltClass provides {@link Entry} and {@link Query} instance.<br>
@@ -17,6 +16,7 @@ import static com.contentstack.volley.VolleyLog.TAG;
  */
 public class ContentType {
 
+    protected String TAG = ContentType.class.getSimpleName();
     protected String contentTypeName = null;
     protected Stack stackInstance = null;
     private ArrayMap<String, Object> localHeader = null;
@@ -151,12 +151,16 @@ public class ContentType {
     /**
      *
      *
+     * @param params query parameters
      * @param callback ContentTypesCallback
      * This call returns information of a specific content type. It returns the content type schema, but does not include its entries.
      *
      *  <br><br><b>Example :</b><br>
      *  <pre class="prettyprint">
      * ContentType  contentType = stack.contentType("content_type_uid");
+     * JSONObject params = new JSONObject();
+     * params.put("include_snippet_schema", true);
+     * params.put("limit", 3);
      * contentType.fetch(new ContentTypesCallback() {
      * @Override
      * public void onCompletion(ContentTypesModel contentTypesModel, Error error) {
@@ -171,19 +175,30 @@ public class ContentType {
      */
 
 
-    public void fetch(final ContentTypesCallback callback) {
+    public void fetch(JSONObject params, final ContentTypesCallback callback) {
 
         try {
 
             String URL = "/" + stackInstance.VERSION + "/content_types/"+contentTypeName;
             ArrayMap<String, Object> headers = getHeader(localHeader);
-            JSONObject param = new JSONObject();
-            if (headers.containsKey("environment")) {
-                param.put("environment", headers.get("environment"));
+            if (params == null){ params = new JSONObject(); }
+
+            Iterator keys = params.keys();
+            while(keys.hasNext()) {
+                // loop to get the dynamic key
+                String key = (String)keys.next();
+                // get the value of the dynamic key
+                Object value = params.opt(key);
+                // do something here with the value...
+                params.put(key, value);
             }
 
-            if (contentTypeName!=null) {
-                fetchContentTypes(URL, param, headers,null, callback );
+            if (headers.containsKey("environment")) {
+                params.put("environment", headers.get("environment"));
+            }
+
+            if (contentTypeName!=null && !contentTypeName.isEmpty()) {
+                fetchContentTypes(URL, params, headers,null, callback );
             }else {
                 Error error = new Error();
                 error.setErrorMessage(CSAppConstants.ErrorMessage_JsonNotProper);

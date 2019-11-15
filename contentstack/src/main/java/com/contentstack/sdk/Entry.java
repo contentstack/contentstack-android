@@ -1528,4 +1528,30 @@ public class Entry {
         }
         return this;
     }
+
+
+    /**
+     * Include Content Type of all returned objects along with objects themselves.
+     * @return {@link Entry} object, so you can chain this call.
+     * <br><br><b>Example :</b><br>
+     * <pre class="prettyprint">
+     *     //'blt5d4sample2633b' is a dummy Stack API key
+     *     //'blt6d0240b5sample254090d' is dummy access token.
+     *     Stack stack = Contentstack.stack(context, "blt5d4sample2633b", "blt6d0240b5sample254090d", "stag", false);
+     *     final Entry entry = stack.contentType("user").entry("blt3b0aaebf6f1c3762");
+     *     entry.includeContentType();
+     * </pre>
+     */
+    public Entry includeContentType(){
+        try {
+            if (otherPostJSON.has("include_schema")){
+                otherPostJSON.remove("include_schema");
+            }
+            otherPostJSON.put("include_content_type",true);
+            otherPostJSON.put("include_global_field_schema",true);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return this;
+    }
 }

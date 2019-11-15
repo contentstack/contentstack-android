@@ -1,14 +1,14 @@
 package com.contentstack.sdk;
-
 import android.util.ArrayMap;
 import android.text.TextUtils;
+import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.contentstack.sdk.utilities.CSAppConstants;
 import com.contentstack.sdk.utilities.CSAppUtils;
-import com.contentstack.volley.DefaultRetryPolicy;
-import com.contentstack.volley.Response;
-import com.contentstack.volley.error.AuthFailureError;
-import com.contentstack.volley.error.VolleyError;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 import java.net.URLEncoder;
@@ -223,7 +223,7 @@ class CSHttpConnection implements IURLRequestHTTP {
     @Override
     public void send() {
         String url                      = null;
-        String httpsORhttp              = CSAppConstants.URLSCHEMA_HTTPS;
+        String protocol              = CSAppConstants.URLSCHEMA_HTTPS;
         int requestId                   = getRequestId(requestMethod);
         final HashMap<String, String> headers = new HashMap<>();
         int count                       = this.headers.size();
@@ -248,11 +248,12 @@ class CSHttpConnection implements IURLRequestHTTP {
         headers.put("Content-Type", "application/json");
         headers.put("X-User-Agent", defaultUserAgent()+"/"+ CSAppConstants.SDK_VERSION);
 
+
         jsonObjectRequest = new JSONUTF8Request(requestId, url, requestJSON, new Response.Listener<JSONObject>() {
 
             @Override
-            public void onResponse(JSONObject arg0) {
-                responseJSON = arg0;
+            public void onResponse(JSONObject response) {
+                responseJSON = response;
                 if (responseJSON != null) {
                     connectionRequest.onRequestFinished(CSHttpConnection.this);
                 }
@@ -267,7 +268,6 @@ class CSHttpConnection implements IURLRequestHTTP {
 
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
-
                 return headers;
             }
 
@@ -275,7 +275,36 @@ class CSHttpConnection implements IURLRequestHTTP {
 
         jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(CSAppConstants.TimeOutDuration, CSAppConstants.NumRetry, CSAppConstants.BackOFMultiplier));
         jsonObjectRequest.setShouldCache(false);
-        Contentstack.addToRequestQueue(httpsORhttp, jsonObjectRequest, info);
+        Contentstack.addToRequestQueue(protocol, jsonObjectRequest, info);
+
+    }
+
+
+
+    private void httpRequest(String url){
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                (Request.Method.GET, url, requestJSON, new Response.Listener<JSONObject>() {
+
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        responseJSON = response;
+                        if (responseJSON != null) {
+                            connectionRequest.onRequestFinished(CSHttpConnection.this);
+                        }
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        generateBuiltError(error);
+
+                    }
+                });
+
+        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(CSAppConstants.TimeOutDuration, CSAppConstants.NumRetry, CSAppConstants.BackOFMultiplier));
+        jsonObjectRequest.setShouldCache(false);
+        Contentstack.addToRequestQueue("https://", jsonObjectRequest, info);
 
     }
 

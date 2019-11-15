@@ -21,7 +21,10 @@ import static junit.framework.TestCase.assertTrue;
 
 
 /**
- * Created by contentstack
+ * Created by Shailesh Mishra.
+ *
+ * Contentstack pvt Ltd
+ *
  */
 
 @RunWith(AndroidJUnit4.class)
@@ -76,7 +79,7 @@ public class ApplicationTest  {
 
 
     @Test
-    public void test_01_fetchEntriesOfNonExistingContentType() throws InterruptedException {
+    public void test_01_fetchEntriesOfNonExistingContentType() {
 
         Query query = stack.contentType("products").query();
         query.find(new QueryResultsCallBack() {
@@ -594,7 +597,6 @@ public class ApplicationTest  {
 
     /*@Test
     public void test_21_descending() throws InterruptedException, ParseException {
-
         ContentType ct = stack.contentType("product");
         Query query = ct.query();
         query.descending("title");
@@ -608,8 +610,6 @@ public class ApplicationTest  {
                 assertTrue(sizeOFContent == 27);
             }
         });
-
-
     }*/
 
 
@@ -919,7 +919,7 @@ public class ApplicationTest  {
                 if (error == null) {
                     entries = queryresult.getResultObjects();
                     if (entries != null) {
-                       // assertEquals("blt3976eac6d3a0cb74", entries.get(0).getUid());
+                        // assertEquals("blt3976eac6d3a0cb74", entries.get(0).getUid());
                     }
                 }
             }

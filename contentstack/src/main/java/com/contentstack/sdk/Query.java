@@ -1226,11 +1226,7 @@ public class Query implements INotifyClass{
 
     /**
      * Include Content Type of all returned objects along with objects themselves.
-     *
-     *
-     * @return
-     * {@link Query} object, so you can chain this call.
-     *
+     * @return {@link Query} object, so you can chain this call.
      * <br><br><b>Example :</b><br>
      * <pre class="prettyprint">
      *     //'blt5d4sample2633b' is a dummy Stack API key
@@ -1242,13 +1238,11 @@ public class Query implements INotifyClass{
      */
     public Query includeContentType(){
         try {
-
             if (urlQueries.has("include_schema")){
                 urlQueries.remove("include_schema");
             }
-
             urlQueries.put("include_content_type",true);
-
+            urlQueries.put("include_global_field_schema",true);
         } catch (Exception e) {
             throwException("include_content_type", CSAppConstants.ErrorMessage_QueryFilterException, e);
         }
@@ -1260,8 +1254,7 @@ public class Query implements INotifyClass{
     /**
      * Include object owner&#39;s profile in the objects data.
      *
-     * @return
-     * 		    {@linkplain Query} object, so you can chain this call.
+     * @return {@linkplain Query} object, so you can chain this call.
      *
      * <br><br><b>Example :</b><br>
      * <pre class="prettyprint">
@@ -1269,7 +1262,6 @@ public class Query implements INotifyClass{
      *     //'blt6d0240b5sample254090d' is dummy access token.
      *     Stack stack = Contentstack.stack(context, "blt5d4sample2633b", "blt6d0240b5sample254090d", "stag", false);
      *     Query csQuery = stack.contentType("contentType_name").query();<br>
-     *
      *     csQuery.includeOwner();
      * </pre>
      */
@@ -2262,15 +2254,14 @@ public class Query implements INotifyClass{
      *     csQuery.whereIn("due_date");
      * </pre>
      */
-    public Query whereIn(String key){
+    public Query whereIn(String key, Query queryObject){
 
         if(key != null){
 
             try{
 
                 JSONObject inQueryObj = new JSONObject();
-                inQueryObj.put("$in_query", queryValueJSON);
-                queryValueJSON = new JSONObject();
+                inQueryObj.put("$in_query", queryObject.queryValueJSON.toString());
                 queryValueJSON.put(key, inQueryObj);
             }catch(Exception e){
                 throwException("in_query",CSAppConstants.ErrorMessage_QueryFilterException, e);
@@ -2297,14 +2288,13 @@ public class Query implements INotifyClass{
      *     csQuery.whereNotIn("due_date");
      * </pre>
      */
-    public Query whereNotIn(String key){
+    public Query whereNotIn(String key, Query queryObject){
 
         if(key != null){
 
             try{
                 JSONObject inQueryObj = new JSONObject();
-                inQueryObj.put("$nin_query", queryValueJSON);
-                queryValueJSON = new JSONObject();
+                inQueryObj.put("$nin_query", queryObject.queryValueJSON.toString());
                 queryValueJSON.put(key, inQueryObj);
             }catch(Exception e){
                 throwException("nin_query",CSAppConstants.ErrorMessage_QueryFilterException, e);
