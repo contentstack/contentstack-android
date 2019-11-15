@@ -29,7 +29,7 @@ implementation 'com.contentstack.sdk:android:3.7.0'
 <dependency>
   <groupId>com.contentstack.sdk</groupId>
   <artifactId>android</artifactId>
-  <version>3.7.0-SNAPSHOT</version>
+  <version>3.7.0</version>
 </dependency>
 ```
   
