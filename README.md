@@ -248,7 +248,7 @@ You can use advanced sync queries to fetch custom results while performing initi
 
 ### The MIT License (MIT)
 
-Copyright © 2012-2019 [Contentstack](https://www.contentstack.com/). All Rights Reserved
+Copyright © 2012-2020 [Contentstack](https://www.contentstack.com/). All Rights Reserved
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software 
 and associated documentation files (the "Software"), to deal in the Software without restriction, 
