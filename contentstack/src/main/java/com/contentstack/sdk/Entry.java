@@ -1554,4 +1554,24 @@ public class Entry {
         }
         return this;
     }
+
+
+    /**
+     * Include the fallback locale publish content, if specified locale content is not publish.
+     * @return {@link Entry} object, so you can chain this call.
+     * <br><br><b>Example :</b><br>
+     * <pre class="prettyprint">
+     *     Stack stack = Contentstack.stack(context, "ApiKey", "deliveryToken", "environment");
+     *     final Entry entry = stack.contentType("user").entry("entryUid");
+     *     entry.includeFallback();
+     * </pre>
+     */
+    public Entry includeFallback(){
+        try {
+            otherPostJSON.put("include_fallback", true);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return this;
+    }
 }

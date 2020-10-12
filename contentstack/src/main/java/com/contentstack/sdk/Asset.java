@@ -661,7 +661,22 @@ public class Asset {
         if(key != null && value != null){
             headerGroup_local.put(key, value);
         }
+        return this;
+    }
 
+
+    /**
+     * Include the fallback locale publish content, if specified locale content is not publish.
+     * @return {@link Asset} object, so you can chain this call.
+     * <br><br><b>Example :</b><br>
+     * <pre class="prettyprint">
+     *     Stack stack = Contentstack.stack(context, "ApiKey", "deliveryToken", "environment");
+     *     final Asset asset = stack.asset("asset_uid");
+     *     asset.includeFallback();
+     * </pre>
+     */
+    public Asset includeFallback(){
+        headerGroup_local.put("include_fallback", true);
         return this;
     }
 

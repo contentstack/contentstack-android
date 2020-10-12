@@ -2305,5 +2305,25 @@ public class Query implements INotifyClass{
         return this;
     }
 
+
+    /**
+     * Include the fallback locale publish content, if specified locale content is not publish.
+     * @return {@link Query} object, so you can chain this call.
+     * <br><br><b>Example :</b><br>
+     * <pre class="prettyprint">
+     *     Stack stack = Contentstack.stack(context, "ApiKey", "deliveryToken",  environment_name);
+     *     Query csQuery = stack.contentType("contentType_name").query();
+     *     csQuery.includeFallback();
+     * </pre>
+     */
+    public Query includeFallback() {
+        try {
+            mainJSON.put("include_fallback", true);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return this;
+    }
+
 }
 

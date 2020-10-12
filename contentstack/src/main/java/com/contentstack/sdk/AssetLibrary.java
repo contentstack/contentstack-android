@@ -6,6 +6,8 @@ import android.util.ArrayMap;
 import com.contentstack.sdk.utilities.CSAppConstants;
 import com.contentstack.sdk.utilities.CSAppUtils;
 import com.contentstack.sdk.utilities.CSController;
+
+import org.json.JSONException;
 import org.json.JSONObject;
 import java.io.File;
 import java.util.ArrayList;
@@ -483,6 +485,26 @@ public class AssetLibrary implements INotifyClass{
         if(assetsCallback != null) {
             assetsCallback.onRequestFinish(ResponseType.NETWORK, assets);
         }
+    }
+
+
+    /**
+     * Include the fallback locale publish content, if specified locale content is not publish.
+     * @return {@link AssetLibrary} object, so you can chain this call.
+     * <br><br><b>Example :</b><br>
+     * <pre class="prettyprint">
+     *     Stack stack = Contentstack.stack(context, "ApiKey", "deliveryToken",  environment_name);
+     *     AssetLibrary assetLibObject = stack.assetLibrary();
+     *     assetLibObject.includeFallback();
+     * </pre>
+     */
+    public AssetLibrary includeFallback(){
+        try {
+            urlQueries.put("include_fallback", true);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return this;
     }
 
 }

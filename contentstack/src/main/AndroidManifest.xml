@@ -4,32 +4,30 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
-
     <application
         android:allowBackup="true"
         android:label="@string/app_name">
         <receiver
             android:name="com.contentstack.sdk.ConnectionStatus"
-            android:enabled="true" >
+            android:enabled="true">
             <intent-filter>
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" >
-                </action>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
             </intent-filter>
         </receiver>
         <receiver
             android:name="com.contentstack.sdk.ClearCache"
-            android:enabled="true" >
+            android:enabled="true">
             <intent-filter>
-                <action android:name="StartContentStackClearingCache" >
-                </action>
+                <action android:name="StartContentStackClearingCache"/>
             </intent-filter>
         </receiver>
 
-        <uses-library android:name="org.apache.http.legacy"
+        <uses-library
+            android:name="org.apache.http.legacy"
             android:required="false" />
-        <uses-library android:name="android.test.runner"
+        <uses-library
+            android:name="android.test.runner"
             android:required="false" />
-
     </application>
 
 </manifest>
