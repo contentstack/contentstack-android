@@ -489,7 +489,7 @@ public class AssetLibrary implements INotifyClass{
 
 
     /**
-     * Include the fallback locale publish content, if specified locale content is not publish.
+     * Retrieve the published content of the fallback locale if an entry is not localized in specified locale
      * @return {@link AssetLibrary} object, so you can chain this call.
      * <br><br><b>Example :</b><br>
      * <pre class="prettyprint">

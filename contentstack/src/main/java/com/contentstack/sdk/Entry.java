@@ -370,11 +370,9 @@ public class Entry {
         try{
             ArrayList<String> multipleHtmlStrings = new ArrayList<>();
             JSONArray jsonArray = getJSONArray(markdownKey);
-
             for (int i = 0; i < jsonArray.length(); i++) {
                 multipleHtmlStrings.add(Processor.process(jsonArray.getString(i), Configuration.builder().forceExtentedProfile().build()));
             }
-
             return multipleHtmlStrings;
         }catch(Exception e){
             CSAppUtils.showLog(TAG, "-----------------getHtmlText|" + e);
@@ -1557,7 +1555,7 @@ public class Entry {
 
 
     /**
-     * Include the fallback locale publish content, if specified locale content is not publish.
+     * Retrieve the published content of the fallback locale if an entry is not localized in specified locale.
      * @return {@link Entry} object, so you can chain this call.
      * <br><br><b>Example :</b><br>
      * <pre class="prettyprint">

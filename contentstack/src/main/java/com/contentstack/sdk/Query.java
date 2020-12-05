@@ -18,9 +18,7 @@ import java.util.Map;
 
 /**
  * A class that defines a query that is used to query for {@link Entry} instance.
- *
- * @author Contentstack.com, Inc
- *
+ * @author Contentstack
  */
 public class Query implements INotifyClass{
 
@@ -2307,7 +2305,7 @@ public class Query implements INotifyClass{
 
 
     /**
-     * Include the fallback locale publish content, if specified locale content is not publish.
+     * Retrieve the published content of the fallback locale if an entry is not localized in specified locale.
      * @return {@link Query} object, so you can chain this call.
      * <br><br><b>Example :</b><br>
      * <pre class="prettyprint">

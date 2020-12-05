@@ -6,6 +6,8 @@ import com.contentstack.sdk.utilities.CSAppConstants;
 import com.contentstack.sdk.utilities.CSAppUtils;
 import com.contentstack.sdk.utilities.CSController;
 import com.contentstack.sdk.utilities.ContentstackUtil;
+
+import org.json.JSONException;
 import org.json.JSONObject;
 import java.io.File;
 import java.util.Calendar;
@@ -22,9 +24,7 @@ import java.util.Map;
 public class Asset {
 
     private final static String TAG = "Asset";
-
     /*For SingleUpload variable*/
-
     protected String assetUid = null;
     protected String contentType  = null;
     protected String fileSize     = null;
@@ -32,14 +32,14 @@ public class Asset {
     protected String uploadUrl    = null;
     protected JSONObject json 	  = null;
     protected String[] tagsArray = null;
-
+    JSONObject urlQueries = new JSONObject();
     protected ArrayMap<String, Object> headerGroup_app;
     protected ArrayMap<String, Object> headerGroup_local;
     protected Stack stackInstance;
     private CachePolicy cachePolicyForCall = CachePolicy.IGNORE_CACHE;
 
-    private long maxCachetimeForCall             = 0; //local cache time interval
-    private long defaultCacheTimeInterval        = 0;
+    private final long maxCachetimeForCall             = 0; //local cache time interval
+    private final long defaultCacheTimeInterval        = 0;
 
     protected Asset(){
         this.headerGroup_local = new ArrayMap<>();
@@ -421,24 +421,18 @@ public class Asset {
         try {
 
             String URL = "/" + stackInstance.VERSION + "/assets/" + assetUid;
-
             ArrayMap<String, Object> headers = getHeader(headerGroup_local);
-            JSONObject urlQueries = new JSONObject();
             if (headers.containsKey("environment")) {
                 urlQueries.put("environment", headers.get("environment"));
             }
 
             String mainStringForMD5 = URL + new JSONObject().toString() + headers.toString();
             String md5Value = new CSAppUtils().getMD5FromString(mainStringForMD5.trim());
-
             File cacheFile = new File(CSAppConstants.cacheFolderName + File.separator + md5Value);
-
 
             switch (cachePolicyForCall){
 
                 case IGNORE_CACHE:
-                    fetchFromNetwork(URL, urlQueries, headers, cacheFile.getPath(), callback);
-                    break;
 
                 case NETWORK_ONLY:
                     fetchFromNetwork(URL, urlQueries, headers, cacheFile.getPath(), callback);
@@ -502,7 +496,6 @@ public class Asset {
     private void fetchFromNetwork(String URL, JSONObject urlQueries, ArrayMap<String, Object> headers, String cacheFilePath, FetchResultCallback callback) {
         if(callback != null) {
             HashMap<String, Object> urlParams = getUrlParams(urlQueries);
-
             new CSBackgroundTask(this, stackInstance, CSController.FETCHASSETS, URL, headers, urlParams, new JSONObject(), cacheFilePath, CSAppConstants.callController.ASSET.toString(), false, CSAppConstants.RequestMethod.GET, callback);
         }
     }
@@ -655,18 +648,37 @@ public class Asset {
      *
      *
      */
-
     public Asset addParam(String key, String value){
-
         if(key != null && value != null){
-            headerGroup_local.put(key, value);
+            try {
+                urlQueries.put(key, value);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
         return this;
     }
 
 
+
     /**
-     * Include the fallback locale publish content, if specified locale content is not publish.
+     * Include the dimensions (height and width) of the image in the response.
+     * Supported image types: JPG, GIF, PNG, WebP, BMP, TIFF, SVG, and PSD
+     * @return Asset
+     */
+    public Asset includeDimension(){
+        try {
+            urlQueries.put("include_dimension", true);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return this;
+    }
+
+
+
+    /**
+     * Retrieve the published content of the fallback locale if an entry is not localized in specified locale
      * @return {@link Asset} object, so you can chain this call.
      * <br><br><b>Example :</b><br>
      * <pre class="prettyprint">
@@ -676,7 +688,11 @@ public class Asset {
      * </pre>
      */
     public Asset includeFallback(){
-        headerGroup_local.put("include_fallback", true);
+        try {
+            urlQueries.put("include_fallback", true);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         return this;
     }
 

@@ -1,10 +1,10 @@
-﻿## CHANGELOG
+﻿# CHANGELOG
 
 ------------------------------------------------
 
 ## Version 3.8.0
    ###### Date: 20-Oct-2020
-   - **Asset**   includeFallback support added
+   - **Asset**   includeFallback support added, includeDimension added
    - **AssetQuery**   includeFallback support added
    - **Entry**   includeFallback support added
    - **Query**   includeFallback support added
