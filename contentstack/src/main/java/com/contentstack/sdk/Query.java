@@ -1111,15 +1111,9 @@ public class Query implements INotifyClass{
 
     /**
      * Specifies an array of &#39;except&#39; keys that would be &#39;excluded&#39; in the response.
-     *
-     * @param fieldUid
-     * 					Array of the &#39;except&#39; reference keys to be excluded in response.
-     *
-     * @param referenceFieldUid
-     * 					Key who has reference to some other class object.
-     *
-     * @return
-     *           {@link Query} object, so you can chain this call.
+     * @param fieldUid Array of the &#39;except&#39; reference keys to be excluded in response.
+     * @param referenceFieldUid Key who has reference to some other class object.
+     * @return {@link Query} object, so you can chain this call.
      *
      * <br><br><b>Example :</b><br>
      * <pre class="prettyprint">
@@ -1194,8 +1188,7 @@ public class Query implements INotifyClass{
      * Retrieve count and data of objects in result.
      *
      *
-     * @return
-     * 			 {@link Query} object, so you can chain this call.
+     * @return {@link Query} object, so you can chain this call.
      *
      * <b>Note :- </b>
      * <li>Call {@link QueryResult#getCount()} method in the success to get count of  objects.</li>
@@ -1206,7 +1199,6 @@ public class Query implements INotifyClass{
      *     //'blt6d0240b5sample254090d' is dummy access token.
      *     Stack stack = Contentstack.stack(context, "blt5d4sample2633b", "blt6d0240b5sample254090d", "stag", false);
      *     Query csQuery = stack.contentType("contentType_name").query();<br>
-     *
      *     csQuery.includeCount();
      * </pre>
      */

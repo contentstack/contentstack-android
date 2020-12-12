@@ -551,19 +551,13 @@ public class Asset {
     }
 
     /**
-     * To set tags for this object.
-     *
-     * @param tags
-     * 				array of tag.
-     *
-     * @return
-     * 			{@link Asset} object, so you can chain this call.
-     *
+     * To set tags for this objects
+     * @param tags array of tag.
+     * @return {@link Asset} object, so you can chain this call.
      * <br><br><b>Example :</b><br>
      * <pre class="prettyprint">
      * //'blt5d4sample2633b' is a dummy Application API key
      * Asset assetObject = Contentstack.stack(context, "blt5d4sample2633b", "bltdtsample_accessToken767vv",  config).asset("assetUid");
-     *
      * assetObject.setTags(new String[]{"tag1", "tag2"});
      * </pre>
      */
@@ -573,9 +567,7 @@ public class Asset {
     }
 
     private HashMap<String, Object> getUrlParams(JSONObject urlQueriesJSON) {
-
         HashMap<String, Object> hashMap = new HashMap<>();
-
         if(urlQueriesJSON != null && urlQueriesJSON.length() > 0){
             Iterator<String> iter = urlQueriesJSON.keys();
             while (iter.hasNext()) {
@@ -587,37 +579,30 @@ public class Asset {
                     CSAppUtils.showLog(TAG, "----------------setQueryJson"+e.toString());
                 }
             }
-
             return hashMap;
         }
-
         return null;
     }
 
     private ArrayMap<String, Object> getHeader(ArrayMap<String, Object> localHeader) {
         ArrayMap<String, Object> mainHeader = headerGroup_app;
         ArrayMap<String, Object> classHeaders = new ArrayMap<>();
-
         if(localHeader != null && localHeader.size() > 0){
             if(mainHeader != null && mainHeader.size() > 0) {
                 for (Map.Entry<String, Object> entry : localHeader.entrySet()) {
                     String key = entry.getKey();
                     classHeaders.put(key, entry.getValue());
                 }
-
                 for (Map.Entry<String, Object> entry : mainHeader.entrySet()) {
                     String key = entry.getKey();
                     if(!classHeaders.containsKey(key)) {
                         classHeaders.put(key, entry.getValue());
                     }
                 }
-
                 return classHeaders;
-
             }else{
                 return localHeader;
             }
-
         }else{
             return headerGroup_app;
         }
