@@ -1,5 +1,5 @@
 [![Contentstack](https://www.contentstack.com/docs/static/images/contentstack.png)](https://www.contentstack.com/)
-## Android SDK for Contentstack
+# Android SDK for Contentstack
 
 Contentstack is a headless CMS with an API-first approach. 
 It is a CMS that developers can use to build powerful cross-platform applications 
@@ -21,7 +21,7 @@ To use the Contentstack Android SDK to your existing project, perform the steps 
 
 1. **Gradle**
 ```
-implementation 'com.contentstack.sdk:android:3.7.0'
+implementation 'com.contentstack.sdk:android:3.8.0'
 ```
 
 2. **Maven**
@@ -29,7 +29,7 @@ implementation 'com.contentstack.sdk:android:3.7.0'
 <dependency>
   <groupId>com.contentstack.sdk</groupId>
   <artifactId>android</artifactId>
-  <version>3.7.0</version>
+  <version>3.8.0</version>
 </dependency>
 ```
   

@@ -6,6 +6,8 @@ import android.util.ArrayMap;
 import com.contentstack.sdk.utilities.CSAppConstants;
 import com.contentstack.sdk.utilities.CSAppUtils;
 import com.contentstack.sdk.utilities.CSController;
+
+import org.json.JSONException;
 import org.json.JSONObject;
 import java.io.File;
 import java.util.ArrayList;
@@ -83,8 +85,7 @@ public class AssetLibrary implements INotifyClass{
      * <br>
      * Scope is limited to this object only.
      *
-     * @param key
-     * 			   header key.
+     * @param key header key.
      *
      * <br><br><b>Example :</b><br>
      * <pre class="prettyprint">
@@ -165,9 +166,7 @@ public class AssetLibrary implements INotifyClass{
 
     /**
      * Retrieve relative urls objects in result.
-     *
-     * @return
-     * 			 {@link AssetLibrary} object, so you can chain this call.
+     * @return {@link AssetLibrary} object, so you can chain this call.
      *
      * <br><br><b>Example :</b><br>
      * <pre class="prettyprint">
@@ -229,10 +228,7 @@ public class AssetLibrary implements INotifyClass{
      *    //'blt5d4sample2633b' is a dummy Stack API key
      *    //'bltdtsample_accessToken767vv' is dummy access token.
      *    AssetLibrary assetLibObject = Contentstack.stack(context, "blt5d4sample2633b", "bltdtsample_accessToken767vv",  config).assetLibrary();
-     *
      *   assetLibObject.fetchAll(new FetchAssetsCallback() {
-     *
-     *
      *   public void onCompletion(ResponseType responseType, List<Asset> assets, Error error) {
      *      if (error == null) {
      *         //Success Block.
@@ -247,57 +243,41 @@ public class AssetLibrary implements INotifyClass{
     public void fetchAll(FetchAssetsCallback assetsCallback){
         try {
             this.assetsCallback = assetsCallback;
-
             String URL = "/" + stackInstance.VERSION + "/assets";
-
             ArrayMap<String, Object> headers = getHeader(localHeader);
             if (headers.containsKey("environment")) {
                 urlQueries.put("environment", headers.get("environment"));
             }
-
             String mainStringForMD5 = URL + new JSONObject().toString() + headers.toString();
             String md5Value = new CSAppUtils().getMD5FromString(mainStringForMD5.trim());
-
             File cacheFile = new File(CSAppConstants.cacheFolderName + File.separator + md5Value);
-
             switch (cachePolicyForCall){
-
                 case IGNORE_CACHE:
                     fetchFromNetwork(URL, urlQueries, headers, cacheFile.getPath(), assetsCallback);
                     break;
-
                 case NETWORK_ONLY:
                     fetchFromNetwork(URL, urlQueries, headers, cacheFile.getPath(), assetsCallback);
                     break;
-
                 case CACHE_ONLY:
                     fetchFromCache(cacheFile, assetsCallback);
                     break;
-
                 case CACHE_ELSE_NETWORK:
-
                     if(cacheFile.exists()){
                         boolean needToSendCall = false;
-
                         if(maxCachetimeForCall > 0){
                             needToSendCall = new CSAppUtils().getResponseTimeFromCacheFile(cacheFile, (int) maxCachetimeForCall);
                         }else{
                             needToSendCall = new CSAppUtils().getResponseTimeFromCacheFile(cacheFile, (int) defaultCacheTimeInterval);
                         }
-
                         if(needToSendCall){
                             fetchFromNetwork(URL, urlQueries, headers, cacheFile.getPath(), assetsCallback);
-
                         }else{
                             setCacheModel(cacheFile, assetsCallback);
                         }
-
                     }else{
                         fetchFromNetwork(URL, urlQueries, headers, cacheFile.getPath(), assetsCallback);
                     }
-
                     break;
-
                 case CACHE_THEN_NETWORK:
                     if(cacheFile.exists()){
                         setCacheModel(cacheFile, assetsCallback);
@@ -367,9 +347,7 @@ public class AssetLibrary implements INotifyClass{
         List<Object> objectList = assetsModel.objects;
         assetsModel = null;
         count = objectList.size();
-
         List<Asset> assets = new ArrayList<Asset>();
-
         if(objectList != null && objectList.size() > 0){
             for (Object object : objectList) {
                 AssetModel model = (AssetModel) object;
@@ -483,6 +461,26 @@ public class AssetLibrary implements INotifyClass{
         if(assetsCallback != null) {
             assetsCallback.onRequestFinish(ResponseType.NETWORK, assets);
         }
+    }
+
+
+    /**
+     * Retrieve the published content of the fallback locale if an entry is not localized in specified locale
+     * @return {@link AssetLibrary} object, so you can chain this call.
+     * <br><br><b>Example :</b><br>
+     * <pre class="prettyprint">
+     *     Stack stack = Contentstack.stack(context, "ApiKey", "deliveryToken",  environment_name);
+     *     AssetLibrary assetLibObject = stack.assetLibrary();
+     *     assetLibObject.includeFallback();
+     * </pre>
+     */
+    public AssetLibrary includeFallback(){
+        try {
+            urlQueries.put("include_fallback", true);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return this;
     }
 
 }

@@ -370,11 +370,9 @@ public class Entry {
         try{
             ArrayList<String> multipleHtmlStrings = new ArrayList<>();
             JSONArray jsonArray = getJSONArray(markdownKey);
-
             for (int i = 0; i < jsonArray.length(); i++) {
                 multipleHtmlStrings.add(Processor.process(jsonArray.getString(i), Configuration.builder().forceExtentedProfile().build()));
             }
-
             return multipleHtmlStrings;
         }catch(Exception e){
             CSAppUtils.showLog(TAG, "-----------------getHtmlText|" + e);
@@ -1550,6 +1548,26 @@ public class Entry {
             otherPostJSON.put("include_content_type",true);
             otherPostJSON.put("include_global_field_schema",true);
         } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return this;
+    }
+
+
+    /**
+     * Retrieve the published content of the fallback locale if an entry is not localized in specified locale.
+     * @return {@link Entry} object, so you can chain this call.
+     * <br><br><b>Example :</b><br>
+     * <pre class="prettyprint">
+     *     Stack stack = Contentstack.stack(context, "ApiKey", "deliveryToken", "environment");
+     *     final Entry entry = stack.contentType("user").entry("entryUid");
+     *     entry.includeFallback();
+     * </pre>
+     */
+    public Entry includeFallback(){
+        try {
+            otherPostJSON.put("include_fallback", true);
+        } catch (JSONException e) {
             e.printStackTrace();
         }
         return this;

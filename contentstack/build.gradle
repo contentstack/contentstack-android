@@ -6,14 +6,14 @@ android {
 
     signingConfigs {
         debug {
-            storeFile file("/Users/shaileshmishra/Documents/contentstack/workspace/android/keystore/debug.keystore")
+            storeFile file("/Users/shaileshmishra/Documents/workspace/contentstack/android/keystore/debug.keystore")
             storePassword 'android'
             keyAlias 'androiddebugkey'
             keyPassword 'android'
         }
 
         release {
-            storeFile file("/Users/shaileshmishra/Documents/contentstack/workspace/android/keystore/debug.keystore")
+            storeFile file("/Users/shaileshmishra/Documents/workspace/contentstack/android/keystore/debug.keystore")
             storePassword 'android'
             keyAlias 'androiddebugkey'
             keyPassword 'android'
@@ -110,7 +110,7 @@ createJar.dependsOn(clearJar, unzip, build)
 
 group = "com.contentstack.sdk"
 archivesBaseName = "android"
-version = "3.7.0-SNAPSHOT"
+version = "3.8.0"
 
 task sourceJar(type: Jar) {
     from android.sourceSets.main.java.srcDirs
@@ -182,7 +182,6 @@ uploadArchives {
                         email 'mobile@contentstack.com'
                     }
                 }
-
             }
         }
     }
