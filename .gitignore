@@ -39,3 +39,4 @@ proguard/
 lib/
 src/androidTest/java/com/builtio/contentstack/ApplicationTest.java
 src/main/res/
+contentstack/src/androidTest/java/com/contentstack/sdk/SyncTestCase.java
