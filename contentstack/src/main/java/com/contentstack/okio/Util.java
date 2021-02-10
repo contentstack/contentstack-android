@@ -16,10 +16,11 @@
 package com.contentstack.okio;
 
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 final class Util {
   /** A cheap and type-safe constant for the UTF-8 Charset. */
-  public static final Charset UTF_8 = Charset.forName("UTF-8");
+  public static final Charset UTF_8 = StandardCharsets.UTF_8;
 
   private Util() {
   }
