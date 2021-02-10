@@ -496,69 +496,7 @@ public class QueryTestCase {
     }
 
 
-    @Test
-    public void test_30_includeCount() {
-        query.includeCount();
-        query.where("uid", "blt3976eac6d3a0cb74");
-        query.find(new QueryResultsCallBack() {
-            @Override
-            public void onCompletion(ResponseType responseType, QueryResult queryresult, Error error) {
-                if (error == null) {
-                    List<Entry> entries = queryresult.getResultObjects();
-                }
-            }
-        });
-    }
 
-
-    @Test
-    public void test_31_includeReferenceOnly_fetch() {
-
-        final Query query = stack.contentType("multifield").query();
-        query.where("uid", "blt1b1cb4f26c4b682e");
-
-        ArrayList<String> strings = new ArrayList<>();
-        strings.add("title");
-
-        ArrayList<String> strings1 = new ArrayList<>();
-        strings1.add("title");
-        strings1.add("brief_description");
-        strings1.add("discount");
-        strings1.add("price");
-        strings1.add("in_stock");
-
-        query.onlyWithReferenceUid(strings, "package_info.info_category");
-        query.exceptWithReferenceUid(strings1, "product_ref");
-        query.find(new QueryResultsCallBack() {
-            @Override
-            public void onCompletion(ResponseType responseType, QueryResult queryresult, Error error) {
-                if (error == null) {
-                    List<Entry> entries = queryresult.getResultObjects();
-                }
-            }
-        });
-
-
-    }
-
-
-    @Test
-    public void test_32_includeReferenceExcept_fetch() {
-        query = query.where("uid", "blt7801c5d40cbbe979");
-        ArrayList<String> strings = new ArrayList<>();
-        strings.add("title");
-        query.exceptWithReferenceUid(strings, "category");
-        query.find(new QueryResultsCallBack() {
-            @Override
-            public void onCompletion(ResponseType responseType, QueryResult queryresult, Error error) {
-                if (error == null) {
-                    List<Entry> entries = queryresult.getResultObjects();
-                }
-            }
-        });
-
-
-    }
 
 
     @Test
