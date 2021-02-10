@@ -20,12 +20,12 @@ or [Eclipse](https://eclipse.org/downloads/eclipse-packages/?show_instructions=T
 To use the Contentstack Android SDK to your existing project, perform the steps given below:
 
 1. **Gradle**
-```
+```java
 implementation 'com.contentstack.sdk:android:3.8.0'
 ```
 
 2. **Maven**
-```
+```java
 <dependency>
   <groupId>com.contentstack.sdk</groupId>
   <artifactId>android</artifactId>
@@ -76,7 +76,7 @@ android:enabled="true">
 
 
 To initialize the SDK, specify application context, the API key, access token, and environment name of the stack as shown in the snippet given below:
-```sh
+```java
 Stack stack = Contentstack.stack(context, "api_key", "access_token", "enviroment_name");
 ```
 Once you have initialized the SDK, you can query entries to fetch the required content.
@@ -112,7 +112,9 @@ A publishing environment corresponds to one or more deployment servers or a cont
 
 To initialize the SDK, specify application context, the API key, access token, and environment name of the stack as shown in the snippet given below:
 
-  Stack stack = Contentstack.stack(context, "api_key", "access_token", "enviroment_name");
+```java
+Stack stack = Contentstack.stack(context, "api_key", "access_token", "enviroment_name");
+```
 
 Once you have initialized the SDK, you can query entries to fetch the required content.
 
@@ -123,7 +125,7 @@ Once you have initialized the SDK, you can query entries to fetch the required c
 To retrieve a single entry from a content type use the code snippet given below:
 
 ContentType contentType = stack.contentType("content_type_uid");
-```sh
+```java
 Entry blogEntry = contentType.entry("entry_uid");
 blogEntry.fetch(new EntryResultCallBack() {
 @Override
@@ -137,7 +139,7 @@ if (error == null) {
 ##### Get Multiple Entries
 
 To retrieve multiple entries of a particular content type, use the code snippet given below:
-```sh
+```java
 //stack is an instance of Stack class
 Query blogQuery = stack.contentType("content_type_uid").query();
 blogQuery.find(new QueryResultsCallBack() {
@@ -164,7 +166,7 @@ We have introduced Image Delivery APIs that let you retrieve images and then man
 For example, if you want to crop an image (with width as 300 and height as 400), you simply need to append query parameters at the end of the image URL, such as, https://images.contentstack.io/v3/assets/blteae40eb499811073/bltc5064f36b5855343/59e0c41ac0eddd140d5a8e3e/download?crop=300,400. There are several more parameters that you can use for your images.
 
 [Read Image Delivery API documentation](https://www.contentstack.com/docs/apis/image-delivery-api/).
-```sh
+```java
 // set the image quality to 100
 LinkedHashMap imageParams = new LinkedHashMap();
 imageParams.put("quality", 100);
@@ -189,7 +191,7 @@ The Sync API takes care of syncing your Contentstack data with your app and ensu
 
 The Initial sync request performs a complete sync of your app data. It returns all the published entries and assets of the specified stack in response. To start the Initial sync process, use the syncInit method.
 
-```sh
+```java
 //stack is an instance of Stack class
 stack.sync(new SyncResultCallBack() {
     @Override
@@ -208,7 +210,7 @@ If the result of the initial sync (or subsequent sync) contains more than 100 re
 
 Pagination token can be used in case you want to fetch only selected batches. It is especially useful if the sync process is interrupted midway (due to network issues, etc.). In such cases, this token can be used to restart the sync process from where it was interrupted.
 
-```sh
+```java
 //stack is an instance of Stack class
 stack.syncPaginationToken("pagination_token", new SyncResultCallBack() {
    @Override
@@ -225,7 +227,7 @@ stack.syncPaginationToken("pagination_token", new SyncResultCallBack() {
 
  You can use the sync token (that you receive after initial sync) to get the updated content next time. The sync token fetches only the content that was added after your last sync, and the details of the content that was deleted or updated.
 
-```sh
+```java
 //stack is an instance of Stack class
 stack.syncToken("sync_token", new SyncResultCallBack() {
    @Override
