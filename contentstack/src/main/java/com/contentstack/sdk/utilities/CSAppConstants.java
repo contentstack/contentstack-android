@@ -16,7 +16,7 @@ public class CSAppConstants {
     public static String URLSCHEMA_HTTPS = "https://";
     public static String SDK_VERSION = "3.9.0";
     public final static int NONETWORKCONNECTION = 408;
-    public final static int TimeOutDuration = 30000;
+    public final static int TimeOutDuration = 30000; // timeout in millisecond
     public final static int NumRetry = 0;
     public final static int BackOFMultiplier = 0;
 
