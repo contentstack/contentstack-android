@@ -10,7 +10,6 @@ Contentstack provides Android SDK to build application on top of Android.
 Given below is the detailed guide and helpful resources to get started with our Android SDK.
 
 
-
 ### Prerequisite
 
 You will need one of the following: [Android Studio](https://developer.android.com/studio/install.html) 
