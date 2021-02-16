@@ -21,7 +21,7 @@ To use the Contentstack Android SDK to your existing project, perform the steps 
 
 1. **Gradle**
 ```java
-implementation 'com.contentstack.sdk:android:3.9.0'
+implementation 'com.contentstack.sdk:android:3.8.1'
 ```
 
 2. **Maven**
@@ -29,7 +29,7 @@ implementation 'com.contentstack.sdk:android:3.9.0'
 <dependency>
   <groupId>com.contentstack.sdk</groupId>
   <artifactId>android</artifactId>
-  <version>3.9.0</version>
+  <version>3.8.1</version>
 </dependency>
 ```
 
