@@ -38,11 +38,6 @@ android {
             buildConfigField "String", "environment", localProperties['env']
             buildConfigField "String", "contentTypeUID", localProperties['contentType']
             buildConfigField "String", "assetUID", localProperties['assetUid']
-//            buildConfigField "String", "SyncToken", localProperties['SYNC_TOKEN']
-//            buildConfigField "String", "SyncAPIKey", localProperties['SYNC_API_KEY']
-//            buildConfigField "String", "SyncDeliveryToken", localProperties['SYNC_DELIVERY_TOKEN']
-//            buildConfigField "String", "SyncEnv", localProperties['SYNC_ENVIRONMENT']
-//            buildConfigField "String", "SyncPaginationToken", localProperties['SYNC_PAGINATION_TOKEN']
         }
         release {
             minifyEnabled false

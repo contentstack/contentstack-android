@@ -14,9 +14,9 @@ public class CSAppConstants {
     public static final boolean debug = false;
     public static boolean isNetworkAvailable = true;
     public static String URLSCHEMA_HTTPS = "https://";
-    public static String SDK_VERSION = "3.8.0";
+    public static String SDK_VERSION = "3.9.0";
     public final static int NONETWORKCONNECTION = 408;
-    public final static int TimeOutDuration = 15000;
+    public final static int TimeOutDuration = 30000;
     public final static int NumRetry = 0;
     public final static int BackOFMultiplier = 0;
 

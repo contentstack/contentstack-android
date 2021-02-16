@@ -21,7 +21,7 @@ To use the Contentstack Android SDK to your existing project, perform the steps 
 
 1. **Gradle**
 ```java
-implementation 'com.contentstack.sdk:android:3.8.0'
+implementation 'com.contentstack.sdk:android:3.9.0'
 ```
 
 2. **Maven**
@@ -29,14 +29,14 @@ implementation 'com.contentstack.sdk:android:3.8.0'
 <dependency>
   <groupId>com.contentstack.sdk</groupId>
   <artifactId>android</artifactId>
-  <version>3.8.0</version>
+  <version>3.9.0</version>
 </dependency>
 ```
-  
- Or, 
- 
+
+ Or,
+
 To add the Contentstack Android SDK to your existing project manually, perform the steps given below:
-1. [Download the Android SDK](https://docs.contentstack.com/platforms/android/android_sdk_latest) 
+1. [Download the Android SDK](https://docs.contentstack.com/platforms/android/android_sdk_latest)
 and extract the ZIP file to your local disk.
 2. Add references/dependencies using Eclipse/Android Studio:
 
@@ -128,28 +128,31 @@ ContentType contentType = stack.contentType("content_type_uid");
 ```java
 Entry blogEntry = contentType.entry("entry_uid");
 blogEntry.fetch(new EntryResultCallBack() {
-@Override
-publicvoidonCompletion(ResponseType responseType, Error error) {
-if (error == null) {
-// Success block
-} else {
-// Error block
-}}});
+  @Override
+  public void onCompletion(ResponseType responseType, Error error) {
+    if (error == null) {
+      // Success block
+    } else {
+      // Error block
+    }}
+});
 ```
 ##### Get Multiple Entries
 
 To retrieve multiple entries of a particular content type, use the code snippet given below:
+
 ```java
 //stack is an instance of Stack class
 Query blogQuery = stack.contentType("content_type_uid").query();
 blogQuery.find(new QueryResultsCallBack() {
- @Override
- publicvoidonCompletion(ResponseType responseType, QueryResult queryResult, Error error) {
-if(error == null){
-//Success block
-}else{
-//Error block
-}}});
+  @Override
+  public void onCompletion(ResponseType responseType, QueryResult queryResult, Error error) {
+    if(error == null){
+      //Success block
+    }else{
+      //Error block
+    }}
+});
 ```
 
 
@@ -194,13 +197,14 @@ The Initial sync request performs a complete sync of your app data. It returns a
 ```java
 //stack is an instance of Stack class
 stack.sync(new SyncResultCallBack() {
-    @Override
-    public void onCompletion(SyncStack syncStack,Error error) {
+  @Override
+  public void onCompletion(SyncStack syncStack,Error error) {
     if(error == null){
-    //Success block
+      //Success block
     }else{
-    //Error block
-    }}});
+      //Error block
+    }}
+});
 ```
 
 
@@ -213,13 +217,14 @@ Pagination token can be used in case you want to fetch only selected batches. It
 ```java
 //stack is an instance of Stack class
 stack.syncPaginationToken("pagination_token", new SyncResultCallBack() {
-   @Override
-   public void onCompletion(SyncStack syncStack, Error error) {
-   if(error == null){
-    //Success block
+  @Override
+  public void onCompletion(SyncStack syncStack, Error error) {
+    if(error == null){
+      //Success block
     }else{
-    //Error block
-    }}});
+      //Error block
+    }}
+});
 ```
 
 
@@ -230,13 +235,14 @@ stack.syncPaginationToken("pagination_token", new SyncResultCallBack() {
 ```java
 //stack is an instance of Stack class
 stack.syncToken("sync_token", new SyncResultCallBack() {
-   @Override
-   public void onCompletion(SyncStack syncStack,Error error) {
-   if(error == null){
-    //Success block
+  @Override
+  public void onCompletion(SyncStack syncStack,Error error) {
+    if(error == null){
+      //Success block
     }else{
-    //Error block
-    }}});
+      //Error block
+    }}
+});
 ```
 
 ### Advanced sync queries

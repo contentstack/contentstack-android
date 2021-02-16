@@ -2,6 +2,12 @@
 
 ------------------------------------------------
 
+## Version 3.9.0
+   ###### Date: 18-FEB-2020
+   - Increased default timeout time to 30 sec
+
+------------------------------------------------
+
 ## Version 3.8.0
    ###### Date: 08-DEC-2020
    - [Asset]: includeFallback support and includeDimension added
