@@ -3,9 +3,6 @@ package com.contentstack.sdk;
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.util.Log;
-
-import com.contentstack.sdk.test.BuildConfig;
-
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
