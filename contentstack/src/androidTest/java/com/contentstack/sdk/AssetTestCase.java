@@ -20,7 +20,6 @@ public class AssetTestCase {
     private static Stack stack;
     private static CountDownLatch latch;
 
-
     @BeforeClass
     public static void oneTimeSetUp() throws Exception {
         Context appContext = InstrumentationRegistry.getTargetContext();
