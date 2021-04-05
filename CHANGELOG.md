@@ -1,6 +1,13 @@
 ﻿# CHANGELOG
 
 
+
+## Version 3.9.0
+   ###### Date: 05-April-2021
+   - [Entry]:  entry.includeEmbeddedItems() support added
+   - [Query]:  query.includeEmbeddedItems() support added
+
+
 ------------------------------------------------
 
 ## Version 3.8.2
