@@ -140,7 +140,7 @@ localProperties.load(new FileInputStream(rootProject.file("local.properties")))
 
 group = "com.contentstack.sdk"
 archivesBaseName = "android"
-version = "3.8.2"
+version = "3.9.0"
 
 task sourceJar(type: Jar) {
     from android.sourceSets.main.java.srcDirs

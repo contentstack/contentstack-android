@@ -2315,5 +2315,22 @@ public class Query implements INotifyClass{
         return this;
     }
 
+    /**
+     *  includeEmbeddedItems instance of Query
+     *  Include Embedded Objects (Entries and Assets) along with entry/entries details.<br>
+     *  Stack stack = Contentstack.stack( "ApiKey", "deliveryToken", "environment");
+     *  final Query query = stack.contentType("user").query();
+     *  query = query.includeEmbeddedObjects()
+     * @return {@link Query}
+     */
+    public Query includeEmbeddedItems() {
+        try {
+            mainJSON.put("include_embedded_items" , "BASE");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return this;
+    }
+
 }
 
