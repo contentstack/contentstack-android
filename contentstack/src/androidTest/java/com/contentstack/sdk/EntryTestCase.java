@@ -215,7 +215,6 @@ public class EntryTestCase {
         entry.fetch(new EntryResultCallBack() {
             @Override
             public void onCompletion(ResponseType responseType, Error error) {
-
                 if (error == null) {
                     latch.countDown();
                 } else {
@@ -290,6 +289,25 @@ public class EntryTestCase {
                 } else {
                     latch.countDown();
                 }
+            }
+        });
+        latch.await();
+    }
+
+    @Test
+    public void test_13_entry_include_embedded_items_unit_test() throws InterruptedException {
+
+        final Entry entry = stack.contentType("user").entry(entryUID);
+        entry.includeEmbeddedItems().fetch(new EntryResultCallBack() {
+            @Override
+            public void onCompletion(ResponseType responseType, Error error) {
+                if (error == null) {
+                    String checkResp = entry.getLocale();
+                    Log.d(TAG, checkResp);
+                }
+                boolean hasEmbeddedItemKey = entry.otherPostJSON.has("include_embedded_items[]");
+                Assert.assertTrue(hasEmbeddedItemKey);
+                latch.countDown();
             }
         });
         latch.await();
