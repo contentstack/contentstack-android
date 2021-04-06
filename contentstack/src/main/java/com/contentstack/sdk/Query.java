@@ -23,7 +23,7 @@ import java.util.Map;
 public class Query implements INotifyClass{
 
     private static final String TAG              = "Query";
-    private JSONObject mainJSON                  = null;
+    protected JSONObject mainJSON                  = null;
     private String formName                      = null;
     protected ContentType contentTypeInstance    = null;
     private JSONObject urlQueries                = null;
@@ -2325,7 +2325,7 @@ public class Query implements INotifyClass{
      */
     public Query includeEmbeddedItems() {
         try {
-            mainJSON.put("include_embedded_items" , "BASE");
+            mainJSON.put("include_embedded_items[]", "BASE");
         } catch (JSONException e) {
             e.printStackTrace();
         }

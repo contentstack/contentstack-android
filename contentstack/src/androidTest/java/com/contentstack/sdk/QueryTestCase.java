@@ -619,7 +619,24 @@ public class QueryTestCase {
                 }
             }
         });
+    }
 
+
+    @Test
+    public void test_41_entry_include_embedded_items_unit_test() throws InterruptedException {
+
+        final Query query = stack.contentType("user").query();
+        query.includeEmbeddedItems().find(new QueryResultsCallBack() {
+            @Override
+            public void onCompletion(ResponseType responseType, QueryResult queryresult, Error error) {
+                if (error == null) {
+                    JSONArray checkResp = (JSONArray) queryresult.getResultObjects();
+                    Log.d(TAG, checkResp.toString());
+                }
+                boolean hasEmbeddedItemKey = query.mainJSON.has("include_embedded_items[]");
+                Assert.assertTrue(hasEmbeddedItemKey);
+            }
+        });
     }
 
 }

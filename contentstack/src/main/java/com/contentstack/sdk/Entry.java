@@ -47,7 +47,7 @@ public class Entry {
     protected String url                         = null;
     protected String language                    = null;
     private JSONArray referenceArray;
-    private JSONObject otherPostJSON;
+    protected JSONObject otherPostJSON;
     private JSONArray objectUidForOnly;
     private JSONArray objectUidForExcept;
     private JSONObject onlyJsonObject;
@@ -1584,7 +1584,7 @@ public class Entry {
      */
     public Entry includeEmbeddedItems() {
         try {
-            otherPostJSON.put("include_embedded_items" , "BASE");
+            otherPostJSON.put("include_embedded_items[]", "BASE");
         } catch (JSONException e) {
             e.printStackTrace();
         }
