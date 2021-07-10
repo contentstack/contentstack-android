@@ -2,7 +2,9 @@ package com.contentstack.sdk.utilities;
 
 import android.annotation.SuppressLint;
 import android.util.Log;
+
 import org.json.JSONObject;
+
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -17,16 +19,15 @@ import java.util.Date;
 import java.util.TimeZone;
 
 /**
- *
  * @author contentstack.com, Inc
- *
  */
 public class CSAppUtils {
 
-    public CSAppUtils(){}
+    public CSAppUtils() {
+    }
 
-    public static void showLog(String tag, String message){
-        if(CSAppConstants.debug){
+    public static void showLog(String tag, String message) {
+        if (CSAppConstants.debug) {
             Log.i(tag, message);
         }
     }
@@ -35,18 +36,14 @@ public class CSAppUtils {
     /**
      * To check if required response within given time window available in cache
      *
-     * @param file
-     * 				cache file.
-     * @param time
-     * 				time
-     *
-     * @return
-     * 			true if cache data available which satisfy given time condition.
+     * @param file cache file.
+     * @param time time
+     * @return true if cache data available which satisfy given time condition.
      */
-    public boolean getResponseTimeFromCacheFile(File file,long time) {
-        try{
+    public boolean getResponseTimeFromCacheFile(File file, long time) {
+        try {
             JSONObject jsonObj = getJsonFromCacheFile(file);
-            long responseDate =  Long.parseLong(jsonObj.optString("timestamp"));
+            long responseDate = Long.parseLong(jsonObj.optString("timestamp"));
 
             Calendar responseCalendar = Calendar.getInstance();
 
@@ -65,13 +62,13 @@ public class CSAppUtils {
             long dateDiffInMin = dateDiff / (60 * 1000);
 
 
-            if(dateDiffInMin > (time / 60000)){
+            if (dateDiffInMin > (time / 60000)) {
                 return true;// need to send call.
-            }else{
+            } else {
                 return false;// no need to send call.
             }
 
-        }catch(Exception e) {
+        } catch (Exception e) {
             showLog("appUtils", "------------getJsonFromFilec catch-|" + e.toString());
             return false;
         }
@@ -80,23 +77,21 @@ public class CSAppUtils {
     /**
      * To retrieve data from cache.
      *
-     * @param file
-     * 				cache file.
-     * @return
-     * 				cache data in JSON.
+     * @param file cache file.
+     * @return cache data in JSON.
      */
     public static JSONObject getJsonFromCacheFile(File file) {
 
-        JSONObject json              = null;
-        InputStream input            = null;
+        JSONObject json = null;
+        InputStream input = null;
         ByteArrayOutputStream buffer = null;
-        try{
+        try {
 
             input = new BufferedInputStream(new FileInputStream(file));
             buffer = new ByteArrayOutputStream();
             byte[] temp = new byte[1024];
             int read;
-            while((read = input.read(temp)) > 0){
+            while ((read = input.read(temp)) > 0) {
                 buffer.write(temp, 0, read);
             }
             json = new JSONObject(buffer.toString("UTF-8"));
@@ -104,7 +99,7 @@ public class CSAppUtils {
             buffer.close();
             input.close();
             return json;
-        }catch (Exception e) {
+        } catch (Exception e) {
             showLog("appUtils", "------------getJsonFromFilec catch-|" + e.toString());
             return null;
         }
@@ -113,16 +108,13 @@ public class CSAppUtils {
     /**
      * To encrypt given value.
      *
-     * @param value
-     * 				string
-     *
-     * @return
-     * 			MD5 value
+     * @param value string
+     * @return MD5 value
      */
     public String getMD5FromString(String value) {
         String output;
         output = value.toString().trim();
-        if(value.length() > 0){
+        if (value.length() > 0) {
             try {
                 // Create MD5 Hash
                 MessageDigest digest = java.security.MessageDigest.getInstance("MD5");
@@ -135,7 +127,7 @@ public class CSAppUtils {
                 for (int i = 0; i < messageDigest.length; i++) {
 
                     String hex = Integer.toHexString(0xFF & messageDigest[i]);
-                    if(hex.length() == 1){
+                    if (hex.length() == 1) {
                         hexString.append('0');
                     }
                     hexString.append(hex);
@@ -147,28 +139,21 @@ public class CSAppUtils {
                 showLog("appUtils", "------------getMD5FromString catch-|" + e.toString());
                 return null;
             }
-        }else{
+        } else {
             return null;
         }
     }
 
 
-
     /**
      * Converts the given date to user&#39;s timezone.
      *
-     * @param date
-     * 				date in ISO format.
-     * @return
-     * 				{@link Calendar} object.
-     *
-     * @throws ParseException
-     *
-     * <br><br><b>Example :</b><br>
-     * <pre class="prettyprint">
-     *   BuiltUtil.parseDate(dateString, TimeZone.getDefault());
-     * </pre>
-     *
+     * @param date date in ISO format.
+     * @return {@link Calendar} object.
+     * @throws ParseException <br><br><b>Example :</b><br>
+     *                        <pre class="prettyprint">
+     *                          BuiltUtil.parseDate(dateString, TimeZone.getDefault());
+     *                        </pre>
      */
     public static Calendar parseDate(String date, TimeZone timeZone) throws ParseException {
         ArrayList<String> knownPatterns = new ArrayList<String>();
@@ -184,12 +169,13 @@ public class CSAppUtils {
         knownPatterns.add("HH:mm:ssZ");
         knownPatterns.add("HH:mm:ss'Z'");
 
-        for (String formatString : knownPatterns){
+        for (String formatString : knownPatterns) {
             try {
 
                 return parseDate(date, formatString, timeZone);
 
-            }catch (ParseException e) {}
+            } catch (ParseException e) {
+            }
         }
 
         return null;
@@ -198,57 +184,49 @@ public class CSAppUtils {
     /**
      * Converts the given date to the user&#39;s timezone.
      *
-     * @param date
-     * 				date in string format.
-     *
-     * @param dateFormat
-     * 				 date format.
-     *
-     * @return
-     * 				{@link Calendar} object.
-     *
-     * @throws ParseException
-     *
-     * <br><br><b>Example :</b><br>
-     * <pre class="prettyprint">
-     *   BuiltUtil.parseDate(dateString, "yyyy-MM-dd'T'HH:mm:ssZ", TimeZone.getTimeZone("GMT"));
-     * </pre>
+     * @param date       date in string format.
+     * @param dateFormat date format.
+     * @return {@link Calendar} object.
+     * @throws ParseException <br><br><b>Example :</b><br>
+     *                        <pre class="prettyprint">
+     *                          BuiltUtil.parseDate(dateString, "yyyy-MM-dd'T'HH:mm:ssZ", TimeZone.getTimeZone("GMT"));
+     *                        </pre>
      */
     @SuppressLint("SimpleDateFormat")
     public static Calendar parseDate(String date, String dateFormat, TimeZone timeZone) throws ParseException {
-        Date dateObject   = null;
-        String month      = "";
-        String day        = "";
-        String year       = "";
-        String hourOfDay  = "";
-        String min        = "";
-        String sec        = "";
-        Calendar cal      = Calendar.getInstance();
+        Date dateObject = null;
+        String month = "";
+        String day = "";
+        String year = "";
+        String hourOfDay = "";
+        String min = "";
+        String sec = "";
+        Calendar cal = Calendar.getInstance();
 
         SimpleDateFormat dateFormatter = new SimpleDateFormat(dateFormat);
         dateObject = dateFormatter.parse(date);
 
-        month     = new SimpleDateFormat("MM").format(dateObject);
-        day       = new SimpleDateFormat("dd").format(dateObject);
-        year      = new SimpleDateFormat("yyyy").format(dateObject);
+        month = new SimpleDateFormat("MM").format(dateObject);
+        day = new SimpleDateFormat("dd").format(dateObject);
+        year = new SimpleDateFormat("yyyy").format(dateObject);
         hourOfDay = new SimpleDateFormat("HH").format(dateObject);
-        min       = new SimpleDateFormat("mm").format(dateObject);
-        sec       = new SimpleDateFormat("ss").format(dateObject);
+        min = new SimpleDateFormat("mm").format(dateObject);
+        sec = new SimpleDateFormat("ss").format(dateObject);
 
-        if(timeZone != null){
+        if (timeZone != null) {
             cal.setTimeZone(timeZone);
-        }else{
+        } else {
             cal.setTimeZone(TimeZone.getDefault());
         }
 
-        cal.set(Integer.valueOf(year), Integer.valueOf(month)-1, Integer.valueOf(day), Integer.valueOf(hourOfDay), Integer.valueOf(min), Integer.valueOf(sec));
+        cal.set(Integer.valueOf(year), Integer.valueOf(month) - 1, Integer.valueOf(day), Integer.valueOf(hourOfDay), Integer.valueOf(min), Integer.valueOf(sec));
 
-        month     = null;
-        day       = null;
-        year      = null;
+        month = null;
+        day = null;
+        year = null;
         hourOfDay = null;
-        min       = null;
-        sec       = null;
+        min = null;
+        sec = null;
         dateObject = null;
 
         return cal;
@@ -258,11 +236,12 @@ public class CSAppUtils {
      * Type to compare dates.
      *
      * @author built.io. Inc
-     *
      */
-    public static enum DateComapareType{
+    public static enum DateComapareType {
 
         WEEK, DAY, HOURS, MINUTES, SECONDS
 
-    };
+    }
+
+    ;
 }

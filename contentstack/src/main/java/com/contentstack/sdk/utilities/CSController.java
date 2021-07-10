@@ -1,9 +1,7 @@
 package com.contentstack.sdk.utilities;
 
 /**
- *
  * @author contentstack.com, Inc
- *
  */
 public class CSController {
 

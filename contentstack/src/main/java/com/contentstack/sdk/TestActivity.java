@@ -1,4 +1,5 @@
 package com.contentstack.sdk;
+
 import android.app.Application;
 
 /**

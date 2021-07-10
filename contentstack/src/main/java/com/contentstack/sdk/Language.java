@@ -5,7 +5,6 @@ package com.contentstack.sdk;
  * Differentiated using languages and countries.
  *
  * @author Contentstack.com, Inc
- *
  */
 public enum Language {
 

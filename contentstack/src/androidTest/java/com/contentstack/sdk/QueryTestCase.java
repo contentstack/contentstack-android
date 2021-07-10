@@ -1,4 +1,5 @@
 package com.contentstack.sdk;
+
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.util.Log;
@@ -6,6 +7,7 @@ import android.util.Log;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.*;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -23,14 +25,14 @@ public class QueryTestCase {
     @BeforeClass
     public static void oneTimeSetUp() throws Exception {
         Context appContext = InstrumentationRegistry.getTargetContext();
-            Config config = new Config();
-            String DEFAULT_API_KEY = BuildConfig.APIKey;
-            String DEFAULT_DELIVERY_TOKEN = BuildConfig.deliveryToken;
-            String DEFAULT_ENV = BuildConfig.environment;
-            String DEFAULT_HOST = BuildConfig.host;
-            config.setHost(DEFAULT_HOST);
-            stack = Contentstack.stack(appContext, DEFAULT_API_KEY, DEFAULT_DELIVERY_TOKEN, DEFAULT_ENV, config);
-            query = stack.contentType(contentTypeUID).query();
+        Config config = new Config();
+        String DEFAULT_API_KEY = BuildConfig.APIKey;
+        String DEFAULT_DELIVERY_TOKEN = BuildConfig.deliveryToken;
+        String DEFAULT_ENV = BuildConfig.environment;
+        String DEFAULT_HOST = BuildConfig.host;
+        config.setHost(DEFAULT_HOST);
+        stack = Contentstack.stack(appContext, DEFAULT_API_KEY, DEFAULT_DELIVERY_TOKEN, DEFAULT_ENV, config);
+        query = stack.contentType(contentTypeUID).query();
     }
 
 
@@ -42,7 +44,6 @@ public class QueryTestCase {
     public void setUp() {
         query = stack.contentType(contentTypeUID).query();
     }
-
 
 
     @Test
@@ -110,7 +111,7 @@ public class QueryTestCase {
             public void onCompletion(ResponseType responseType, QueryResult queryresult, Error error) {
                 if (error == null) {
                     List<Entry> entries = queryresult.getResultObjects();
-                    entries.forEach(entry -> Log.i(TAG,entry.getString("title")));
+                    entries.forEach(entry -> Log.i(TAG, entry.getString("title")));
                 }
             }
         });
@@ -176,7 +177,7 @@ public class QueryTestCase {
                 if (error == null) {
                     List<Entry> resp = queryresult.getResultObjects();
                     resp.forEach(entry -> {
-                        Log.i(TAG,"Is price less than 90..? " + entry.get("price"));
+                        Log.i(TAG, "Is price less than 90..? " + entry.get("price"));
                     });
                 }
             }
@@ -300,9 +301,9 @@ public class QueryTestCase {
                             try {
                                 Object value = jsonObject.opt(key);
                                 if (value instanceof String && ((String) value).contains("dress"))
-                                    Log.i(TAG,value.toString());
+                                    Log.i(TAG, value.toString());
                             } catch (Exception e) {
-                                Log.i(TAG,"----------------setQueryJson" + e.toString());
+                                Log.i(TAG, "----------------setQueryJson" + e.toString());
                             }
                         }
                     }
@@ -321,7 +322,7 @@ public class QueryTestCase {
                 if (error == null) {
                     List<Entry> entries = queryresult.getResultObjects();
                     for (Entry entry : entries) {
-                        Log.i(TAG,entry.getString("title"));
+                        Log.i(TAG, entry.getString("title"));
                     }
                 }
             }
@@ -338,7 +339,7 @@ public class QueryTestCase {
                 if (error == null) {
                     List<Entry> entries = queryresult.getResultObjects();
                     for (Entry entry : entries) {
-                        Log.i(TAG,entry.getString("title"));
+                        Log.i(TAG, entry.getString("title"));
                     }
                 }
             }
@@ -355,7 +356,7 @@ public class QueryTestCase {
                 if (error == null) {
                     List<Entry> entries = queryresult.getResultObjects();
                     for (Entry entry : entries) {
-                        Log.i(TAG," entry = [" + entry.getString("title") + "]");
+                        Log.i(TAG, " entry = [" + entry.getString("title") + "]");
                     }
                 }
             }
@@ -496,9 +497,6 @@ public class QueryTestCase {
     }
 
 
-
-
-
     @Test
     public void test_33_findOne() {
         query.includeCount();
@@ -507,7 +505,7 @@ public class QueryTestCase {
             @Override
             public void onCompletion(ResponseType responseType, Entry entry, Error error) {
                 if (error == null) {
-                    System.out.println("entry: "+entry);
+                    System.out.println("entry: " + entry);
                 }
             }
         });
@@ -630,7 +628,7 @@ public class QueryTestCase {
             @Override
             public void onCompletion(ResponseType responseType, QueryResult queryresult, Error error) {
                 if (error == null) {
-                    JSONArray checkResp = (JSONArray) queryresult.getResultObjects();
+                    Entry checkResp = queryresult.getResultObjects().get(0);
                     Log.d(TAG, checkResp.toString());
                 }
                 boolean hasEmbeddedItemKey = query.mainJSON.has("include_embedded_items[]");

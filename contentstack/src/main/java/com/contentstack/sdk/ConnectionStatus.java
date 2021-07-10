@@ -3,9 +3,12 @@ package com.contentstack.sdk;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+
 import com.contentstack.sdk.utilities.CSAppConstants;
 import com.contentstack.sdk.utilities.CSAppUtils;
+
 import org.json.JSONObject;
+
 import java.io.File;
 import java.util.HashMap;
 
@@ -13,7 +16,6 @@ import java.util.HashMap;
  * Connection Status.
  *
  * @author contentstack.com, Inc
- *
  */
 public class ConnectionStatus extends BroadcastReceiver {
 
@@ -26,28 +28,28 @@ public class ConnectionStatus extends BroadcastReceiver {
 
         Contentstack.isNetworkAvailable(context);
 
-        if(!CSAppConstants.isNetworkAvailable){
+        if (!CSAppConstants.isNetworkAvailable) {
             //no net connection
             CSAppConstants.isNetworkAvailable = false;
 
-        }else{
-            try{
-                JSONObject jsonObj                  = null;
-                JSONObject headerObject             = null;
+        } else {
+            try {
+                JSONObject jsonObj = null;
+                JSONObject headerObject = null;
                 HashMap<String, Object> headerGroup = new HashMap();
 
-                CSAppConstants.isNetworkAvailable   = true;
+                CSAppConstants.isNetworkAvailable = true;
 
                 File offlineCallsFolder = new File(context.getDir("OfflineCalls", 0).getPath());
 
-                if(offlineCallsFolder.isDirectory()){
+                if (offlineCallsFolder.isDirectory()) {
                     File[] childFiles = offlineCallsFolder.listFiles();
-                    for(File child :childFiles){
+                    for (File child : childFiles) {
                         File file = new File(offlineCallsFolder, child.getName());
-                        if(file.exists()){
-                            jsonObj =  CSAppUtils.getJsonFromCacheFile(file);
+                        if (file.exists()) {
+                            jsonObj = CSAppUtils.getJsonFromCacheFile(file);
 
-                            if(jsonObj != null) {
+                            if (jsonObj != null) {
 
                                 headerObject = jsonObj.optJSONObject("headers");
 
@@ -70,13 +72,13 @@ public class ConnectionStatus extends BroadcastReceiver {
                                 );
                             }
                             child.delete();
-                        }else{
+                        } else {
                             CSAppUtils.showLog("ConnectionStatus", "--------------------no offline network calls");
                         }
                     }
                 }
 
-            }catch (Exception e) {
+            } catch (Exception e) {
                 CSAppUtils.showLog("ConnectionStatus", "-----content stack----------send  saved network calls-------catch|" + e);
             }
         }

@@ -1,14 +1,15 @@
 package com.contentstack.sdk;
 
 import android.util.ArrayMap;
+
 import com.contentstack.sdk.utilities.CSAppConstants;
+
 import org.json.JSONObject;
+
 import java.util.HashMap;
 
 /**
- *
  * @author contentstack.com, Inc
- *
  */
 class CSBackgroundTask {
 
@@ -87,7 +88,6 @@ class CSBackgroundTask {
     }
 
 
-
     public CSBackgroundTask(Stack stack, Stack stackInstance, String controller, String url, ArrayMap<String, Object> headers, HashMap<String, Object> urlParams, JSONObject jsonMain, String cacheFilePath, String requestInfo, boolean b, CSAppConstants.RequestMethod method, ResultCallBack callback) {
 
         if (CSAppConstants.isNetworkAvailable) {
@@ -107,7 +107,6 @@ class CSBackgroundTask {
             sendErrorToUser(callback);
         }
     }
-
 
 
     public CSBackgroundTask(ContentType contentType, Stack stackInstance, String controller, String url, ArrayMap<String, Object> headers, HashMap<String, Object> urlParams, JSONObject jsonMain, String cacheFilePath, String requestInfo, boolean b, CSAppConstants.RequestMethod method, ResultCallBack callback) {
@@ -131,14 +130,12 @@ class CSBackgroundTask {
     }
 
 
-
-
-    private void sendErrorToUser(ResultCallBack callbackObject){
+    private void sendErrorToUser(ResultCallBack callbackObject) {
         Error error = new Error();
         error.setErrorCode(CSAppConstants.NONETWORKCONNECTION);
         error.setErrorMessage(CSAppConstants.ErrorMessage_NoNetwork);
-        if(callbackObject != null){
-            callbackObject.onRequestFail(ResponseType.UNKNOWN,error);
+        if (callbackObject != null) {
+            callbackObject.onRequestFail(ResponseType.UNKNOWN, error);
         }
     }
 
