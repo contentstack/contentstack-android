@@ -12,28 +12,19 @@ import java.util.TimeZone;
 /**
  * Helper class of utilities.
  *
- *
  * @author contentstack.com, Inc
- *
  */
 public class ContentstackUtil {
 
     /**
      * Converts the given date to user&#39;s timezone.
      *
-     * @param date
-     * date in ISO format.
-     *
-     * @return
-     * {@link Calendar} object.
-     *
-     * @throws ParseException
-     *
-     * <br><br><b>Example :</b><br>
-     * <pre class="prettyprint">
+     * @param date date in ISO format.
+     * @return {@link Calendar} object.
+     * @throws ParseException <br><br><b>Example :</b><br>
+     *  <pre class="prettyprint">
      *  BuiltUtil.parseDate(dateString, TimeZone.getDefault());
-     * </pre>
-     *
+     *  </pre>
      */
     public static Calendar parseDate(String date, TimeZone timeZone) throws ParseException {
         ArrayList<String> knownPatterns = new ArrayList<String>();
@@ -49,12 +40,13 @@ public class ContentstackUtil {
         knownPatterns.add("HH:mm:ssZ");
         knownPatterns.add("HH:mm:ss'Z'");
 
-        for (String formatString : knownPatterns){
+        for (String formatString : knownPatterns) {
             try {
 
                 return parseDate(date, formatString, timeZone);
 
-            }catch (ParseException e) {}
+            } catch (ParseException e) {
+            }
         }
 
         return null;
@@ -63,57 +55,49 @@ public class ContentstackUtil {
     /**
      * Converts the given date to the user&#39;s timezone.
      *
-     * @param date
-     * 				date in string format.
-     *
-     * @param dateFormat
-     * 				 date format.
-     *
-     * @return
-     * 				{@link Calendar} object.
-     *
-     * @throws ParseException
-     *
-     * <br><br><b>Example :</b><br>
-     * <pre class="prettyprint">
-     *   BuiltUtil.parseDate(dateString, "yyyy-MM-dd'T'HH:mm:ssZ", TimeZone.getTimeZone("GMT"));
-     * </pre>
+     * @param date       date in string format.
+     * @param dateFormat date format.
+     * @return {@link Calendar} object.
+     * @throws ParseException <br><br><b>Example :</b><br>
+     *                        <pre class="prettyprint">
+     *                          BuiltUtil.parseDate(dateString, "yyyy-MM-dd'T'HH:mm:ssZ", TimeZone.getTimeZone("GMT"));
+     *                        </pre>
      */
     @SuppressLint("SimpleDateFormat")
     public static Calendar parseDate(String date, String dateFormat, TimeZone timeZone) throws ParseException {
-        Date dateObject   = null;
-        String month      = "";
-        String day        = "";
-        String year       = "";
-        String hourOfDay  = "";
-        String min        = "";
-        String sec        = "";
-        Calendar cal      = Calendar.getInstance();
+        Date dateObject = null;
+        String month = "";
+        String day = "";
+        String year = "";
+        String hourOfDay = "";
+        String min = "";
+        String sec = "";
+        Calendar cal = Calendar.getInstance();
 
         SimpleDateFormat dateFormatter = new SimpleDateFormat(dateFormat);
         dateObject = dateFormatter.parse(date);
 
-        month     = new SimpleDateFormat("MM").format(dateObject);
-        day       = new SimpleDateFormat("dd").format(dateObject);
-        year      = new SimpleDateFormat("yyyy").format(dateObject);
+        month = new SimpleDateFormat("MM").format(dateObject);
+        day = new SimpleDateFormat("dd").format(dateObject);
+        year = new SimpleDateFormat("yyyy").format(dateObject);
         hourOfDay = new SimpleDateFormat("HH").format(dateObject);
-        min       = new SimpleDateFormat("mm").format(dateObject);
-        sec       = new SimpleDateFormat("ss").format(dateObject);
+        min = new SimpleDateFormat("mm").format(dateObject);
+        sec = new SimpleDateFormat("ss").format(dateObject);
 
-        if(timeZone != null){
+        if (timeZone != null) {
             cal.setTimeZone(timeZone);
-        }else{
+        } else {
             cal.setTimeZone(TimeZone.getDefault());
         }
 
-        cal.set(Integer.valueOf(year), Integer.valueOf(month)-1, Integer.valueOf(day), Integer.valueOf(hourOfDay), Integer.valueOf(min), Integer.valueOf(sec));
+        cal.set(Integer.valueOf(year), Integer.valueOf(month) - 1, Integer.valueOf(day), Integer.valueOf(hourOfDay), Integer.valueOf(min), Integer.valueOf(sec));
 
-        month     = null;
-        day       = null;
-        year      = null;
+        month = null;
+        day = null;
+        year = null;
         hourOfDay = null;
-        min       = null;
-        sec       = null;
+        min = null;
+        sec = null;
         dateObject = null;
 
         return cal;
@@ -123,11 +107,12 @@ public class ContentstackUtil {
      * Type to compare dates.
      *
      * @author built.io, Inc
-     *
      */
-    public static enum DateComapareType{
+    public static enum DateComapareType {
 
         WEEK, DAY, HOURS, MINUTES, SECONDS
 
-    };
+    }
+
+    ;
 }

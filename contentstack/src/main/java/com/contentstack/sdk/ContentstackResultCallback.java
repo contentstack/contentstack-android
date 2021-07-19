@@ -1,15 +1,14 @@
 package com.contentstack.sdk;
 
 /**
- *
  * @author contentstack.com, Inc
  */
-public abstract class ContentstackResultCallback extends ResultCallBack{
+public abstract class ContentstackResultCallback extends ResultCallBack {
 
 
     public abstract void onCompletion(ResponseType responseType, Error error);
 
-    public void onRequestFinish(ResponseType responseType){
+    public void onRequestFinish(ResponseType responseType) {
         onCompletion(responseType, null);
     }
 

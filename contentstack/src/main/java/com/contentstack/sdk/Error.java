@@ -10,15 +10,14 @@ import java.util.HashMap;
 public class Error {
 
     String errorMessage = null;
-    int errorCode       = 0;
+    int errorCode = 0;
     HashMap<String, Object> errorHashMap = new HashMap<>();
 
     /**
-     *
      * Returns error in string format.
      *
      * <br><br><b>Example :</b><br>
-     *  <pre class="prettyprint">
+     * <pre class="prettyprint">
      *  String errorString = error.getErrorMessage();
      *  </pre>
      */
@@ -35,8 +34,8 @@ public class Error {
      *
      * @return int value.
      *
-     *  <br><br><b>Example :</b><br>
-     *  <pre class="prettyprint">
+     * <br><br><b>Example :</b><br>
+     * <pre class="prettyprint">
      *  int errorCode = error.getErrorCode();
      *  </pre>
      */
@@ -49,7 +48,6 @@ public class Error {
     }
 
     /**
-     *
      * Returns error in {@linkplain HashMap} format where error is key and its respective information as HashMap&#39;s value.
      *
      * <br><br><b>Example :</b><br>

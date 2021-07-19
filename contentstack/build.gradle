@@ -3,11 +3,9 @@ apply plugin: 'maven'
 apply plugin: 'signing'
 apply plugin: 'jacoco'
 
-
 tasks.withType(Test) {
     jacoco.includeNoLocationClasses = true
 }
-
 //https://medium.com/@rafael_toledo/setting-up-an-unified-coverage-report-in-android-with-jacoco-robolectric-and-espresso-ffe239aaf3fa
 // gradle clean jacocoTestReport
 task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest', 'createDebugCoverageReport']) {
@@ -23,8 +21,6 @@ task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest', 'crea
         }))
     }
 }
-
-
 android {
 
     testOptions {
@@ -63,7 +59,7 @@ android {
     buildTypes {
         def localProperties = new Properties()
         localProperties.load(new FileInputStream(rootProject.file("local.properties")))
-        debug{
+        debug {
             debuggable true
             testCoverageEnabled true
             buildConfigField "String", "host", localProperties['host']
@@ -78,7 +74,6 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-
     flavorDimensions "default"
     lintOptions { abortOnError false }
     compileOptions {
@@ -86,46 +81,38 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 }
-
 repositories {
     flatDir { dirs 'libs' }
     mavenCentral()
     mavenLocal()
 }
-
 configurations { archives }
-
 dependencies {
     configurations.all { resolutionStrategy.force 'com.android.support:support-annotations:23.1.0' }
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'com.contentstack.sdk:utils:1.0.0'
+    implementation 'com.contentstack.sdk:utils:1.1.0'
     implementation 'com.android.support:appcompat-v7:26.1.0'
     implementation 'com.android.support:support-v4:26.1.0'
-    implementation 'com.android.volley:volley:1.1.1'
-    testImplementation 'junit:junit:4.13.1'
+    implementation 'com.android.volley:volley:1.2.0'
+    testImplementation 'junit:junit:4.13.2'
     androidTestImplementation('com.android.support.test.espresso:espresso-core:3.0.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 }
-
 task clearJar(type: Delete) { delete 'build/libs/Contentstack.jar' }
-
 task unzip(type: Copy) {
     def zipFile = file('build/intermediates/intermediate-jars/release/classes.jar')
     def outputDir = file("${buildDir}/Contentstack-jar")
     from zipTree(zipFile)
     into outputDir
 }
-
 task createJar(type: Jar) {
-    archiveName='Contentstack.jar'
-    from ('build/Contentstack-jar/')
+    archiveName = 'Contentstack.jar'
+    from('build/Contentstack-jar/')
     include 'com/contentstack/'
     include 'META-INF/'
 }
-
 createJar.dependsOn(clearJar, unzip, build)
-
 /*============================================*/
 /*=========== [ MAVEN-PUSH-UPLOAD ] ==========*/
 // to upload library to the maven repo run comman -> ./gradlew clean deploy uploadArchive
@@ -135,52 +122,44 @@ createJar.dependsOn(clearJar, unzip, build)
 // after successful closing publish the artifact to go live
 // it will drop the coordinates after successful deployment
 /*=============================================*/
-
 def localProperties = new Properties()
 localProperties.load(new FileInputStream(rootProject.file("local.properties")))
-
 group = "com.contentstack.sdk"
 archivesBaseName = "android"
-version = "3.9.0"
-
+version = "3.10.0-SNAPSHOT"
 task sourceJar(type: Jar) {
     from android.sourceSets.main.java.srcDirs
     classifier "source"
 }
-
 task javadoc(type: Javadoc) {
     source = android.sourceSets.main.java.srcDirs
     classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
     destinationDir = file("../javadoc/")
     failOnError false
 }
-
 task javadocJar(type: Jar, dependsOn: javadoc) {
     classifier = 'javadoc'
     from tasks.javadoc.destinationDir
 }
-
 task androidSourcesJar(type: Jar) {
     classifier = 'sources'
     from android.sourceSets.main.java.srcDirs
 }
-
 artifacts {
     archives javadocJar
     archives androidSourcesJar
 }
-
 signing { sign configurations.archives }
-
-
-uploadArchives {
+ uploadArchives {
     repositories {
         mavenDeployer {
             beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
             repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
-                authentication(userName: ossrhUsername, password: ossrhPassword)            }
+                authentication(userName: ossrhUsername, password: ossrhPassword)
+            }
             snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
-                authentication(userName: ossrhUsername, password: ossrhPassword)            }
+                authentication(userName: ossrhUsername, password: ossrhPassword)
+            }
             pom.project {
                 name 'contentstack-android-sdk'
                 packaging 'aar'
@@ -204,13 +183,19 @@ uploadArchives {
 
                 developers {
                     developer {
-                        id    'mshaileshr@gmail.com'
-                        name  'Shailesh Mishra'
+                        id 'mshaileshr@gmail.com'
+                        name 'Shailesh Mishra'
                         email 'mobile@contentstack.com'
                     }
                 }
             }
         }
+    }
+}
+task uploadSnapshotArchives(dependsOn: uploadArchives) {
+    if (!version.endsWith("-SNAPSHOT")) {
+        enabled = false;
+        dependsOn = [];
     }
 }
 

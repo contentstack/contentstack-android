@@ -5,8 +5,10 @@ import com.android.volley.ParseError;
 import com.android.volley.Response;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonObjectRequest;
+
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.io.UnsupportedEncodingException;
 
 
@@ -27,7 +29,6 @@ class JSONUTF8Request extends JsonObjectRequest {
             return Response.error(new ParseError(je));
         }
     }
-
 
 
 }

@@ -1,4 +1,5 @@
 package com.contentstack.sdk;
+
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.util.Log;
@@ -8,8 +9,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.*;
 import org.junit.runners.MethodSorters;
+
 import java.util.ArrayList;
 import java.util.concurrent.CountDownLatch;
+
 import static junit.framework.TestCase.*;
 
 
@@ -32,14 +35,14 @@ public class EntryTestCase {
         stack = Contentstack.stack(appContext, BuildConfig.APIKey, BuildConfig.deliveryToken, BuildConfig.environment, config);
 
         latch = new CountDownLatch(1);
-        Log.d(TAG,"test started...");
+        Log.d(TAG, "test started...");
     }
 
     @AfterClass
     public static void oneTimeTearDown() {
         // one-time cleanup code
-        Log.d(TAG,"When all the test cases of class finishes...");
-        Log.d(TAG,"Total testcase: " + latch.getCount());
+        Log.d(TAG, "When all the test cases of class finishes...");
+        Log.d(TAG, "Total testcase: " + latch.getCount());
     }
 
     /**
@@ -58,7 +61,7 @@ public class EntryTestCase {
      */
     @After
     public void tearDown() {
-        Log.d(TAG,"Runs after every testcase completes.");
+        Log.d(TAG, "Runs after every testcase completes.");
         latch.countDown();
     }
 
@@ -121,7 +124,7 @@ public class EntryTestCase {
                             JSONObject array = (JSONObject) categoryArray.get(index);
                             assertTrue(array.toString().contains("_content_type_uid"));
                         }
-                    }catch (Exception e){
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
 

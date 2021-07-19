@@ -8,18 +8,19 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.SystemClock;
 import android.text.TextUtils;
+
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.contentstack.sdk.utilities.CSAppConstants;
 import com.contentstack.sdk.utilities.CSAppUtils;
+
 import java.io.File;
 
 /**
  * Contains all Contentstack API classes and functions.
  *
  * @author contentstack.com, Inc
- *
  */
 public class Contentstack {
 
@@ -27,34 +28,25 @@ public class Contentstack {
     protected static RequestQueue requestQueue;
     private static Contentstack instance;
     protected static Context context = null;
-    private Contentstack(){}
+
+    private Contentstack() {
+    }
 
     public Contentstack(Context applicationContext) {
         context = applicationContext;
     }
 
     /**
-     *
      * Authenticates the stack api key of your stack.
      * This must be called before your stack uses Built.io Contentstack sdk.
      * <br>
      * You can find your stack api key from web.
      *
-     * @param context
-     * application context.
-     *
-     * @param stackApiKey
-     * application api Key of your application on Built.io Contentstack.
-     *
-     * @param accessToken
-     * access token
-     *
-     * @param environment
-     * environment name
-     *
-     *
-     * @return
-     * {@link Stack} instance.
+     * @param context     application context.
+     * @param stackApiKey application api Key of your application on Built.io Contentstack.
+     * @param accessToken access token
+     * @param environment environment name
+     * @return {@link Stack} instance.
      *
      *
      * <br><br><b>Example :</b><br>
@@ -64,24 +56,24 @@ public class Contentstack {
      * Stack stack = Contentstack.stack(context, "blt5d4sample2633b", "blt6d0240b5sample254090d", "stag");
      * </pre>
      */
-    public static Stack stack(Context context, String stackApiKey, String accessToken, String environment) throws Exception{
-        if(context != null) {
-            if(!TextUtils.isEmpty(stackApiKey)) {
-                if(!TextUtils.isEmpty(accessToken)) {
-                    if(!TextUtils.isEmpty(environment)) {
+    public static Stack stack(Context context, String stackApiKey, String accessToken, String environment) throws Exception {
+        if (context != null) {
+            if (!TextUtils.isEmpty(stackApiKey)) {
+                if (!TextUtils.isEmpty(accessToken)) {
+                    if (!TextUtils.isEmpty(environment)) {
                         Config config = new Config();
                         config.setEnvironment(environment);
                         return initializeStack(context, stackApiKey, accessToken, config);
-                    }else{
+                    } else {
                         throw new Exception(CSAppConstants.ErrorMessage_Stack_Environment_IsNull);
                     }
-                }else{
+                } else {
                     throw new Exception(CSAppConstants.ErrorMessage_Stack_AccessToken_IsNull);
                 }
-            }else {
+            } else {
                 throw new Exception(CSAppConstants.ErrorMessage_StackApiKeyIsNull);
             }
-        }else{
+        } else {
             throw new Exception(CSAppConstants.ErrorMessage_StackContextIsNull);
         }
     }
@@ -92,20 +84,11 @@ public class Contentstack {
      * <br>
      * You can find your stack api key from web.
      *
-     * @param context
-     * application context.
-     *
-     * @param stackApiKey
-     * application api Key of your application on Built.io Contentstack.
-     *
-     * @param accessToken
-     * access token
-     *
-     * @param config
-     * {@link Config} instance to set environment and other configuration details.
-     *
-     * @return
-     * {@link Stack} instance.
+     * @param context     application context.
+     * @param stackApiKey application api Key of your application on Built.io Contentstack.
+     * @param accessToken access token
+     * @param config      {@link Config} instance to set environment and other configuration details.
+     * @return {@link Stack} instance.
      *
      *
      * <br><br><b>Example :</b><br>
@@ -120,42 +103,42 @@ public class Contentstack {
 
 
     public static Stack stack(Context context, String stackApiKey, String accessToken,
-                              String environment, Config config) throws Exception{
-        if(context != null) {
-            if(!TextUtils.isEmpty(stackApiKey)) {
-                if(!TextUtils.isEmpty(accessToken)) {
-                    if(!TextUtils.isEmpty(environment)) {
+                              String environment, Config config) throws Exception {
+        if (context != null) {
+            if (!TextUtils.isEmpty(stackApiKey)) {
+                if (!TextUtils.isEmpty(accessToken)) {
+                    if (!TextUtils.isEmpty(environment)) {
 
-                        if(config != null){
+                        if (config != null) {
                             config.setEnvironment(environment);
-                        }else {
+                        } else {
                             config = new Config();
                             config.setEnvironment(environment);
                         }
                         return initializeStack(context, stackApiKey, accessToken, config);
-                    }else{
+                    } else {
                         throw new Exception(CSAppConstants.ErrorMessage_Stack_Environment_IsNull);
                     }
-                }else{
+                } else {
                     throw new Exception(CSAppConstants.ErrorMessage_Stack_AccessToken_IsNull);
                 }
-            }else {
+            } else {
                 throw new Exception(CSAppConstants.ErrorMessage_StackApiKeyIsNull);
             }
-        }else{
+        } else {
             throw new Exception(CSAppConstants.ErrorMessage_StackContextIsNull);
         }
     }
 
 
-    private static Stack initializeStack(Context mContext, String stackApiKey, String accessToken, Config config){
+    private static Stack initializeStack(Context mContext, String stackApiKey, String accessToken, Config config) {
         Stack stack = new Stack(stackApiKey.trim());
         stack.setHeader("api_key", stackApiKey);
         stack.setHeader("access_token", accessToken);
         context = mContext;
         stack.setConfig(config);
 
-        if(context != null) {
+        if (context != null) {
             try {
 
                 //cache folder
@@ -176,7 +159,6 @@ public class Contentstack {
      * // Private Functionality
      *
      ********************************************************************************************************/
-
 
 
     public static synchronized Contentstack getInstance(Context context) {
@@ -220,8 +202,8 @@ public class Contentstack {
 
     /**
      * To start schedule for clearing cache.
-     * @param context
-     * application context.
+     *
+     * @param context application context.
      */
 
     private static void clearCache(Context context) {
@@ -244,7 +226,7 @@ public class Contentstack {
             } else {
                 CSAppConstants.isNetworkAvailable = true;
             }
-        }else if (connectivityManager.getNetworkInfo(0).getState() == NetworkInfo.State.CONNECTED ||
+        } else if (connectivityManager.getNetworkInfo(0).getState() == NetworkInfo.State.CONNECTED ||
                 connectivityManager.getNetworkInfo(1).getState() == NetworkInfo.State.CONNECTED) {
             CSAppConstants.isNetworkAvailable = true;
         } else {

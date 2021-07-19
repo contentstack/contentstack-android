@@ -2,7 +2,7 @@ package com.contentstack.sdk;
 
 /**
  * Response Type.
- *
+ * <p>
  * In following categories.
  * Network, Cache.
  *
