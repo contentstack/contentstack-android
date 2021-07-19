@@ -1,5 +1,8 @@
 ﻿# CHANGELOG
 
+## Version 3.10.0
+   ###### Date: 12-Jul-2021
+   -  Added support for updated Utils package
 
 
 ## Version 3.9.0
