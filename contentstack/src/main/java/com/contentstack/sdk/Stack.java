@@ -106,9 +106,7 @@ public class Stack implements INotifyClass {
      *
      * <br><br><b>Example :</b><br>
      * <pre class="prettyprint">
-     * //'blt5d4sample2633b' is a dummy Stack API key
-     * //'blt6d0240b5sample254090d' is dummy access token.
-     * Stack stack = Contentstack.stack(context, "blt5d4sample2633b", "blt6d0240b5sample254090d", "stag", false);
+     * Stack stack = Contentstack.stack(context, "apiKey", "deliveryToken", "stag");
      *
      * ContentType contentType = stack.contentType("blog");
      * </pre>
@@ -128,10 +126,7 @@ public class Stack implements INotifyClass {
      *
      * <br><br><b>Example :</b><br>
      * <pre class="prettyprint">
-     * //'blt5d4sample2633b' is a dummy Stack API key
-     * //'blt6d0240b5sample254090d' is dummy access token.
-     * Stack stack = Contentstack.stack(context, "blt5d4sample2633b", "blt6d0240b5sample254090d", "stag", false);
-     *
+     * Stack stack = Contentstack.stack(context, "apiKey", "deliveryToken", "stag");
      * Asset asset = stack.asset("assetUid");
      * </pre>
      */
@@ -149,10 +144,7 @@ public class Stack implements INotifyClass {
      *
      * <br><br><b>Example :</b><br>
      * <pre class="prettyprint">
-     * //'blt5d4sample2633b' is a dummy Stack API key
-     * //'blt6d0240b5sample254090d' is dummy access token.
-     * Stack stack = Contentstack.stack(context, "blt5d4sample2633b", "blt6d0240b5sample254090d", "stag", false);
-     *
+     *  Stack stack = Contentstack.stack(context, "apiKey", "deliveryToken", "stag");
      * Asset asset = stack.asset();
      * </pre>
      */
@@ -170,10 +162,7 @@ public class Stack implements INotifyClass {
      *
      * <br><br><b>Example :</b><br>
      * <pre class="prettyprint">
-     * //'blt5d4sample2633b' is a dummy Stack API key
-     * //'blt6d0240b5sample254090d' is dummy access token.
-     * Stack stack = Contentstack.stack(context, "blt5d4sample2633b", "blt6d0240b5sample254090d", "stag", false);
-     *
+     * Stack stack = Contentstack.stack(context, "apiKey", "deliveryToken", "stag");
      * AssetLibrary assetLib = stack.assetLibrary();
      * </pre>
      */
@@ -219,9 +208,7 @@ public class Stack implements INotifyClass {
      *
      *            <br><br><b>Example :</b><br>
      *            <pre class="prettyprint">
-     *            //'blt5d4sample2633b' is a dummy Stack API key
-     *             //'blt6d0240b5sample254090d' is dummy access token.
-     *             Stack stack = Contentstack.stack(context, "blt5d4sample2633b", "blt6d0240b5sample254090d", "stag", false);<br>
+     *             Stack stack = Contentstack.stack(context, "apiKey", "deliveryToken", "stag");<br>
      *             stack.removeHeader("custom_header_key");
      *            </pre>
      */
@@ -232,7 +219,7 @@ public class Stack implements INotifyClass {
     }
 
     /**
-     * To set headers for Built.io Contentstack rest calls.
+     * To set headers for Contentstack rest calls.
      * <br>
      * Scope is limited to this object and followed classes.
      *
@@ -241,9 +228,7 @@ public class Stack implements INotifyClass {
      *
      *              <br><br><b>Example :</b><br>
      *              <pre class="prettyprint">
-     *               //'blt5d4sample2633b' is a dummy Stack API key
-     *               //'blt6d0240b5sample254090d' is dummy access token.
-     *               Stack stack = Contentstack.stack(context, "blt5d4sample2633b", "blt6d0240b5sample254090d", "stag", false);<br>
+     *               Stack stack = Contentstack.stack(context, "apiKey", "deliveryToken", "stag");<br>
      *               stack.setHeader("custom_key", "custom_value");
      *               </pre>
      */
@@ -264,9 +249,7 @@ public class Stack implements INotifyClass {
      *
      * <br><br><b>Example :</b><br>
      * <pre class="prettyprint">
-     *  //'blt5d4sample2633b' is a dummy Stack API key
-     *  //'blt6d0240b5sample254090d' is dummy access token.
-     *  Stack stack = Contentstack.stack(context, "blt5d4sample2633b", "blt6d0240b5sample254090d", "stag", false);<br>
+     *  Stack stack = Contentstack.stack(context, "apiKey", "deliveryToken", "stag");<br>
      *  // resize the image by specifying width and height
      *  LinkedHashMap imageParams = new LinkedHashMap();
      *  imageParams.put("width", 100);
@@ -427,11 +410,7 @@ public class Stack implements INotifyClass {
      *
      *                         <br><br><b>Example :</b><br>
      *                         <pre class="prettyprint">
-     *
-     *                         // dummy pagination_token = "blt7f35951d259183fba680e1";
-     *                           stack.syncPaginationToken(pagination_token, new SyncResultCallBack()) {}
-     *
-     *
+     *                         stack.syncPaginationToken(pagination_token, new SyncResultCallBack()) {}
      *                         </pre>
      */
     public void syncPaginationToken(String pagination_token, SyncResultCallBack syncCallBack) {
@@ -458,12 +437,8 @@ public class Stack implements INotifyClass {
      *                     You can use the sync token (that you receive after initial sync) to get the updated content next time.
      *                     The sync token fetches only the content that was added after your last sync,
      *                     and the details of the content that was deleted or updated.
-     *
-     *
      *                     <br><br><b>Example :</b><br>
      *                     <pre class="prettyprint">
-     *
-     *                      //dummy sync_token = "blt28937206743728463";
      *                      stack.syncToken(sync_token, new SyncResultCallBack() ){ }
      *
      *                     </pre>
@@ -494,11 +469,7 @@ public class Stack implements INotifyClass {
      *
      *                     <br><br><b>Example :</b><br>
      *                     <pre class="prettyprint">
-     *
-     *                       // dummy date final Date start_date = sdf.parse("2018-10-07");
-     *                       stack.syncFromDate(start_date, new SyncResultCallBack()) { }
-     *
-     *
+     *                    stack.syncFromDate(start_date, new SyncResultCallBack()) { }
      *                      </pre>
      */
     public void syncFromDate(Date from_date, SyncResultCallBack syncCallBack) {
@@ -724,9 +695,7 @@ public class Stack implements INotifyClass {
 
 
     private void fetchFromNetwork(String urlString, JSONObject urlQueries, ArrayMap<String, Object> headers, String cacheFilePath, SyncResultCallBack callback) {
-
         if (callback != null) {
-
             HashMap<String, Object> urlParams = getUrlParams(urlQueries);
             new CSBackgroundTask(this, this, CSController.FETCHSYNC, urlString, headers, urlParams, new JSONObject(), cacheFilePath, CSAppConstants.callController.SYNC.toString(), false, CSAppConstants.RequestMethod.GET, callback);
         }
@@ -745,7 +714,7 @@ public class Stack implements INotifyClass {
                     Object value = urlQueriesJSON.opt(key);
                     hashMap.put(key, value);
                 } catch (Exception e) {
-                    CSAppUtils.showLog(TAG, "------setQueryJson" + e.toString());
+                    CSAppUtils.showLog(TAG,  e.getLocalizedMessage());
                 }
             }
 
@@ -757,30 +726,24 @@ public class Stack implements INotifyClass {
 
 
     private ArrayMap<String, Object> getHeader(ArrayMap<String, Object> localHeader) {
-
         ArrayMap<String, Object> mainHeader = headerGroup_app;
         ArrayMap<String, Object> classHeaders = new ArrayMap<>();
-
         if (localHeader != null && localHeader.size() > 0) {
             if (mainHeader != null && mainHeader.size() > 0) {
                 for (Map.Entry<String, Object> entry : localHeader.entrySet()) {
                     String key = entry.getKey();
                     classHeaders.put(key, entry.getValue());
                 }
-
                 for (Map.Entry<String, Object> entry : mainHeader.entrySet()) {
                     String key = entry.getKey();
                     if (!classHeaders.containsKey(key)) {
                         classHeaders.put(key, entry.getValue());
                     }
                 }
-
                 return classHeaders;
-
             } else {
                 return localHeader;
             }
-
         } else {
             return headerGroup_app;
         }

@@ -111,7 +111,7 @@ public class Group {
 
             return multipleHtmlStrings;
         } catch (Exception e) {
-            CSAppUtils.showLog(TAG, "-----------------getHtmlText|" + e);
+            CSAppUtils.showLog(TAG, e.getLocalizedMessage());
             return null;
         }
     }
@@ -430,9 +430,7 @@ public class Group {
      *
      * <br><br><b>Example :</b><br>
      * <pre class="prettyprint">
-     *  //'blt5d4sample2633b' is a dummy Stack API key
-     *  //'blt6d0240b5sample254090d' is dummy access token.
-     *  Stack stack = Contentstack.stack(context, "blt5d4sample2633b", "blt6d0240b5sample254090d", "stag", false);
+     *  Stack stack = Contentstack.stack(context, "apiKey", "deliveryToken", "stag", false);
      *  Query csQuery = stack.contentType("contentType_name").query();
      *
      * csQuery.includeReference("for_bug");
@@ -471,7 +469,7 @@ public class Group {
                             entryInstance = stackInstance.contentType(refContentType).entry();
                         } catch (Exception e) {
                             entryInstance = new Entry(refContentType);
-                            CSAppUtils.showLog("BuiltObject", "----------------getAllEntries" + e.toString());
+                            CSAppUtils.showLog("BuiltObject", e.getLocalizedMessage());
                         }
                         entryInstance.setUid(model.entryUid);
                         entryInstance.ownerEmailId = model.ownerEmailId;
@@ -491,7 +489,7 @@ public class Group {
                 }
             }
         } catch (Exception e) {
-            CSAppUtils.showLog(TAG, "-----------------get|" + e);
+            CSAppUtils.showLog(TAG, e.getLocalizedMessage());
             return null;
         }
 

@@ -38,12 +38,12 @@ public class Contentstack {
 
     /**
      * Authenticates the stack api key of your stack.
-     * This must be called before your stack uses Built.io Contentstack sdk.
+     * This must be called before your stack uses Contentstack sdk.
      * <br>
      * You can find your stack api key from web.
      *
      * @param context     application context.
-     * @param stackApiKey application api Key of your application on Built.io Contentstack.
+     * @param stackApiKey application api Key of your application on Contentstack.
      * @param accessToken access token
      * @param environment environment name
      * @return {@link Stack} instance.
@@ -51,9 +51,7 @@ public class Contentstack {
      *
      * <br><br><b>Example :</b><br>
      * <pre class="prettyprint">
-     * //'blt5d4sample2633b' is a dummy Stack API key
-     * //'blt6d0240b5sample254090d' is dummy access token.
-     * Stack stack = Contentstack.stack(context, "blt5d4sample2633b", "blt6d0240b5sample254090d", "stag");
+     * Stack stack = Contentstack.stack(context, "apiKey", "deliveryToken", "stag");
      * </pre>
      */
     public static Stack stack(Context context, String stackApiKey, String accessToken, String environment) throws Exception {
@@ -80,12 +78,12 @@ public class Contentstack {
 
     /**
      * Authenticates the stack api key of your stack.
-     * This must be called before your stack uses Built.io Contentstack sdk.
+     * This must be called before your stack uses Contentstack sdk.
      * <br>
      * You can find your stack api key from web.
      *
      * @param context     application context.
-     * @param stackApiKey application api Key of your application on Built.io Contentstack.
+     * @param stackApiKey application api Key of your application on Contentstack.
      * @param accessToken access token
      * @param config      {@link Config} instance to set environment and other configuration details.
      * @return {@link Stack} instance.
@@ -93,12 +91,9 @@ public class Contentstack {
      *
      * <br><br><b>Example :</b><br>
      * <pre class="prettyprint">
-     * //'blt5d4sample2633b' is a dummy Stack API key
-     * //'blt6d0240b5sample254090d' is dummy access token.
      * Config config = new Config();
      * config.setEnvironment("stag");
-     *
-     * Stack stack = Contentstack.stack(context, "blt5d4sample2633b", "blt6d0240b5sample254090d", config);
+     * Stack stack = Contentstack.stack(context, "apiKey", "delierytoken", config);
      */
 
 

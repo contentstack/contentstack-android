@@ -33,14 +33,13 @@ public class AssetLibrary implements INotifyClass {
     private FetchAssetsCallback assetsCallback;
     private int count;
     private static CachePolicy cachePolicyForCall = CachePolicy.IGNORE_CACHE;
-
-    private long maxCachetimeForCall = 0; //local cache time interval
+    private long maxCachetimeForCall = 0;
     private long defaultCacheTimeInterval = 0;
 
     /**
      * Sorting order enum for {@link AssetLibrary}.
      *
-     * @author built.io, Inc
+     * @author Contentstack
      */
     public enum ORDERBY {
         ASCENDING,
@@ -58,7 +57,7 @@ public class AssetLibrary implements INotifyClass {
     }
 
     /**
-     * To set headers for Built.io Contentstack rest calls.
+     * To set headers for Contentstack rest calls.
      * <br>
      * Scope is limited to this object only.
      *
@@ -67,11 +66,9 @@ public class AssetLibrary implements INotifyClass {
      *
      *              <br><br><b>Example :</b><br>
      *              <pre class="prettyprint">
-     *              //'blt5d4sample2633b' is a dummy Application API key
-     *              AssetLibrary assetLibObject = Contentstack.stack(context, "blt5d4sample2633b", "bltdtsample_accessToken767vv",  config).assetLibrary();
-     *
-     *              assetLibObject.setHeader("custom_header_key", "custom_header_value");
-     *              </pre>
+     *                           AssetLibrary assetLibObject = Contentstack.stack(context, "apiKey", "deliveryToken",  config).assetLibrary();
+     *                           assetLibObject.setHeader("custom_header_key", "custom_header_value");
+     *                           </pre>
      */
     public void setHeader(String key, String value) {
         if (!TextUtils.isEmpty(key) && !TextUtils.isEmpty(value)) {
@@ -88,11 +85,9 @@ public class AssetLibrary implements INotifyClass {
      *
      *            <br><br><b>Example :</b><br>
      *            <pre class="prettyprint">
-     *            //'blt5d4sample2633b' is a dummy Application API key
-     *            AssetLibrary assetLibObject = Contentstack.stack(context, "blt5d4sample2633b", "bltdtsample_accessToken767vv",  config).assetLibrary();
-     *
-     *            assetLibObject.removeHeader("custom_header_key");
-     *            </pre>
+     *                       AssetLibrary assetLibObject = Contentstack.stack(context, "apiKey", "deliveryToken",  config).assetLibrary();
+     *                       assetLibObject.removeHeader("custom_header_key");
+     *                       </pre>
      */
     public void removeHeader(String key) {
         if (!TextUtils.isEmpty(key)) {
@@ -109,8 +104,7 @@ public class AssetLibrary implements INotifyClass {
      *
      * <br><br><b>Example :</b><br>
      * <pre class="prettyprint">
-     * //'blt5d4sample2633b' is a dummy Application API key
-     * AssetLibrary assetLibObject = Contentstack.stack(context, "blt5d4sample2633b", "bltdtsample_accessToken767vv",  config).assetLibrary();
+     * AssetLibrary assetLibObject = Contentstack.stack(context, "apiKey", "deliveryToken",  config).assetLibrary();
      *
      * assetLibObject.sort("fieldUid", AssetLibrary.ORDERBY.ASCENDING);
      * </pre>
@@ -140,10 +134,7 @@ public class AssetLibrary implements INotifyClass {
      *
      * <br><br><b>Example :</b><br>
      * <pre class="prettyprint">
-     *    //'blt5d4sample2633b' is a dummy Stack API key
-     *    //'bltdtsample_accessToken767vv' is dummy access token.
-     *    AssetLibrary assetLibObject = Contentstack.stack(context, "blt5d4sample2633b", "bltdtsample_accessToken767vv",  config).assetLibrary();
-     *
+     *    AssetLibrary assetLibObject = Contentstack.stack(context, "apiKey", "deliveryToken",  config).assetLibrary();
      *    assetLibObject.includeCount();
      * </pre>
      */
@@ -163,10 +154,7 @@ public class AssetLibrary implements INotifyClass {
      *
      * <br><br><b>Example :</b><br>
      * <pre class="prettyprint">
-     *    //'blt5d4sample2633b' is a dummy Stack API key
-     *    //'bltdtsample_accessToken767vv' is dummy access token.
-     *    AssetLibrary assetLibObject = Contentstack.stack(context, "blt5d4sample2633b", "bltdtsample_accessToken767vv",  config).assetLibrary();
-     *
+     *    AssetLibrary assetLibObject = Contentstack.stack(context, "deliveryToken", "deliveryToken",  config).assetLibrary();
      *    assetLibObject.includeRelativeUrl();
      * </pre>
      */
@@ -195,11 +183,8 @@ public class AssetLibrary implements INotifyClass {
      *
      * <br><br><b>Example :</b><br>
      * <pre class="prettyprint">
-     *      //'blt5d4sample2633b' is a dummy Stack API key
-     *      //'blt6d0240b5sample254090d' is dummy access token.
-     *      Stack stack = Contentstack.stack(context, "blt5d4sample2633b", "blt6d0240b5sample254090d", "stag", false);
+     *      Stack stack = Contentstack.stack(context, "apiKey", "deliveryToken", "stag", false);
      *      {@link AssetLibrary} assetLibObject = stack.assetLibrary();<br>
-     *
      *      assetLibObject.setCachePolicy(NETWORK_ELSE_CACHE);
      * </pre>
      */
@@ -214,19 +199,17 @@ public class AssetLibrary implements INotifyClass {
      *
      *                       <br><br><b>Example :</b><br>
      *                       <pre class="prettyprint">
-     *                          //'blt5d4sample2633b' is a dummy Stack API key
-     *                          //'bltdtsample_accessToken767vv' is dummy access token.
-     *                          AssetLibrary assetLibObject = Contentstack.stack(context, "blt5d4sample2633b", "bltdtsample_accessToken767vv",  config).assetLibrary();
-     *                         assetLibObject.fetchAll(new FetchAssetsCallback() {
-     *                         public void onCompletion(ResponseType responseType, List<Asset> assets, Error error) {
-     *                            if (error == null) {
-     *                               //Success Block.
-     *                            } else {
-     *                               //Error Block.
-     *                            }
-     *                         }
-     *                        });
-     *                       </pre>
+     *                                                AssetLibrary assetLibObject = Contentstack.stack(context, "apiKey", "deliveryToken",  config).assetLibrary();
+     *                                               assetLibObject.fetchAll(new FetchAssetsCallback() {
+     *                                               public void onCompletion(ResponseType responseType, List<Asset> assets, Error error) {
+     *                                                  if (error == null) {
+     *                                                     //Success Block.
+     *                                                  } else {
+     *                                                     //Error Block.
+     *                                                  }
+     *                                               }
+     *                                              });
+     *                                             </pre>
      */
     public void fetchAll(FetchAssetsCallback assetsCallback) {
         try {
@@ -270,51 +253,41 @@ public class AssetLibrary implements INotifyClass {
                     if (cacheFile.exists()) {
                         setCacheModel(cacheFile, assetsCallback);
                     }
-
-                    // from network
                     fetchFromNetwork(URL, urlQueries, headers, cacheFile.getPath(), assetsCallback);
                     break;
-
                 case NETWORK_ELSE_CACHE:
-
                     if (CSAppConstants.isNetworkAvailable) {
                         fetchFromNetwork(URL, urlQueries, headers, cacheFile.getPath(), assetsCallback);
                     } else {
                         fetchFromCache(cacheFile, assetsCallback);
                     }
-
                     break;
             }
 
         } catch (Exception e) {
-            CSAppUtils.showLog(TAG, "---------------------------------------" + TAG + "---fetchAll---||" + e.toString());
+            CSAppUtils.showLog(TAG, e.toString());
         }
     }
 
     private void fetchFromNetwork(String URL, JSONObject urlQueries, ArrayMap<String, Object> headers, String cacheFilePath, FetchAssetsCallback callback) {
         if (callback != null) {
             HashMap<String, Object> urlParams = getUrlParams(urlQueries);
-
             new CSBackgroundTask(this, stackInstance, CSController.FETCHALLASSETS, URL, headers, urlParams, new JSONObject(), cacheFilePath, CSAppConstants.callController.ASSETLIBRARY.toString(), false, CSAppConstants.RequestMethod.GET, assetsCallback);
         }
     }
 
-    //fetch from cache.
     private void fetchFromCache(File cacheFile, FetchAssetsCallback callback) {
         Error error = null;
         if (cacheFile.exists()) {
             boolean needToSendCall = false;
-
             if (maxCachetimeForCall > 0) {
                 needToSendCall = new CSAppUtils().getResponseTimeFromCacheFile(cacheFile, (int) maxCachetimeForCall);
             } else {
                 needToSendCall = new CSAppUtils().getResponseTimeFromCacheFile(cacheFile, (int) defaultCacheTimeInterval);
             }
-
             if (needToSendCall) {
                 error = new Error();
                 error.setErrorMessage(CSAppConstants.ErrorMessage_EntryNotFoundInCache);
-
             } else {
                 setCacheModel(cacheFile, callback);
             }
@@ -372,7 +345,7 @@ public class AssetLibrary implements INotifyClass {
                     Object value = urlQueriesJSON.opt(key);
                     hashMap.put(key, value);
                 } catch (Exception e) {
-                    CSAppUtils.showLog(TAG, "----------------setQueryJson" + e.toString());
+                    CSAppUtils.showLog(TAG,  e.toString());
                 }
             }
 
@@ -459,7 +432,7 @@ public class AssetLibrary implements INotifyClass {
      * @return {@link AssetLibrary} object, so you can chain this call.
      * <br><br><b>Example :</b><br>
      * <pre class="prettyprint">
-     *     Stack stack = Contentstack.stack(context, "ApiKey", "deliveryToken",  environment_name);
+     *     Stack stack = Contentstack.stack(context, "apiKey", "deliveryToken",  environment_name);
      *     AssetLibrary assetLibObject = stack.assetLibrary();
      *     assetLibObject.includeFallback();
      * </pre>

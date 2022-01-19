@@ -23,7 +23,7 @@ public class ContentstackUtil {
      * @return {@link Calendar} object.
      * @throws ParseException <br><br><b>Example :</b><br>
      *  <pre class="prettyprint">
-     *  BuiltUtil.parseDate(dateString, TimeZone.getDefault());
+     *  Util.parseDate(dateString, TimeZone.getDefault());
      *  </pre>
      */
     public static Calendar parseDate(String date, TimeZone timeZone) throws ParseException {
@@ -60,7 +60,7 @@ public class ContentstackUtil {
      * @return {@link Calendar} object.
      * @throws ParseException <br><br><b>Example :</b><br>
      *                        <pre class="prettyprint">
-     *                          BuiltUtil.parseDate(dateString, "yyyy-MM-dd'T'HH:mm:ssZ", TimeZone.getTimeZone("GMT"));
+     *                          Util.parseDate(dateString, "yyyy-MM-dd'T'HH:mm:ssZ", TimeZone.getTimeZone("GMT"));
      *                        </pre>
      */
     @SuppressLint("SimpleDateFormat")
@@ -106,7 +106,6 @@ public class ContentstackUtil {
     /**
      * Type to compare dates.
      *
-     * @author built.io, Inc
      */
     public static enum DateComapareType {
 

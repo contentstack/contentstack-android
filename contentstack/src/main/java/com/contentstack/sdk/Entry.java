@@ -101,9 +101,7 @@ public class Entry {
      *
      *              <br><br><b>Example :</b><br>
      *              <pre class="prettyprint">
-     *              //'blt5d4sample2633b' is a dummy Stack API key
-     *              //'blt6d0240b5sample254090d' is dummy access token.
-     *              Stack stack = Contentstack.stack(context, "blt5d4sample2633b", "blt6d0240b5sample254090d", "stag", false);
+     *              Stack stack = Contentstack.stack(context, "apiKey", "deliveryToken",  "stag");
      *              Entry entry = stack.contentType("form_name").entry("entry_uid");
      *              entry.setHeader("custom_header_key", "custom_header_value");
      *              </pre>
@@ -121,9 +119,7 @@ public class Entry {
      *
      *            <br><br><b>Example :</b><br>
      *            <pre class="prettyprint">
-     *            //'blt5d4sample2633b' is a dummy Stack API key
-     *            //'blt6d0240b5sample254090d' is dummy access token.
-     *            Stack stack = Contentstack.stack(context, "blt5d4sample2633b", "blt6d0240b5sample254090d", "stag", false);
+     *            Stack stack = Contentstack.stack(context, "apiKey", "deliveryToken",  "stag");
      *            Entry entry = stack.contentType("form_name").entry("entry_uid");
      *            entry.removeHeader("custom_header_key");
      *            </pre>
@@ -318,7 +314,7 @@ public class Entry {
                 return null;
             }
         } catch (Exception e) {
-            CSAppUtils.showLog(TAG, "-----------------get|" + e);
+            CSAppUtils.showLog(TAG, e.getLocalizedMessage());
             return null;
         }
     }
@@ -338,7 +334,7 @@ public class Entry {
         try {
             return Processor.process(getString(markdownKey), Configuration.builder().forceExtentedProfile().build());
         } catch (Exception e) {
-            CSAppUtils.showLog(TAG, "-----------------getHtmlText|" + e);
+            CSAppUtils.showLog(TAG, e.getLocalizedMessage());
             return null;
         }
     }
@@ -363,7 +359,7 @@ public class Entry {
             }
             return multipleHtmlStrings;
         } catch (Exception e) {
-            CSAppUtils.showLog(TAG, "-----------------getHtmlText|" + e);
+            CSAppUtils.showLog(TAG, e.getLocalizedMessage());
             return null;
         }
     }
@@ -574,7 +570,7 @@ public class Entry {
             String value = getString(key);
             return ContentstackUtil.parseDate(value, null);
         } catch (Exception e) {
-            CSAppUtils.showLog(TAG, "-----------------getDate|" + e);
+            CSAppUtils.showLog(TAG, e.getLocalizedMessage());
         }
         return null;
     }
@@ -594,7 +590,7 @@ public class Entry {
             String value = getString("created_at");
             return ContentstackUtil.parseDate(value, null);
         } catch (Exception e) {
-            CSAppUtils.showLog(TAG, "-----------------getCreateAtDate|" + e);
+            CSAppUtils.showLog(TAG, e.getLocalizedMessage());
         }
         return null;
     }
@@ -627,7 +623,7 @@ public class Entry {
             String value = getString("updated_at");
             return ContentstackUtil.parseDate(value, null);
         } catch (Exception e) {
-            CSAppUtils.showLog(TAG, "-----------------getUpdateAtDate|" + e);
+            CSAppUtils.showLog(TAG, e.getLocalizedMessage());
         }
         return null;
     }
@@ -641,7 +637,6 @@ public class Entry {
      * </pre>
      */
     public String getUpdatedBy() {
-
         return getString("updated_by");
     }
 
@@ -660,7 +655,7 @@ public class Entry {
             String value = getString("deleted_at");
             return ContentstackUtil.parseDate(value, null);
         } catch (Exception e) {
-            CSAppUtils.showLog(TAG, "-----------------getDeleteAt|" + e);
+            CSAppUtils.showLog(TAG, e.getLocalizedMessage());
         }
         return null;
     }
@@ -711,7 +706,6 @@ public class Entry {
         JSONArray assetArray = getJSONArray(key);
 
         for (int i = 0; i < assetArray.length(); i++) {
-
             if (assetArray.opt(i) instanceof JSONObject) {
                 Asset asset = contentTypeInstance.stackInstance.asset().configure(assetArray.optJSONObject(i));
                 assets.add(asset);
@@ -780,9 +774,7 @@ public class Entry {
      *
      * <br><br><b>Example :</b><br>
      * <pre class="prettyprint">
-     *  //'blt5d4sample2633b' is a dummy Stack API key
-     *  //'blt6d0240b5sample254090d' is dummy access token.
-     *  Stack stack = Contentstack.stack(context, "blt5d4sample2633b", "blt6d0240b5sample254090d", "stag", false);
+     *  Stack stack = Contentstack.stack(context, "apiKey", "deliveryToken",  "stag");
      *  Query csQuery = stack.contentType("contentType_name").query();
      *
      * csQuery.includeReference("for_bug");
@@ -820,7 +812,7 @@ public class Entry {
                             entryInstance = contentTypeInstance.stackInstance.contentType(refContentType).entry();
                         } catch (Exception e) {
                             entryInstance = new Entry(refContentType);
-                            CSAppUtils.showLog("BuiltObject", "----------------getAllEntries" + e.toString());
+                            CSAppUtils.showLog(TAG, e.getLocalizedMessage());
                         }
                         entryInstance.setUid(model.entryUid);
                         entryInstance.ownerEmailId = model.ownerEmailId;
@@ -840,7 +832,7 @@ public class Entry {
                 }
             }
         } catch (Exception e) {
-            CSAppUtils.showLog(TAG, "-----------------get|" + e);
+            CSAppUtils.showLog(TAG, e.getLocalizedMessage());
             return null;
         }
 
@@ -855,9 +847,7 @@ public class Entry {
      *
      * <br><br><b>Example :</b><br>
      * <pre class="prettyprint">
-     *     //'blt5d4sample2633b' is a dummy Stack API key
-     *     //'blt6d0240b5sample254090d' is dummy access token.
-     *     Stack stack = Contentstack.stack(context, "blt5d4sample2633b", "blt6d0240b5sample254090d", "stag", false);
+     *     Stack stack = Contentstack.stack(context, "apiKey", "deliveryToken",  "stag");
      *     Entry entry = stack.contentType("form_name").entry("entry_uid");<br>
      *     entry.except(new String[]{"name", "description"});
      * </pre>
@@ -889,9 +879,7 @@ public class Entry {
      *
      * <br><br><b>Example :</b><br>
      * <pre class="prettyprint">
-     *    //'blt5d4sample2633b' is a dummy Stack API key
-     *    //'blt6d0240b5sample254090d' is dummy access token.
-     *    Stack stack = Contentstack.stack(context, "blt5d4sample2633b", "blt6d0240b5sample254090d", "stag", false);
+     *    Stack stack = Contentstack.stack(context, "apiKey", "deliveryToken",  "stag");
      *    Entry entry = stack.contentType("form_name").entry("entry_uid");<br>
      *    entry.includeReference("referenceUid");
      * </pre>
@@ -908,7 +896,7 @@ public class Entry {
                 otherPostJSON.put("include[]", referenceArray);
             }
         } catch (Exception e) {
-            CSAppUtils.showLog(TAG, "--include Reference-catch|" + e);
+            CSAppUtils.showLog(TAG, "--include Reference-catch|" + e.getLocalizedMessage());
         }
 
         return this;
@@ -922,9 +910,7 @@ public class Entry {
      *
      * <br><br><b>Example :</b><br>
      * <pre class="prettyprint">
-     *    //'blt5d4sample2633b' is a dummy Stack API key
-     *    //'blt6d0240b5sample254090d' is dummy access token.
-     *    Stack stack = Contentstack.stack(context, "blt5d4sample2633b", "blt6d0240b5sample254090d", "stag", false);
+     *    Stack stack = Contentstack.stack(context, "apiKey", "deliveryToken",  "stag");
      *    Entry entry = stack.contentType("form_name").entry("entry_uid");<br>
      *    entry.includeReference(new String[]{"referenceUid_A", "referenceUid_B"});
      * </pre>
@@ -942,7 +928,7 @@ public class Entry {
                 otherPostJSON.put("include[]", referenceArray);
             }
         } catch (Exception e) {
-            CSAppUtils.showLog(TAG, "--include Reference-catch|" + e);
+            CSAppUtils.showLog(TAG, "--include Reference-catch|" + e.getLocalizedMessage());
         }
 
         return this;
@@ -956,9 +942,7 @@ public class Entry {
      *
      * <br><br><b>Example :</b><br>
      * <pre class="prettyprint">
-     *    //'blt5d4sample2633b' is a dummy Stack API key
-     *    //'blt6d0240b5sample254090d' is dummy access token.
-     *    Stack stack = Contentstack.stack(context, "blt5d4sample2633b", "blt6d0240b5sample254090d", "stag", false);
+     *    Stack stack = Contentstack.stack(context, "apiKey", "deliveryToken",  "stag");
      *    Entry entry = stack.contentType("form_name").entry("entry_uid");<br>
      *    entry.only(new String[]{"name", "description"});
      * </pre>
@@ -976,7 +960,7 @@ public class Entry {
                 }
             }
         } catch (Exception e) {
-            CSAppUtils.showLog(TAG, "--include Reference-catch|" + e);
+            CSAppUtils.showLog(TAG, "--include Reference-catch|" + e.getLocalizedMessage());
         }
 
         return this;
@@ -991,9 +975,7 @@ public class Entry {
      *
      * <br><br><b>Example :</b><br>
      * <pre class="prettyprint">
-     *    //'blt5d4sample2633b' is a dummy Stack API key
-     *    //'blt6d0240b5sample254090d' is dummy access token.
-     *    Stack stack = Contentstack.stack(context, "blt5d4sample2633b", "blt6d0240b5sample254090d", "stag", false);
+     *    Stack stack = Contentstack.stack(context, "apiKey", "deliveryToken",  "stag");
      *    Entry entry = stack.contentType("form_name").entry("entry_uid");<br>
      *    ArrayList&#60;String&#62; array = new ArrayList&#60;String&#62;();
      *    array.add("description");
@@ -1012,14 +994,11 @@ public class Entry {
                 for (int i = 0; i < count; i++) {
                     fieldValueArray.put(fieldUid.get(i));
                 }
-
                 onlyJsonObject.put(referenceFieldUid, fieldValueArray);
-
                 includeReference(referenceFieldUid);
-
             }
         } catch (Exception e) {
-            CSAppUtils.showLog(TAG, "--onlyWithReferenceUid-catch|" + e);
+            CSAppUtils.showLog(TAG, "--onlyWithReferenceUid-catch|" + e.getLocalizedMessage());
         }
         return this;
     }
@@ -1033,9 +1012,7 @@ public class Entry {
      *
      * <br><br><b>Example :</b><br>
      * <pre class="prettyprint">
-     *    //'blt5d4sample2633b' is a dummy Stack API key
-     *    //'blt6d0240b5sample254090d' is dummy access token.
-     *    Stack stack = Contentstack.stack(context, "blt5d4sample2633b", "blt6d0240b5sample254090d", "stag", false);
+     *    Stack stack = Contentstack.stack(context, "apiKey", "deliveryToken",  "stag");
      *    Entry entry = stack.contentType("form_name").entry("entry_uid");<br>
      *    ArrayList&#60;String&#62; array = new ArrayList&#60;String&#62;();
      *    array.add("description");
@@ -1060,7 +1037,7 @@ public class Entry {
                 includeReference(referenceFieldUid);
             }
         } catch (Exception e) {
-            CSAppUtils.showLog(TAG, "--exceptWithReferenceUid-catch|" + e);
+            CSAppUtils.showLog(TAG, "--exceptWithReferenceUid-catch|" + e.getLocalizedMessage());
         }
         return this;
     }
@@ -1075,7 +1052,7 @@ public class Entry {
     }
 
     /**
-     * Fetches the latest version of the entries from Built.io content stack
+     * Fetches the latest version of the entries from content stack
      *
      * @param callBack {@link EntryResultCallBack} object to notify the application when the request has completed.
      *                 <p>
@@ -1083,9 +1060,7 @@ public class Entry {
      *
      *                 <br><br><b>Example :</b><br>
      *                 <pre class="prettyprint">
-     *                    //'blt5d4sample2633b' is a dummy Stack API key
-     *                    //'blt6d0240b5sample254090d' is dummy access token.
-     *                    Stack stack = Contentstack.stack(context, "blt5d4sample2633b", "blt6d0240b5sample254090d", "stag", false);
+     *                    Stack stack = Contentstack.stack(context, "apiKey", "deliveryToken",  "stag");
      *                    Entry entry = stack.contentType("form_name").entry("entry_uid");<br>
      *                    entry.fetch(new BuiltResultCallBack() {<br>
      *                           &#64;Override
@@ -1285,9 +1260,7 @@ public class Entry {
      *
      * <br><br><b>Example :</b><br>
      * <pre class="prettyprint">
-     *      //'blt5d4sample2633b' is a dummy Stack API key
-     *      //'blt6d0240b5sample254090d' is dummy access token.
-     *      Stack stack = Contentstack.stack(context, "blt5d4sample2633b", "blt6d0240b5sample254090d", "stag", false);
+     *      Stack stack = Contentstack.stack(context, "apiKey", "deliveryToken",  "stag");
      *      Entry entry = stack.contentType("form_name").entry();<br>
      *      entry.setCachePolicy(NETWORK_ELSE_CACHE);
      * </pre>
@@ -1309,7 +1282,7 @@ public class Entry {
                     Object value = queryJSON.opt(key);
                     hashMap.put(key, value);
                 } catch (Exception e) {
-                    CSAppUtils.showLog(TAG, "----------------setQueryJson" + e.toString());
+                    CSAppUtils.showLog(TAG, e.getLocalizedMessage());
                 }
             }
 
@@ -1361,9 +1334,7 @@ public class Entry {
         } else {
             error.setErrorMessage(e.toString());
         }
-
         callBack.onRequestFail(ResponseType.UNKNOWN, error);
-
     }
 
     private ArrayMap<String, Object> getHeader(ArrayMap<String, Object> localHeader) {
@@ -1404,16 +1375,13 @@ public class Entry {
      *
      * <br><br><b>Example :</b><br>
      * <pre class="prettyprint">
-     *    //'blt5d4sample2633b' is a dummy Stack API key
-     *    //'blt6d0240b5sample254090d' is dummy access token.
      *    {@code
-     *
-     *    Stack stack = Contentstack.stack(context, "blt5d4sample2633b", "blt6d0240b5sample254090d", "stag", false);
-     *    final Entry entry = stack.contentType("user").entry("blt3b0aaebf6f1c3762"); <br>
+     *    Stack stack = Contentstack.stack(context, "apiKey", "deliveryToken",  "stag");
+     *    final Entry entry = stack.contentType("user").entry("entryUid"); <br>
      *    entry.addParam("include_dimensions", "true"); <br>
-     *    entry.fetch(new BuiltResultCallBack() {<br>
+     *    entry.fetch(new ResultCallBack() {<br>
      *           &#64;Override
-     *           public void onCompletion(ResponseType responseType, BuiltError builtError) {
+     *           public void onCompletion(ResponseType responseType, Error error) {
      *
      *           }<br>
      *    });<br>
@@ -1443,11 +1411,9 @@ public class Entry {
      *
      * <br><br><b>Example :</b><br>
      * <pre class="prettyprint">
-     * //'blt5d4sample2633b' is a dummy Stack API key
-     * //'blt6d0240b5sample254090d' is dummy access token.
      * {@code
-     * Stack stack = Contentstack.stack(context, "blt5d4sample2633b", "blt6d0240b5sample254090d", "stag", false);
-     * final Entry entry = stack.contentType("user").entry("blt3b0aaebf6f1c3762"); <br>
+     * Stack stack = Contentstack.stack(context, "apiKey", "deliveryToken",  "stag");
+     * final Entry entry = stack.contentType("user").entry("apiKey"); <br>
      * entry.includeReferenceContentTypeUID; <br>
      * entry.fetch(new BuiltResultCallBack() {
      * <br>&#64;
@@ -1474,10 +1440,8 @@ public class Entry {
      * @return {@link Entry} object, so you can chain this call.
      * <br><br><b>Example :</b><br>
      * <pre class="prettyprint">
-     *     //'blt5d4sample2633b' is a dummy Stack API key
-     *     //'blt6d0240b5sample254090d' is dummy access token.
-     *     Stack stack = Contentstack.stack(context, "blt5d4sample2633b", "blt6d0240b5sample254090d", "stag", false);
-     *     final Entry entry = stack.contentType("user").entry("blt3b0aaebf6f1c3762");
+     *     Stack stack = Contentstack.stack(context, "apiKey", "deliveryToken",  "stag");
+     *     final Entry entry = stack.contentType("user").entry("entryUid");
      *     entry.includeContentType();
      * </pre>
      */
@@ -1519,7 +1483,7 @@ public class Entry {
     /**
      * includeEmbeddedItems instance of Entry
      * Include Embedded Objects (Entries and Assets) along with entry/entries details.<br>
-     * Stack stack = Contentstack.stack( "ApiKey", "deliveryToken", "environment");
+     * Stack stack = Contentstack.stack(context, "apiKey", "deliveryToken",  "stag");
      * final Entry entry = stack.contentType("user").entry("entry_uid");
      * entry = entry.includeEmbeddedObjects()
      *

@@ -25,7 +25,6 @@ import java.util.Map;
 public class Asset {
 
     private final static String TAG = "Asset";
-    /*For SingleUpload variable*/
     protected String assetUid = null;
     protected String contentType = null;
     protected String fileSize = null;
@@ -69,21 +68,19 @@ public class Asset {
      *                   <br><br><b>Example :</b><br>
      *                   <br>1. Single Attachment :-<br>
      *                   <pre class="prettyprint linenums:1">
-     *                      //'blt5d4sample2633b' is a dummy Application API key
-     *                      Stack stack = Contentstack.stack(context, "blt5d4sample2633b", "bltdtsample_accessToken767vv",  config);
-     *
-     *                      Asset assetObject = stack.asset("assetUid");<br>
-     *                      assetObject.configure(entryObject.getJSONObject(attached_image_field_uid));</pre>
+     *                                                          Stack stack = Contentstack.stack(context, "apiKey", "deliveryToken",  config);
+     *                                                          Asset assetObject = stack.asset("assetUid");<br>
+     *                                                          assetObject.configure(entryObject.getJSONObject(attached_image_field_uid));</pre>
      *
      *                   <br>2. Multiple Attachment :-<br>
      *
      *                   <pre class="prettyprint linenums:1">
-     *                   JSONArray array = entryObject.getJSONArray(Attach_Image_Field_Uid);<br>
-     *                      for (int i = 0; i < array.length(); i++) {<br>
-     *                    	  Asset assetObject = stack.asset("assetUid");<br>
-     *                    	  assetObject.configure(entryObject.getJSONObject(attached_image_field_uid));<br>
-     *                      }<br>
-     *                   </pre>
+     *                                                       JSONArray array = entryObject.getJSONArray(Attach_Image_Field_Uid);<br>
+     *                                                          for (int i = 0; i < array.length(); i++) {<br>
+     *                                                        	  Asset assetObject = stack.asset("assetUid");<br>
+     *                                                        	  assetObject.configure(entryObject.getJSONObject(attached_image_field_uid));<br>
+     *                                                          }<br>
+     *                                                       </pre>
      * @return {@link Asset} instance.
      */
     public Asset configure(JSONObject jsonObject) {
@@ -107,7 +104,7 @@ public class Asset {
 
 
     /**
-     * To set headers for Built.io Contentstack rest calls.
+     * To set headers for Contentstack rest calls.
      * <br>
      * Scope is limited to this object only.
      *
@@ -116,11 +113,10 @@ public class Asset {
      *
      *              <br><br><b>Example :</b><br>
      *              <pre class="prettyprint">
-     *              //'blt5d4sample2633b' is a dummy Application API key
-     *              Asset assetObject = Contentstack.stack(context, "blt5d4sample2633b", "bltdtsample_accessToken767vv",  config).asset("assetUid");
-     *
-     *              assetObject.setHeader("custom_header_key", "custom_header_value");
-     *              </pre>
+     *                                        //'blt5d4sample2633b' is a dummy Application API key
+     *                                        Asset assetObject = Contentstack.stack(context, "apiKey", "deliveryToken",  config).asset("assetUid");
+     *                                        assetObject.setHeader("custom_header_key", "custom_header_value");
+     *                                        </pre>
      */
     public void setHeader(String key, String value) {
 
@@ -139,11 +135,9 @@ public class Asset {
      *
      *            <br><br><b>Example :</b><br>
      *            <pre class="prettyprint">
-     *            //'blt5d4sample2633b' is a dummy Application API key
-     *            Asset assetObject = Contentstack.stack(context, "blt5d4sample2633b", "bltdtsample_accessToken767vv",  config).asset("assetUid");
-     *
-     *            assetObject.removeHeader("custom_header_key");
-     *            </pre>
+     *                                  Asset assetObject = Contentstack.stack(context, "apiKey", "deliveryToken",  config).asset("assetUid");
+     *                                  assetObject.removeHeader("custom_header_key");
+     *                                  </pre>
      */
     public void removeHeader(String key) {
         if (headerGroup_local != null) {
@@ -157,17 +151,15 @@ public class Asset {
     }
 
     /**
-     * To set uid of media file which is uploaded on Built.io Contentstack server.
+     * To set uid of media file which is uploaded on Contentstack server.
      *
      * @param assetUid upload uid.
      *
      *                 <br><br><b>Example :</b><br>
      *                 <pre class="prettyprint">
-     *                 //'blt5d4sample2633b' is a dummy Application API key
-     *                 Asset assetObject = Contentstack.stack(context, "blt5d4sample2633b", "bltdtsample_accessToken767vv",  config).asset("assetUid");
-     *
-     *                 assetObject.setUid("upload_uid");
-     *                 </pre>
+     *                                                 Asset assetObject = Contentstack.stack(context, "apiKey", "deliveryToken",   config).asset("assetUid");*
+     *                                                 assetObject.setUid("upload_uid");
+     *                                                 </pre>
      */
     protected void setUid(String assetUid) {
         if (!TextUtils.isEmpty(assetUid)) {
@@ -176,7 +168,7 @@ public class Asset {
     }
 
     /**
-     * Returns media file upload uid. You will get uploaded uid after uploading media file on Built.io Contentstack server.
+     * Returns media file upload uid. You will get uploaded uid after uploading media file on Contentstack server.
      *
      * <br><br><b>Example :</b><br>
      * <pre class="prettyprint">
@@ -227,8 +219,8 @@ public class Asset {
     }
 
     /**
-     * Returns upload url by which you can download media file uploaded on Built.io Contentstack server.
-     * You will get uploaded url after uploading media file on Built.io Contentstack server.
+     * Returns upload url by which you can download media file uploaded on Contentstack server.
+     * You will get uploaded url after uploading media file on Contentstack server.
      *
      * <br><br><b>Example :</b><br>
      * <pre class="prettyprint">
@@ -300,7 +292,7 @@ public class Asset {
             String value = json.optString("updated_at");
             return ContentstackUtil.parseDate(value, null);
         } catch (Exception e) {
-            CSAppUtils.showLog(TAG, "-----------------getUpdateAtDate|" + e);
+            CSAppUtils.showLog(TAG, e.getLocalizedMessage());
         }
         return null;
     }
@@ -333,7 +325,7 @@ public class Asset {
             String value = json.optString("deleted_at");
             return ContentstackUtil.parseDate(value, null);
         } catch (Exception e) {
-            CSAppUtils.showLog(TAG, "-----------------getDeleteAt|" + e);
+            CSAppUtils.showLog(TAG, e.getLocalizedMessage());
         }
         return null;
     }
@@ -372,13 +364,10 @@ public class Asset {
      *
      *                    <br><br><b>Example :</b><br>
      *                    <pre class="prettyprint">
-     *                         //'blt5d4sample2633b' is a dummy Stack API key
-     *                         //'blt6d0240b5sample254090d' is dummy access token.
-     *                         Stack stack = Contentstack.stack(context, "blt5d4sample2633b", "blt6d0240b5sample254090d", "stag", false);
-     *                         Asset assetObject = stack.asset("bltsampleAsset");<br>
-     *
-     *                         assetObject.setCachePolicy(NETWORK_ELSE_CACHE);
-     *                    </pre>
+     *                                                               Stack stack = Contentstack.stack(context, "apiKey", "deliveryToken",  "stag", false);
+     *                                                               Asset assetObject = stack.asset("assetUid");<br>
+     *                                                               assetObject.setCachePolicy(NETWORK_ELSE_CACHE);
+     *                                                          </pre>
      */
     public void setCachePolicy(CachePolicy cachePolicy) {
         this.cachePolicyForCall = cachePolicy;
@@ -391,18 +380,18 @@ public class Asset {
      *
      *                 <br><br><b>Example :</b><br>
      *                 <pre class="prettyprint">
-     *                  Asset asset = stack.asset("blt5312f71416d6e2c8");
-     *                  asset.fetch(new FetchResultCallback() {
-     *                    &#64;Override
-     *                    public void onCompletion(ResponseType responseType, Error error) {
-     *                          if(error == null){
-     *                            //Success Block.
-     *                          }else {
-     *                            //Fail Block.
-     *                          }
-     *                    }
-     *                  });
-     *                 </pre>
+     *                                                  Asset asset = stack.asset("assetUid");
+     *                                                  asset.fetch(new FetchResultCallback() {
+     *                                                    &#64;Override
+     *                                                    public void onCompletion(ResponseType responseType, Error error) {
+     *                                                          if(error == null){
+     *                                                            //Success Block.
+     *                                                          }else {
+     *                                                            //Fail Block.
+     *                                                          }
+     *                                                    }
+     *                                                  });
+     *                                                 </pre>
      */
     public void fetch(FetchResultCallback callback) {
 
@@ -544,8 +533,7 @@ public class Asset {
      * @return {@link Asset} object, so you can chain this call.
      * <br><br><b>Example :</b><br>
      * <pre class="prettyprint">
-     * //'blt5d4sample2633b' is a dummy Application API key
-     * Asset assetObject = Contentstack.stack(context, "blt5d4sample2633b", "bltdtsample_accessToken767vv",  config).asset("assetUid");
+     * Asset assetObject = Contentstack.stack(context, "apiKey", "deliveryToken",  config).asset("assetUid");
      * assetObject.setTags(new String[]{"tag1", "tag2"});
      * </pre>
      */
@@ -605,7 +593,7 @@ public class Asset {
      *
      * <br><br><b>Example :</b><br>
      * <pre class="prettyprint">
-     * final Asset asset = stack.asset("blt5312f71416d6e2c8");
+     * final Asset asset = stack.asset("assetUid");
      * asset.addParam("key", "some_value");
      *
      *  asset.fetch(new FetchResultCallback() {
@@ -654,7 +642,7 @@ public class Asset {
      * @return {@link Asset} object, so you can chain this call.
      * <br><br><b>Example :</b><br>
      * <pre class="prettyprint">
-     *     Stack stack = Contentstack.stack(context, "ApiKey", "deliveryToken", "environment");
+     *     Stack stack = Contentstack.stack(context, "apiKey", "deliveryToken", "environment");
      *     final Asset asset = stack.asset("asset_uid");
      *     asset.includeFallback();
      * </pre>

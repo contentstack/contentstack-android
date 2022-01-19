@@ -2,7 +2,7 @@ package com.contentstack.sdk;
 
 
 /**
- * built.io callback to notify class after network call has been executed.
+ * callback to notify class after network call has been executed.
  *
  * @author Contentstack.com, Inc
  */

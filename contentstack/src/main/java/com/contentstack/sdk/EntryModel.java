@@ -125,7 +125,7 @@ class EntryModel {
 
         } catch (Exception e) {
             e.printStackTrace();
-            CSAppUtils.showLog("EntryModel", "---------------------EntryModel---------err|" + e);
+            CSAppUtils.showLog("EntryModel",  e.getLocalizedMessage());
         }
 
     }

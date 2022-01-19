@@ -93,7 +93,7 @@ public class SyncStack {
                     }
                 }
             } catch (Exception e) {
-                CSAppUtils.showLog(TAG, "---------QueryResult--setJSON--" + e.toString());
+                CSAppUtils.showLog(TAG, e.getLocalizedMessage());
             }
 
         }

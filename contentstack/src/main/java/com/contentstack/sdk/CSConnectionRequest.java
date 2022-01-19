@@ -310,12 +310,12 @@ class CSConnectionRequest implements IRequestModelHTTP {
             Error error = new Error();
             error.setErrorMessage(CSAppConstants.ErrorMessage_SavingNetworkCallResponseForCache);
             HashMap<String, Object> hashMap = new HashMap<String, Object>();
-            hashMap.put("error", e);
+            hashMap.put("error", e.getLocalizedMessage());
             error.setErrors(hashMap);
             if (callBackObject != null) {
                 callBackObject.onRequestFail(ResponseType.CACHE, error);
             }
-            CSAppUtils.showLog(TAG, "-----built.io----------createCacheFile-------cach |" + e);
+            CSAppUtils.showLog(TAG, e.getLocalizedMessage());
         }
     }
 

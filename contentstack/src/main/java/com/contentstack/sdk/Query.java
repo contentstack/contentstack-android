@@ -65,7 +65,7 @@ public class Query implements INotifyClass {
 
 
     /**
-     * To set headers for Built.io Contentstack rest calls.
+     * To set headers for Contentstack rest calls.
      * <br>
      * Scope is limited to this object and followed classes.
      *

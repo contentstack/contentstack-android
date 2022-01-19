@@ -46,18 +46,13 @@ public class ClearCache extends BroadcastReceiver {
                         JSONObject jsonObj = CSAppUtils.getJsonFromCacheFile(file);
                         if (jsonObj != null) {
                             if (jsonObj.optString("timestamp") != null) {
-
                                 long responseTime = Long.parseLong(jsonObj.optString("timestamp"));
-
                                 Date responseDate = new Date(responseTime);
-
                                 Calendar cal = Calendar.getInstance();
                                 cal.setTimeZone(TimeZone.getTimeZone("UTC"));
                                 cal.setTime(new Date());
                                 Date currentDate = new Date(cal.getTimeInMillis());
-
                                 long hourBetween = TimeUnit.MILLISECONDS.toHours(currentDate.getTime() - responseDate.getTime());
-
                                 if (hourBetween >= 24) {
                                     file.delete();
                                 }
