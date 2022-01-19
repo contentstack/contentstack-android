@@ -70,7 +70,7 @@ public final class SpdyTransport implements Transport {
   }
 
   @Override public Sink createRequestBody(Request request) throws IOException {
-    // TODO: if bufferRequestBody is set, we must buffer the whole request
+    // If bufferRequestBody is set, we must buffer the whole request
     writeRequestHeaders(request);
     return stream.getSink();
   }
@@ -217,7 +217,7 @@ public final class SpdyTransport implements Transport {
   }
 
   @Override public boolean canReuseConnection() {
-    return true; // TODO: spdyConnection.isClosed() ?
+    return true; // SpdyConnection.isClosed() ?
   }
 
   /** When true, this header should not be emitted or consumed. */
@@ -271,7 +271,7 @@ public final class SpdyTransport implements Transport {
       }
 
       if (cacheBody != null) {
-        // TODO get buffer.copyTo(cacheBody, read);
+        // Get buffer.copyTo(cacheBody, read);
         cacheBody.write(buffer.clone(), read);
       }
 

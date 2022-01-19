@@ -45,7 +45,7 @@ public interface Transport {
    * responses to be retransmitted transparently.</li>
    * </ul>
    */
-  // TODO: don't bother retransmitting the request body? It's quite a corner
+  // Don't bother retransmitting the request body? It's quite a corner
   // case and there's uncertainty whether Firefox or Chrome do this
   Sink createRequestBody(Request request) throws IOException;
 
@@ -67,7 +67,7 @@ public interface Transport {
   /** Notify the transport that no response body will be read. */
   void emptyTransferStream() throws IOException;
 
-  // TODO: make this the content stream?
+  // Make this the content stream?
   Source getTransferStream(CacheRequest cacheRequest) throws IOException;
 
   /**

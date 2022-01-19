@@ -109,13 +109,11 @@ public final class SpdyConnection implements Closeable {
   long bytesLeftInWriteWindow;
 
   /** Settings we communicate to the peer. */
-  // TODO: Do we want to dynamically adjust settings, or KISS and only set once?
   final Settings okHttpSettings = new Settings();
       // okHttpSettings.set(Settings.MAX_CONCURRENT_STREAMS, 0, max);
   private static final int OKHTTP_CLIENT_WINDOW_SIZE = 16 * 1024 * 1024;
 
   /** Settings we receive from the peer. */
-  // TODO: MWS will need to guard on this setting before attempting to push.
   final Settings peerSettings = new Settings();
 
   private boolean receivedInitialPeerSettings = false;
@@ -428,7 +426,6 @@ public final class SpdyConnection implements Closeable {
         shutdown = true;
         lastGoodStreamId = this.lastGoodStreamId;
       }
-      // TODO: propagate exception message into debugData
       frameWriter.goAway(lastGoodStreamId, statusCode, Util.EMPTY_BYTE_ARRAY);
     }
   }
@@ -716,7 +713,6 @@ public final class SpdyConnection implements Closeable {
     }
 
     @Override public void ackSettings() {
-      // TODO: If we don't get this callback after sending settings to the peer, SETTINGS_TIMEOUT.
     }
 
     @Override public void ping(boolean reply, int payload1, int payload2) {
@@ -732,7 +728,7 @@ public final class SpdyConnection implements Closeable {
     }
 
     @Override public void goAway(int lastGoodStreamId, ErrorCode errorCode, ByteString debugData) {
-      if (debugData.size() > 0) { // TODO: log the debugData
+      if (debugData.size() > 0) {
       }
       synchronized (SpdyConnection.this) {
         shutdown = true;
@@ -768,7 +764,6 @@ public final class SpdyConnection implements Closeable {
 
     @Override public void priority(int streamId, int streamDependency, int weight,
         boolean exclusive) {
-      // TODO: honor priority.
     }
 
     @Override
@@ -778,7 +773,6 @@ public final class SpdyConnection implements Closeable {
 
     @Override public void alternateService(int streamId, String origin, ByteString protocol,
         String host, int port, long maxAge) {
-      // TODO: register alternate service.
     }
   }
 

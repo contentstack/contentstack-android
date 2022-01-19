@@ -276,7 +276,6 @@ public class TableDef {
 				dw--;
 			}
 		} else if (dw < 0) { // overflow - cut
-			//TODO: should we accept overflow cells?
 			while (dw < 0) {
 				cols.removeLast();
 				dw++;

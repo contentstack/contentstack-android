@@ -385,7 +385,6 @@ public final class HttpConnection {
     /** Copy the last {@code byteCount} bytes of {@code source} to the cache body. */
     protected final void cacheWrite(Buffer source, long byteCount) throws IOException {
       if (cacheBody != null) {
-        // TODO source.copyTo(cacheBody, byteCount);
         cacheBody.write(source.clone(), byteCount);
       }
     }
@@ -579,7 +578,6 @@ public final class HttpConnection {
 
     @Override public void close() throws IOException {
       if (closed) return;
-      // TODO: discard unknown length streams for best caching?
       if (!inputExhausted) {
         unexpectedEndOfInput();
       }

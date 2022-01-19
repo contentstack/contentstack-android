@@ -25,14 +25,8 @@ package com.contentstack.okio;
  * of segments in the pool.
  */
 final class Segment {
-  /** The size of all segments in bytes. */
-  // TODO: Using fixed-size segments makes pooling easier. But it harms memory
-  //       efficiency and encourages copying. Try variable sized segments?
-  // TODO: Is 2 KiB a good default segment size?
   static final int SIZE = 2048;
-
   final byte[] data = new byte[SIZE];
-
   /** The next byte of application data byte to read in this segment. */
   int pos;
 
@@ -114,10 +108,6 @@ final class Segment {
     pop();
     SegmentPool.INSTANCE.recycle(this);
   }
-
-  /** Moves {@code byteCount} bytes from this segment to {@code sink}. */
-  // TODO: if sink has fewer bytes than this, it may be cheaper to reverse the
-  //       direction of the copy and swap the segments!
   public void writeTo(Segment sink, int byteCount) {
     if (byteCount + (sink.limit - sink.pos) > SIZE) throw new IllegalArgumentException();
 

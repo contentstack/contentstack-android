@@ -111,7 +111,6 @@ public class QueryResult {
             }
 
         } catch (Exception e) {
-            //TODO ERROR HANDLE
             CSAppUtils.showLog(TAG, "----------------------QueryResult--setJSON--" + e.toString());
         }
     }

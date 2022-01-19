@@ -200,14 +200,13 @@ public final class Http20Draft13 implements Variant {
 
       hpackReader.readHeaders();
       hpackReader.emitReferenceSet();
-      // TODO: Concat multi-value headers with 0x0, except COOKIE, which uses 0x3B, 0x20.
       // http://tools.ietf.org/html/draft-ietf-httpbis-http2-09#section-8.1.3
       return hpackReader.getAndReset();
     }
 
     private void readData(Handler handler, short length, byte flags, int streamId)
         throws IOException {
-      // TODO: checkState open or half-closed (local) or raise STREAM_CLOSED
+
       boolean inFinished = (flags & FLAG_END_STREAM) != 0;
       boolean gzipped = (flags & FLAG_COMPRESSED) != 0;
       if (gzipped) {
@@ -594,7 +593,6 @@ public final class Http20Draft13 implements Variant {
         padding = 0;
         if ((flags & FLAG_END_HEADERS) != 0) return -1;
         readContinuationHeader();
-        // TODO: test case for empty continuation header?
       }
 
       long read = source.read(sink, Math.min(byteCount, left));
@@ -680,9 +678,9 @@ public final class Http20Draft13 implements Variant {
       String result = flags < FLAGS.length ? FLAGS[flags] : BINARY[flags];
       // Special case publishType that have overlap flag values.
       if (type == TYPE_PUSH_PROMISE && (flags & FLAG_END_PUSH_PROMISE) != 0) {
-        return result.replace("HEADERS", "PUSH_PROMISE"); // TODO: Avoid allocation.
+        return result.replace("HEADERS", "PUSH_PROMISE");
       } else if (type == TYPE_DATA && (flags & FLAG_COMPRESSED) != 0) {
-        return result.replace("PRIORITY", "COMPRESSED"); // TODO: Avoid allocation.
+        return result.replace("PRIORITY", "COMPRESSED");
       }
       return result;
     }

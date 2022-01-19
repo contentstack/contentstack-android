@@ -90,7 +90,7 @@ public final class InflaterSource implements Source {
     if (!inflater.needsInput()) return false;
 
     releaseInflatedBytes();
-    if (inflater.getRemaining() != 0) throw new IllegalStateException("?"); // TODO: possible?
+    if (inflater.getRemaining() != 0) throw new IllegalStateException("?");
 
     // If there are compressed bytes in the source, assign them to the inflater.
     if (source.exhausted()) return true;

@@ -249,7 +249,6 @@ final class DistinguishedNameParser {
       case '*':
       case '%':
       case '_':
-        //FIXME: escaping is allowed only for leading or trailing space char
         return chars[pos];
       default:
         // RFC doesn't explicitly say that escaped hex pair is
@@ -262,7 +261,7 @@ final class DistinguishedNameParser {
   // see http://www.unicode.org for UTF-8 bit distribution table
   private char getUTF8() {
     int res = getByte(pos);
-    pos++; //FIXME tmp
+    pos++;
 
     if (res < 128) { // one byte: 0-7F
       return (char) res;
@@ -284,21 +283,21 @@ final class DistinguishedNameParser {
       for (int i = 0; i < count; i++) {
         pos++;
         if (pos == length || chars[pos] != '\\') {
-          return 0x3F; //FIXME failed to decode UTF-8 char - return '?'
+          return 0x3F;
         }
         pos++;
 
         b = getByte(pos);
-        pos++; //FIXME tmp
+        pos++;
         if ((b & 0xC0) != 0x80) {
-          return 0x3F; //FIXME failed to decode UTF-8 char - return '?'
+          return 0x3F;
         }
 
         res = (res << 6) + (b & 0x3F);
       }
       return (char) res;
     } else {
-      return 0x3F; //FIXME failed to decode UTF-8 char - return '?'
+      return 0x3F;
     }
   }
 

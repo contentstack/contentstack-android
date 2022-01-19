@@ -489,7 +489,7 @@ public class HttpURLConnectionImpl extends HttpURLConnection {
 			return;
 		}
 
-		// TODO: Deprecate use of X-Android-Transports header?
+		// Deprecate use of X-Android-Transports header?
 		if ("X-Android-Transports".equals(field) || "X-Android-Protocols".equals(field)) {
 			setProtocols(newValue, false /* append */);
 		} else {
@@ -523,7 +523,7 @@ public class HttpURLConnectionImpl extends HttpURLConnection {
 			return;
 		}
 
-		// TODO: Deprecate use of X-Android-Transports header?
+		// Deprecate use of X-Android-Transports header?
 		if ("X-Android-Transports".equals(field) || "X-Android-Protocols".equals(field)) {
 			setProtocols(value, true /* append */);
 		} else {
@@ -570,7 +570,7 @@ public class HttpURLConnectionImpl extends HttpURLConnection {
 	}
 
 	public long getHeaderFieldLong(String field, long defaultValue) {
-		// TODO Auto-generated method stub
+		// Auto-generated method stub
 		return getHeaderFieldDate(field, defaultValue);
 	}
 }

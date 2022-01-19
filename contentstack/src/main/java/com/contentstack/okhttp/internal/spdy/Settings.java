@@ -147,7 +147,7 @@ public final class Settings {
   }
 
   /** HTTP/2 only. */
-  // TODO: honor this setting in HTTP/2.
+
   boolean getEnablePush(boolean defaultValue) {
     int bit = 1 << ENABLE_PUSH;
     return ((bit & set) != 0 ? values[ENABLE_PUSH] : defaultValue ? 1 : 0) == 1;
@@ -159,7 +159,7 @@ public final class Settings {
     return (bit & set) != 0 ? values[ROUND_TRIP_TIME] : defaultValue;
   }
 
-  // TODO: honor this setting in spdy/3 and HTTP/2.
+
   int getMaxConcurrentStreams(int defaultValue) {
     int bit = 1 << MAX_CONCURRENT_STREAMS;
     return (bit & set) != 0 ? values[MAX_CONCURRENT_STREAMS] : defaultValue;
@@ -188,7 +188,6 @@ public final class Settings {
     return (bit & set) != 0 ? values[CLIENT_CERTIFICATE_VECTOR_SIZE] : defaultValue;
   }
 
-  // TODO: honor this setting in spdy/3 and HTTP/2.
   boolean isFlowControlDisabled() {
     int bit = 1 << FLOW_CONTROL_OPTIONS;
     int value = (bit & set) != 0 ? values[FLOW_CONTROL_OPTIONS] : 0;

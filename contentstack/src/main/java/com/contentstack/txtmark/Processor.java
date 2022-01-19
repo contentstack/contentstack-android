@@ -872,7 +872,6 @@ public class Processor
             case XML:
                 if (line.previous != null)
                 {
-                    // FIXME ... this looks wrong
                     root.split(line.previous);
                 }
                 root.split(line.xmlEndLine).type = BlockType.XML;
@@ -899,7 +898,6 @@ public class Processor
             case HR:
                 if (line.previous != null)
                 {
-                    // FIXME ... this looks wrong
                     root.split(line.previous);
                 }
                 root.split(line).type = BlockType.RULER;
@@ -914,7 +912,6 @@ public class Processor
                     {
                         break;
                     }
-                    // TODO ... is this really necessary? Maybe add a special
                     // flag?
                     line = line.next;
                 }

@@ -173,7 +173,6 @@ public final class Util {
 
   /** Reads until {@code in} is exhausted or the timeout has elapsed. */
   public static boolean skipAll(Source in, int timeoutMillis) throws IOException {
-    // TODO: Implement deadlines everywhere so they can do this work.
     long startNanos = System.nanoTime();
     Buffer skipBuffer = new Buffer();
     while (NANOSECONDS.toMillis(System.nanoTime() - startNanos) < timeoutMillis) {

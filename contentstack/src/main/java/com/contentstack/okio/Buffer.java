@@ -557,7 +557,6 @@ public final class Buffer implements BufferedSource, BufferedSink, Cloneable {
 
   @Override public Buffer writeUtf8(String string) {
     if (string == null) throw new IllegalArgumentException("string == null");
-    // TODO: inline UTF-8 encoding to save allocating a byte[]?
     return writeString(string, Util.UTF_8);
   }
 

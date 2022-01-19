@@ -1552,20 +1552,17 @@ public class Query implements INotifyClass {
 
                     execQuery(null, callback, false);
                 } else {
-                    //TODO ERROR HANDLE
                     throwException("find", CSAppConstants.ErrorMessage_FormName, null);
                     error = new Error();
                     error.setErrorMessage(errorString);
                     error.setErrors(errorHashMap);
                 }
             } else {
-                //TODO ERROR HANDLE
                 error = new Error();
                 error.setErrorMessage(errorString);
                 error.setErrors(errorHashMap);
             }
         } catch (Exception e) {
-            //TODO ERROR HANDLE
             throwException("find", CSAppConstants.ErrorMessage_JsonNotProper, null);
             error = new Error();
             error.setErrorMessage(errorString);
@@ -1619,20 +1616,17 @@ public class Query implements INotifyClass {
                     }
 
                 } else {
-                    //TODO ERROR HANDLE
                     throwException("find", CSAppConstants.ErrorMessage_FormName, null);
                     error = new Error();
                     error.setErrorMessage(errorString);
                     error.setErrors(errorHashMap);
                 }
             } else {
-                //TODO ERROR HANDLE
                 error = new Error();
                 error.setErrorMessage(errorString);
                 error.setErrors(errorHashMap);
             }
         } catch (Exception e) {
-            //TODO ERROR HANDLE
             throwException("find", CSAppConstants.ErrorMessage_JsonNotProper, null);
             error = new Error();
             error.setErrorMessage(errorString);
@@ -1713,7 +1707,6 @@ public class Query implements INotifyClass {
             }
 
         } catch (Exception e) {
-            //TODO ERROR HANDLER
             throwException("find", CSAppConstants.ErrorMessage_QueryFilterException, e);
         }
     }
@@ -1722,95 +1715,64 @@ public class Query implements INotifyClass {
         try {
 
             String URL = "/" + contentTypeInstance.stackInstance.VERSION + "/content_types/" + formName + "/entries";
-
             queryResultCallback = callback;
             singleQueryResultCallback = callBack;
-
             setQueryJson(callback);
-
-            //TODO Delta is not yet added
             ArrayMap<String, Object> headers = getHeader(localHeader);
 
             if (headers.size() < 1) {
-                //TODO HANDLE HEADER NOT PRESENT ERROR
                 throwException("find", CSAppConstants.ErrorMessage_CalledDefaultMethod, null);
-
             } else {
-
                 if (headers.containsKey("environment")) {
                     urlQueries.put("environment", headers.get("environment"));
                 }
-
                 mainJSON.put("query", urlQueries);
                 mainJSON.put("_method", CSAppConstants.RequestMethod.GET.toString());
-
                 String mainStringForMD5 = URL + mainJSON.toString() + headers.toString();
                 String md5Value = new CSAppUtils().getMD5FromString(mainStringForMD5.trim());
-
                 File cacheFile = new File(CSAppConstants.cacheFolderName + File.separator + md5Value);
-
                 CachePolicy cachePolicy = CachePolicy.NETWORK_ONLY;//contentTypeInstance.stackInstance.globalCachePolicyForCall;
-
-
                 if (cachePolicyForCall != null) {
                     cachePolicy = cachePolicyForCall;
                 }
-
                 switch (cachePolicy) {
                     case IGNORE_CACHE:
-
                         fetchFromNetwork(URL, headers, mainJSON, null, callback, callBack);
                         break;
-
                     case CACHE_ONLY:
-
                         fetchFromCache(cacheFile, callback, callBack);
                         break;
-
                     case NETWORK_ONLY:
-
                         fetchFromNetwork(URL, headers, mainJSON, cacheFile.getPath(), callback, callBack);
                         break;
-
                     case CACHE_ELSE_NETWORK:
-
                         if (cacheFile.exists()) {
                             boolean needToSendCall = false;
-
                             if (maxCachetimeForCall > 0) {
                                 needToSendCall = new CSAppUtils().getResponseTimeFromCacheFile(cacheFile, (int) maxCachetimeForCall);
                             } else {
                                 needToSendCall = new CSAppUtils().getResponseTimeFromCacheFile(cacheFile, (int) defaultCacheTimeInterval);
                             }
-
                             if (needToSendCall) {
                                 fetchFromNetwork(URL, headers, mainJSON, cacheFile.getPath(), callback, callBack);
-
                             } else {
                                 setCacheModel(cacheFile, callback, callBack);
                             }
-
                         } else {
                             fetchFromNetwork(URL, headers, mainJSON, cacheFile.getPath(), callback, callBack);
                         }
-
                         break;
-
                     case NETWORK_ELSE_CACHE:
-
                         if (CSAppConstants.isNetworkAvailable) {
                             fetchFromNetwork(URL, headers, mainJSON, cacheFile.getPath(), callback, callBack);
                         } else {
                             fetchFromCache(cacheFile, callback, callBack);
                         }
                         break;
-
                     case CACHE_THEN_NETWORK:
-
                         if (cacheFile.exists()) {
                             setCacheModel(cacheFile, callback, callBack);
                         }
-
                         // from network
                         fetchFromNetwork(URL, headers, mainJSON, cacheFile.getPath(), callback, callBack);
                         break;
@@ -1822,7 +1784,6 @@ public class Query implements INotifyClass {
 
 
         } catch (Exception e) {
-            //TODO HANDLE EXCEPTION
             throwException("find", CSAppConstants.ErrorMessage_QueryFilterException, e);
         }
     }

@@ -230,9 +230,9 @@ public final class OkHeaders {
         String scheme = value.substring(tokenStart, pos).trim();
         pos = HeaderParser.skipWhitespace(value, pos);
 
-        // TODO: This currently only handles schemes with a 'realm' parameter;
-        //       It needs to be fixed to handle any scheme and any parameters
-        //       http://code.google.com/p/android/issues/detail?id=11140
+        // This currently only handles schemes with a 'realm' parameter;
+        // It needs to be fixed to handle any scheme and any parameters
+        // http://code.google.com/p/android/issues/detail?id=11140
 
         if (!value.regionMatches(true, pos, "realm=\"", 0, "realm=\"".length())) {
           break; // Unexpected challenge parameter; give up!

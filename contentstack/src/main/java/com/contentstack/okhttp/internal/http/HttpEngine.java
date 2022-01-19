@@ -330,8 +330,6 @@ public final class HttpEngine {
     return userRequest;
   }
 
-  /** Returns the engine's response. */
-  // TODO: the returned body will always be null.
   public Response getResponse() {
     if (userResponse == null) throw new IllegalStateException();
     return userResponse;
@@ -461,7 +459,7 @@ public final class HttpEngine {
 
     // If this engine never achieved a response body, its connection cannot be reused.
     if (responseBody == null) {
-      if (connection != null) closeQuietly(connection.getSocket()); // TODO: does this break SPDY?
+      if (connection != null) closeQuietly(connection.getSocket());
       connection = null;
       return null;
     }

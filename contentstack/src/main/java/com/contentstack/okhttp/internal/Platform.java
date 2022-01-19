@@ -93,7 +93,6 @@ public class Platform {
    */
   public void configureTls(SSLSocket socket, String uriHost, String tlsVersion) {
     // We don't call setEnabledProtocols("TLSv1") on the assumption that that's
-    // the default. TODO: confirm this and support more TLS versions.
     if (tlsVersion.equals("SSLv3")) {
       socket.setEnabledProtocols(new String[] {"SSLv3"});
     }

@@ -432,7 +432,6 @@ final class HpackDraft08 {
     /** This does not use "never indexed" semantics for sensitive headers. */
     // https://tools.ietf.org/html/draft-ietf-httpbis-header-compression-08#section-4.3.3
     void writeHeaders(List<Header> headerBlock) throws IOException {
-      // TODO: implement index tracking
       for (int i = 0, size = headerBlock.size(); i < size; i++) {
         ByteString name = headerBlock.get(i).name.toAsciiLowercase();
         Integer staticIndex = NAME_TO_FIRST_INDEX.get(name);

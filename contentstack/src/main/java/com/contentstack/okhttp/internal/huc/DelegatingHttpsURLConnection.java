@@ -297,7 +297,7 @@ abstract class DelegatingHttpsURLConnection extends HttpsURLConnection {
 	}
 
 	public long getHeaderFieldLong(String field, long defaultValue) {
-		// TODO Auto-generated method stub
+		// Auto-generated method stub
 		return delegate.getHeaderFieldDate(field, defaultValue);
 	}
 }

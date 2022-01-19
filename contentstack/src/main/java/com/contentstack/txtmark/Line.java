@@ -99,7 +99,6 @@ class Line
      *
      * @return <code>false</code> if end of line is reached
      */
-    // TODO use Util#skipSpaces
     public boolean skipSpaces()
     {
         while (this.pos < this.value.length() && this.value.charAt(this.pos) == ' ')
@@ -117,7 +116,6 @@ class Line
      * @return The read String or <code>null</code> if no 'end' char was
      *         reached.
      */
-    // TODO use Util#readUntil
     public String readUntil(final char... end)
     {
         final StringBuilder sb = new StringBuilder();
@@ -432,7 +430,6 @@ class Line
      *
      * @return The ID or <code>null</code> if no valid ID exists.
      */
-    // FIXME ... hack
     public String stripID()
     {
         if (this.isEmpty || this.value.charAt(this.value.length() - this.trailing - 1) != '}')
