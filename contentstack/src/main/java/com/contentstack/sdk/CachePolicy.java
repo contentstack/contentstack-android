@@ -1,10 +1,5 @@
 package com.contentstack.sdk;
 
-/**
- * cache policy for {@link Query}.
- *
- * @author contentstack.com, Inc
- */
 public enum CachePolicy {
 
     /**

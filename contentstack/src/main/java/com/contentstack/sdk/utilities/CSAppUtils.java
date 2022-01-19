@@ -171,13 +171,10 @@ public class CSAppUtils {
 
         for (String formatString : knownPatterns) {
             try {
-
                 return parseDate(date, formatString, timeZone);
-
             } catch (ParseException e) {
             }
         }
-
         return null;
     }
 
