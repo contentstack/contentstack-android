@@ -13,6 +13,7 @@
 # Generated files
 bin/
 gen/
+.talismanrc/
 
 # Gradle files
 .gradle/
