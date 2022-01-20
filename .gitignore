@@ -14,9 +14,11 @@
 bin/
 gen/
 .talismanrc/
+.vscode/
+.idea/
+.gradle/
 
 # Gradle files
-.gradle/
 build/
 /*/build/
 
