@@ -16,6 +16,7 @@ gen/
 .talismanrc/
 .dccache/
 .vscode/
+docs/
 .idea/
 .gradle/
 
