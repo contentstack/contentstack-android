@@ -202,9 +202,11 @@ public class Contentstack {
      */
 
     private static void clearCache(Context context) {
-
         Intent alarmIntent = new Intent("StartContentStackClearingCache");
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        alarmIntent.setPackage(context.getPackageName());
+        int flag = PendingIntent.FLAG_UPDATE_CURRENT;
+        if (android.os.Build.VERSION.SDK_INT >= 23) flag = PendingIntent.FLAG_IMMUTABLE | flag;
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, alarmIntent, flag);
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(), AlarmManager.INTERVAL_DAY, pendingIntent);
     }

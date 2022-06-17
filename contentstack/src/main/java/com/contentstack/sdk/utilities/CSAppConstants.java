@@ -19,7 +19,7 @@ public class CSAppConstants {
     public final static int BackOFMultiplier = 0;
 
     //Implemented for single network call cancellation. for class-level network call cancellation.
-    public static ArrayList<String> cancelledCallController = new ArrayList<String>();
+    public static ArrayList<String> cancelledCallController = new ArrayList<>();
 
     /**
      * Directory path to store offline data.
@@ -32,7 +32,7 @@ public class CSAppConstants {
         GET, POST, PUT, DELETE
     }
 
-    public static enum callController {
+    public enum callController {
 
         QUERY,
         ENTRY,

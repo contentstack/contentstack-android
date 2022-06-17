@@ -90,10 +90,10 @@ configurations { archives }
 dependencies {
     configurations.all { resolutionStrategy.force 'com.android.support:support-annotations:23.1.0' }
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'com.contentstack.sdk:utils:1.1.0'
+    implementation 'com.contentstack.sdk:utils:1.1.2'
     implementation 'com.android.support:appcompat-v7:26.1.0'
     implementation 'com.android.support:support-v4:26.1.0'
-    implementation 'com.android.volley:volley:1.2.0'
+    implementation 'com.android.volley:volley:1.2.1'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation('com.android.support.test.espresso:espresso-core:3.0.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
@@ -126,7 +126,7 @@ def localProperties = new Properties()
 localProperties.load(new FileInputStream(rootProject.file("local.properties")))
 group = "com.contentstack.sdk"
 archivesBaseName = "android"
-version = "3.10.0-SNAPSHOT"
+version = "3.10.2-SNAPSHOT"
 task sourceJar(type: Jar) {
     from android.sourceSets.main.java.srcDirs
     classifier "source"
@@ -150,15 +150,15 @@ artifacts {
     archives androidSourcesJar
 }
 signing { sign configurations.archives }
- uploadArchives {
+uploadArchives {
     repositories {
         mavenDeployer {
             beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
             repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
-                authentication(userName: ossrhUsername, password: ossrhPassword)
+                authentication(userName: localProperties['ossrhUsername'], password: localProperties['ossrhPassword'])
             }
             snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
-                authentication(userName: ossrhUsername, password: ossrhPassword)
+                authentication(userName: localProperties['ossrhUsername'], password: localProperties['ossrhPassword'])
             }
             pom.project {
                 name 'contentstack-android-sdk'
@@ -180,10 +180,9 @@ signing { sign configurations.archives }
                         distribution 'repo'
                     }
                 }
-
                 developers {
                     developer {
-                        id 'mshaileshr@gmail.com'
+                        id 'ishaileshmishra'
                         name 'Shailesh Mishra'
                         email 'mobile@contentstack.com'
                     }
