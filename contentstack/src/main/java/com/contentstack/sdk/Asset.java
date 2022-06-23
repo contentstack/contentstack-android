@@ -39,7 +39,7 @@ public class Asset {
     protected Stack stackInstance;
     private CachePolicy cachePolicyForCall = CachePolicy.IGNORE_CACHE;
 
-    private final long maxCacheTimeForCall = 0; 
+    private final long maxCacheTimeForCall = 0;
     private final long defaultCacheTimeInterval = 0;
 
     protected Asset() {
@@ -68,28 +68,26 @@ public class Asset {
      *
      *                   <br><br><b>Example :</b><br>
      *                   <br>1. Single Attachment :-<br>
-     *                   <pre class="prettyprint linenums:1">
-     *            Stack stack = Contentstack.stack(context, "apiKey", "deliveryToken",  config);
-     *            Asset assetObject = stack.asset("assetUid");<br>
-     *            assetObject.configure(entryObject.getJSONObject(attached_image_field_uid));</pre>
+     *                   <pre
+     *                   Stack stack = Contentstack.stack(context, "apiKey", "deliveryToken",  config);
+     *                   Asset assetObject = stack.asset("assetUid");<br>
+     *                   assetObject.configure(entryObject.getJSONObject(attached_image_field_uid));</pre>
      *
-     *            <br>2. Multiple Attachment :-<br>
-     *
-     *            <pre class="prettyprint linenums:1">
-     *            JSONArray array = entryObject.getJSONArray(Attach_Image_Field_Uid);<br>
-     *            for (int i = 0; i < array.length(); i++) {<br>
-     *              Asset assetObject = stack.asset("assetUid");<br>
-     *            assetObject.configure(entryObject.getJSONObject(attached_image_field_uid));<br>
-     *            }<br>
-     *            </pre>
+     *                   <br>2. Multiple Attachment :-<br>
+     *                   <p>
+     *                   <pre
+     *                   JSONArray array = entryObject.getJSONArray(Attach_Image_Field_Uid);<br>
+     *                   for (int i = 0; i < array.length(); i++) {<br>
+     *                   Asset assetObject = stack.asset("assetUid");<br>
+     *                   assetObject.configure(entryObject.getJSONObject(attached_image_field_uid));<br>
+     *                   }<br>
+     *                   </pre>
      * @return {@link Asset} instance.
      */
     public Asset configure(JSONObject jsonObject) {
 
         AssetModel model = null;
-
         model = new AssetModel(jsonObject, true, false);
-
         this.contentType = model.contentType;
         this.fileSize = model.fileSize;
         this.uploadUrl = model.uploadUrl;
@@ -97,9 +95,7 @@ public class Asset {
         this.json = model.json;
         this.assetUid = model.uploadedUid;
         this.setTags(model.tags);
-
         model = null;
-
         return this;
     }
 
@@ -113,10 +109,10 @@ public class Asset {
      * @param value header value against given header name.
      *
      *              <br><br><b>Example :</b><br>
-     *              <pre class="prettyprint">
-     *                                        Asset assetObject = Contentstack.stack(context, "apiKey", "deliveryToken",  config).asset("assetUid");
-     *                                        assetObject.setHeader("custom_header_key", "custom_header_value");
-     *                                        </pre>
+     *              <pre
+     *              Asset assetObject = Contentstack.stack(context, "apiKey", "deliveryToken",  config).asset("assetUid");
+     *              assetObject.setHeader("custom_header_key", "custom_header_value");
+     *              </pre>
      */
     public void setHeader(String key, String value) {
 
@@ -134,10 +130,10 @@ public class Asset {
      * @param key header key.
      *
      *            <br><br><b>Example :</b><br>
-     *            <pre class="prettyprint">
-     *                                  Asset assetObject = Contentstack.stack(context, "apiKey", "deliveryToken",  config).asset("assetUid");
-     *                                  assetObject.removeHeader("custom_header_key");
-     *                                  </pre>
+     *            <pre
+     *            Asset assetObject = Contentstack.stack(context, "apiKey", "deliveryToken",  config).asset("assetUid");
+     *            assetObject.removeHeader("custom_header_key");
+     *            </pre>
      */
     public void removeHeader(String key) {
         if (headerGroup_local != null) {
@@ -156,10 +152,10 @@ public class Asset {
      * @param assetUid upload uid.
      *
      *                 <br><br><b>Example :</b><br>
-     *                 <pre class="prettyprint">
-     *                                                 Asset assetObject = Contentstack.stack(context, "apiKey", "deliveryToken",   config).asset("assetUid");*
-     *                                                 assetObject.setUid("upload_uid");
-     *                                                 </pre>
+     *                 <pre
+     *                 Asset assetObject = Contentstack.stack(context, "apiKey", "deliveryToken",   config).asset("assetUid");*
+     *                 assetObject.setUid("upload_uid");
+     *                 </pre>
      */
     protected void setUid(String assetUid) {
         if (!TextUtils.isEmpty(assetUid)) {
@@ -259,7 +255,7 @@ public class Asset {
             String value = json.optString("created_at");
             return ContentstackUtil.parseDate(value, null);
         } catch (Exception e) {
-            CSAppUtils.showLog(TAG, "-----------------getCreateAtDate|" + e);
+            CSAppUtils.showLog(TAG, e.getLocalizedMessage());
         }
         return null;
     }
@@ -363,11 +359,11 @@ public class Asset {
      *                    {@link Query} object, so you can chain this call.
      *
      *                    <br><br><b>Example :</b><br>
-     *                    <pre class="prettyprint">
-     *                                                               Stack stack = Contentstack.stack(context, "apiKey", "deliveryToken",  "stag", false);
-     *                                                               Asset assetObject = stack.asset("assetUid");<br>
-     *                                                               assetObject.setCachePolicy(NETWORK_ELSE_CACHE);
-     *                                                          </pre>
+     *                    <pre
+     *                    Stack stack = Contentstack.stack(context, "apiKey", "deliveryToken",  "stag", false);
+     *                    Asset assetObject = stack.asset("assetUid");<br>
+     *                    assetObject.setCachePolicy(NETWORK_ELSE_CACHE);
+     *                    </pre>
      */
     public void setCachePolicy(CachePolicy cachePolicy) {
         this.cachePolicyForCall = cachePolicy;
@@ -379,19 +375,19 @@ public class Asset {
      * @param callback {@link FetchResultCallback} instance for success and failure result.
      *
      *                 <br><br><b>Example :</b><br>
-     *                 <pre class="prettyprint">
-     *                                                  Asset asset = stack.asset("assetUid");
-     *                                                  asset.fetch(new FetchResultCallback() {
-     *                                                    &#64;Override
-     *                                                    public void onCompletion(ResponseType responseType, Error error) {
-     *                                                          if(error == null){
-     *                                                            //Success Block.
-     *                                                          }else {
-     *                                                            //Fail Block.
-     *                                                          }
-     *                                                    }
-     *                                                  });
-     *                                                 </pre>
+     *                 <pre
+     *                 Asset asset = stack.asset("assetUid");
+     *                 asset.fetch(new FetchResultCallback() {
+     *                 &#64;Override
+     *                 public void onCompletion(ResponseType responseType, Error error) {
+     *                 if(error == null){
+     *                 //Success Block.
+     *                 }else {
+     *                 //Fail Block.
+     *                 }
+     *                 }
+     *                 });
+     *                 </pre>
      */
     public void fetch(FetchResultCallback callback) {
 
@@ -420,34 +416,23 @@ public class Asset {
                     break;
 
                 case CACHE_ELSE_NETWORK:
-                
+
                     if (cacheFile.exists()) {
                         boolean needToSendCall = false;
-                        // if (maxCacheTimeForCall > 0) {
-                        //     needToSendCall = new CSAppUtils().getResponseTimeFromCacheFile(cacheFile, (int) maxCacheTimeForCall);
-                        // } else {
-                        //     needToSendCall = new CSAppUtils().getResponseTimeFromCacheFile(cacheFile, (int) defaultCacheTimeInterval);
-                        // }
                         needToSendCall = new CSAppUtils().getResponseTimeFromCacheFile(cacheFile, (int) maxCacheTimeForCall);
-
                         if (needToSendCall) {
                             fetchFromNetwork(URL, urlQueries, headers, cacheFile.getPath(), callback);
-
                         } else {
                             setCacheModel(cacheFile, callback);
                         }
-
                     } else {
                         fetchFromNetwork(URL, urlQueries, headers, cacheFile.getPath(), callback);
                     }
-
                     break;
-
                 case CACHE_THEN_NETWORK:
                     if (cacheFile.exists()) {
                         setCacheModel(cacheFile, callback);
                     }
-
                     // from network
                     fetchFromNetwork(URL, urlQueries, headers, cacheFile.getPath(), callback);
                     break;
