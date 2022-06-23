@@ -67,11 +67,11 @@ public class AssetLibrary implements INotifyClass {
      * @param key   header name.
      * @param value header value against given header name.
      *
-     * <br><br><b>Example :</b><br>
-     * <pre class="prettyprint">
-     *  AssetLibrary assetLibObject = Contentstack.stack(context, "apiKey", "deliveryToken",  config).assetLibrary();
-     *  assetLibObject.setHeader("custom_header_key", "custom_header_value");
-     *  </pre>
+     *              <br><br><b>Example :</b><br>
+     *              <pre class="prettyprint">
+     *                                                                                                                                                                           AssetLibrary assetLibObject = Contentstack.stack(context, "apiKey", "deliveryToken",  config).assetLibrary();
+     *                                                                                                                                                                           assetLibObject.setHeader("custom_header_key", "custom_header_value");
+     *                                                                                                                                                                           </pre>
      */
     public void setHeader(String key, String value) {
         if (!TextUtils.isEmpty(key) && !TextUtils.isEmpty(value)) {
@@ -87,10 +87,10 @@ public class AssetLibrary implements INotifyClass {
      * @param key header key.
      *
      *            <br><br><b>Example :</b><br>
-     *            <pre class="prettyprint">
-     *                                                                              AssetLibrary assetLibObject = Contentstack.stack(context, "apiKey", "deliveryToken",  config).assetLibrary();
-     *                                                                              assetLibObject.removeHeader("custom_header_key");
-     *                                                                              </pre>
+     *            <pre
+     *            AssetLibrary assetLibObject = Contentstack.stack(context, "apiKey", "deliveryToken",  config).assetLibrary();
+     *            assetLibObject.removeHeader("custom_header_key");
+     *            </pre>
      */
     public void removeHeader(String key) {
         if (!TextUtils.isEmpty(key)) {
@@ -108,7 +108,6 @@ public class AssetLibrary implements INotifyClass {
      * <br><br><b>Example :</b><br>
      * <pre class="prettyprint">
      * AssetLibrary assetLibObject = Contentstack.stack(context, "apiKey", "deliveryToken",  config).assetLibrary();
-     *
      * assetLibObject.sort("fieldUid", AssetLibrary.ORDERBY.ASCENDING);
      * </pre>
      */
@@ -182,14 +181,14 @@ public class AssetLibrary implements INotifyClass {
      * To set cache policy using {@link Query} instance.
      *
      * @param cachePolicy {@link CachePolicy} instance.
-     * @return {@link Query} object, so you can chain this call.
      *
-     * <br><br><b>Example :</b><br>
-     * <pre class="prettyprint">
-     *      Stack stack = Contentstack.stack(context, "apiKey", "deliveryToken", "stag", false);
-     *      {@link AssetLibrary} assetLibObject = stack.assetLibrary();<br>
-     *      assetLibObject.setCachePolicy(NETWORK_ELSE_CACHE);
-     * </pre>
+     *                    <br><br><b>Example :</b><br>
+     *                    <pre
+     *                    Stack stack = Contentstack.stack(context, "apiKey", "deliveryToken", "stag", false);
+     *                    {@link AssetLibrary} assetLibObject = stack.assetLibrary();<br>
+     *                    assetLibObject.setCachePolicy(NETWORK_ELSE_CACHE);
+     *                    </pre>
+     * @return {@link Query} object, so you can chain this call.
      */
     public void setCachePolicy(CachePolicy cachePolicy) {
         this.cachePolicyForCall = cachePolicy;
@@ -201,18 +200,18 @@ public class AssetLibrary implements INotifyClass {
      * @param assetsCallback {@link FetchAssetsCallback} instance for success and failure result.
      *
      *                       <br><br><b>Example :</b><br>
-     *                       <pre class="prettyprint">
-     *                         AssetLibrary assetLibObject = Contentstack.stack(context, "apiKey", "deliveryToken",  config).assetLibrary();
-     *                         assetLibObject.fetchAll(new FetchAssetsCallback() {
-     *                         public void onCompletion(ResponseType responseType, List<Asset> assets, Error error) {
-     *                            if (error == null) {
-     *                                 //Success Block.
-     *                           } else {
-     *                                //Error Block.
-     *                           }
-     *                         }
-     *                          });
-     *                          </pre>
+     *                       <pre
+     *                       AssetLibrary assetLibObject = Contentstack.stack(context, "apiKey", "deliveryToken",  config).assetLibrary();
+     *                       assetLibObject.fetchAll(new FetchAssetsCallback() {
+     *                       public void onCompletion(ResponseType responseType, List<Asset> assets, Error error) {
+     *                       if (error == null) {
+     *                       //Success Block.
+     *                       } else {
+     *                       //Error Block.
+     *                       }
+     *                       }
+     *                       });
+     *                       </pre>
      */
     public void fetchAll(FetchAssetsCallback assetsCallback) {
         try {
@@ -238,11 +237,6 @@ public class AssetLibrary implements INotifyClass {
                 case CACHE_ELSE_NETWORK:
                     if (cacheFile.exists()) {
                         boolean needToSendCall = false;
-                        // if (maxCacheTimeForCall > 0) {
-                        //     needToSendCall = new CSAppUtils().getResponseTimeFromCacheFile(cacheFile, (int) maxCacheTimeForCall);
-                        // } else {
-                        //     needToSendCall = new CSAppUtils().getResponseTimeFromCacheFile(cacheFile, (int) defaultCacheTimeInterval);
-                        // }
                         needToSendCall = new CSAppUtils().getResponseTimeFromCacheFile(cacheFile, (int) maxCacheTimeForCall);
                         if (needToSendCall) {
                             fetchFromNetwork(URL, urlQueries, headers, cacheFile.getPath(), assetsCallback);
@@ -284,11 +278,6 @@ public class AssetLibrary implements INotifyClass {
         Error error = null;
         if (cacheFile.exists()) {
             boolean needToSendCall = false;
-            // if (maxCacheTimeForCall > 0) {
-            //     needToSendCall = new CSAppUtils().getResponseTimeFromCacheFile(cacheFile, (int) maxCacheTimeForCall);
-            // } else {
-            //     needToSendCall = new CSAppUtils().getResponseTimeFromCacheFile(cacheFile, (int) defaultCacheTimeInterval);
-            // }
             needToSendCall = new CSAppUtils().getResponseTimeFromCacheFile(cacheFile, (int) maxCacheTimeForCall);
             if (needToSendCall) {
                 error = new Error();
@@ -411,9 +400,7 @@ public class AssetLibrary implements INotifyClass {
         if (jsonObject != null && jsonObject.has("count")) {
             count = jsonObject.optInt("count");
         }
-
         List<Asset> assets = new ArrayList<Asset>();
-
         if (objects != null && objects.size() > 0) {
             for (Object object : objects) {
                 AssetModel model = (AssetModel) object;
@@ -427,7 +414,6 @@ public class AssetLibrary implements INotifyClass {
                 asset.assetUid = model.uploadedUid;
                 asset.setTags(model.tags);
                 model = null;
-
                 assets.add(asset);
             }
         }

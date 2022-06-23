@@ -8,9 +8,6 @@ def localProperties = new Properties()
 localProperties.load(new FileInputStream(rootProject.file("local.properties")))
 
 
-tasks.withType(Test) {
-    jacoco.includeNoLocationClasses = true
-}
 //https://medium.com/@rafael_toledo/setting-up-an-unified-coverage-report-in-android-with-jacoco-robolectric-and-espresso-ffe239aaf3fa
 // gradle clean jacocoTestReport
 task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest', 'createDebugCoverageReport']) {
@@ -125,8 +122,8 @@ task unzip(type: Copy) {
     into outputDir
 }
 task createJar(type: Jar) {
-    archiveName = 'Contentstack.jar'
-    from('build/Contentstack-jar/')
+    archivesBaseName="contentstack.jar"
+    from('build/contentstack-jar/')
     include 'com/contentstack/'
     include 'META-INF/'
 }
@@ -143,7 +140,7 @@ createJar.dependsOn(clearJar, unzip, build)
 
 group = "com.contentstack.sdk"
 archivesBaseName = "android"
-version = "3.10.2-SNAPSHOT"
+version = "3.10.2-beta-SNAPSHOT"
 
 task sourceJar(type: Jar) {
     from android.sourceSets.main.java.srcDirs
@@ -183,7 +180,7 @@ uploadArchives {
                 authentication(userName: localProperties['ossrhUsername'], password: localProperties['ossrhPassword'])
             }
             pom.project {
-                name 'contentstack-android-sdk'
+                name 'contentstack-android'
                 packaging 'aar'
                 description 'Android SDK for Contentstack Content Delivery API, Contentstack is a headless CMS with an API-first approach'
                 artifactId "android"
