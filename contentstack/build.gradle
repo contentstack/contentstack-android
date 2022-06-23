@@ -1,7 +1,12 @@
+apply plugin: 'maven-publish'
 apply plugin: 'com.android.library'
 apply plugin: 'maven'
 apply plugin: 'signing'
 apply plugin: 'jacoco'
+
+def localProperties = new Properties()
+localProperties.load(new FileInputStream(rootProject.file("local.properties")))
+
 
 tasks.withType(Test) {
     jacoco.includeNoLocationClasses = true
@@ -22,6 +27,18 @@ task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest', 'crea
     }
 }
 android {
+
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/LICENSE.md'
+        exclude 'META-INF/LICENSE-notice.md'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/ASL2.0'
+        exclude("META-INF/*.kotlin_module")
+    }
 
     testOptions {
         unitTests.all {
@@ -57,8 +74,7 @@ android {
     }
 
     buildTypes {
-        def localProperties = new Properties()
-        localProperties.load(new FileInputStream(rootProject.file("local.properties")))
+
         debug {
             debuggable true
             testCoverageEnabled true
@@ -90,11 +106,13 @@ configurations { archives }
 dependencies {
     configurations.all { resolutionStrategy.force 'com.android.support:support-annotations:23.1.0' }
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'com.contentstack.sdk:utils:1.1.0'
+    implementation 'com.contentstack.sdk:utils:1.1.2'
     implementation 'com.android.support:appcompat-v7:26.1.0'
     implementation 'com.android.support:support-v4:26.1.0'
-    implementation 'com.android.volley:volley:1.2.0'
+    implementation 'com.android.volley:volley:1.2.1'
+    implementation 'junit:junit:4.13.2'
     testImplementation 'junit:junit:4.13.2'
+
     androidTestImplementation('com.android.support.test.espresso:espresso-core:3.0.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
@@ -113,7 +131,7 @@ task createJar(type: Jar) {
     include 'META-INF/'
 }
 createJar.dependsOn(clearJar, unzip, build)
-/*============================================*/
+
 /*=========== [ MAVEN-PUSH-UPLOAD ] ==========*/
 // to upload library to the maven repo run comman -> ./gradlew clean deploy uploadArchive
 // on successful upload completion
@@ -122,11 +140,11 @@ createJar.dependsOn(clearJar, unzip, build)
 // after successful closing publish the artifact to go live
 // it will drop the coordinates after successful deployment
 /*=============================================*/
-def localProperties = new Properties()
-localProperties.load(new FileInputStream(rootProject.file("local.properties")))
+
 group = "com.contentstack.sdk"
 archivesBaseName = "android"
-version = "3.10.0-SNAPSHOT"
+version = "3.10.2-SNAPSHOT"
+
 task sourceJar(type: Jar) {
     from android.sourceSets.main.java.srcDirs
     classifier "source"
@@ -138,27 +156,31 @@ task javadoc(type: Javadoc) {
     failOnError false
 }
 task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier = 'javadoc'
+    archiveClassifier.set("javadoc")
     from tasks.javadoc.destinationDir
 }
 task androidSourcesJar(type: Jar) {
-    classifier = 'sources'
+    archiveClassifier.set("sources")
     from android.sourceSets.main.java.srcDirs
 }
 artifacts {
     archives javadocJar
     archives androidSourcesJar
 }
+
+// In a case you lost the GPG key and password follow the link
+// https://github.com/kit-data-manager/nexus-publish-example
 signing { sign configurations.archives }
- uploadArchives {
+
+uploadArchives {
     repositories {
         mavenDeployer {
             beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
             repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
-                authentication(userName: ossrhUsername, password: ossrhPassword)
+                authentication(userName: localProperties['ossrhUsername'], password: localProperties['ossrhPassword'])
             }
             snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
-                authentication(userName: ossrhUsername, password: ossrhPassword)
+                authentication(userName: localProperties['ossrhUsername'], password: localProperties['ossrhPassword'])
             }
             pom.project {
                 name 'contentstack-android-sdk'
@@ -180,10 +202,9 @@ signing { sign configurations.archives }
                         distribution 'repo'
                     }
                 }
-
                 developers {
                     developer {
-                        id 'mshaileshr@gmail.com'
+                        id 'ishaileshmishra'
                         name 'Shailesh Mishra'
                         email 'mobile@contentstack.com'
                     }
@@ -192,6 +213,7 @@ signing { sign configurations.archives }
         }
     }
 }
+
 task uploadSnapshotArchives(dependsOn: uploadArchives) {
     if (!version.endsWith("-SNAPSHOT")) {
         enabled = false;
