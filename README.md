@@ -82,7 +82,7 @@ android:enabled="true">
 To initialize the SDK, specify application context, the API key, access token, and environment name of the stack as shown in the snippet given below:
 
 ```java
-Stack stack = Contentstack.stack(context, "api_key", "access_token", "enviroment_name");
+Stack stack = Contentstack.stack(context, "api_key", "delivery_token", "environment");
 ```
 
 Once you have initialized the SDK, you can query entries to fetch the required content.
@@ -259,7 +259,7 @@ You can use advanced sync queries to fetch custom results while performing initi
 
 ### The MIT License (MIT)
 
-Copyright © 2012-2020 [Contentstack](https://www.contentstack.com/). All Rights Reserved
+Copyright © 2012-2022 [Contentstack](https://www.contentstack.com/). All Rights Reserved
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software
 and associated documentation files (the "Software"), to deal in the Software without restriction,
