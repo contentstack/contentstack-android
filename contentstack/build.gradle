@@ -140,7 +140,7 @@ createJar.dependsOn(clearJar, unzip, build)
 
 group = "com.contentstack.sdk"
 archivesBaseName = "android"
-version = "3.10.2-beta-SNAPSHOT"
+version = "3.10.2-SNAPSHOT"
 
 task sourceJar(type: Jar) {
     from android.sourceSets.main.java.srcDirs
