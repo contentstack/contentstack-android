@@ -116,7 +116,7 @@ A publishing environment corresponds to one or more deployment servers or a cont
 To initialize the SDK, specify application context, the API key, access token, and environment name of the stack as shown in the snippet given below:
 
 ```java
-Stack stack = Contentstack.stack(context, "api_key", "access_token", "enviroment_name");
+Stack stack = Contentstack.stack(context, "api_key", "delivery_token", "environment");
 ```
 
 Once you have initialized the SDK, you can query entries to fetch the required content.
@@ -125,7 +125,9 @@ Once you have initialized the SDK, you can query entries to fetch the required c
 
 To retrieve a single entry from a content type use the code snippet given below:
 
+```java
 ContentType contentType = stack.contentType("content_type_uid");
+```
 
 ```java
 Entry blogEntry = contentType.entry("entry_uid");
