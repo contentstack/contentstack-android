@@ -30,6 +30,7 @@ public class Contentstack {
     protected static Context context = null;
 
     private Contentstack() {
+        throw new IllegalStateException("Private constructor not allowed");
     }
 
     public Contentstack(Context applicationContext) {
@@ -135,14 +136,11 @@ public class Contentstack {
 
         if (context != null) {
             try {
-
-                //cache folder
                 File queryCacheFile = context.getDir("ContentstackCache", 0);
                 CSAppConstants.cacheFolderName = queryCacheFile.getPath();
-
                 clearCache(context);
             } catch (Exception e) {
-                CSAppUtils.showLog(TAG, "-------------------stack-Contentstack-" + e.toString());
+                CSAppUtils.showLog(TAG, "Contentstack-" + e.getLocalizedMessage());
             }
         }
         return stack;
@@ -176,17 +174,11 @@ public class Contentstack {
         getRequestQueue().add(req);
     }
 
-    //////////////////////////////////////////
-
-
     protected static RequestQueue getRequestQueue(String protocol) {
-
         if (requestQueue == null) {
             requestQueue = Volley.newRequestQueue(context);
         }
         return requestQueue;
-
-
     }
 
     protected static <T> void addToRequestQueue(String protocol, Request<T> req, String tag) {
@@ -202,30 +194,25 @@ public class Contentstack {
      */
 
     private static void clearCache(Context context) {
-
         Intent alarmIntent = new Intent("StartContentStackClearingCache");
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        alarmIntent.setPackage(context.getPackageName());
+        int flag = PendingIntent.FLAG_UPDATE_CURRENT;
+        if (android.os.Build.VERSION.SDK_INT >= 23) flag = PendingIntent.FLAG_IMMUTABLE | flag;
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, alarmIntent, flag);
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(), AlarmManager.INTERVAL_DAY, pendingIntent);
+        alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                SystemClock.elapsedRealtime(), AlarmManager.INTERVAL_DAY, pendingIntent);
     }
 
     /**
      * To check network availability.
      */
     protected static void isNetworkAvailable(Context context) {
-
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         if (connectivityManager.getNetworkInfo(0) != null || connectivityManager.getNetworkInfo(1).getState() != null) {
-            if (connectivityManager.getActiveNetworkInfo() == null) {
-                CSAppConstants.isNetworkAvailable = false;
-            } else {
-                CSAppConstants.isNetworkAvailable = true;
-            }
-        } else if (connectivityManager.getNetworkInfo(0).getState() == NetworkInfo.State.CONNECTED ||
-                connectivityManager.getNetworkInfo(1).getState() == NetworkInfo.State.CONNECTED) {
-            CSAppConstants.isNetworkAvailable = true;
-        } else {
-            CSAppConstants.isNetworkAvailable = false;
-        }
+            CSAppConstants.isNetworkAvailable = connectivityManager.getActiveNetworkInfo() != null;
+        } else
+            CSAppConstants.isNetworkAvailable = connectivityManager.getNetworkInfo(0).getState() == NetworkInfo.State.CONNECTED ||
+                    connectivityManager.getNetworkInfo(1).getState() == NetworkInfo.State.CONNECTED;
     }
 }
