@@ -212,10 +212,10 @@ public class Stack implements INotifyClass {
      * @param key custom_header_key
      *
      *            <br><br><b>Example :</b><br>
-     *            <pre class="prettyprint">
-     *                                              Stack stack = Contentstack.stack(context, "apiKey", "deliveryToken", "stag");<br>
-     *                                              stack.removeHeader("custom_header_key");
-     *                                             </pre>
+     *            <pre
+     *            Stack stack = Contentstack.stack(context, "apiKey", "deliveryToken", "stag");<br>
+     *            stack.removeHeader("custom_header_key");
+     *            </pre>
      */
     public void removeHeader(String key) {
         if (!TextUtils.isEmpty(key)) {
@@ -232,10 +232,10 @@ public class Stack implements INotifyClass {
      * @param value header value against given header name.
      *
      *              <br><br><b>Example :</b><br>
-     *              <pre class="prettyprint">
-     *                                                      Stack stack = Contentstack.stack(context, "apiKey", "deliveryToken", "stag");<br>
-     *                                                      stack.setHeader("custom_key", "custom_value");
-     *                                                      </pre>
+     *              <pre
+     *              Stack stack = Contentstack.stack(context, "apiKey", "deliveryToken", "stag");<br>
+     *              stack.setHeader("custom_key", "custom_value");
+     *              </pre>
      */
     public void setHeader(String key, String value) {
         if (!TextUtils.isEmpty(key) && !TextUtils.isEmpty(value)) {
@@ -308,20 +308,18 @@ public class Stack implements INotifyClass {
      *                 This call returns comprehensive information of all the content types available in a particular stack in your account.
      *
      *                 <br><br><b>Example :</b><br>
-     *                 <pre class="prettyprint">
-     *                                                                 JSONObject params = new JSONObject();
-     *                                                                 params.put("include_snippet_schema", true);
-     *                                                                 params.put("limit", 3);
-     *                                                                 stack.getContentTypes(params, new ContentTypesCallback() {
-     *                                                                 @Override
-     *                                                                 public void onCompletion(ContentTypesModel contentTypesModel, Error error) {
-     *                                                                 if (error == null){
-     *                                                                   // do your stuff.
-     *                                                                  }
-     *
-     *                                                                 }
-     *                                                                 });
-     *                                                                 </pre>
+     *                 <pre
+     *                 JSONObject params = new JSONObject();
+     *                 params.put("include_snippet_schema", true);
+     *                 params.put("limit", 3);
+     *                 stack.getContentTypes(params, new ContentTypesCallback() {
+     * @Override public void onCompletion(ContentTypesModel contentTypesModel, Error error) {
+     * if (error == null){
+     * // do your stuff.
+     * }
+     * }
+     * });
+     * </pre>
      */
     public void getContentTypes(JSONObject params, final ContentTypesCallback callback) {
 
@@ -379,9 +377,9 @@ public class Stack implements INotifyClass {
      *                     <br><br><b>Example :</b><br>
      *                     <pre class="prettyprint">
      *
-     *                                                                                 stack.sync(SyncResultCallBack syncCallBack){  }
+     *                                                                                                                                                                                                                                                                                         stack.sync(SyncResultCallBack syncCallBack){  }
      *
-     *                                                                                 </pre>
+     *                                                                                                                                                                                                                                                                                         </pre>
      */
 
     public void sync(SyncResultCallBack syncCallBack) {
@@ -414,8 +412,8 @@ public class Stack implements INotifyClass {
      *
      *                         <br><br><b>Example :</b><br>
      *                         <pre class="prettyprint">
-     *                                                                                                 stack.syncPaginationToken(pagination_token, new SyncResultCallBack()) {}
-     *                                                                                                 </pre>
+     *                                                                                                                                                                                                                                                                                                                                                 stack.syncPaginationToken(pagination_token, new SyncResultCallBack()) {}
+     *                                                                                                                                                                                                                                                                                                                                                 </pre>
      */
     public void syncPaginationToken(String pagination_token, SyncResultCallBack syncCallBack) {
         this.pagination_token = pagination_token;
@@ -443,9 +441,9 @@ public class Stack implements INotifyClass {
      *                     and the details of the content that was deleted or updated.
      *                     <br><br><b>Example :</b><br>
      *                     <pre class="prettyprint">
-     *                                                                                  stack.syncToken(sync_token, new SyncResultCallBack() ){ }
+     *                                                                                                                                                                                                                                                                                          stack.syncToken(sync_token, new SyncResultCallBack() ){ }
      *
-     *                                                                                 </pre>
+     *                                                                                                                                                                                                                                                                                         </pre>
      */
     public void syncToken(String sync_token, SyncResultCallBack syncCallBack) {
 
@@ -473,8 +471,8 @@ public class Stack implements INotifyClass {
      *
      *                     <br><br><b>Example :</b><br>
      *                     <pre class="prettyprint">
-     *                                                                                stack.syncFromDate(start_date, new SyncResultCallBack()) { }
-     *                                                                                  </pre>
+     *                                                                                                                                                                                                                                                                                        stack.syncFromDate(start_date, new SyncResultCallBack()) { }
+     *                                                                                                                                                                                                                                                                                          </pre>
      */
     public void syncFromDate(Date from_date, SyncResultCallBack syncCallBack) {
         start_from_date = convertUTCToISO(from_date);
@@ -512,10 +510,10 @@ public class Stack implements INotifyClass {
      *                     <br><br><b>Example :</b><br>
      *                     <pre class="prettyprint">
      *
-     *                                                                                 // dummy content_type like "session"
-     *                                                                                 stack.syncContentType(String content_type, new SyncResultCallBack()){  }
+     *                                                                                                                                                                                                                                                                                         // dummy content_type like "session"
+     *                                                                                                                                                                                                                                                                                         stack.syncContentType(String content_type, new SyncResultCallBack()){  }
      *
-     *                                                                                  </pre>
+     *                                                                                                                                                                                                                                                                                          </pre>
      */
     public void syncContentType(String content_type, SyncResultCallBack syncCallBack) {
 
@@ -545,10 +543,10 @@ public class Stack implements INotifyClass {
      *                     <br><br><b>Example :</b><br>
      *                     <pre class="prettyprint">
      *
-     *                                                                                 // dummy language- Language.ENGLISH_UNITED_STATES
-     *                                                                                 stackInstance.syncLocale(Language.ENGLISH_UNITED_STATES, new SyncResultCallBack() ) { }
+     *                                                                                                                                                                                                                                                                                         // dummy language- Language.ENGLISH_UNITED_STATES
+     *                                                                                                                                                                                                                                                                                         stackInstance.syncLocale(Language.ENGLISH_UNITED_STATES, new SyncResultCallBack() ) { }
      *
-     *                                                                                 </pre>
+     *                                                                                                                                                                                                                                                                                         </pre>
      */
     public void syncLocale(Language language, SyncResultCallBack syncCallBack) {
         this.localeCode = getLanguageCode(language);
@@ -596,9 +594,9 @@ public class Stack implements INotifyClass {
      *                     <br><br><b>Example :</b><br>
      *                     <pre class="prettyprint">
      *
-     *                                                                                   stackInstance.syncPublishType(Stack.PublishType.entry_published, new SyncResultCallBack()) { }
+     *                                                                                                                                                                                                                                                                                           stackInstance.syncPublishType(Stack.PublishType.entry_published, new SyncResultCallBack()) { }
      *
-     *                                                                                  </pre>
+     *                                                                                                                                                                                                                                                                                          </pre>
      */
 
     public void syncPublishType(PublishType type, SyncResultCallBack syncCallBack) {
@@ -630,10 +628,10 @@ public class Stack implements INotifyClass {
      *                     <br><br><b>Example :</b><br>
      *                     <pre class="prettyprint">
      *
-     *                                                                                  stackInstance.sync(String contentType, Date from_date, Language language, PublishType type,  SyncResultCallBack syncCallBack) { }
+     *                                                                                                                                                                                                                                                                                          stackInstance.sync(String contentType, Date from_date, Language language, PublishType type,  SyncResultCallBack syncCallBack) { }
      *
      *
-     *                                                                                 </pre>
+     *                                                                                                                                                                                                                                                                                         </pre>
      */
 
     public void sync(String contentType, Date from_date, Language language, PublishType type, SyncResultCallBack syncCallBack) {
