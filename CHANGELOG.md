@@ -1,5 +1,14 @@
 ﻿# CHANGELOG
 
+## Version 3.10.2
+
+###### Date: 27-Jun-2022
+
+- #23 Implicit PendingIntent detected in ContentStack Android SDK
+- New Region Support - AZURE_NA
+
+---
+
 ## Version 3.10.1
 
 ###### Date: 17-Jan-2022
@@ -92,7 +101,7 @@
 
 Change: Added support of below methods in SDK
 
-```
+```java
  getContentTypes() in Stack class
  fetch in ContentType class
 ```
@@ -113,7 +122,7 @@ Change:
 - Removed support for unsafe (HTTP) request.
 - Below two breaking changes from Config class has been deprecated
 
-```
+```java
 @Deprecated
 public void setSSL(boolean isSSL)setSSL()
 
@@ -152,17 +161,12 @@ Added New Class
 
 New Features:
 
-    Entry
-
-added method ‘addParam’
-
-    Query
-
-added method 'addParam'
-
-    Asset
-
-added method ‘addParam'
+- Entry
+  - added method ‘addParam’
+- Query
+  - added method 'addParam'
+- Asset
+  - added method ‘addParam'
 
 ---
 
@@ -172,26 +176,25 @@ added method ‘addParam'
 
 New Features:
 
-    Stack
+- Stack
 
-    added method 'ImageTransform'
+  added method 'ImageTransform'
 
-    Query
+  Query
 
-    added method 'includeContentType'
+  added method 'includeContentType'
 
-    QueryResult
+  QueryResult
 
-    added method 'content_type'
+  added method 'content_type'
 
 API Modifications:
-
-    None
+None
 
 API deprecation:
 
-    Query
-    Deprecated method 'includeSchema'
+- Query
+  - Deprecated method 'includeSchema'
 
 Bug Fixes:
 
@@ -203,22 +206,20 @@ Bug Fixes:
 
 ###### Date: 28-July-2017
 
-New Features:
+- New Features:
 
-    None
+  - None
 
-API Modifications:
-
-    None
+- API Modifications:
+  - None
 
 API deprecation:
 
-     None
+None
 
-Bug Fixes:
-
-    1] Cache Policy bug fixed.
-    1] Cache Policy timeout increased.
+- Bug Fixes:
+  - Cache Policy bug fixed.
+  - Cache Policy timeout increased.
 
 ---
 

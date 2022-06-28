@@ -17,7 +17,7 @@ public class Config {
     protected String environment = null;
     protected ContentstackRegion region = ContentstackRegion.US;
 
-    public enum ContentstackRegion {US, EU}
+    public enum ContentstackRegion {US, EU, AZURE_NA}
 
 
     public ContentstackRegion getRegion() {
@@ -32,8 +32,8 @@ public class Config {
      *
      *               <br><br><b>Example :</b><br>
      *               <pre class="prettyprint">
-     *               config.setRegion(ContentstackRegion.US);
-     *               </pre>
+     *                                                                                     config.setRegion(ContentstackRegion.US);
+     *                                                                                     </pre>
      */
 
     public ContentstackRegion setRegion(ContentstackRegion region) {
@@ -62,7 +62,7 @@ public class Config {
      *                 <b>Note:</b> Default hostname sets to <a href ="https://cdn.contentstack.io"> cdn.contentstack.io </a>
      *                 and default protocol is HTTPS.
      *                 <br><br><b>Example :</b><br>
-     *                 <pre class="prettyprint">
+     *                 <pre
      *                 config.setHost("cdn.contentstack.io");
      *                 </pre>
      */
@@ -79,7 +79,7 @@ public class Config {
      *
      *
      * <br><br><b>Example :</b><br>
-     * <pre class="prettyprint">
+     * <pre
      * String url = config.getHost();
      * </pre>
      */
@@ -106,8 +106,8 @@ public class Config {
      * @param version version string.
      *
      *                <br><br><b>Example :</b><br>
-     *                <pre class="prettyprint">
-     *                     config.setVersion("v3");
+     *                <pre
+     *                config.setVersion("v3");
      *                </pre>
      */
     private void setVersion(String version) {
@@ -122,8 +122,8 @@ public class Config {
      * @param environment environment uid/name
      *
      *                    <br><br><b>Example :</b><br>
-     *                    <pre class="prettyprint">
-     *                     config.setEnvironment("stag", false);
+     *                    <pre
+     *                    config.setEnvironment("stag", false);
      *                    </pre>
      */
     protected void setEnvironment(String environment) {
@@ -135,8 +135,8 @@ public class Config {
     /**
      * Get environment.
      * <br><br><b>Example :</b><br>
-     * <pre class="prettyprint">
-     *  String environment = config.getEnvironment();
+     * <pre
+     * String environment = config.getEnvironment();
      * </pre>
      */
     public String getEnvironment() {

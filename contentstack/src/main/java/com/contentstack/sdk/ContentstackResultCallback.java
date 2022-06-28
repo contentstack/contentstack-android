@@ -5,7 +5,6 @@ package com.contentstack.sdk;
  */
 public abstract class ContentstackResultCallback extends ResultCallBack {
 
-
     public abstract void onCompletion(ResponseType responseType, Error error);
 
     public void onRequestFinish(ResponseType responseType) {
