@@ -26,15 +26,16 @@ task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest', 'crea
 android {
 
     packagingOptions {
-        exclude 'META-INF/DEPENDENCIES'
-        exclude 'META-INF/LICENSE.md'
-        exclude 'META-INF/LICENSE-notice.md'
-        exclude 'META-INF/license.txt'
-        exclude 'META-INF/NOTICE'
-        exclude 'META-INF/NOTICE.txt'
-        exclude 'META-INF/notice.txt'
-        exclude 'META-INF/ASL2.0'
-        exclude("META-INF/*.kotlin_module")
+        exclude 'META-INF/'
+//        exclude 'META-INF/DEPENDENCIES'
+//        exclude 'META-INF/LICENSE.md'
+//        exclude 'META-INF/LICENSE-notice.md'
+//        exclude 'META-INF/license.txt'
+//        exclude 'META-INF/NOTICE'
+//        exclude 'META-INF/NOTICE.txt'
+//        exclude 'META-INF/notice.txt'
+//        exclude 'META-INF/ASL2.0'
+//        exclude("META-INF/*.kotlin_module")
     }
 
     testOptions {
@@ -103,15 +104,16 @@ configurations { archives }
 dependencies {
     configurations.all { resolutionStrategy.force 'com.android.support:support-annotations:23.1.0' }
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'com.contentstack.sdk:utils:1.1.2'
-    implementation 'com.android.support:appcompat-v7:26.1.0'
+    implementation 'com.contentstack.sdk:utils:1.2.0'
+    implementation 'androidx.appcompat:appcompat:1.5.1'
+//    implementation 'androidx.legacy:legacy-support-v4:1.1.0'
     implementation 'com.android.support:support-v4:26.1.0'
     implementation 'com.android.volley:volley:1.2.1'
     implementation 'junit:junit:4.13.2'
-    testImplementation 'junit:junit:4.13.2'
 
     androidTestImplementation('com.android.support.test.espresso:espresso-core:3.0.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
+        testImplementation 'junit:junit:4.13.2'
     })
 }
 task clearJar(type: Delete) { delete 'build/libs/Contentstack.jar' }
@@ -122,7 +124,7 @@ task unzip(type: Copy) {
     into outputDir
 }
 task createJar(type: Jar) {
-    archivesBaseName="contentstack.jar"
+    archivesBaseName = "contentstack.jar"
     from('build/contentstack-jar/')
     include 'com/contentstack/'
     include 'META-INF/'
@@ -140,7 +142,7 @@ createJar.dependsOn(clearJar, unzip, build)
 
 group = "com.contentstack.sdk"
 archivesBaseName = "android"
-version = "3.10.2-SNAPSHOT"
+version = "3.10.3-SNAPSHOT"
 
 task sourceJar(type: Jar) {
     from android.sourceSets.main.java.srcDirs
@@ -204,6 +206,8 @@ uploadArchives {
                         id 'ishaileshmishra'
                         name 'Shailesh Mishra'
                         email 'mobile@contentstack.com'
+                        roles 'Sr Software Engineer'
+                        organization 'contentstack'
                     }
                 }
             }

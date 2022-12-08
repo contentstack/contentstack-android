@@ -30,59 +30,65 @@ import java.net.Proxy;
 import java.net.URL;
 import java.util.List;
 
-/** Adapts {@link java.net.Authenticator} to {@link Authenticator}. */
+/**
+ * Adapts {@link java.net.Authenticator} to {@link Authenticator}.
+ */
 public final class AuthenticatorAdapter implements Authenticator {
-  /** Uses the global authenticator to get the password. */
-  public static final Authenticator INSTANCE = new AuthenticatorAdapter();
+    /**
+     * Uses the global authenticator to get the password.
+     */
+    public static final Authenticator INSTANCE = new AuthenticatorAdapter();
 
-  @Override public Request authenticate(Proxy proxy, Response response) throws IOException {
-    List<Challenge> challenges = response.challenges();
-    Request request = response.request();
-    URL url = request.url();
-    for (int i = 0, size = challenges.size(); i < size; i++) {
-      Challenge challenge = challenges.get(i);
-      if (!"Basic".equalsIgnoreCase(challenge.getScheme())) continue;
+    @Override
+    public Request authenticate(Proxy proxy, Response response) throws IOException {
+        List<Challenge> challenges = response.challenges();
+        Request request = response.request();
+        URL url = request.url();
+        for (int i = 0, size = challenges.size(); i < size; i++) {
+            Challenge challenge = challenges.get(i);
+            if (!"Basic".equalsIgnoreCase(challenge.getScheme())) continue;
 
-      PasswordAuthentication auth = java.net.Authenticator.requestPasswordAuthentication(
-          url.getHost(), getConnectToInetAddress(proxy, url), url.getPort(), url.getProtocol(),
-          challenge.getRealm(), challenge.getScheme(), url, RequestorType.SERVER);
-      if (auth == null) continue;
+            PasswordAuthentication auth = java.net.Authenticator.requestPasswordAuthentication(
+                    url.getHost(), getConnectToInetAddress(proxy, url), url.getPort(), url.getProtocol(),
+                    challenge.getRealm(), challenge.getScheme(), url, RequestorType.SERVER);
+            if (auth == null) continue;
 
-      String credential = Credentials.basic(auth.getUserName(), new String(auth.getPassword()));
-      return request.newBuilder()
-          .header("Authorization", credential)
-          .build();
+            String credential = Credentials.basic(auth.getUserName(), new String(auth.getPassword()));
+            return request.newBuilder()
+                    .header("Authorization", credential)
+                    .build();
+        }
+        return null;
+
     }
-    return null;
 
-  }
+    @Override
+    public Request authenticateProxy(Proxy proxy, Response response) throws IOException {
+        List<Challenge> challenges = response.challenges();
+        Request request = response.request();
+        URL url = request.url();
+        for (int i = 0, size = challenges.size(); i < size; i++) {
+            Challenge challenge = challenges.get(i);
+            if (!"Basic".equalsIgnoreCase(challenge.getScheme())) continue;
 
-  @Override public Request authenticateProxy(Proxy proxy, Response response) throws IOException {
-    List<Challenge> challenges = response.challenges();
-    Request request = response.request();
-    URL url = request.url();
-    for (int i = 0, size = challenges.size(); i < size; i++) {
-      Challenge challenge = challenges.get(i);
-      if (!"Basic".equalsIgnoreCase(challenge.getScheme())) continue;
+            InetSocketAddress proxyAddress = (InetSocketAddress) proxy.address();
+            PasswordAuthentication auth = java.net.Authenticator.requestPasswordAuthentication(
+                    proxyAddress.getHostName(), getConnectToInetAddress(proxy, url), proxyAddress.getPort(),
+                    url.getProtocol(), challenge.getRealm(), challenge.getScheme(), url,
+                    RequestorType.PROXY);
+            if (auth == null) continue;
 
-      InetSocketAddress proxyAddress = (InetSocketAddress) proxy.address();
-      PasswordAuthentication auth = java.net.Authenticator.requestPasswordAuthentication(
-          proxyAddress.getHostName(), getConnectToInetAddress(proxy, url), proxyAddress.getPort(),
-          url.getProtocol(), challenge.getRealm(), challenge.getScheme(), url,
-          RequestorType.PROXY);
-      if (auth == null) continue;
-
-      String credential = Credentials.basic(auth.getUserName(), new String(auth.getPassword()));
-      return request.newBuilder()
-          .header("Proxy-Authorization", credential)
-          .build();
+            String credential = Credentials.basic(auth.getUserName(), new String(auth.getPassword()));
+            return request.newBuilder()
+                    .header("Proxy-Authorization", credential)
+                    .build();
+        }
+        return null;
     }
-    return null;
-  }
 
-  private InetAddress getConnectToInetAddress(Proxy proxy, URL url) throws IOException {
-    return (proxy != null && proxy.type() != Proxy.Type.DIRECT)
-        ? ((InetSocketAddress) proxy.address()).getAddress()
-        : InetAddress.getByName(url.getHost());
-  }
+    private InetAddress getConnectToInetAddress(Proxy proxy, URL url) throws IOException {
+        return (proxy != null && proxy.type() != Proxy.Type.DIRECT)
+                ? ((InetSocketAddress) proxy.address()).getAddress()
+                : InetAddress.getByName(url.getHost());
+    }
 }

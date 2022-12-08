@@ -22,9 +22,9 @@ public class ContentstackUtil {
      * @param date date in ISO format.
      * @return {@link Calendar} object.
      * @throws ParseException <br><br><b>Example :</b><br>
-     *  <pre class="prettyprint">
-     *  Util.parseDate(dateString, TimeZone.getDefault());
-     *  </pre>
+     *                        <pre class="prettyprint">
+     *                         Util.parseDate(dateString, TimeZone.getDefault());
+     *                         </pre>
      */
     public static Calendar parseDate(String date, TimeZone timeZone) throws ParseException {
         ArrayList<String> knownPatterns = new ArrayList<String>();
@@ -60,8 +60,8 @@ public class ContentstackUtil {
      * @return {@link Calendar} object.
      * @throws ParseException <br><br><b>Example :</b><br>
      *                        <pre class="prettyprint">
-     *                          Util.parseDate(dateString, "yyyy-MM-dd'T'HH:mm:ssZ", TimeZone.getTimeZone("GMT"));
-     *                        </pre>
+     *                                                 Util.parseDate(dateString, "yyyy-MM-dd'T'HH:mm:ssZ", TimeZone.getTimeZone("GMT"));
+     *                                               </pre>
      */
     @SuppressLint("SimpleDateFormat")
     public static Calendar parseDate(String date, String dateFormat, TimeZone timeZone) throws ParseException {
@@ -105,7 +105,6 @@ public class ContentstackUtil {
 
     /**
      * Type to compare dates.
-     *
      */
     public static enum DateComapareType {
 

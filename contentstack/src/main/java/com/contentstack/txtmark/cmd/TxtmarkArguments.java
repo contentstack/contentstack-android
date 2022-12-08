@@ -15,31 +15,30 @@
  */
 package com.contentstack.txtmark.cmd;
 
-final class TxtmarkArguments
-{
+final class TxtmarkArguments {
     @CmdArgument(l = "help", s = 'h', isSwitch = true, desc = "prints a summary of command line arguments.")
-    public boolean printHelp            = false;
+    public boolean printHelp = false;
 
     @CmdArgument(l = "extended", isSwitch = true, desc = "forces extended profile")
     public boolean forceExtendedProfile = false;
 
     @CmdArgument(l = "panic-mode", isSwitch = true, desc = "enables panic mode")
-    public boolean panicMode            = false;
+    public boolean panicMode = false;
 
     @CmdArgument(l = "safe-mode", isSwitch = true, desc = "enables safe mode")
-    public boolean safeMode             = false;
+    public boolean safeMode = false;
 
     @CmdArgument(l = "no-fenced-spaces", isSwitch = true, desc = "disables spaces in fenced code block delimiters")
-    public boolean noFencedSpaced       = false;
+    public boolean noFencedSpaced = false;
 
     @CmdArgument(l = "encoding", desc = "sets the IO encoding.")
-    public String  encoding             = "UTF-8";
+    public String encoding = "UTF-8";
 
     @CmdArgument(l = "out-file", s = 'o', desc = "specifies the output filename, writes to stdout otherwise")
-    public String  outFile              = null;
+    public String outFile = null;
 
     @CmdArgument(l = "highlighter", desc = "full path to a program taking three arguments [meta in-file out-file] "
             + "that should be used for highlighting fenced code blocks. 'in-file' contains the text to be highlighted/escaped, "
             + "the result is expected to be written to 'out-file'")
-    public String  highlighter          = null;
+    public String highlighter = null;
 }

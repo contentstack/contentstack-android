@@ -28,41 +28,31 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 
-public final class Run
-{
-    private final static void printUsage()
-    {
-        try
-        {
+public final class Run {
+    private final static void printUsage() {
+        try {
             System.out.println("Usage: txtmark [options] [input-file]");
             System.out.println("Options:");
             System.out.println(CmdLineParser.generateHelp(80, false, new TxtmarkArguments()));
-        }
-        catch (final IOException e)
-        {
+        } catch (final IOException e) {
             //
         }
     }
 
-    public static void main(final String[] args)
-    {
+    public static void main(final String[] args) {
         final TxtmarkArguments ta = new TxtmarkArguments();
         List<String> rest = new ArrayList<String>();
 
         boolean parseError = false;
-        try
-        {
+        try {
             rest = CmdLineParser.parse(args, ta);
-        }
-        catch (final IOException e)
-        {
+        } catch (final IOException e) {
             System.out.println("Error: " + e.getMessage());
             System.out.println("---");
             parseError = true;
         }
 
-        if (ta.printHelp || parseError)
-        {
+        if (ta.printHelp || parseError) {
             printUsage();
             System.exit(parseError ? 1 : 0);
         }
@@ -74,15 +64,12 @@ public final class Run
                 .setSafeMode(ta.safeMode)
                 .setAllowSpacesInFencedCodeBlockDelimiters(!ta.noFencedSpaced);
         // Check for extended profile
-        if (ta.forceExtendedProfile)
-        {
+        if (ta.forceExtendedProfile) {
             cfgBuilder.forceExtentedProfile();
         }
         // Connect highlighter if any
-        if (ta.highlighter != null && !ta.highlighter.isEmpty())
-        {
-            if (!new File(ta.highlighter).exists())
-            {
+        if (ta.highlighter != null && !ta.highlighter.isEmpty()) {
+            if (!new File(ta.highlighter).exists()) {
                 System.err.println("Program '" + ta.highlighter + "' not found");
                 System.exit(1);
             }
@@ -94,60 +81,41 @@ public final class Run
         boolean processOk = true;
         InputStream input = null;
         Writer output = null;
-        try
-        {
+        try {
             final String inFile = rest.isEmpty() ? "--" : rest.get(0);
             final String outFile = ta.outFile;
 
-            if (inFile.equals("--"))
-            {
+            if (inFile.equals("--")) {
                 input = System.in;
-            }
-            else
-            {
+            } else {
                 input = new FileInputStream(inFile);
             }
 
             final String result = Processor.process(input, config);
 
-            if (outFile == null)
-            {
+            if (outFile == null) {
                 output = new OutputStreamWriter(System.out, ta.encoding);
-            }
-            else
-            {
+            } else {
                 output = new OutputStreamWriter(new FileOutputStream(outFile), ta.encoding);
             }
 
             output.write(result);
-        }
-        catch (final IOException e)
-        {
+        } catch (final IOException e) {
             processOk = false;
             System.err.println("Exception: " + e.toString());
             e.printStackTrace(System.err);
-        }
-        finally
-        {
-            if (input != null)
-            {
-                try
-                {
+        } finally {
+            if (input != null) {
+                try {
                     input.close();
-                }
-                catch (final IOException e)
-                {
+                } catch (final IOException e) {
                     // ignore
                 }
             }
-            if (output != null)
-            {
-                try
-                {
+            if (output != null) {
+                try {
                     output.close();
-                }
-                catch (final IOException e)
-                {
+                } catch (final IOException e) {
                     // ignore
                 }
             }

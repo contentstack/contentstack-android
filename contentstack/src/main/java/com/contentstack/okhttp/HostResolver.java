@@ -23,12 +23,13 @@ import java.net.UnknownHostException;
  * make code more testable.
  */
 public interface HostResolver {
-  HostResolver DEFAULT = new HostResolver() {
-    @Override public InetAddress[] getAllByName(String host) throws UnknownHostException {
-      if (host == null) throw new UnknownHostException("host == null");
-      return InetAddress.getAllByName(host);
-    }
-  };
+    HostResolver DEFAULT = new HostResolver() {
+        @Override
+        public InetAddress[] getAllByName(String host) throws UnknownHostException {
+            if (host == null) throw new UnknownHostException("host == null");
+            return InetAddress.getAllByName(host);
+        }
+    };
 
-  InetAddress[] getAllByName(String host) throws UnknownHostException;
+    InetAddress[] getAllByName(String host) throws UnknownHostException;
 }

@@ -35,88 +35,100 @@ import javax.net.ssl.SSLSession;
  * javax.net.ssl.SSLSocketFactory} to set policy for new handshakes.
  */
 public final class Handshake {
-  private final String cipherSuite;
-  private final List<Certificate> peerCertificates;
-  private final List<Certificate> localCertificates;
+    private final String cipherSuite;
+    private final List<Certificate> peerCertificates;
+    private final List<Certificate> localCertificates;
 
-  private Handshake(
-      String cipherSuite, List<Certificate> peerCertificates, List<Certificate> localCertificates) {
-    this.cipherSuite = cipherSuite;
-    this.peerCertificates = peerCertificates;
-    this.localCertificates = localCertificates;
-  }
-
-  public static Handshake get(SSLSession session) {
-    String cipherSuite = session.getCipherSuite();
-    if (cipherSuite == null) throw new IllegalStateException("cipherSuite == null");
-
-    Certificate[] peerCertificates;
-    try {
-      peerCertificates = session.getPeerCertificates();
-    } catch (SSLPeerUnverifiedException ignored) {
-      peerCertificates = null;
+    private Handshake(
+            String cipherSuite, List<Certificate> peerCertificates, List<Certificate> localCertificates) {
+        this.cipherSuite = cipherSuite;
+        this.peerCertificates = peerCertificates;
+        this.localCertificates = localCertificates;
     }
-    List<Certificate> peerCertificatesList = peerCertificates != null
-        ? Util.immutableList(peerCertificates)
-        : Collections.<Certificate>emptyList();
 
-    Certificate[] localCertificates = session.getLocalCertificates();
-    List<Certificate> localCertificatesList = localCertificates != null
-        ? Util.immutableList(localCertificates)
-        : Collections.<Certificate>emptyList();
+    public static Handshake get(SSLSession session) {
+        String cipherSuite = session.getCipherSuite();
+        if (cipherSuite == null) throw new IllegalStateException("cipherSuite == null");
 
-    return new Handshake(cipherSuite, peerCertificatesList, localCertificatesList);
-  }
+        Certificate[] peerCertificates;
+        try {
+            peerCertificates = session.getPeerCertificates();
+        } catch (SSLPeerUnverifiedException ignored) {
+            peerCertificates = null;
+        }
+        List<Certificate> peerCertificatesList = peerCertificates != null
+                ? Util.immutableList(peerCertificates)
+                : Collections.<Certificate>emptyList();
 
-  public static Handshake get(
-      String cipherSuite, List<Certificate> peerCertificates, List<Certificate> localCertificates) {
-    if (cipherSuite == null) throw new IllegalArgumentException("cipherSuite == null");
-    return new Handshake(cipherSuite, Util.immutableList(peerCertificates),
-        Util.immutableList(localCertificates));
-  }
+        Certificate[] localCertificates = session.getLocalCertificates();
+        List<Certificate> localCertificatesList = localCertificates != null
+                ? Util.immutableList(localCertificates)
+                : Collections.<Certificate>emptyList();
 
-  /** Returns a cipher suite name like "TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA". */
-  public String cipherSuite() {
-    return cipherSuite;
-  }
+        return new Handshake(cipherSuite, peerCertificatesList, localCertificatesList);
+    }
 
-  /** Returns a possibly-empty list of certificates that identify the remote peer. */
-  public List<Certificate> peerCertificates() {
-    return peerCertificates;
-  }
+    public static Handshake get(
+            String cipherSuite, List<Certificate> peerCertificates, List<Certificate> localCertificates) {
+        if (cipherSuite == null) throw new IllegalArgumentException("cipherSuite == null");
+        return new Handshake(cipherSuite, Util.immutableList(peerCertificates),
+                Util.immutableList(localCertificates));
+    }
 
-  /** Returns the remote peer's principle, or null if that peer is anonymous. */
-  public Principal peerPrincipal() {
-    return !peerCertificates.isEmpty()
-        ? ((X509Certificate) peerCertificates.get(0)).getSubjectX500Principal()
-        : null;
-  }
+    /**
+     * Returns a cipher suite name like "TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA".
+     */
+    public String cipherSuite() {
+        return cipherSuite;
+    }
 
-  /** Returns a possibly-empty list of certificates that identify this peer. */
-  public List<Certificate> localCertificates() {
-    return localCertificates;
-  }
+    /**
+     * Returns a possibly-empty list of certificates that identify the remote peer.
+     */
+    public List<Certificate> peerCertificates() {
+        return peerCertificates;
+    }
 
-  /** Returns the local principle, or null if this peer is anonymous. */
-  public Principal localPrincipal() {
-    return !localCertificates.isEmpty()
-        ? ((X509Certificate) localCertificates.get(0)).getSubjectX500Principal()
-        : null;
-  }
+    /**
+     * Returns the remote peer's principle, or null if that peer is anonymous.
+     */
+    public Principal peerPrincipal() {
+        return !peerCertificates.isEmpty()
+                ? ((X509Certificate) peerCertificates.get(0)).getSubjectX500Principal()
+                : null;
+    }
 
-  @Override public boolean equals(Object other) {
-    if (!(other instanceof Handshake)) return false;
-    Handshake that = (Handshake) other;
-    return cipherSuite.equals(that.cipherSuite)
-        && peerCertificates.equals(that.peerCertificates)
-        && localCertificates.equals(that.localCertificates);
-  }
+    /**
+     * Returns a possibly-empty list of certificates that identify this peer.
+     */
+    public List<Certificate> localCertificates() {
+        return localCertificates;
+    }
 
-  @Override public int hashCode() {
-    int result = 17;
-    result = 31 * result + cipherSuite.hashCode();
-    result = 31 * result + peerCertificates.hashCode();
-    result = 31 * result + localCertificates.hashCode();
-    return result;
-  }
+    /**
+     * Returns the local principle, or null if this peer is anonymous.
+     */
+    public Principal localPrincipal() {
+        return !localCertificates.isEmpty()
+                ? ((X509Certificate) localCertificates.get(0)).getSubjectX500Principal()
+                : null;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (!(other instanceof Handshake)) return false;
+        Handshake that = (Handshake) other;
+        return cipherSuite.equals(that.cipherSuite)
+                && peerCertificates.equals(that.peerCertificates)
+                && localCertificates.equals(that.localCertificates);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = 17;
+        result = 31 * result + cipherSuite.hashCode();
+        result = 31 * result + peerCertificates.hashCode();
+        result = 31 * result + localCertificates.hashCode();
+        return result;
+    }
 }

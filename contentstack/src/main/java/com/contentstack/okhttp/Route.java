@@ -36,75 +36,77 @@ import java.net.Proxy;
  * Each route is a specific selection of these options.
  */
 public final class Route {
-  final Address address;
-  final Proxy proxy;
-  final InetSocketAddress inetSocketAddress;
-  final String tlsVersion;
+    final Address address;
+    final Proxy proxy;
+    final InetSocketAddress inetSocketAddress;
+    final String tlsVersion;
 
-  public Route(Address address, Proxy proxy, InetSocketAddress inetSocketAddress,
-      String tlsVersion) {
-    if (address == null) throw new NullPointerException("address == null");
-    if (proxy == null) throw new NullPointerException("proxy == null");
-    if (inetSocketAddress == null) throw new NullPointerException("inetSocketAddress == null");
-    if (tlsVersion == null) throw new NullPointerException("tlsVersion == null");
-    this.address = address;
-    this.proxy = proxy;
-    this.inetSocketAddress = inetSocketAddress;
-    this.tlsVersion = tlsVersion;
-  }
-
-  public Address getAddress() {
-    return address;
-  }
-
-  /**
-   * Returns the {@link Proxy} of this route.
-   *
-   * <strong>Warning:</strong> This may disagree with {@link Address#getProxy}
-   * when it is null. When the address's proxy is null, the proxy selector is
-   * used.
-   */
-  public Proxy getProxy() {
-    return proxy;
-  }
-
-  public InetSocketAddress getSocketAddress() {
-    return inetSocketAddress;
-  }
-
-  public String getTlsVersion() {
-    return tlsVersion;
-  }
-
-  boolean supportsNpn() {
-    return !tlsVersion.equals(RouteSelector.SSL_V3);
-  }
-
-  /**
-   * Returns true if this route tunnels HTTPS through an HTTP proxy. See <a
-   * href="http://www.ietf.org/rfc/rfc2817.txt">RFC 2817, Section 5.2</a>.
-   */
-  public boolean requiresTunnel() {
-    return address.sslSocketFactory != null && proxy.type() == Proxy.Type.HTTP;
-  }
-
-  @Override public boolean equals(Object obj) {
-    if (obj instanceof Route) {
-      Route other = (Route) obj;
-      return address.equals(other.address)
-          && proxy.equals(other.proxy)
-          && inetSocketAddress.equals(other.inetSocketAddress)
-          && tlsVersion.equals(other.tlsVersion);
+    public Route(Address address, Proxy proxy, InetSocketAddress inetSocketAddress,
+                 String tlsVersion) {
+        if (address == null) throw new NullPointerException("address == null");
+        if (proxy == null) throw new NullPointerException("proxy == null");
+        if (inetSocketAddress == null) throw new NullPointerException("inetSocketAddress == null");
+        if (tlsVersion == null) throw new NullPointerException("tlsVersion == null");
+        this.address = address;
+        this.proxy = proxy;
+        this.inetSocketAddress = inetSocketAddress;
+        this.tlsVersion = tlsVersion;
     }
-    return false;
-  }
 
-  @Override public int hashCode() {
-    int result = 17;
-    result = 31 * result + address.hashCode();
-    result = 31 * result + proxy.hashCode();
-    result = 31 * result + inetSocketAddress.hashCode();
-    result = 31 * result + tlsVersion.hashCode();
-    return result;
-  }
+    public Address getAddress() {
+        return address;
+    }
+
+    /**
+     * Returns the {@link Proxy} of this route.
+     *
+     * <strong>Warning:</strong> This may disagree with {@link Address#getProxy}
+     * when it is null. When the address's proxy is null, the proxy selector is
+     * used.
+     */
+    public Proxy getProxy() {
+        return proxy;
+    }
+
+    public InetSocketAddress getSocketAddress() {
+        return inetSocketAddress;
+    }
+
+    public String getTlsVersion() {
+        return tlsVersion;
+    }
+
+    boolean supportsNpn() {
+        return !tlsVersion.equals(RouteSelector.SSL_V3);
+    }
+
+    /**
+     * Returns true if this route tunnels HTTPS through an HTTP proxy. See <a
+     * href="http://www.ietf.org/rfc/rfc2817.txt">RFC 2817, Section 5.2</a>.
+     */
+    public boolean requiresTunnel() {
+        return address.sslSocketFactory != null && proxy.type() == Proxy.Type.HTTP;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Route) {
+            Route other = (Route) obj;
+            return address.equals(other.address)
+                    && proxy.equals(other.proxy)
+                    && inetSocketAddress.equals(other.inetSocketAddress)
+                    && tlsVersion.equals(other.tlsVersion);
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = 17;
+        result = 31 * result + address.hashCode();
+        result = 31 * result + proxy.hashCode();
+        result = 31 * result + inetSocketAddress.hashCode();
+        result = 31 * result + tlsVersion.hashCode();
+        return result;
+    }
 }

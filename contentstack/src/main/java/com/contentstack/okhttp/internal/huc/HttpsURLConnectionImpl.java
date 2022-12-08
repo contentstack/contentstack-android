@@ -36,7 +36,8 @@ public final class HttpsURLConnectionImpl extends DelegatingHttpsURLConnection {
         this.delegate = delegate;
     }
 
-    @Override protected Handshake handshake() {
+    @Override
+    protected Handshake handshake() {
         if (delegate.httpEngine == null) {
             throw new IllegalStateException("Connection has not yet been established");
         }
@@ -49,23 +50,28 @@ public final class HttpsURLConnectionImpl extends DelegatingHttpsURLConnection {
                 : delegate.handshake;
     }
 
-    @Override public void setHostnameVerifier(HostnameVerifier hostnameVerifier) {
+    @Override
+    public void setHostnameVerifier(HostnameVerifier hostnameVerifier) {
         delegate.client.setHostnameVerifier(hostnameVerifier);
     }
 
-    @Override public HostnameVerifier getHostnameVerifier() {
+    @Override
+    public HostnameVerifier getHostnameVerifier() {
         return delegate.client.getHostnameVerifier();
     }
 
-    @Override public void setSSLSocketFactory(SSLSocketFactory sslSocketFactory) {
+    @Override
+    public void setSSLSocketFactory(SSLSocketFactory sslSocketFactory) {
         delegate.client.setSslSocketFactory(sslSocketFactory);
     }
 
-    @Override public SSLSocketFactory getSSLSocketFactory() {
+    @Override
+    public SSLSocketFactory getSSLSocketFactory() {
         return delegate.client.getSslSocketFactory();
     }
 
-    @Override public long getContentLengthLong() {
+    @Override
+    public long getContentLengthLong() {
         return 0;
     }
 
@@ -75,7 +81,8 @@ public final class HttpsURLConnectionImpl extends DelegatingHttpsURLConnection {
 
     }
 
-    @Override public long getHeaderFieldLong(String field, long defaultValue) {
+    @Override
+    public long getHeaderFieldLong(String field, long defaultValue) {
         return delegate.getHeaderFieldLong(field, defaultValue);
     }
 }
