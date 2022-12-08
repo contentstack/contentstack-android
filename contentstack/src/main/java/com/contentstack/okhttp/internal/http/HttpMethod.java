@@ -20,23 +20,23 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 public final class HttpMethod {
-  public static final Set<String> METHODS = new LinkedHashSet<String>(Arrays.asList(
-      "OPTIONS", "GET", "HEAD", "POST", "PUT", "DELETE", "TRACE", "PATCH"));
+    public static final Set<String> METHODS = new LinkedHashSet<String>(Arrays.asList(
+            "OPTIONS", "GET", "HEAD", "POST", "PUT", "DELETE", "TRACE", "PATCH"));
 
-  public static boolean invalidatesCache(String method) {
-    return method.equals("POST")
-        || method.equals("PATCH")
-        || method.equals("PUT")
-        || method.equals("DELETE");
-  }
+    public static boolean invalidatesCache(String method) {
+        return method.equals("POST")
+                || method.equals("PATCH")
+                || method.equals("PUT")
+                || method.equals("DELETE");
+    }
 
-  public static boolean hasRequestBody(String method) {
-    return method.equals("POST")
-        || method.equals("PUT")
-        || method.equals("PATCH")
-        || method.equals("DELETE"); // Permitted as spec is ambiguous.
-  }
+    public static boolean hasRequestBody(String method) {
+        return method.equals("POST")
+                || method.equals("PUT")
+                || method.equals("PATCH")
+                || method.equals("DELETE"); // Permitted as spec is ambiguous.
+    }
 
-  private HttpMethod() {
-  }
+    private HttpMethod() {
+    }
 }

@@ -53,223 +53,239 @@ import java.util.concurrent.TimeUnit;
  * initialized lazily.
  */
 public final class ConnectionPool {
-  private static final int MAX_CONNECTIONS_TO_CLEANUP = 2;
-  private static final long DEFAULT_KEEP_ALIVE_DURATION_MS = 5 * 60 * 1000; // 5 min
+    private static final int MAX_CONNECTIONS_TO_CLEANUP = 2;
+    private static final long DEFAULT_KEEP_ALIVE_DURATION_MS = 5 * 60 * 1000; // 5 min
 
-  private static final ConnectionPool systemDefault;
+    private static final ConnectionPool systemDefault;
 
-  static {
-    String keepAlive = System.getProperty("http.keepAlive");
-    String keepAliveDuration = System.getProperty("http.keepAliveDuration");
-    String maxIdleConnections = System.getProperty("http.maxConnections");
-    long keepAliveDurationMs = keepAliveDuration != null ? Long.parseLong(keepAliveDuration)
-        : DEFAULT_KEEP_ALIVE_DURATION_MS;
-    if (keepAlive != null && !Boolean.parseBoolean(keepAlive)) {
-      systemDefault = new ConnectionPool(0, keepAliveDurationMs);
-    } else if (maxIdleConnections != null) {
-      systemDefault = new ConnectionPool(Integer.parseInt(maxIdleConnections), keepAliveDurationMs);
-    } else {
-      systemDefault = new ConnectionPool(5, keepAliveDurationMs);
-    }
-  }
-
-  /** The maximum number of idle connections for each address. */
-  private final int maxIdleConnections;
-  private final long keepAliveDurationNs;
-
-  private final LinkedList<Connection> connections = new LinkedList<Connection>();
-
-  /** We use a single background thread to cleanup expired connections. */
-  private final ExecutorService executorService = new ThreadPoolExecutor(0, 1,
-      60L, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>(),
-      Util.threadFactory("OkHttp ConnectionPool", true));
-  private final Runnable connectionsCleanupRunnable = new Runnable() {
-    @Override public void run() {
-      List<Connection> expiredConnections = new ArrayList<Connection>(MAX_CONNECTIONS_TO_CLEANUP);
-      int idleConnectionCount = 0;
-      synchronized (ConnectionPool.this) {
-        for (ListIterator<Connection> i = connections.listIterator(connections.size());
-            i.hasPrevious(); ) {
-          Connection connection = i.previous();
-          if (!connection.isAlive() || connection.isExpired(keepAliveDurationNs)) {
-            i.remove();
-            expiredConnections.add(connection);
-            if (expiredConnections.size() == MAX_CONNECTIONS_TO_CLEANUP) break;
-          } else if (connection.isIdle()) {
-            idleConnectionCount++;
-          }
+    static {
+        String keepAlive = System.getProperty("http.keepAlive");
+        String keepAliveDuration = System.getProperty("http.keepAliveDuration");
+        String maxIdleConnections = System.getProperty("http.maxConnections");
+        long keepAliveDurationMs = keepAliveDuration != null ? Long.parseLong(keepAliveDuration)
+                : DEFAULT_KEEP_ALIVE_DURATION_MS;
+        if (keepAlive != null && !Boolean.parseBoolean(keepAlive)) {
+            systemDefault = new ConnectionPool(0, keepAliveDurationMs);
+        } else if (maxIdleConnections != null) {
+            systemDefault = new ConnectionPool(Integer.parseInt(maxIdleConnections), keepAliveDurationMs);
+        } else {
+            systemDefault = new ConnectionPool(5, keepAliveDurationMs);
         }
+    }
 
-        for (ListIterator<Connection> i = connections.listIterator(connections.size());
-            i.hasPrevious() && idleConnectionCount > maxIdleConnections; ) {
-          Connection connection = i.previous();
-          if (connection.isIdle()) {
-            expiredConnections.add(connection);
-            i.remove();
-            --idleConnectionCount;
-          }
+    /**
+     * The maximum number of idle connections for each address.
+     */
+    private final int maxIdleConnections;
+    private final long keepAliveDurationNs;
+
+    private final LinkedList<Connection> connections = new LinkedList<Connection>();
+
+    /**
+     * We use a single background thread to cleanup expired connections.
+     */
+    private final ExecutorService executorService = new ThreadPoolExecutor(0, 1,
+            60L, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>(),
+            Util.threadFactory("OkHttp ConnectionPool", true));
+    private final Runnable connectionsCleanupRunnable = new Runnable() {
+        @Override
+        public void run() {
+            List<Connection> expiredConnections = new ArrayList<Connection>(MAX_CONNECTIONS_TO_CLEANUP);
+            int idleConnectionCount = 0;
+            synchronized (ConnectionPool.this) {
+                for (ListIterator<Connection> i = connections.listIterator(connections.size());
+                     i.hasPrevious(); ) {
+                    Connection connection = i.previous();
+                    if (!connection.isAlive() || connection.isExpired(keepAliveDurationNs)) {
+                        i.remove();
+                        expiredConnections.add(connection);
+                        if (expiredConnections.size() == MAX_CONNECTIONS_TO_CLEANUP) break;
+                    } else if (connection.isIdle()) {
+                        idleConnectionCount++;
+                    }
+                }
+
+                for (ListIterator<Connection> i = connections.listIterator(connections.size());
+                     i.hasPrevious() && idleConnectionCount > maxIdleConnections; ) {
+                    Connection connection = i.previous();
+                    if (connection.isIdle()) {
+                        expiredConnections.add(connection);
+                        i.remove();
+                        --idleConnectionCount;
+                    }
+                }
+            }
+            for (Connection expiredConnection : expiredConnections) {
+                Util.closeQuietly(expiredConnection.getSocket());
+            }
         }
-      }
-      for (Connection expiredConnection : expiredConnections) {
-        Util.closeQuietly(expiredConnection.getSocket());
-      }
+    };
+
+    public ConnectionPool(int maxIdleConnections, long keepAliveDurationMs) {
+        this.maxIdleConnections = maxIdleConnections;
+        this.keepAliveDurationNs = keepAliveDurationMs * 1000 * 1000;
     }
-  };
 
-  public ConnectionPool(int maxIdleConnections, long keepAliveDurationMs) {
-    this.maxIdleConnections = maxIdleConnections;
-    this.keepAliveDurationNs = keepAliveDurationMs * 1000 * 1000;
-  }
-
-  /**
-   * Returns a snapshot of the connections in this pool, ordered from newest to
-   * oldest. Waits for the cleanup callable to run if it is currently scheduled.
-   */
-  List<Connection> getConnections() {
-    waitForCleanupCallableToRun();
-    synchronized (this) {
-      return new ArrayList<Connection>(connections);
-    }
-  }
-
-  /**
-   * Blocks until the executor service has processed all currently enqueued
-   * jobs.
-   */
-  private void waitForCleanupCallableToRun() {
-    try {
-      executorService.submit(new Runnable() {
-        @Override public void run() {
+    /**
+     * Returns a snapshot of the connections in this pool, ordered from newest to
+     * oldest. Waits for the cleanup callable to run if it is currently scheduled.
+     */
+    List<Connection> getConnections() {
+        waitForCleanupCallableToRun();
+        synchronized (this) {
+            return new ArrayList<Connection>(connections);
         }
-      }).get();
-    } catch (Exception e) {
-      throw new AssertionError();
     }
-  }
 
-  public static ConnectionPool getDefault() {
-    return systemDefault;
-  }
-
-  /** Returns total number of connections in the pool. */
-  public synchronized int getConnectionCount() {
-    return connections.size();
-  }
-
-  /** Returns total number of spdy connections in the pool. */
-  public synchronized int getSpdyConnectionCount() {
-    int total = 0;
-    for (Connection connection : connections) {
-      if (connection.isSpdy()) total++;
-    }
-    return total;
-  }
-
-  /** Returns total number of http connections in the pool. */
-  public synchronized int getHttpConnectionCount() {
-    int total = 0;
-    for (Connection connection : connections) {
-      if (!connection.isSpdy()) total++;
-    }
-    return total;
-  }
-
-  /** Returns a recycled connection to {@code address}, or null if no such connection exists. */
-  public synchronized Connection get(Address address) {
-    Connection foundConnection = null;
-    for (ListIterator<Connection> i = connections.listIterator(connections.size());
-        i.hasPrevious(); ) {
-      Connection connection = i.previous();
-      if (!connection.getRoute().getAddress().equals(address)
-          || !connection.isAlive()
-          || System.nanoTime() - connection.getIdleStartTimeNs() >= keepAliveDurationNs) {
-        continue;
-      }
-      i.remove();
-      if (!connection.isSpdy()) {
+    /**
+     * Blocks until the executor service has processed all currently enqueued
+     * jobs.
+     */
+    private void waitForCleanupCallableToRun() {
         try {
-          Platform.get().tagSocket(connection.getSocket());
-        } catch (SocketException e) {
-          Util.closeQuietly(connection.getSocket());
-          // When unable to tag, skip recycling and close
-          Platform.get().logW("Unable to tagSocket(): " + e);
-          continue;
+            executorService.submit(new Runnable() {
+                @Override
+                public void run() {
+                }
+            }).get();
+        } catch (Exception e) {
+            throw new AssertionError();
         }
-      }
-      foundConnection = connection;
-      break;
     }
 
-    if (foundConnection != null && foundConnection.isSpdy()) {
-      connections.addFirst(foundConnection); // Add it back after iteration.
+    public static ConnectionPool getDefault() {
+        return systemDefault;
     }
 
-    executorService.execute(connectionsCleanupRunnable);
-    return foundConnection;
-  }
-
-  /**
-   * Gives {@code connection} to the pool. The pool may store the connection,
-   * or close it, as its policy describes.
-   *
-   * <p>It is an error to use {@code connection} after calling this method.
-   */
-  void recycle(Connection connection) {
-    if (connection.isSpdy()) {
-      return;
+    /**
+     * Returns total number of connections in the pool.
+     */
+    public synchronized int getConnectionCount() {
+        return connections.size();
     }
 
-    if (!connection.clearOwner()) {
-      return; // This connection isn't eligible for reuse.
+    /**
+     * Returns total number of spdy connections in the pool.
+     */
+    public synchronized int getSpdyConnectionCount() {
+        int total = 0;
+        for (Connection connection : connections) {
+            if (connection.isSpdy()) total++;
+        }
+        return total;
     }
 
-    if (!connection.isAlive()) {
-      Util.closeQuietly(connection.getSocket());
-      return;
+    /**
+     * Returns total number of http connections in the pool.
+     */
+    public synchronized int getHttpConnectionCount() {
+        int total = 0;
+        for (Connection connection : connections) {
+            if (!connection.isSpdy()) total++;
+        }
+        return total;
     }
 
-    try {
-      Platform.get().untagSocket(connection.getSocket());
-    } catch (SocketException e) {
-      // When unable to remove tagging, skip recycling and close.
-      Platform.get().logW("Unable to untagSocket(): " + e);
-      Util.closeQuietly(connection.getSocket());
-      return;
+    /**
+     * Returns a recycled connection to {@code address}, or null if no such connection exists.
+     */
+    public synchronized Connection get(Address address) {
+        Connection foundConnection = null;
+        for (ListIterator<Connection> i = connections.listIterator(connections.size());
+             i.hasPrevious(); ) {
+            Connection connection = i.previous();
+            if (!connection.getRoute().getAddress().equals(address)
+                    || !connection.isAlive()
+                    || System.nanoTime() - connection.getIdleStartTimeNs() >= keepAliveDurationNs) {
+                continue;
+            }
+            i.remove();
+            if (!connection.isSpdy()) {
+                try {
+                    Platform.get().tagSocket(connection.getSocket());
+                } catch (SocketException e) {
+                    Util.closeQuietly(connection.getSocket());
+                    // When unable to tag, skip recycling and close
+                    Platform.get().logW("Unable to tagSocket(): " + e);
+                    continue;
+                }
+            }
+            foundConnection = connection;
+            break;
+        }
+
+        if (foundConnection != null && foundConnection.isSpdy()) {
+            connections.addFirst(foundConnection); // Add it back after iteration.
+        }
+
+        executorService.execute(connectionsCleanupRunnable);
+        return foundConnection;
     }
 
-    synchronized (this) {
-      connections.addFirst(connection);
-      connection.incrementRecycleCount();
-      connection.resetIdleStartTime();
+    /**
+     * Gives {@code connection} to the pool. The pool may store the connection,
+     * or close it, as its policy describes.
+     *
+     * <p>It is an error to use {@code connection} after calling this method.
+     */
+    void recycle(Connection connection) {
+        if (connection.isSpdy()) {
+            return;
+        }
+
+        if (!connection.clearOwner()) {
+            return; // This connection isn't eligible for reuse.
+        }
+
+        if (!connection.isAlive()) {
+            Util.closeQuietly(connection.getSocket());
+            return;
+        }
+
+        try {
+            Platform.get().untagSocket(connection.getSocket());
+        } catch (SocketException e) {
+            // When unable to remove tagging, skip recycling and close.
+            Platform.get().logW("Unable to untagSocket(): " + e);
+            Util.closeQuietly(connection.getSocket());
+            return;
+        }
+
+        synchronized (this) {
+            connections.addFirst(connection);
+            connection.incrementRecycleCount();
+            connection.resetIdleStartTime();
+        }
+
+        executorService.execute(connectionsCleanupRunnable);
     }
 
-    executorService.execute(connectionsCleanupRunnable);
-  }
-
-  /**
-   * Shares the SPDY connection with the pool. Callers to this method may
-   * continue to use {@code connection}.
-   */
-  void share(Connection connection) {
-    if (!connection.isSpdy()) throw new IllegalArgumentException();
-    executorService.execute(connectionsCleanupRunnable);
-    if (connection.isAlive()) {
-      synchronized (this) {
-        connections.addFirst(connection);
-      }
-    }
-  }
-
-  /** Close and remove all connections in the pool. */
-  public void evictAll() {
-    List<Connection> connections;
-    synchronized (this) {
-      connections = new ArrayList<Connection>(this.connections);
-      this.connections.clear();
+    /**
+     * Shares the SPDY connection with the pool. Callers to this method may
+     * continue to use {@code connection}.
+     */
+    void share(Connection connection) {
+        if (!connection.isSpdy()) throw new IllegalArgumentException();
+        executorService.execute(connectionsCleanupRunnable);
+        if (connection.isAlive()) {
+            synchronized (this) {
+                connections.addFirst(connection);
+            }
+        }
     }
 
-    for (int i = 0, size = connections.size(); i < size; i++) {
-      Util.closeQuietly(connections.get(i).getSocket());
+    /**
+     * Close and remove all connections in the pool.
+     */
+    public void evictAll() {
+        List<Connection> connections;
+        synchronized (this) {
+            connections = new ArrayList<Connection>(this.connections);
+            this.connections.clear();
+        }
+
+        for (int i = 0, size = connections.size(); i < size; i++) {
+            Util.closeQuietly(connections.get(i).getSocket());
+        }
     }
-  }
 }

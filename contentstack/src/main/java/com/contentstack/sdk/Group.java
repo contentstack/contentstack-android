@@ -53,8 +53,8 @@ public class Group {
      *
      *            <br><br><b>Example :</b><br>
      *            <pre class="prettyprint">
-     *            Object obj = group.get("key");
-     *            </pre>
+     *                       Object obj = group.get("key");
+     *                       </pre>
      */
     public Object get(String key) {
         try {
@@ -123,8 +123,8 @@ public class Group {
      *
      *            <br><br><b>Example :</b><br>
      *            <pre class="prettyprint">
-     *            String value = group.getString("key");
-     *            </pre>
+     *                       String value = group.getString("key");
+     *                       </pre>
      */
     public String getString(String key) {
         Object value = get(key);
@@ -143,8 +143,8 @@ public class Group {
      *
      *            <br><br><b>Example :</b><br>
      *            <pre class="prettyprint">
-     *            Boolean value = group.getBoolean("key");
-     *            </pre>
+     *                       Boolean value = group.getBoolean("key");
+     *                       </pre>
      */
     public Boolean getBoolean(String key) {
         Object value = get(key);
@@ -163,8 +163,8 @@ public class Group {
      *
      *            <br><br><b>Example :</b><br>
      *            <pre class="prettyprint">
-     *            JSONArray value = group.getJSONArray("key");
-     *            </pre>
+     *                       JSONArray value = group.getJSONArray("key");
+     *                       </pre>
      */
     public JSONArray getJSONArray(String key) {
         Object value = get(key);
@@ -183,8 +183,8 @@ public class Group {
      *
      *            <br><br><b>Example :</b><br>
      *            <pre class="prettyprint">
-     *            JSONObject value = group.getJSONObject("key");
-     *            </pre>
+     *                       JSONObject value = group.getJSONObject("key");
+     *                       </pre>
      */
     public JSONObject getJSONObject(String key) {
         Object value = get(key);
@@ -203,8 +203,8 @@ public class Group {
      *
      *            <br><br><b>Example :</b><br>
      *            <pre class="prettyprint">
-     *            JSONObject value = group.getJSONObject("key");
-     *            </pre>
+     *                       JSONObject value = group.getJSONObject("key");
+     *                       </pre>
      */
     public Number getNumber(String key) {
         Object value = get(key);
@@ -223,8 +223,8 @@ public class Group {
      *
      *            <br><br><b>Example :</b><br>
      *            <pre class="prettyprint">
-     *            int value = group.getInt("key");
-     *            </pre>
+     *                       int value = group.getInt("key");
+     *                       </pre>
      */
     public int getInt(String key) {
         Number value = getNumber(key);
@@ -241,8 +241,8 @@ public class Group {
      *
      *            <br><br><b>Example :</b><br>
      *            <pre class="prettyprint">
-     *            float value = group.getFloat("key");
-     *            </pre>
+     *                       float value = group.getFloat("key");
+     *                       </pre>
      */
     public float getFloat(String key) {
         Number value = getNumber(key);
@@ -259,8 +259,8 @@ public class Group {
      *
      *            <br><br><b>Example :</b><br>
      *            <pre class="prettyprint">
-     *            double value = group.getDouble("key");
-     *            </pre>
+     *                       double value = group.getDouble("key");
+     *                       </pre>
      */
     public double getDouble(String key) {
         Number value = getNumber(key);
@@ -277,8 +277,8 @@ public class Group {
      *
      *            <br><br><b>Example :</b><br>
      *            <pre class="prettyprint">
-     *            long value = group.getLong("key");
-     *            </pre>
+     *                       long value = group.getLong("key");
+     *                       </pre>
      */
     public long getLong(String key) {
         Number value = getNumber(key);
@@ -295,8 +295,8 @@ public class Group {
      *
      *            <br><br><b>Example :</b><br>
      *            <pre class="prettyprint">
-     *            short value = group.getShort("key");
-     *            </pre>
+     *                       short value = group.getShort("key");
+     *                       </pre>
      */
     public short getShort(String key) {
         Number value = getNumber(key);
@@ -313,8 +313,8 @@ public class Group {
      *
      *            <br><br><b>Example :</b><br>
      *            <pre class="prettyprint">
-     *            Calendar value = group.getDate("key");
-     *            </pre>
+     *                       Calendar value = group.getDate("key");
+     *                       </pre>
      */
     public Calendar getDate(String key) {
 
@@ -334,8 +334,8 @@ public class Group {
      *
      *            <br><br><b>Example :</b><br>
      *            <pre class="prettyprint">
-     *            Asset asset = group.getAsset("key");
-     *            </pre>
+     *                       Asset asset = group.getAsset("key");
+     *                       </pre>
      */
     public Asset getAsset(String key) {
 
@@ -351,8 +351,8 @@ public class Group {
      *
      *            <br><br><b>Example :</b><br>
      *            <pre class="prettyprint">
-     *            List<Asset> asset = group.getAssets("key");
-     *            </pre>
+     *                       List<Asset> asset = group.getAssets("key");
+     *                       </pre>
      */
     public List<Asset> getAssets(String key) {
         List<Asset> assets = new ArrayList<>();
@@ -377,8 +377,8 @@ public class Group {
      *
      *            <br><br><b>Example :</b><br>
      *            <pre class="prettyprint">
-     *            Group innerGroup = group.getGroup("key");
-     *            </pre>
+     *                       Group innerGroup = group.getGroup("key");
+     *                       </pre>
      */
     public Group getGroup(String key) {
 
@@ -398,8 +398,8 @@ public class Group {
      *
      *            <br><br><b>Example :</b><br>
      *            <pre class="prettyprint">
-     *            Group innerGroup = group.getGroups("key");
-     *            </pre>
+     *                       Group innerGroup = group.getGroups("key");
+     *                       </pre>
      */
     public List<Group> getGroups(String key) {
 

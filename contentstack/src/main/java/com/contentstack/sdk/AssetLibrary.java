@@ -1,8 +1,5 @@
 package com.contentstack.sdk;
 
-
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.ArrayMap;
 import android.util.Log;
@@ -45,8 +42,7 @@ public class AssetLibrary implements INotifyClass {
      * @author Contentstack
      */
     public enum ORDERBY {
-        ASCENDING,
-        DESCENDING
+        ASCENDING, DESCENDING
     }
 
     protected AssetLibrary() {
@@ -69,9 +65,9 @@ public class AssetLibrary implements INotifyClass {
      *
      *              <br><br><b>Example :</b><br>
      *              <pre class="prettyprint">
-     *                                                                                                                                                                           AssetLibrary assetLibObject = Contentstack.stack(context, "apiKey", "deliveryToken",  config).assetLibrary();
-     *                                                                                                                                                                           assetLibObject.setHeader("custom_header_key", "custom_header_value");
-     *                                                                                                                                                                           </pre>
+     *                                                                                                                                                                                                                  AssetLibrary assetLibObject = Contentstack.stack(context, "apiKey", "deliveryToken",  config).assetLibrary();
+     *                                                                                                                                                                                                                  assetLibObject.setHeader("custom_header_key", "custom_header_value");
+     *                                                                                                                                                                                                                  </pre>
      */
     public void setHeader(String key, String value) {
         if (!TextUtils.isEmpty(key) && !TextUtils.isEmpty(value)) {
@@ -349,7 +345,7 @@ public class AssetLibrary implements INotifyClass {
         return null;
     }
 
-    private void throwException(@NonNull String tag, @Nullable String messageString, @Nullable Exception e) {
+    private void throwException(String tag, String messageString, Exception e) {
         Error error = new Error();
         if (messageString != null) {
             error.setErrorMessage(messageString);

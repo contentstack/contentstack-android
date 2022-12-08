@@ -30,71 +30,73 @@ import java.io.IOException;
  * to identify how HTTP messages are framed.
  */
 public enum Protocol {
-  /**
-   * An obsolete plaintext framing that does not use persistent sockets by
-   * default.
-   */
-  HTTP_1_0("http/1.0"),
+    /**
+     * An obsolete plaintext framing that does not use persistent sockets by
+     * default.
+     */
+    HTTP_1_0("http/1.0"),
 
-  /**
-   * A plaintext framing that includes persistent connections.
-   *
-   * <p>This version of OkHttp implements <a
-   * href="http://www.ietf.org/rfc/rfc2616.txt">RFC 2616</a>, and tracks
-   * revisions to that spec.
-   */
-  HTTP_1_1("http/1.1"),
+    /**
+     * A plaintext framing that includes persistent connections.
+     *
+     * <p>This version of OkHttp implements <a
+     * href="http://www.ietf.org/rfc/rfc2616.txt">RFC 2616</a>, and tracks
+     * revisions to that spec.
+     */
+    HTTP_1_1("http/1.1"),
 
-  /**
-   * Chromium's binary-framed protocol that includes header compression,
-   * multiplexing multiple requests on the same socket, and server-push.
-   * HTTP/1.1 semantics are layered on SPDY/3.
-   *
-   * <p>This version of OkHttp implements SPDY 3 <a
-   * href="http://dev.chromium.org/spdy/spdy-protocol/spdy-protocol-draft3-1">draft
-   * 3.1</a>. Future releases of OkHttp may use this identifier for a newer draft
-   * of the SPDY spec.
-   */
-  SPDY_3("spdy/3.1"),
+    /**
+     * Chromium's binary-framed protocol that includes header compression,
+     * multiplexing multiple requests on the same socket, and server-push.
+     * HTTP/1.1 semantics are layered on SPDY/3.
+     *
+     * <p>This version of OkHttp implements SPDY 3 <a
+     * href="http://dev.chromium.org/spdy/spdy-protocol/spdy-protocol-draft3-1">draft
+     * 3.1</a>. Future releases of OkHttp may use this identifier for a newer draft
+     * of the SPDY spec.
+     */
+    SPDY_3("spdy/3.1"),
 
-  /**
-   * The IETF's binary-framed protocol that includes header compression,
-   * multiplexing multiple requests on the same socket, and server-push.
-   * HTTP/1.1 semantics are layered on HTTP/2.
-   *
-   * <p>This version of OkHttp implements HTTP/2 <a
-   * href="http://tools.ietf.org/html/draft-ietf-httpbis-http2-13">draft 12</a>
-   * with HPACK <a
-   * href="http://tools.ietf.org/html/draft-ietf-httpbis-header-compression-08">draft
-   * 6</a>. Future releases of OkHttp may use this identifier for a newer draft
-   * of these specs.
-   */
-  HTTP_2("h2-13");
+    /**
+     * The IETF's binary-framed protocol that includes header compression,
+     * multiplexing multiple requests on the same socket, and server-push.
+     * HTTP/1.1 semantics are layered on HTTP/2.
+     *
+     * <p>This version of OkHttp implements HTTP/2 <a
+     * href="http://tools.ietf.org/html/draft-ietf-httpbis-http2-13">draft 12</a>
+     * with HPACK <a
+     * href="http://tools.ietf.org/html/draft-ietf-httpbis-header-compression-08">draft
+     * 6</a>. Future releases of OkHttp may use this identifier for a newer draft
+     * of these specs.
+     */
+    HTTP_2("h2-13");
 
-  private final String protocol;
+    private final String protocol;
 
-  Protocol(String protocol) {
-    this.protocol = protocol;
-  }
+    Protocol(String protocol) {
+        this.protocol = protocol;
+    }
 
-  /**
-   * Returns the protocol identified by {@code protocol}.
-   * @throws IOException if {@code protocol} is unknown.
-   */
-  public static Protocol get(String protocol) throws IOException {
-    // Unroll the loop over values() to save an allocation.
-    if (protocol.equals(HTTP_1_0.protocol)) return HTTP_1_0;
-    if (protocol.equals(HTTP_1_1.protocol)) return HTTP_1_1;
-    if (protocol.equals(HTTP_2.protocol)) return HTTP_2;
-    if (protocol.equals(SPDY_3.protocol)) return SPDY_3;
-    throw new IOException("Unexpected protocol: " + protocol);
-  }
+    /**
+     * Returns the protocol identified by {@code protocol}.
+     *
+     * @throws IOException if {@code protocol} is unknown.
+     */
+    public static Protocol get(String protocol) throws IOException {
+        // Unroll the loop over values() to save an allocation.
+        if (protocol.equals(HTTP_1_0.protocol)) return HTTP_1_0;
+        if (protocol.equals(HTTP_1_1.protocol)) return HTTP_1_1;
+        if (protocol.equals(HTTP_2.protocol)) return HTTP_2;
+        if (protocol.equals(SPDY_3.protocol)) return SPDY_3;
+        throw new IOException("Unexpected protocol: " + protocol);
+    }
 
-  /**
-   * Returns the string used to identify this protocol for ALPN and NPN, like
-   * "http/1.1", "spdy/3.1" or "h2-13".
-   */
-  @Override public String toString() {
-    return protocol;
-  }
+    /**
+     * Returns the string used to identify this protocol for ALPN and NPN, like
+     * "http/1.1", "spdy/3.1" or "h2-13".
+     */
+    @Override
+    public String toString() {
+        return protocol;
+    }
 }

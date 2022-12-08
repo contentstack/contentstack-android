@@ -32,33 +32,33 @@ import java.io.IOException;
  * interface is in {@link OkHttpClient}.
  */
 public abstract class Internal {
-  public static Internal instance;
+    public static Internal instance;
 
-  public abstract Transport newTransport(Connection connection, HttpEngine httpEngine)
-      throws IOException;
+    public abstract Transport newTransport(Connection connection, HttpEngine httpEngine)
+            throws IOException;
 
-  public abstract boolean clearOwner(Connection connection);
+    public abstract boolean clearOwner(Connection connection);
 
-  public abstract void closeIfOwnedBy(Connection connection, Object owner) throws IOException;
+    public abstract void closeIfOwnedBy(Connection connection, Object owner) throws IOException;
 
-  public abstract int recycleCount(Connection connection);
+    public abstract int recycleCount(Connection connection);
 
-  public abstract void setProtocol(Connection connection, Protocol protocol);
+    public abstract void setProtocol(Connection connection, Protocol protocol);
 
-  public abstract void setOwner(Connection connection, HttpEngine httpEngine);
+    public abstract void setOwner(Connection connection, HttpEngine httpEngine);
 
-  public abstract boolean isReadable(Connection pooled);
+    public abstract boolean isReadable(Connection pooled);
 
-  public abstract void addLine(Headers.Builder builder, String line);
+    public abstract void addLine(Headers.Builder builder, String line);
 
-  public abstract void setCache(OkHttpClient client, InternalCache internalCache);
+    public abstract void setCache(OkHttpClient client, InternalCache internalCache);
 
-  public abstract InternalCache internalCache(OkHttpClient client);
+    public abstract InternalCache internalCache(OkHttpClient client);
 
-  public abstract void recycle(ConnectionPool pool, Connection connection);
+    public abstract void recycle(ConnectionPool pool, Connection connection);
 
-  public abstract RouteDatabase routeDatabase(OkHttpClient client);
+    public abstract RouteDatabase routeDatabase(OkHttpClient client);
 
-  public abstract void connectAndSetOwner(OkHttpClient client, Connection connection,
-      HttpEngine owner, Request request) throws IOException;
+    public abstract void connectAndSetOwner(OkHttpClient client, Connection connection,
+                                            HttpEngine owner, Request request) throws IOException;
 }

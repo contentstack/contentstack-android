@@ -2,11 +2,10 @@ package com.contentstack.sdk;
 
 import android.util.ArrayMap;
 import android.text.TextUtils;
+import android.util.Log;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
-import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.contentstack.sdk.utilities.CSAppConstants;
@@ -252,25 +251,16 @@ class CSHttpConnection implements IURLRequestHTTP {
         headers.put("X-User-Agent", "contentstack-android/" + CSAppConstants.SDK_VERSION);
 
 
-        jsonObjectRequest = new JSONUTF8Request(requestId, url, requestJSON, new Response.Listener<JSONObject>() {
-
-            @Override
-            public void onResponse(JSONObject response) {
-                responseJSON = response;
-                if (responseJSON != null) {
-                    connectionRequest.onRequestFinished(CSHttpConnection.this);
-                }
+        jsonObjectRequest = new JSONUTF8Request(requestId, url, requestJSON, response -> {
+            responseJSON = response;
+            Log.i("response", response.toString());
+            if (responseJSON != null) {
+                connectionRequest.onRequestFinished(CSHttpConnection.this);
             }
-        }, new Response.ErrorListener() {
+        }, error -> generateBuiltError(error)) {
 
             @Override
-            public void onErrorResponse(VolleyError error) {
-                generateBuiltError(error);
-            }
-        }) {
-
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
+            public Map<String, String> getHeaders() {
                 return headers;
             }
 
@@ -286,23 +276,12 @@ class CSHttpConnection implements IURLRequestHTTP {
     private void httpRequest(String url) {
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
-                (Request.Method.GET, url, requestJSON, new Response.Listener<JSONObject>() {
-
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        responseJSON = response;
-                        if (responseJSON != null) {
-                            connectionRequest.onRequestFinished(CSHttpConnection.this);
-                        }
+                (Request.Method.GET, url, requestJSON, response -> {
+                    responseJSON = response;
+                    if (responseJSON != null) {
+                        connectionRequest.onRequestFinished(CSHttpConnection.this);
                     }
-                }, new Response.ErrorListener() {
-
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        generateBuiltError(error);
-
-                    }
-                });
+                }, error -> generateBuiltError(error));
 
         jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(CSAppConstants.TimeOutDuration, CSAppConstants.NumRetry, CSAppConstants.BackOFMultiplier));
         jsonObjectRequest.setShouldCache(false);

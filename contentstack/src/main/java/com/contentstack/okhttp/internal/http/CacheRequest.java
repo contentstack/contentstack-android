@@ -20,6 +20,7 @@ import com.contentstack.okio.Sink;
 import java.io.IOException;
 
 public interface CacheRequest {
-  Sink body() throws IOException;
-  void abort();
+    Sink body() throws IOException;
+
+    void abort();
 }
