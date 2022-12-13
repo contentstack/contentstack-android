@@ -75,10 +75,10 @@ public class Query implements INotifyClass {
      *
      *              <br><br><b>Example :</b><br>
      *              <pre class="prettyprint">
-     *                            Stack stack = Contentstack.stack(context, "apiKey", "deliveryToken", "env");
-     *                            Query csQuery = stack.contentType("contentType_name").query();<br>
-     *                            csQuery.setHeader("custom_key", "custom_value");
-     *                            </pre>
+     *               Stack stack = Contentstack.stack(context, "apiKey", "deliveryToken", "env");
+     *               Query query = stack.contentType("contentType_name").query();<br>
+     *               query.setHeader("custom_key", "custom_value");<br>
+     *               </pre>
      */
     public void setHeader(String key, String value) {
         if (!TextUtils.isEmpty(key) && !TextUtils.isEmpty(value)) {
@@ -93,10 +93,10 @@ public class Query implements INotifyClass {
      *
      *            <br><br><b>Example :</b><br>
      *            <pre class="prettyprint">
-     *                        Stack stack = Contentstack.stack(context, "apiKey", "deliveryToken", "env");
-     *                        Query csQuery = stack.contentType("contentType_name").query();<br>
-     *                        csQuery.removeHeader("custom_key");
-     *                       </pre>
+     *                                   Stack stack = Contentstack.stack(context, "apiKey", "deliveryToken", "env");
+     *                                   Query csQuery = stack.contentType("contentType_name").query();<br>
+     *                                   csQuery.removeHeader("custom_key");
+     *                                  </pre>
      */
     public void removeHeader(String key) {
         if (!TextUtils.isEmpty(key)) {
@@ -1076,27 +1076,6 @@ public class Query implements INotifyClass {
         return this;
     }
 
-
-    /**
-     * Include object owner&#39;s profile in the objects data.
-     *
-     * @return {@linkplain Query} object, so you can chain this call.
-     *
-     * <br><br><b>Example :</b><br>
-     * <pre class="prettyprint">
-     *     Stack stack = Contentstack.stack(context, "apiKey", "deliveryToken", "env");
-     *     Query csQuery = stack.contentType("contentType_name").query();<br>
-     *     csQuery.includeOwner();
-     * </pre>
-     */
-    public Query includeOwner() {
-        try {
-            urlQueries.put("include_owner", true);
-        } catch (Exception e) {
-            throwException("includeUser", CSAppConstants.ErrorMessage_QueryFilterException, e);
-        }
-        return this;
-    }
 
     /**
      * Fetches all the objects before specified uid.
