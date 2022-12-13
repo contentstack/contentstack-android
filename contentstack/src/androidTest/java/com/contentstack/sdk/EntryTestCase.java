@@ -1,7 +1,6 @@
 package com.contentstack.sdk;
 
 import android.content.Context;
-import android.support.test.InstrumentationRegistry;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -14,6 +13,8 @@ import java.util.ArrayList;
 import java.util.concurrent.CountDownLatch;
 
 import static junit.framework.TestCase.*;
+
+import androidx.test.InstrumentationRegistry;
 
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)

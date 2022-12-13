@@ -1,7 +1,6 @@
 package com.contentstack.sdk;
 
 import android.content.Context;
-import android.support.test.InstrumentationRegistry;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -9,11 +8,12 @@ import org.json.JSONObject;
 import org.junit.*;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
 import static junit.framework.TestCase.assertEquals;
+
+import androidx.test.InstrumentationRegistry;
 
 
 public class QueryTestCase {

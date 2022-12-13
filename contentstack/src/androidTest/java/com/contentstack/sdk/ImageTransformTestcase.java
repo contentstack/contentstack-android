@@ -1,11 +1,11 @@
 package com.contentstack.sdk;
 
 import android.content.Context;
-import android.support.test.InstrumentationRegistry;
 import android.util.Log;
 
+import androidx.test.InstrumentationRegistry;
+
 import org.junit.*;
-import org.junit.runner.JUnitCore;
 
 import java.util.LinkedHashMap;
 import java.util.concurrent.CountDownLatch;

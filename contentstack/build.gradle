@@ -206,8 +206,8 @@ uploadArchives {
                         id 'ishaileshmishra'
                         name 'Shailesh Mishra'
                         email 'mobile@contentstack.com'
-                        roles 'Sr Software Engineer'
-                        organization 'contentstack'
+                        roles 'Software Engineer'
+                        organization 'Contentstack'
                     }
                 }
             }
