@@ -1,10 +1,17 @@
 ﻿# CHANGELOG
 
+## Version 3.10.3
+
+###### Date: 15-Dec-2022
+
+- Minor fixes
+- dependencies updated
+
 ## Version 3.10.2
 
 ###### Date: 27-Jun-2022
 
-- #23 Implicit PendingIntent detected in ContentStack Android SDK
+- # 23 Implicit PendingIntent detected in ContentStack Android SDK
 - New Region Support - AZURE_NA
 
 ---
@@ -102,8 +109,10 @@
 Change: Added support of below methods in SDK
 
 ```java
- getContentTypes() in Stack class
- fetch in ContentType class
+ getContentTypes()in Stack
+
+class
+fetch in ContentType class
 ```
 
 Below two support from the Config class has been removed permanently
@@ -139,19 +148,13 @@ public boolean isSSL()
 Change:
 
 New Features:
-\*Stack
-– added method 'sync'
+\*Stack – added method 'sync'
 
-added method 'syncPaginationToken'
-added method 'syncToken'
-added method 'syncFromDate'
-added method 'syncContentType'
-added method 'syncLocale'
-added method 'syncPublishType'
-added method 'sync(contentType, from_date, language, publish_type,syncCallBack)'
+added method 'syncPaginationToken' added method 'syncToken' added method 'syncFromDate' added
+method 'syncContentType' added method 'syncLocale' added method 'syncPublishType' added method '
+sync(contentType, from_date, language, publish_type,syncCallBack)'
 
-SyncStack
-Added New Class
+SyncStack Added New Class
 
 ---
 
@@ -162,11 +165,11 @@ Added New Class
 New Features:
 
 - Entry
-  - added method ‘addParam’
+    - added method ‘addParam’
 - Query
-  - added method 'addParam'
+    - added method 'addParam'
 - Asset
-  - added method ‘addParam'
+    - added method ‘addParam'
 
 ---
 
@@ -194,7 +197,7 @@ None
 API deprecation:
 
 - Query
-  - Deprecated method 'includeSchema'
+    - Deprecated method 'includeSchema'
 
 Bug Fixes:
 
@@ -208,18 +211,18 @@ Bug Fixes:
 
 - New Features:
 
-  - None
+    - None
 
 - API Modifications:
-  - None
+    - None
 
 API deprecation:
 
 None
 
 - Bug Fixes:
-  - Cache Policy bug fixed.
-  - Cache Policy timeout increased.
+    - Cache Policy bug fixed.
+    - Cache Policy timeout increased.
 
 ---
 
@@ -239,9 +242,7 @@ API deprecation:
 
      Asset
 
-1] Removed getPublishDetails() method.
-Entry
-1] Removed getPublishDetails() method.
+1] Removed getPublishDetails() method. Entry 1] Removed getPublishDetails() method.
 
 Bug Fixes:
 
@@ -295,8 +296,7 @@ API Modifications:
 
     Asset
 
-1] Renamed getContentType() to getFileType() method.
-2] Renamed getUploadUrl() to getUrl() method.
+1] Renamed getContentType() to getFileType() method. 2] Renamed getUploadUrl() to getUrl() method.
 
 API deprecation:
 
@@ -320,12 +320,10 @@ Added new class Asset
 
 Added new class AssetLibrary
 
-Conetntstack
-1] Added stack(Context context, String stackApiKey, String accessToken, String environment, Config config) method.
+Conetntstack 1] Added stack(Context context, String stackApiKey, String accessToken, String
+environment, Config config) method.
 
-Stack
-1] Added asset() method.
-2] Added assetLibrary() method.
+Stack 1] Added asset() method. 2] Added assetLibrary() method.
 
     Entry
      1] Added getPublishDetails() method.
@@ -336,8 +334,8 @@ None
 
 API deprecation:
 
-Conetntstack
-1] Removed stack(Context context, String stackApiKey, String accessToken, String environment, boolean isEnvironmentUid) method.
+Conetntstack 1] Removed stack(Context context, String stackApiKey, String accessToken, String
+environment, boolean isEnvironmentUid) method.
 
     Stack
      1] Removed setVersion(String version) method.
@@ -400,12 +398,10 @@ None
 
 Bug Fixes:
 
-Query
-1] Fixed search method issue causing improper result.
+Query 1] Fixed search method issue causing improper result.
 
-Entry
-1] Fixed includeReference method issue causing improper result.
-2] Fixed fetch method which now return response as per environment.
+Entry 1] Fixed includeReference method issue causing improper result. 2] Fixed fetch method which
+now return response as per environment.
 
 ---
 
