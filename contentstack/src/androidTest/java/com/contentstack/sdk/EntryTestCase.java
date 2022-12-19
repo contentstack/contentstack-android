@@ -14,7 +14,7 @@ import java.util.concurrent.CountDownLatch;
 
 import static junit.framework.TestCase.*;
 
-import androidx.test.InstrumentationRegistry;
+import androidx.test.core.app.ApplicationProvider;
 
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
@@ -29,7 +29,7 @@ public class EntryTestCase {
 
     @BeforeClass
     public static void oneTimeSetUp() throws Exception {
-        Context appContext = InstrumentationRegistry.getTargetContext();
+        Context appContext = ApplicationProvider.getApplicationContext();
         Config config = new Config();
         String DEFAULT_HOST = BuildConfig.host;
         config.setHost(DEFAULT_HOST);

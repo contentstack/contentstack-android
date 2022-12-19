@@ -1,0 +1,69 @@
+apply plugin: 'maven-publish'
+apply plugin: 'signing'
+
+task androidSourcesJar(type: Jar) {
+    archiveClassifier.set('sources')
+    if (project.plugins.findPlugin("com.android.library")) {
+        from android.sourceSets.main.java.srcDirs
+    } else {
+        from sourceSets.main.java.srcDirs
+    }
+}
+
+artifacts {
+    archives androidSourcesJar
+}
+
+group = "com.contentstack.sdk"
+version = "3.10.3-SNAPSHOT"
+
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                groupId = 'com.contentstack.sdk'
+                artifactId = 'android'
+                version = '3.10.3-SNAPSHOT'
+                if (project.plugins.findPlugin("com.android.library")) {
+                    from components.release
+                } else {
+                    artifact("$buildDir/libs/${project.getName()}-${version}.jar")
+                }
+                artifact androidSourcesJar
+                pom {
+                    name = 'contentstack-android'
+                    description = 'Android SDK for Contentstack Content Delivery API, Contentstack is a headless CMS with an API-first approach'
+                    url = 'http://www.contentstack.com'
+
+                    licenses {
+                        license {
+                            name = 'The MIT License'
+                            url = 'http://www.opensource.org/licenses/mit-license.php'
+                        }
+                    }
+                    developers {
+                        developer {
+                            id = 'ishaileshmishra'
+                            name = 'Shailesh Mishra'
+                            email = 'mobile@contentstack.com'
+                        }
+                    }
+                    scm {
+                        connection = 'scm:git@github.com:contentstack/contentstack-android'
+                        developerConnection = 'scm:git@github.com:contentstack/contentstack-android.git'
+                        url = 'https://github.com/contentstack/contentstack-android'
+                    }
+
+                }
+            }
+        }
+    }
+}
+
+ext["signing.keyId"] = rootProject.ext["signing.keyId"]
+ext["signing.password"] = rootProject.ext["signing.password"]
+ext["signing.secretKeyRingFile"] = rootProject.ext["signing.secretKeyRingFile"]
+
+signing {
+    sign publishing.publications
+}

@@ -257,7 +257,7 @@ class CSHttpConnection implements IURLRequestHTTP {
             if (responseJSON != null) {
                 connectionRequest.onRequestFinished(CSHttpConnection.this);
             }
-        }, error -> generateBuiltError(error)) {
+        }, this::generateBuiltError) {
 
             @Override
             public Map<String, String> getHeaders() {
@@ -281,7 +281,7 @@ class CSHttpConnection implements IURLRequestHTTP {
                     if (responseJSON != null) {
                         connectionRequest.onRequestFinished(CSHttpConnection.this);
                     }
-                }, error -> generateBuiltError(error));
+                }, this::generateBuiltError);
 
         jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(CSAppConstants.TimeOutDuration, CSAppConstants.NumRetry, CSAppConstants.BackOFMultiplier));
         jsonObjectRequest.setShouldCache(false);

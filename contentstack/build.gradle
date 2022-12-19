@@ -1,154 +1,78 @@
-plugins {
-    id 'com.android.library'
-    id 'maven-publish'
-    id 'signing'
+apply plugin: 'com.android.library'
+
+ext {
+    PUBLISH_GROUP_ID = 'com.contentstack.sdk'
+    PUBLISH_ARTIFACT_ID = 'android'
+    PUBLISH_VERSION = '3.10.3-SNAPSHOT'
+    PUBLISH_DESCRIPTION = 'The Content Delivery SDK is used to retrieve content from your Contentstack account and deliver it to your web or mobile properties.'
+    PUBLISH_URL = 'https://github.com/contentstack/contentstack-android'
+    PUBLISH_LICENSE_NAME = 'MIT License'
+    PUBLISH_LICENSE_URL = 'https://github.com/contentstack/contentstack-android/blob/master/LICENSE'
+    PUBLISH_DEVELOPER_ID = 'ishaileshmishra'
+    PUBLISH_DEVELOPER_NAME = 'Shailesh Mishra'
+    PUBLISH_DEVELOPER_EMAIL = 'shailesh.mishra@contentstack.com'
+    PUBLISH_SCM_CONNECTION = 'scm:git@github.com:contentstack/contentstack-android'
+    PUBLISH_SCM_DEVELOPER_CONNECTION = 'scm:git@github.com:contentstack/contentstack-android'
+    PUBLISH_SCM_URL = 'https://github.com/contentstack/contentstack-android/tree/master'
 }
 
-def lp = new Properties()
-lp.load(new FileInputStream(rootProject.file("local.properties")))
+apply from: "${rootProject.projectDir}/scripts/publish-module.gradle"
 
-def HOST = lp['host']
-def API_KEY = lp['APIKey']
-def DELIVERY_TOKEN = lp['deliveryToken']
-def ENV = lp['env']
-def CT = lp['contentType']
-def ASSET_UID = lp['assetUid']
-
+def localProperties = new Properties()
+localProperties.load(new FileInputStream(rootProject.file("local.properties")))
 
 android {
-    namespace = 'com.contentstack.sdk'
     compileSdk 33
-    buildToolsVersion '33.0.1'
+    buildToolsVersion '30.0.2'
+
     defaultConfig {
-        minSdk 19
-        targetSdk 33
+        minSdkVersion 19
         versionCode 1
-        versionName "1.0"
+        versionName "1.0.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        signingConfig signingConfigs.debug
     }
     buildTypes {
+
         debug {
             debuggable true
             testCoverageEnabled true
-            buildConfigField "String", "host", HOST
-            buildConfigField "String", "APIKey", API_KEY
-            buildConfigField "String", "deliveryToken", DELIVERY_TOKEN
-            buildConfigField "String", "environment", ENV
-            buildConfigField "String", "contentTypeUID", CT
-            buildConfigField "String", "assetUID", ASSET_UID
+            buildConfigField "String", "host", localProperties['host']
+            buildConfigField "String", "APIKey", localProperties['APIKey']
+            buildConfigField "String", "deliveryToken", localProperties['deliveryToken']
+            buildConfigField "String", "environment", localProperties['env']
+            buildConfigField "String", "contentTypeUID", localProperties['contentType']
+            buildConfigField "String", "assetUID", localProperties['assetUid']
         }
+
         release {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            multiDexEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            buildConfigField "String", "host", localProperties['host']
+            buildConfigField "String", "APIKey", localProperties['APIKey']
+            buildConfigField "String", "deliveryToken", localProperties['deliveryToken']
+            buildConfigField "String", "environment", localProperties['env']
+            buildConfigField "String", "contentTypeUID", localProperties['contentType']
+            buildConfigField "String", "assetUID", localProperties['assetUid']
         }
-    }
-    productFlavors {}
-    testFixtures {
-        enable = true
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-    packagingOptions {
-        resources.excludes.add("META-INF/*")
-    }
 
-}
-
-
-tasks.register('generateRepo', Zip) {
-    def publishTask = tasks.named('publishReleasePublicationToMyrepoRepository')
-    from publishTask.map { it.getRepository().getUrl() }
-    into 'library'
-    archiveFileName.set('contentstack.zip')
-}
-
-publishing {
-    publications {
-        release(MavenPublication) {
-
-            groupId = 'com.contentstack-sdk'
-            artifactId = 'android'
-            version = '3.10.3'
-
-            afterEvaluate {}
-
-            suppressPomMetadataWarningsFor('runtimeElements')
-            versionMapping {
-                usage('java-api') {
-                    fromResolutionOf('runtimeClasspath')
-                }
-//                usage('java-runtime') {
-//                    fromResolutionResult()
-//                }
-            }
-            pom {
-                name = 'android'
-                description = 'Android SDK for Contentstack Content Delivery API, Contentstack is a headless CMS with an API-first approach'
-                url = 'http://www.contentstack.com'
-
-                licenses {
-                    license {
-                        name = 'The MIT License'
-                        url = 'http://www.opensource.org/licenses/mit-license.php'
-                    }
-                }
-                developers {
-                    developer {
-                        id = 'ishaileshmishra'
-                        name = 'Shailesh Mishra'
-                        email = 'mobile@contentstack.com'
-                    }
-                }
-                scm {
-                    url = 'https://github.com/contentstack/contentstack-android/'
-                    connection = 'scm:git@github.com:contentstack/contentstack-android'
-                    developerConnection = 'scm:git@github.com:contentstack/contentstack-android.git'
-                }
-
-            }
-        }
-    }
-    repositories {
-
-        maven {
-            name = "contentstack-android"
-            url = "https://github.com/contentstack/contentstack-android"
-            // change URLs to point to your repos, e.g. http://my.org/repo
-            def releasesRepoUrl = layout.buildDirectory.dir('repos/releases')
-            def snapshotsRepoUrl = layout.buildDirectory.dir('repos/snapshots')
-            url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
-
-//            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
-//                authentication(userName: lp('ossrhUsername'), password: lp('ossrhPassword'))
-//            }
-//            snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
-//                authentication(userName: lp('ossrhUsername'), password: lp('ossrhPassword'))
-//            }
-        }
+    testOptions {
+        unitTests.returnDefaultValues = true
     }
 }
-
 
 dependencies {
-    implementation 'com.android.volley:volley:1.2.1'
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'junit:junit:4.13.2'
     testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.4'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'
-    implementation 'com.contentstack.sdk:utils:1.2.0'
-}
+    implementation 'androidx.appcompat:appcompat:1.5.1'
+    implementation 'com.android.volley:volley:1.2.1'
+    androidTestImplementation 'androidx.test:core:1.5.0'
 
-
-sourceSets {
-    main {
-        java { srcDirs = ["src/java"] }
-        resources { srcDir "src/resources" }
-    }
-}
-
-signing {
-    sign publishing.publications.release
+    androidTestImplementation "androidx.test:runner:1.5.1"
+    androidTestImplementation "androidx.test:rules:1.5.0"
 }
