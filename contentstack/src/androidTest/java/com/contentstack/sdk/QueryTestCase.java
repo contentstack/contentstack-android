@@ -13,7 +13,7 @@ import java.util.List;
 
 import static junit.framework.TestCase.assertEquals;
 
-import androidx.test.InstrumentationRegistry;
+import androidx.test.core.app.ApplicationProvider;
 
 
 public class QueryTestCase {
@@ -25,7 +25,7 @@ public class QueryTestCase {
 
     @BeforeClass
     public static void oneTimeSetUp() throws Exception {
-        Context appContext = InstrumentationRegistry.getTargetContext();
+        Context appContext = ApplicationProvider.getApplicationContext();
         Config config = new Config();
         String DEFAULT_API_KEY = BuildConfig.APIKey;
         String DEFAULT_DELIVERY_TOKEN = BuildConfig.deliveryToken;
