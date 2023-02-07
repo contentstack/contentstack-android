@@ -1,5 +1,12 @@
 ﻿# CHANGELOG
 
+## Version 3.11.0
+
+###### Date: 08-Feb-2023
+
+- string locale support added for sync and syncLocale
+- dependencies updated
+
 ## Version 3.10.3
 
 ###### Date: 15-Dec-2022
@@ -107,13 +114,6 @@
 ###### Date: Apr-12-2019
 
 Change: Added support of below methods in SDK
-
-```java
- getContentTypes()in Stack
-
-class
-fetch in ContentType class
-```
 
 Below two support from the Config class has been removed permanently
 
