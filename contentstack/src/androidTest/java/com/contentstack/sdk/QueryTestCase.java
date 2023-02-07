@@ -632,8 +632,6 @@ public class QueryTestCase {
                     Entry checkResp = queryresult.getResultObjects().get(0);
                     Log.d(TAG, checkResp.toString());
                 }
-                //boolean hasEmbeddedItemKey = query.mainJSON.has("include_embedded_items[]");
-                //Assert.assertTrue(hasEmbeddedItemKey);
             }
         });
     }
@@ -649,8 +647,6 @@ public class QueryTestCase {
                     Entry checkResp = queryresult.getResultObjects().get(0);
                     Log.d(TAG, queryresult.getResultObjects().toString());
                 }
-                // boolean hasEmbeddedItemKey = query.mainJSON.has("include_embedded_items[]");
-                // Assert.assertTrue(hasEmbeddedItemKey);
             }
         });
     }
