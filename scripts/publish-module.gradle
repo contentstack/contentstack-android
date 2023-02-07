@@ -15,7 +15,7 @@ artifacts {
 }
 
 group = "com.contentstack.sdk"
-version = "3.10.3-SNAPSHOT"
+version = "3.11.0-SNAPSHOT"
 
 afterEvaluate {
     publishing {
