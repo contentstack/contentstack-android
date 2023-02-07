@@ -23,8 +23,8 @@ public class ContentstackUtil {
      * @return {@link Calendar} object.
      * @throws ParseException <br><br><b>Example :</b><br>
      *                        <pre class="prettyprint">
-     *                         Util.parseDate(dateString, TimeZone.getDefault());
-     *                         </pre>
+     *                                                                       Util.parseDate(dateString, TimeZone.getDefault());
+     *                                                                       </pre>
      */
     public static Calendar parseDate(String date, TimeZone timeZone) throws ParseException {
         ArrayList<String> knownPatterns = new ArrayList<String>();
@@ -42,10 +42,9 @@ public class ContentstackUtil {
 
         for (String formatString : knownPatterns) {
             try {
-
                 return parseDate(date, formatString, timeZone);
-
             } catch (ParseException e) {
+                System.out.println(e.getLocalizedMessage());
             }
         }
 
@@ -60,8 +59,8 @@ public class ContentstackUtil {
      * @return {@link Calendar} object.
      * @throws ParseException <br><br><b>Example :</b><br>
      *                        <pre class="prettyprint">
-     *                                                 Util.parseDate(dateString, "yyyy-MM-dd'T'HH:mm:ssZ", TimeZone.getTimeZone("GMT"));
-     *                                               </pre>
+     *                                                                                               Util.parseDate(dateString, "yyyy-MM-dd'T'HH:mm:ssZ", TimeZone.getTimeZone("GMT"));
+     *                                                                                             </pre>
      */
     @SuppressLint("SimpleDateFormat")
     public static Calendar parseDate(String date, String dateFormat, TimeZone timeZone) throws ParseException {
@@ -77,6 +76,7 @@ public class ContentstackUtil {
         SimpleDateFormat dateFormatter = new SimpleDateFormat(dateFormat);
         dateObject = dateFormatter.parse(date);
 
+        assert dateObject != null;
         month = new SimpleDateFormat("MM").format(dateObject);
         day = new SimpleDateFormat("dd").format(dateObject);
         year = new SimpleDateFormat("yyyy").format(dateObject);
@@ -90,7 +90,12 @@ public class ContentstackUtil {
             cal.setTimeZone(TimeZone.getDefault());
         }
 
-        cal.set(Integer.valueOf(year), Integer.valueOf(month) - 1, Integer.valueOf(day), Integer.valueOf(hourOfDay), Integer.valueOf(min), Integer.valueOf(sec));
+        cal.set(Integer.parseInt(year),
+                Integer.parseInt(month) - 1,
+                Integer.parseInt(day),
+                Integer.parseInt(hourOfDay),
+                Integer.parseInt(min),
+                Integer.parseInt(sec));
 
         month = null;
         day = null;
@@ -99,17 +104,7 @@ public class ContentstackUtil {
         min = null;
         sec = null;
         dateObject = null;
-
         return cal;
-    }
-
-    /**
-     * Type to compare dates.
-     */
-    public static enum DateComapareType {
-
-        WEEK, DAY, HOURS, MINUTES, SECONDS
-
     }
 
     ;

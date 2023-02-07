@@ -138,8 +138,7 @@ public class AssetTestCase {
     @Test
     public void test_G_Include_Dimension() {
         final Asset asset = stack.asset(assetUid);
-        asset.includeDimension();
-        asset.fetch(new FetchResultCallback() {
+        asset.includeDimension().fetch(new FetchResultCallback() {
             @Override
             public void onCompletion(ResponseType responseType, Error error) {
                 if (error == null) {
@@ -154,8 +153,7 @@ public class AssetTestCase {
     @Test
     public void test_H_include_fallback() {
         final Asset asset = stack.asset(assetUid);
-        asset.includeFallback();
-        asset.fetch(new FetchResultCallback() {
+        asset.includeFallback().fetch(new FetchResultCallback() {
             @Override
             public void onCompletion(ResponseType responseType, Error error) {
                 if (error == null) {
