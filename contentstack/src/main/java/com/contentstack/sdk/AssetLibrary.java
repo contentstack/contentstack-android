@@ -299,7 +299,7 @@ public class AssetLibrary implements INotifyClass {
         assetsModel = null;
         count = objectList.size();
         List<Asset> assets = new ArrayList<Asset>();
-        if (objectList != null && objectList.size() > 0) {
+        if (objectList.size() > 0) {
             for (Object object : objectList) {
                 AssetModel model = (AssetModel) object;
                 Asset asset = stackInstance.asset();
@@ -312,7 +312,6 @@ public class AssetLibrary implements INotifyClass {
                 asset.assetUid = model.uploadedUid;
                 asset.setTags(model.tags);
                 model = null;
-
                 assets.add(asset);
             }
         }

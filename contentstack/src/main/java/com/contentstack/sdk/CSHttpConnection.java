@@ -27,12 +27,12 @@ import java.util.Map;
 class CSHttpConnection implements IURLRequestHTTP {
 
     private static final String TAG = "CSHttpConnection";
-    private String urlPath;
+    private final String urlPath;
     private String controller;
     private ArrayMap<String, Object> headers;
     private String info;
     private JSONObject requestJSON;
-    private IRequestModelHTTP connectionRequest;
+    private final IRequestModelHTTP connectionRequest;
     private ResultCallBack callBackObject;
     private CSAppConstants.RequestMethod requestMethod;
     private JSONObject responseJSON;
@@ -269,24 +269,20 @@ class CSHttpConnection implements IURLRequestHTTP {
         jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(CSAppConstants.TimeOutDuration, CSAppConstants.NumRetry, CSAppConstants.BackOFMultiplier));
         jsonObjectRequest.setShouldCache(false);
         Contentstack.addToRequestQueue(protocol, jsonObjectRequest, info);
-
     }
 
 
     private void httpRequest(String url) {
-
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
-                (Request.Method.GET, url, requestJSON, response -> {
-                    responseJSON = response;
-                    if (responseJSON != null) {
-                        connectionRequest.onRequestFinished(CSHttpConnection.this);
-                    }
-                }, this::generateBuiltError);
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, requestJSON, response -> {
+            responseJSON = response;
+            if (responseJSON != null) {
+                connectionRequest.onRequestFinished(CSHttpConnection.this);
+            }
+        }, this::generateBuiltError);
 
         jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(CSAppConstants.TimeOutDuration, CSAppConstants.NumRetry, CSAppConstants.BackOFMultiplier));
         jsonObjectRequest.setShouldCache(false);
         Contentstack.addToRequestQueue("https://", jsonObjectRequest, info);
-
     }
 
     private String defaultUserAgent() {
