@@ -1,14 +1,20 @@
 apply plugin: 'maven-publish'
 apply plugin: 'signing'
 
+
 task androidSourcesJar(type: Jar) {
     archiveClassifier.set('sources')
     if (project.plugins.findPlugin("com.android.library")) {
+        // For Android libraries
         from android.sourceSets.main.java.srcDirs
+        from android.sourceSets.main.kotlin.srcDirs
     } else {
+        // For pure Kotlin libraries, in case you have them
         from sourceSets.main.java.srcDirs
+        from sourceSets.main.kotlin.srcDirs
     }
 }
+
 
 artifacts {
     archives androidSourcesJar
@@ -23,7 +29,7 @@ afterEvaluate {
             release(MavenPublication) {
                 groupId = 'com.contentstack.sdk'
                 artifactId = 'android'
-                version = '3.10.3-SNAPSHOT'
+                version = '3.11.0-SNAPSHOT'
                 if (project.plugins.findPlugin("com.android.library")) {
                     from components.release
                 } else {
@@ -67,3 +73,4 @@ ext["signing.secretKeyRingFile"] = rootProject.ext["signing.secretKeyRingFile"]
 signing {
     sign publishing.publications
 }
+

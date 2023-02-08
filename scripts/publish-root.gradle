@@ -27,13 +27,11 @@ nexusPublishing {
             stagingProfileId = sonatypeStagingProfileId
             username = ossrhUsername
             password = ossrhPassword
-//            if (project.version.endsWith('-SNAPSHOT')) {
-//                url "https://oss.sonatype.org/content/repositories/snapshots/"
-//            } else {
-//                url "https://oss.sonatype.org/service/local/"
-//            }
-            nexusUrl.set(uri("https://oss.sonatype.org/service/local/"))
-            snapshotRepositoryUrl.set(uri("https://oss.sonatype.org/content/repositories/snapshots/"))
+            if (project.version.endsWith('-SNAPSHOT')) {
+                snapshotRepositoryUrl.set(uri("https://oss.sonatype.org/content/repositories/snapshots"))
+            } else {
+                nexusUrl.set(uri("https://oss.sonatype.org/service/local/"))
+            }
         }
     }
 }

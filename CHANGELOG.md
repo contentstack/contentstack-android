@@ -2,30 +2,32 @@
 
 ## Version 3.11.0
 
-###### Date: 08-Feb-2023
+### Date: 08-Feb-2023
 
-- string locale support added for sync and syncLocale
-- dependencies updated
+- String locale support added for sync and syncLocale
+- Dependencies updated
+
+---
 
 ## Version 3.10.3
 
-###### Date: 15-Dec-2022
+### Date: 15-Dec-2022
 
 - Minor fixes
 - dependencies updated
 
 ## Version 3.10.2
 
-###### Date: 27-Jun-2022
+### Date: 27-Jun-2022
 
-- # 23 Implicit PendingIntent detected in ContentStack Android SDK
+- 23 Implicit PendingIntent detected in ContentStack Android SDK
 - New Region Support - AZURE_NA
 
 ---
 
 ## Version 3.10.1
 
-###### Date: 17-Jan-2022
+### Date: 17-Jan-2022
 
 - Fixed compile issue with target version 31
 
@@ -33,7 +35,7 @@
 
 ## Version 3.10.0
 
-###### Date: 12-Jul-2021
+### Date: 12-Jul-2021
 
 - Added support for updated Utils package
 
@@ -41,7 +43,7 @@
 
 ## Version 3.9.0
 
-###### Date: 05-April-2021
+### Date: 05-April-2021
 
 - [Entry]: entry.includeEmbeddedItems() support added
 - [Query]: query.includeEmbeddedItems() support added
@@ -50,7 +52,7 @@
 
 ## Version 3.8.2
 
-###### Date: 05-March-2021
+### Date: 05-March-2021
 
 - Updated X-User-Agent to the header
 
@@ -58,7 +60,7 @@
 
 ## Version 3.8.1
 
-###### Date: 18-FEB-2020
+### Date: 18-FEB-2020
 
 - Increased default timeout time to 30 sec
 
@@ -66,7 +68,7 @@
 
 ## Version 3.8.0
 
-###### Date: 08-DEC-2020
+### Date: 08-DEC-2020
 
 - [Asset]: includeFallback support and includeDimension added
 - [AssetQuery]: includeFallback support added
@@ -75,9 +77,9 @@
 
 ---
 
-### Version: 3.7.0
+## Version: 3.7.0
 
-###### Date: 15-Nov-2019
+### Date: 15-Nov-2019
 
 - [Stack]: Added support for function getContentType()
 - [ContentType]: updated function fetch()
@@ -86,18 +88,18 @@
 
 ---
 
-### Version: 3.6.1
+## Version: 3.6.1
 
-###### Date: 23-Aug-2019
+### Date: 23-Aug-2019
 
 - [Query] - Added support for whereIn(String key) and whereNotIn(String key) methods in Query
 - [Config] - Added support for setRegion(ContentstackRegion region) in Config class.
 
 ---
 
-### Version: 3.6.0
+## Version: 3.6.0
 
-###### Date: 26-July-2019
+### Date: 26-July-2019
 
 - [Entry] - Added support for includeReferenceContentTypeUid support in Entry.
 - [Query] - Added support for includeReferenceContentTypeUid support in Query.
@@ -109,9 +111,9 @@
 
 ---
 
-### Version: 3.5.0
+## Version: 3.5.0
 
-###### Date: Apr-12-2019
+### Date: Apr-12-2019
 
 Change: Added support of below methods in SDK
 
@@ -122,9 +124,9 @@ Below two support from the Config class has been removed permanently
 
 ---
 
-### Version: 3.4.1
+## Version: 3.4.1
 
-###### Date: Apr-05-2019
+### Date: Apr-05-2019
 
 Change:
 
@@ -141,126 +143,118 @@ public boolean isSSL()
 
 ---
 
-### Version: 3.4.0
+## Version: 3.4.0
 
-###### Date: Oct-22-2018
+### Date: Oct-22-2018
 
 Change:
 
 New Features:
-\*Stack – added method 'sync'
 
-added method 'syncPaginationToken' added method 'syncToken' added method 'syncFromDate' added
-method 'syncContentType' added method 'syncLocale' added method 'syncPublishType' added method '
-sync(contentType, from_date, language, publish_type,syncCallBack)'
+Added below function support for sync in Stack class
 
-SyncStack Added New Class
+- sync
+- syncPaginationToken
+- syncToken
+- syncFromDate
+- syncContentType
+- syncLocale
+- syncPublishType
+- sync(contentType, fromDate, locale, publishType, syncCallBack)
+- New Class SyncStack
 
 ---
 
-### Version:3.3.0
+## Version:3.3.0
 
-###### Date 15-Dec-2017
+### Date 15-Dec-2017
 
 New Features:
 
 - Entry
-    - added method ‘addParam’
+  - added method ‘addParam’
 - Query
-    - added method 'addParam'
+  - added method 'addParam'
 - Asset
-    - added method ‘addParam'
+  - added method ‘addParam'
 
 ---
 
-### Version:3.2.0
+## Version:3.2.0
 
-###### Date 10-Nov-2017
+### Date 10-Nov-2017
 
 New Features:
 
 - Stack
-
-  added method 'ImageTransform'
-
-  Query
-
-  added method 'includeContentType'
-
-  QueryResult
-
-  added method 'content_type'
-
-API Modifications:
-None
+  - added method 'ImageTransform'
+- Query
+  - added method 'includeContentType'
+- QueryResult
+  - added method 'content_type'
+- API Modifications:
+  - None
 
 API deprecation:
 
 - Query
-    - Deprecated method 'includeSchema'
+  - Deprecated method 'includeSchema'
 
-Bug Fixes:
-
-    None
+- Bug Fixes:
+  - None
 
 ---
 
-### Version: 3.1.3
+## Version: 3.1.3
 
-###### Date: 28-July-2017
+### Date: 28-July-2017
 
 - New Features:
-
-    - None
+  - None
 
 - API Modifications:
-    - None
+  - None
 
 API deprecation:
 
 None
 
 - Bug Fixes:
-    - Cache Policy bug fixed.
-    - Cache Policy timeout increased.
+  - Cache Policy bug fixed.
+  - Cache Policy timeout increased.
 
 ---
 
-### Version: 3.1.2
+## Version: 3.1.2
 
-###### Date: 24-June-2017
+### Date: 24-June-2017
 
 New Features:
 
-    None
+- None
 
 API Modifications:
-
-    None
+    - None
 
 API deprecation:
-
-     Asset
+    - Asset
 
 1] Removed getPublishDetails() method. Entry 1] Removed getPublishDetails() method.
 
 Bug Fixes:
-
-    None.
+    - None.
 
 ---
 
-### Version: 3.1.1
+## Version: 3.1.1
 
-###### Date: 17-May-2017
+### Date: 17-May-2017
 
 New Features:
-
-    None
+    - None
 
 API Modifications:
-
-    None
+    - None
 
 API deprecation:
 
@@ -272,29 +266,29 @@ Added TLSv1.2 support for older android versions.
 
 ---
 
-### Version: 3.1.0
+## Version: 3.1.0
 
-###### Date: 19-December-2016
+### Date: 19-December-2016
 
 New Features:
 
-    Added new class Group
+Added new class Group
 
-    Entry
+Entry
      1] Added getAllEntries(String refKey, String refContentType) method.
      2] Added getGroups(String key) method.
      3] Added getGroup(String key) method.
 
-    Asset
+Asset
      1] Added setCachePolicy(CachePolicy policy) method.
      2] Added getTags() method.
 
-    AssetLibrary
+AssetLibrary
      1] Added setCachePolicy(CachePolicy policy) method.
 
 API Modifications:
 
-    Asset
+Asset
 
 1] Renamed getContentType() to getFileType() method. 2] Renamed getUploadUrl() to getUrl() method.
 
@@ -308,9 +302,9 @@ None
 
 ---
 
-### Version: 3.0.0
+## Version: 3.0.0
 
-###### Date: 27-October-2016
+### Date: 27-October-2016
 
 New Features:
 
@@ -325,7 +319,7 @@ environment, Config config) method.
 
 Stack 1] Added asset() method. 2] Added assetLibrary() method.
 
-    Entry
+Entry
      1] Added getPublishDetails() method.
 
 API Modifications:
@@ -337,7 +331,7 @@ API deprecation:
 Conetntstack 1] Removed stack(Context context, String stackApiKey, String accessToken, String
 environment, boolean isEnvironmentUid) method.
 
-    Stack
+Stack
      1] Removed setVersion(String version) method.
      2] Removed setURL(String hostName, boolean isSSL) method.
      3] Removed setEnvironment(String environment, boolean isEnvironmentUid) method.
@@ -346,10 +340,10 @@ environment, boolean isEnvironmentUid) method.
      6] Removed getVersion() method.
      7] Removed getURL() method
 
-    Entry
+Entry
      1] Removed getMetadata() method.
 
-    Query
+Query
      1] Removed afterUid() method.
      2] Removed beforeUid() method.
 
@@ -359,9 +353,9 @@ None
 
 ---
 
-### Version: 1.0.2
+## Version: 1.0.2
 
-###### Date: 28-September-2016
+### Date: 28-September-2016
 
 New Features:
 
@@ -380,34 +374,28 @@ Fixed API calls issue for Android 7.0 Nougat.
 
 ---
 
-### Version: 1.0.1
+## Version: 1.0.1
 
-###### Date: 22-September-2016
+### Date: 22-September-2016
 
 New Features:
-
-None
-
+    - None
 API Modifications:
-
-None
+    - None
 
 API deprecation:
-
-None
+    - None
 
 Bug Fixes:
-
-Query 1] Fixed search method issue causing improper result.
-
-Entry 1] Fixed includeReference method issue causing improper result. 2] Fixed fetch method which
+    - Query 1] Fixed search method issue causing improper result.
+    - Entry 1] Fixed includeReference method issue causing improper result. 2] Fixed fetch method which
 now return response as per environment.
 
 ---
 
-### Initial release Version: 1.0.0
+## Initial release Version: 1.0.0
 
-###### Date: 05-August-2015
+### Date: 05-August-2015
 
 Changes
 
