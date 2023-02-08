@@ -23,7 +23,6 @@
                 <action android:name="StartContentStackClearingCache" />
             </intent-filter>
         </receiver>
-
     </application>
 
 </manifest>

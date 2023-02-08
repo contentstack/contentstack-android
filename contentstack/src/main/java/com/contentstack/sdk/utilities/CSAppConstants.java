@@ -1,7 +1,5 @@
 package com.contentstack.sdk.utilities;
 
-import com.contentstack.okhttp.Protocol;
-
 import java.util.ArrayList;
 
 /**
