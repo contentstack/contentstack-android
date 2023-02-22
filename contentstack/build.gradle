@@ -1,9 +1,10 @@
 apply plugin: 'com.android.library'
+apply plugin: 'jacoco'
 
 ext {
     PUBLISH_GROUP_ID = 'com.contentstack.sdk'
     PUBLISH_ARTIFACT_ID = 'android'
-    PUBLISH_VERSION = '3.11.0-SNAPSHOT'
+    PUBLISH_VERSION = '3.11.0'
     PUBLISH_DESCRIPTION = 'The Content Delivery SDK is used to retrieve content from your Contentstack account and deliver it to your web or mobile properties.'
     PUBLISH_URL = 'https://github.com/contentstack/contentstack-android'
     PUBLISH_LICENSE_NAME = 'MIT License'
@@ -33,7 +34,6 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
-
         debug {
             debuggable true
             testCoverageEnabled true
@@ -54,6 +54,7 @@ android {
             buildConfigField "String", "environment", localProperties['env']
             buildConfigField "String", "contentTypeUID", localProperties['contentType']
             buildConfigField "String", "assetUID", localProperties['assetUid']
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
     compileOptions {
@@ -62,6 +63,11 @@ android {
     }
 
     testOptions {
+        unitTests.all {
+            jacoco {
+                includeNoLocationClasses = true
+            }
+        }
         unitTests.returnDefaultValues = true
     }
 }
@@ -71,7 +77,7 @@ dependencies {
     //testImplementation 'junit:junit:5.9.2'
     // https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.2'
-    implementation 'androidx.appcompat:appcompat:1.6.0'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.android.volley:volley:1.2.1'
     androidTestImplementation 'androidx.test:core:1.5.0'
     androidTestImplementation "androidx.test:runner:1.5.2"

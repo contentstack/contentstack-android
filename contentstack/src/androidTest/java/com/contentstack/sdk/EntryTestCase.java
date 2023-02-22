@@ -68,6 +68,20 @@ public class EntryTestCase {
 
 
     @Test
+    public void testCustomHeader() {
+        final Query query = stack.contentType(CONTENT_TYPE_UID).query();
+        query.setHeader("customHeaderKey", "customHeaderValue");
+        query.find(new QueryResultsCallBack() {
+            @Override
+            public void onCompletion(ResponseType responseType, QueryResult queryresult, Error error) {
+                if (error == null) {
+                    entryUID = queryresult.getResultObjects().get(15).getUid();
+                }
+            }
+        });
+    }
+
+    @Test
     public void test_01_findAllEntries() {
         final Query query = stack.contentType(CONTENT_TYPE_UID).query();
         query.find(new QueryResultsCallBack() {

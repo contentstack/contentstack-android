@@ -250,7 +250,7 @@ class CSHttpConnection implements IURLRequestHTTP {
         headers.put("User-Agent", defaultUserAgent());
         headers.put("X-User-Agent", "contentstack-android/" + CSAppConstants.SDK_VERSION);
 
-
+        System.out.println(headers);
         jsonObjectRequest = new JSONUTF8Request(requestId, url, requestJSON, response -> {
             responseJSON = response;
             Log.i("response", response.toString());
