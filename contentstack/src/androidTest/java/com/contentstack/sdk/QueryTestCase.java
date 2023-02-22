@@ -201,7 +201,6 @@ public class QueryTestCase {
         ArrayList<Query> array = new ArrayList<Query>();
         array.add(query);
         array.add(subQuery);
-
         orQuery.or(array);
 
         orQuery.find(new QueryResultsCallBack() {
