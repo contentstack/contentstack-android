@@ -22,15 +22,14 @@ import java.lang.annotation.Target;
 
 /**
  * Annotation for command line parsing.
- *
+ * <p>
  * This is a copy from {@link https://github.com/rjeschke/neetutils-base}.
  *
  * @author René Jeschke (rene_jeschke@yahoo.de)
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-@interface CmdArgument
-{
+@interface CmdArgument {
     /**
      * Long name for argument. Default is 'none'. Either one or both of
      * {@code l}, {@code s} need to be provided.

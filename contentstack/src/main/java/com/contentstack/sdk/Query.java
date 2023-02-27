@@ -41,8 +41,8 @@ public class Query implements INotifyClass {
     private JSONArray objectUidForOnly = null;
     private boolean isJsonProper = true;
     // cache policy
-    private long maxCacheTimeForCall = 86400000;
-    private long defaultCacheTimeInterval = 0;
+    private final long maxCacheTimeForCall = 86400000;
+    private final long defaultCacheTimeInterval = 0;
     private CachePolicy cachePolicyForCall = null;
     private QueryResultsCallBack queryResultCallback;
     private SingleQueryResultCallback singleQueryResultCallback;
@@ -76,8 +76,8 @@ public class Query implements INotifyClass {
      *              <br><br><b>Example :</b><br>
      *              <pre class="prettyprint">
      *               Stack stack = Contentstack.stack(context, "apiKey", "deliveryToken", "env");
-     *               Query csQuery = stack.contentType("contentType_name").query();<br>
-     *               csQuery.setHeader("custom_key", "custom_value");
+     *               Query query = stack.contentType("contentType_name").query();<br>
+     *               query.setHeader("custom_key", "custom_value");<br>
      *               </pre>
      */
     public void setHeader(String key, String value) {
@@ -93,10 +93,10 @@ public class Query implements INotifyClass {
      *
      *            <br><br><b>Example :</b><br>
      *            <pre class="prettyprint">
-     *             Stack stack = Contentstack.stack(context, "apiKey", "deliveryToken", "env");
-     *             Query csQuery = stack.contentType("contentType_name").query();<br>
-     *             csQuery.removeHeader("custom_key");
-     *            </pre>
+     *                                   Stack stack = Contentstack.stack(context, "apiKey", "deliveryToken", "env");
+     *                                   Query csQuery = stack.contentType("contentType_name").query();<br>
+     *                                   csQuery.removeHeader("custom_key");
+     *                                  </pre>
      */
     public void removeHeader(String key) {
         if (!TextUtils.isEmpty(key)) {
@@ -713,9 +713,9 @@ public class Query implements INotifyClass {
                 objectUidForInclude = new JSONArray();
             }
 
-            int count = keys.length;
-            for (int i = 0; i < count; i++) {
-                objectUidForInclude.put(keys[i]);
+            //int count = keys.length;
+            for (String key : keys) {
+                objectUidForInclude.put(key);
             }
         } else {
             throwException("includeReference", CSAppConstants.ErrorMessage_QueryFilterException, null);
@@ -1078,27 +1078,6 @@ public class Query implements INotifyClass {
 
 
     /**
-     * Include object owner&#39;s profile in the objects data.
-     *
-     * @return {@linkplain Query} object, so you can chain this call.
-     *
-     * <br><br><b>Example :</b><br>
-     * <pre class="prettyprint">
-     *     Stack stack = Contentstack.stack(context, "apiKey", "deliveryToken", "env");
-     *     Query csQuery = stack.contentType("contentType_name").query();<br>
-     *     csQuery.includeOwner();
-     * </pre>
-     */
-    public Query includeOwner() {
-        try {
-            urlQueries.put("include_owner", true);
-        } catch (Exception e) {
-            throwException("includeUser", CSAppConstants.ErrorMessage_QueryFilterException, e);
-        }
-        return this;
-    }
-
-    /**
      * Fetches all the objects before specified uid.
      *
      * @param uid uid before which objects should be returned.
@@ -1209,7 +1188,7 @@ public class Query implements INotifyClass {
      *
      * <br><br><b>Example :</b><br>
      * <pre class="prettyprint">
-     *      
+     *
      *      Stack stack = Contentstack.stack(context, "apiKey", "deliveryToken", "env");
      *      Query csQuery = stack.contentType("contentType_name").query();<br>
      *      csQuery.regex("name", "^browser");
@@ -2017,7 +1996,7 @@ public class Query implements INotifyClass {
      */
     public Query includeFallback() {
         try {
-            mainJSON.put("include_fallback", true);
+            urlQueries.put("include_fallback", true);
         } catch (JSONException e) {
             Log.e(TAG, e.getLocalizedMessage());
         }
@@ -2035,7 +2014,7 @@ public class Query implements INotifyClass {
      */
     public Query includeEmbeddedItems() {
         try {
-            mainJSON.put("include_embedded_items[]", "BASE");
+            urlQueries.put("include_embedded_items[]", "BASE");
         } catch (JSONException e) {
             Log.e(TAG, e.getLocalizedMessage());
         }

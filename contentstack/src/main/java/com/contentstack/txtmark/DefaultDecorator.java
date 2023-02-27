@@ -36,286 +36,320 @@ package com.contentstack.txtmark;
  *
  * @author René Jeschke &lt;rene_jeschke@yahoo.de&gt;
  */
-public class DefaultDecorator implements Decorator
-{
-    /** Constructor. */
-    public DefaultDecorator()
-    {
+public class DefaultDecorator implements Decorator {
+    /**
+     * Constructor.
+     */
+    public DefaultDecorator() {
         // empty
     }
 
-    /** @see Decorator#openParagraph(StringBuilder) */
+    /**
+     * @see Decorator#openParagraph(StringBuilder)
+     */
     @Override
-    public void openParagraph(final StringBuilder out)
-    {
+    public void openParagraph(final StringBuilder out) {
         out.append("<p>");
     }
 
-    /** @see Decorator#closeParagraph(StringBuilder) */
+    /**
+     * @see Decorator#closeParagraph(StringBuilder)
+     */
     @Override
-    public void closeParagraph(final StringBuilder out)
-    {
+    public void closeParagraph(final StringBuilder out) {
         out.append("</p>\n");
     }
 
-    /** @see Decorator#openBlockquote(StringBuilder) */
+    /**
+     * @see Decorator#openBlockquote(StringBuilder)
+     */
     @Override
-    public void openBlockquote(final StringBuilder out)
-    {
+    public void openBlockquote(final StringBuilder out) {
         out.append("<blockquote>");
     }
 
-    /** @see Decorator#closeBlockquote(StringBuilder) */
+    /**
+     * @see Decorator#closeBlockquote(StringBuilder)
+     */
     @Override
-    public void closeBlockquote(final StringBuilder out)
-    {
+    public void closeBlockquote(final StringBuilder out) {
         out.append("</blockquote>\n");
     }
 
-    /** @see Decorator#openCodeBlock(StringBuilder) */
+    /**
+     * @see Decorator#openCodeBlock(StringBuilder)
+     */
     @Override
-    public void openCodeBlock(final StringBuilder out)
-    {
+    public void openCodeBlock(final StringBuilder out) {
         out.append("<pre><code>");
     }
 
-    /** @see Decorator#closeCodeBlock(StringBuilder) */
+    /**
+     * @see Decorator#closeCodeBlock(StringBuilder)
+     */
     @Override
-    public void closeCodeBlock(final StringBuilder out)
-    {
+    public void closeCodeBlock(final StringBuilder out) {
         out.append("</code></pre>\n");
     }
 
-    /** @see Decorator#openCodeSpan(StringBuilder) */
+    /**
+     * @see Decorator#openCodeSpan(StringBuilder)
+     */
     @Override
-    public void openCodeSpan(final StringBuilder out)
-    {
+    public void openCodeSpan(final StringBuilder out) {
         out.append("<code>");
     }
 
-    /** @see Decorator#closeCodeSpan(StringBuilder) */
+    /**
+     * @see Decorator#closeCodeSpan(StringBuilder)
+     */
     @Override
-    public void closeCodeSpan(final StringBuilder out)
-    {
+    public void closeCodeSpan(final StringBuilder out) {
         out.append("</code>");
     }
 
     /**
      * @see Decorator#openHeadline(StringBuilder,
-     *      int)
+     * int)
      */
     @Override
-    public void openHeadline(final StringBuilder out, final int level)
-    {
+    public void openHeadline(final StringBuilder out, final int level) {
         out.append("<h");
         out.append(level);
     }
 
     /**
      * @see Decorator#closeHeadline(StringBuilder,
-     *      int)
+     * int)
      */
     @Override
-    public void closeHeadline(final StringBuilder out, final int level)
-    {
+    public void closeHeadline(final StringBuilder out, final int level) {
         out.append("</h");
         out.append(level);
         out.append(">\n");
     }
 
-    /** @see Decorator#openStrong(StringBuilder) */
+    /**
+     * @see Decorator#openStrong(StringBuilder)
+     */
     @Override
-    public void openStrong(final StringBuilder out)
-    {
+    public void openStrong(final StringBuilder out) {
         out.append("<strong>");
     }
 
-    /** @see Decorator#closeStrong(StringBuilder) */
+    /**
+     * @see Decorator#closeStrong(StringBuilder)
+     */
     @Override
-    public void closeStrong(final StringBuilder out)
-    {
+    public void closeStrong(final StringBuilder out) {
         out.append("</strong>");
     }
 
-    /** @see Decorator#openEmphasis(StringBuilder) */
+    /**
+     * @see Decorator#openEmphasis(StringBuilder)
+     */
     @Override
-    public void openEmphasis(final StringBuilder out)
-    {
+    public void openEmphasis(final StringBuilder out) {
         out.append("<em>");
     }
 
-    /** @see Decorator#closeEmphasis(StringBuilder) */
+    /**
+     * @see Decorator#closeEmphasis(StringBuilder)
+     */
     @Override
-    public void closeEmphasis(final StringBuilder out)
-    {
+    public void closeEmphasis(final StringBuilder out) {
         out.append("</em>");
     }
 
-    /** @see Decorator#openStrikeout(StringBuilder) */
+    /**
+     * @see Decorator#openStrikeout(StringBuilder)
+     */
     @Override
-    public void openStrikeout(final StringBuilder out)
-    {
+    public void openStrikeout(final StringBuilder out) {
         out.append("<del>");
     }
 
-    /** @see Decorator#closeStrikeout(StringBuilder) */
+    /**
+     * @see Decorator#closeStrikeout(StringBuilder)
+     */
     @Override
-    public void closeStrikeout(final StringBuilder out)
-    {
+    public void closeStrikeout(final StringBuilder out) {
         out.append("</del>");
     }
 
-    /** @see Decorator#openSuper(StringBuilder) */
+    /**
+     * @see Decorator#openSuper(StringBuilder)
+     */
     @Override
-    public void openSuper(final StringBuilder out)
-    {
+    public void openSuper(final StringBuilder out) {
         out.append("<sup>");
     }
 
-    /** @see Decorator#closeSuper(StringBuilder) */
+    /**
+     * @see Decorator#closeSuper(StringBuilder)
+     */
     @Override
-    public void closeSuper(final StringBuilder out)
-    {
+    public void closeSuper(final StringBuilder out) {
         out.append("</sup>");
     }
 
-    /** @see Decorator#openOrderedList(StringBuilder) */
+    /**
+     * @see Decorator#openOrderedList(StringBuilder)
+     */
     @Override
-    public void openOrderedList(final StringBuilder out)
-    {
+    public void openOrderedList(final StringBuilder out) {
         out.append("<ol>\n");
     }
 
-    /** @see Decorator#closeOrderedList(StringBuilder) */
+    /**
+     * @see Decorator#closeOrderedList(StringBuilder)
+     */
     @Override
-    public void closeOrderedList(final StringBuilder out)
-    {
+    public void closeOrderedList(final StringBuilder out) {
         out.append("</ol>\n");
     }
 
-    /** @see Decorator#openUnorderedList(StringBuilder) */
+    /**
+     * @see Decorator#openUnorderedList(StringBuilder)
+     */
     @Override
-    public void openUnorderedList(final StringBuilder out)
-    {
+    public void openUnorderedList(final StringBuilder out) {
         out.append("<ul>\n");
     }
 
-    /** @see Decorator#closeUnorderedList(StringBuilder) */
+    /**
+     * @see Decorator#closeUnorderedList(StringBuilder)
+     */
     @Override
-    public void closeUnorderedList(final StringBuilder out)
-    {
+    public void closeUnorderedList(final StringBuilder out) {
         out.append("</ul>\n");
     }
 
-    /** @see Decorator#openListItem(StringBuilder) */
+    /**
+     * @see Decorator#openListItem(StringBuilder)
+     */
     @Override
-    public void openListItem(final StringBuilder out)
-    {
+    public void openListItem(final StringBuilder out) {
         out.append("<li");
     }
 
-    /** @see Decorator#closeListItem(StringBuilder) */
+    /**
+     * @see Decorator#closeListItem(StringBuilder)
+     */
     @Override
-    public void closeListItem(final StringBuilder out)
-    {
+    public void closeListItem(final StringBuilder out) {
         out.append("</li>\n");
     }
 
-    /** @see Decorator#horizontalRuler(StringBuilder) */
+    /**
+     * @see Decorator#horizontalRuler(StringBuilder)
+     */
     @Override
-    public void horizontalRuler(final StringBuilder out)
-    {
+    public void horizontalRuler(final StringBuilder out) {
         out.append("<hr />\n");
     }
 
-    /** @see Decorator#openLink(StringBuilder) */
+    /**
+     * @see Decorator#openLink(StringBuilder)
+     */
     @Override
-    public void openLink(final StringBuilder out)
-    {
+    public void openLink(final StringBuilder out) {
         out.append("<a");
     }
 
-    /** @see Decorator#closeLink(StringBuilder) */
+    /**
+     * @see Decorator#closeLink(StringBuilder)
+     */
     @Override
-    public void closeLink(final StringBuilder out)
-    {
+    public void closeLink(final StringBuilder out) {
         out.append("</a>");
     }
 
-    /** @see Decorator#openImage(StringBuilder) */
+    /**
+     * @see Decorator#openImage(StringBuilder)
+     */
     @Override
-    public void openImage(final StringBuilder out)
-    {
+    public void openImage(final StringBuilder out) {
         out.append("<img");
     }
 
-    /** @see Decorator#closeImage(StringBuilder) */
+    /**
+     * @see Decorator#closeImage(StringBuilder)
+     */
     @Override
-    public void closeImage(final StringBuilder out)
-    {
+    public void closeImage(final StringBuilder out) {
         out.append(" />");
     }
 
-    /** @see Decorator#openTable(java.lang.StringBuilder) */
+    /**
+     * @see Decorator#openTable(java.lang.StringBuilder)
+     */
     @Override
-    public void openTable(final StringBuilder out)
-    {
+    public void openTable(final StringBuilder out) {
         out.append("<table>\n");
     }
 
-    /** @see Decorator#closeTable(java.lang.StringBuilder) */
+    /**
+     * @see Decorator#closeTable(java.lang.StringBuilder)
+     */
     @Override
-    public void closeTable(final StringBuilder out)
-    {
+    public void closeTable(final StringBuilder out) {
         out.append("</table>\n");
     }
 
-    /** @see Decorator#openTableHead(java.lang.StringBuilder) */
+    /**
+     * @see Decorator#openTableHead(java.lang.StringBuilder)
+     */
     @Override
-    public void openTableHead(final StringBuilder out)
-    {
+    public void openTableHead(final StringBuilder out) {
         out.append("<thead>\n");
     }
 
-    /** @see Decorator#closeTableHead(java.lang.StringBuilder) */
+    /**
+     * @see Decorator#closeTableHead(java.lang.StringBuilder)
+     */
     @Override
-    public void closeTableHead(final StringBuilder out)
-    {
+    public void closeTableHead(final StringBuilder out) {
         out.append("</thead>\n");
     }
 
-    /** @see Decorator#openTableBody(java.lang.StringBuilder) */
+    /**
+     * @see Decorator#openTableBody(java.lang.StringBuilder)
+     */
     @Override
-    public void openTableBody(final StringBuilder out)
-    {
+    public void openTableBody(final StringBuilder out) {
         out.append("<tbody>\n");
     }
 
-    /** @see Decorator#closeTableBody(java.lang.StringBuilder) */
+    /**
+     * @see Decorator#closeTableBody(java.lang.StringBuilder)
+     */
     @Override
-    public void closeTableBody(final StringBuilder out)
-    {
+    public void closeTableBody(final StringBuilder out) {
         out.append("</tbody>\n");
     }
 
-    /** @see Decorator#openTableRow(java.lang.StringBuilder) */
+    /**
+     * @see Decorator#openTableRow(java.lang.StringBuilder)
+     */
     @Override
-    public void openTableRow(final StringBuilder out)
-    {
+    public void openTableRow(final StringBuilder out) {
         out.append("<tr>\n");
     }
 
-    /** @see Decorator#closeTableRow(java.lang.StringBuilder) */
+    /**
+     * @see Decorator#closeTableRow(java.lang.StringBuilder)
+     */
     @Override
-    public void closeTableRow(final StringBuilder out)
-    {
+    public void closeTableRow(final StringBuilder out) {
         out.append("</tr>\n");
     }
 
-    /** @see Decorator#openTableData(java.lang.StringBuilder,java.lang.String) */
+    /**
+     * @see Decorator#openTableData(java.lang.StringBuilder, java.lang.String)
+     */
     @Override
-    public void openTableData(final StringBuilder out, final String align)
-    {
+    public void openTableData(final StringBuilder out, final String align) {
         if (align == null) {
             out.append("<td>");
         } else {
@@ -323,17 +357,19 @@ public class DefaultDecorator implements Decorator
         }
     }
 
-    /** @see Decorator#closeTableData(java.lang.StringBuilder) */
+    /**
+     * @see Decorator#closeTableData(java.lang.StringBuilder)
+     */
     @Override
-    public void closeTableData(final StringBuilder out)
-    {
+    public void closeTableData(final StringBuilder out) {
         out.append("</td>");
     }
 
-    /** @see Decorator#openTableHeader(java.lang.StringBuilder,java.lang.String) */
+    /**
+     * @see Decorator#openTableHeader(java.lang.StringBuilder, java.lang.String)
+     */
     @Override
-    public void openTableHeader(final StringBuilder out, final String align)
-    {
+    public void openTableHeader(final StringBuilder out, final String align) {
         if (align == null) {
             out.append("<th>");
         } else {
@@ -341,10 +377,11 @@ public class DefaultDecorator implements Decorator
         }
     }
 
-    /** @see Decorator#closeTableHeader(java.lang.StringBuilder) */
+    /**
+     * @see Decorator#closeTableHeader(java.lang.StringBuilder)
+     */
     @Override
-    public void closeTableHeader(final StringBuilder out)
-    {
+    public void closeTableHeader(final StringBuilder out) {
         out.append("</th>");
     }
 }

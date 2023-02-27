@@ -20,22 +20,18 @@ import com.contentstack.txtmark.BlockEmitter;
 import java.io.IOException;
 import java.util.List;
 
-final class CodeBlockEmitter implements BlockEmitter
-{
+final class CodeBlockEmitter implements BlockEmitter {
     private final String encoding;
     private final String program;
 
-    public CodeBlockEmitter(final String encoding, final String program)
-    {
+    public CodeBlockEmitter(final String encoding, final String program) {
         this.encoding = encoding;
         this.program = program;
     }
 
-    private static void append(final StringBuilder out, final List<String> lines)
-    {
+    private static void append(final StringBuilder out, final List<String> lines) {
         out.append("<pre class=\"pre_no_hl\">");
-        for (final String l : lines)
-        {
+        for (final String l : lines) {
             HlUtils.escapedAdd(out, l);
             out.append('\n');
         }
@@ -43,21 +39,14 @@ final class CodeBlockEmitter implements BlockEmitter
     }
 
     @Override
-    public void emitBlock(final StringBuilder out, final List<String> lines, final String meta)
-    {
-        if (meta == null || meta.isEmpty())
-        {
+    public void emitBlock(final StringBuilder out, final List<String> lines, final String meta) {
+        if (meta == null || meta.isEmpty()) {
             append(out, lines);
-        }
-        else
-        {
-            try
-            {
+        } else {
+            try {
                 out.append(HlUtils.highlight(lines, meta, this.program, this.encoding));
                 out.append('\n');
-            }
-            catch (final IOException e)
-            {
+            } catch (final IOException e) {
                 // Ignore or do something, still, pump out the lines
                 append(out, lines);
             }

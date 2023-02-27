@@ -82,7 +82,7 @@ android:enabled="true">
 To initialize the SDK, specify application context, the API key, access token, and environment name of the stack as shown in the snippet given below:
 
 ```java
-Stack stack = Contentstack.stack(context, "api_key", "delivery_token", "environment");
+Stack stack = Contentstack.stack(context, "apiKey", "deliveryToken", "environment");
 ```
 
 Once you have initialized the SDK, you can query entries to fetch the required content.
@@ -116,7 +116,7 @@ A publishing environment corresponds to one or more deployment servers or a cont
 To initialize the SDK, specify application context, the API key, access token, and environment name of the stack as shown in the snippet given below:
 
 ```java
-Stack stack = Contentstack.stack(context, "api_key", "access_token", "enviroment_name");
+Stack stack = Contentstack.stack(context, "apiKey", "deliveryToken", "environment");
 ```
 
 Once you have initialized the SDK, you can query entries to fetch the required content.
@@ -125,10 +125,12 @@ Once you have initialized the SDK, you can query entries to fetch the required c
 
 To retrieve a single entry from a content type use the code snippet given below:
 
-ContentType contentType = stack.contentType("content_type_uid");
+```java
+ContentType contentType = stack.contentType("contentTypeUid");
+```
 
 ```java
-Entry blogEntry = contentType.entry("entry_uid");
+Entry blogEntry = contentType.entry("entryUid");
 blogEntry.fetch(new EntryResultCallBack() {
   @Override
   public void onCompletion(ResponseType responseType, Error error) {
@@ -146,7 +148,7 @@ To retrieve multiple entries of a particular content type, use the code snippet 
 
 ```java
 //stack is an instance of Stack class
-Query blogQuery = stack.contentType("content_type_uid").query();
+Query blogQuery = stack.contentType("contentTypeUid").query();
 blogQuery.find(new QueryResultsCallBack() {
   @Override
   public void onCompletion(ResponseType responseType, QueryResult queryResult, Error error) {
@@ -219,7 +221,7 @@ Pagination token can be used in case you want to fetch only selected batches. It
 
 ```java
 //stack is an instance of Stack class
-stack.syncPaginationToken("pagination_token", new SyncResultCallBack() {
+stack.syncPaginationToken("paginationToken", new SyncResultCallBack() {
   @Override
   public void onCompletion(SyncStack syncStack, Error error) {
     if(error == null){
@@ -236,7 +238,7 @@ You can use the sync token (that you receive after initial sync) to get the upda
 
 ```java
 //stack is an instance of Stack class
-stack.syncToken("sync_token", new SyncResultCallBack() {
+stack.syncToken("syncToken", new SyncResultCallBack() {
   @Override
   public void onCompletion(SyncStack syncStack,Error error) {
     if(error == null){
@@ -259,7 +261,7 @@ You can use advanced sync queries to fetch custom results while performing initi
 
 ### The MIT License (MIT)
 
-Copyright © 2012-2022 [Contentstack](https://www.contentstack.com/). All Rights Reserved
+Copyright © 2012-2023 [Contentstack](https://www.contentstack.com/). All Rights Reserved
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software
 and associated documentation files (the "Software"), to deal in the Software without restriction,

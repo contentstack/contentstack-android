@@ -1,19 +1,22 @@
 package com.contentstack.sdk;
 
 import android.content.Context;
-import android.support.test.InstrumentationRegistry;
 import android.util.Log;
 
+import androidx.test.core.app.ApplicationProvider;
+
 import org.junit.*;
-import org.junit.runner.JUnitCore;
 
 import java.util.LinkedHashMap;
 import java.util.concurrent.CountDownLatch;
 
 
-public class ImageTransformTestcase {
+/**
+ *
+ */
+public class TransformTestcase {
 
-    static final String TAG = ImageTransformTestcase.class.getSimpleName();
+    static final String TAG = TransformTestcase.class.getSimpleName();
     private static CountDownLatch latch;
     private static Stack stack;
     private final LinkedHashMap<String, Object> imageParams = new LinkedHashMap<>();
@@ -22,7 +25,7 @@ public class ImageTransformTestcase {
 
     @BeforeClass
     public static void oneTimeSetUp() throws Exception {
-        Context appContext = InstrumentationRegistry.getTargetContext();
+        Context appContext = ApplicationProvider.getApplicationContext();
 
         Config config = new Config();
         String DEFAULT_API_KEY = BuildConfig.APIKey;
@@ -201,7 +204,7 @@ public class ImageTransformTestcase {
         String image_url = stack.ImageTransform(IMAGE_URL, imageParams);
         int counter = 0;
         /* check url contains "?" */
-        if (!image_url.equalsIgnoreCase("") && image_url.contains("?")) {
+        if (image_url.contains("?")) {
             String[] imgKeys = image_url.split("\\?");
             String rightUrl = imgKeys[1];
             String[] getAllPairs = rightUrl.split("\\&");

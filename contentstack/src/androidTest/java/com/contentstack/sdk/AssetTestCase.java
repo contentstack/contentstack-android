@@ -1,8 +1,12 @@
 package com.contentstack.sdk;
 
+import static junit.framework.Assert.assertTrue;
+import static junit.framework.TestCase.assertEquals;
+
 import android.content.Context;
-import android.support.test.InstrumentationRegistry;
 import android.util.Log;
+
+import androidx.test.core.app.ApplicationProvider;
 
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
@@ -10,10 +14,6 @@ import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
 import java.util.List;
-
-import static junit.framework.Assert.assertTrue;
-import static junit.framework.TestCase.assertEquals;
-
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class AssetTestCase {
@@ -24,14 +24,15 @@ public class AssetTestCase {
 
     @BeforeClass
     public static void oneTimeSetUp() throws Exception {
-        Context appContext = InstrumentationRegistry.getTargetContext();
+        Context context = ApplicationProvider.getApplicationContext();
+
         Config config = new Config();
         String DEFAULT_API_KEY = BuildConfig.APIKey;
         String DEFAULT_DELIVERY_TOKEN = BuildConfig.deliveryToken;
         String DEFAULT_ENV = BuildConfig.environment;
         String DEFAULT_HOST = BuildConfig.host;
         config.setHost(DEFAULT_HOST);
-        stack = Contentstack.stack(appContext, DEFAULT_API_KEY, DEFAULT_DELIVERY_TOKEN, DEFAULT_ENV, config);
+        stack = Contentstack.stack(context, DEFAULT_API_KEY, DEFAULT_DELIVERY_TOKEN, DEFAULT_ENV, config);
     }
 
 
@@ -137,8 +138,7 @@ public class AssetTestCase {
     @Test
     public void test_G_Include_Dimension() {
         final Asset asset = stack.asset(assetUid);
-        asset.includeDimension();
-        asset.fetch(new FetchResultCallback() {
+        asset.includeDimension().fetch(new FetchResultCallback() {
             @Override
             public void onCompletion(ResponseType responseType, Error error) {
                 if (error == null) {
@@ -153,8 +153,7 @@ public class AssetTestCase {
     @Test
     public void test_H_include_fallback() {
         final Asset asset = stack.asset(assetUid);
-        asset.includeFallback();
-        asset.fetch(new FetchResultCallback() {
+        asset.includeFallback().fetch(new FetchResultCallback() {
             @Override
             public void onCompletion(ResponseType responseType, Error error) {
                 if (error == null) {
@@ -174,7 +173,7 @@ public class AssetTestCase {
         String DEFAULT_HOST = BuildConfig.host;
         config.setHost(DEFAULT_HOST);
         config.setRegion(Config.ContentstackRegion.AZURE_NA);
-        Context appContext = InstrumentationRegistry.getTargetContext();
+        Context appContext = ApplicationProvider.getApplicationContext();
         stack = Contentstack.stack(appContext, DEFAULT_API_KEY, DEFAULT_DELIVERY_TOKEN, DEFAULT_ENV, config);
     }
 

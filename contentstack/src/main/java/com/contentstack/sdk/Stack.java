@@ -8,6 +8,7 @@ import com.contentstack.sdk.utilities.CSAppConstants;
 import com.contentstack.sdk.utilities.CSAppUtils;
 import com.contentstack.sdk.utilities.CSController;
 
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -51,7 +52,7 @@ public class Stack implements INotifyClass {
     protected String contentType;
     protected String localeCode;
     protected PublishType publishType;
-    protected String start_from_date;
+    protected String startFromDate;
     private SyncResultCallBack syncCallBack;
 
 
@@ -212,10 +213,10 @@ public class Stack implements INotifyClass {
      * @param key custom_header_key
      *
      *            <br><br><b>Example :</b><br>
-     *            <pre class="prettyprint">
-     *                                              Stack stack = Contentstack.stack(context, "apiKey", "deliveryToken", "stag");<br>
-     *                                              stack.removeHeader("custom_header_key");
-     *                                             </pre>
+     *            <pre
+     *            Stack stack = Contentstack.stack(context, "apiKey", "deliveryToken", "stag");<br>
+     *            stack.removeHeader("custom_header_key");
+     *            </pre>
      */
     public void removeHeader(String key) {
         if (!TextUtils.isEmpty(key)) {
@@ -232,10 +233,10 @@ public class Stack implements INotifyClass {
      * @param value header value against given header name.
      *
      *              <br><br><b>Example :</b><br>
-     *              <pre class="prettyprint">
-     *                                                      Stack stack = Contentstack.stack(context, "apiKey", "deliveryToken", "stag");<br>
-     *                                                      stack.setHeader("custom_key", "custom_value");
-     *                                                      </pre>
+     *              <pre
+     *              Stack stack = Contentstack.stack(context, "apiKey", "deliveryToken", "stag");<br>
+     *              stack.setHeader("custom_key", "custom_value");
+     *              </pre>
      */
     public void setHeader(String key, String value) {
         if (!TextUtils.isEmpty(key) && !TextUtils.isEmpty(value)) {
@@ -308,20 +309,18 @@ public class Stack implements INotifyClass {
      *                 This call returns comprehensive information of all the content types available in a particular stack in your account.
      *
      *                 <br><br><b>Example :</b><br>
-     *                 <pre class="prettyprint">
-     *                                                                 JSONObject params = new JSONObject();
-     *                                                                 params.put("include_snippet_schema", true);
-     *                                                                 params.put("limit", 3);
-     *                                                                 stack.getContentTypes(params, new ContentTypesCallback() {
-     *                                                                 @Override
-     *                                                                 public void onCompletion(ContentTypesModel contentTypesModel, Error error) {
-     *                                                                 if (error == null){
-     *                                                                   // do your stuff.
-     *                                                                  }
-     *
-     *                                                                 }
-     *                                                                 });
-     *                                                                 </pre>
+     *                 <pre
+     *                 JSONObject params = new JSONObject();
+     *                 params.put("include_snippet_schema", true);
+     *                 params.put("limit", 3);
+     *                 stack.getContentTypes(params, new ContentTypesCallback() {
+     * @Override public void onCompletion(ContentTypesModel contentTypesModel, Error error) {
+     * if (error == null){
+     * // do your stuff.
+     * }
+     * }
+     * });
+     * </pre>
      */
     public void getContentTypes(JSONObject params, final ContentTypesCallback callback) {
 
@@ -331,7 +330,7 @@ public class Stack implements INotifyClass {
             if (params == null) {
                 params = new JSONObject();
             }
-            Iterator keys = params.keys();
+            Iterator<String> keys = params.keys();
             while (keys.hasNext()) {
                 // loop to get the dynamic key
                 String key = (String) keys.next();
@@ -379,9 +378,9 @@ public class Stack implements INotifyClass {
      *                     <br><br><b>Example :</b><br>
      *                     <pre class="prettyprint">
      *
-     *                                                                                 stack.sync(SyncResultCallBack syncCallBack){  }
+     *                                                                                                                                                                                                                                                                                                                                                                                                                                     stack.sync(SyncResultCallBack syncCallBack){  }
      *
-     *                                                                                 </pre>
+     *                                                                                                                                                                                                                                                                                                                                                                                                                                     </pre>
      */
 
     public void sync(SyncResultCallBack syncCallBack) {
@@ -414,8 +413,8 @@ public class Stack implements INotifyClass {
      *
      *                         <br><br><b>Example :</b><br>
      *                         <pre class="prettyprint">
-     *                                                                                                 stack.syncPaginationToken(pagination_token, new SyncResultCallBack()) {}
-     *                                                                                                 </pre>
+     *                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         stack.syncPaginationToken(pagination_token, new SyncResultCallBack()) {}
+     *                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         </pre>
      */
     public void syncPaginationToken(String pagination_token, SyncResultCallBack syncCallBack) {
         this.pagination_token = pagination_token;
@@ -443,9 +442,9 @@ public class Stack implements INotifyClass {
      *                     and the details of the content that was deleted or updated.
      *                     <br><br><b>Example :</b><br>
      *                     <pre class="prettyprint">
-     *                                                                                  stack.syncToken(sync_token, new SyncResultCallBack() ){ }
+     *                                                                                                                                                                                                                                                                                                                                                                                                                                      stack.syncToken(sync_token, new SyncResultCallBack() ){ }
      *
-     *                                                                                 </pre>
+     *                                                                                                                                                                                                                                                                                                                                                                                                                                     </pre>
      */
     public void syncToken(String sync_token, SyncResultCallBack syncCallBack) {
 
@@ -473,18 +472,18 @@ public class Stack implements INotifyClass {
      *
      *                     <br><br><b>Example :</b><br>
      *                     <pre class="prettyprint">
-     *                                                                                stack.syncFromDate(start_date, new SyncResultCallBack()) { }
-     *                                                                                  </pre>
+     *                                                                                                                                                                                                                                                                                                                                                                                                                                    stack.syncFromDate(start_date, new SyncResultCallBack()) { }
+     *                                                                                                                                                                                                                                                                                                                                                                                                                                      </pre>
      */
     public void syncFromDate(Date from_date, SyncResultCallBack syncCallBack) {
-        start_from_date = convertUTCToISO(from_date);
+        startFromDate = convertUTCToISO(from_date);
         if (syncParams == null) {
             syncParams = new JSONObject();
         }
 
         try {
             syncParams.put("init", true);
-            syncParams.put("start_from", start_from_date);
+            syncParams.put("start_from", startFromDate);
         } catch (JSONException e) {
             Log.e(TAG, e.getLocalizedMessage());
         }
@@ -512,10 +511,10 @@ public class Stack implements INotifyClass {
      *                     <br><br><b>Example :</b><br>
      *                     <pre class="prettyprint">
      *
-     *                                                                                 // dummy content_type like "session"
-     *                                                                                 stack.syncContentType(String content_type, new SyncResultCallBack()){  }
+     *                                                                                                                                                                                                                                                                                                                                                                                                                                     // dummy content_type like "session"
+     *                                                                                                                                                                                                                                                                                                                                                                                                                                     stack.syncContentType(String content_type, new SyncResultCallBack()){  }
      *
-     *                                                                                  </pre>
+     *                                                                                                                                                                                                                                                                                                                                                                                                                                      </pre>
      */
     public void syncContentType(String content_type, SyncResultCallBack syncCallBack) {
 
@@ -537,18 +536,10 @@ public class Stack implements INotifyClass {
     /**
      * @param language     Select the required locale from the Language class.
      * @param syncCallBack Returns callback for sync result.
-     *                     <p>
      *                     You can also initialize sync with entries of only specific locales.
      *                     To do this, use syncLocale and specify the locale code as its value.
      *                     However, if you do this, the subsequent syncs will only include the entries of the specified locales.
-     *
-     *                     <br><br><b>Example :</b><br>
-     *                     <pre class="prettyprint">
-     *
-     *                                                                                 // dummy language- Language.ENGLISH_UNITED_STATES
-     *                                                                                 stackInstance.syncLocale(Language.ENGLISH_UNITED_STATES, new SyncResultCallBack() ) { }
-     *
-     *                                                                                 </pre>
+     *                     </pre>
      */
     public void syncLocale(Language language, SyncResultCallBack syncCallBack) {
         this.localeCode = getLanguageCode(language);
@@ -563,23 +554,42 @@ public class Stack implements INotifyClass {
             Log.e(TAG, e.getLocalizedMessage());
         }
 
+        this.requestSync(syncCallBack);
+    }
+
+
+    /**
+     * @param localeCode   Provide locale code
+     * @param syncCallBack Returns callback for sync result.
+     *                     You can also initialize sync with entries of only specific locales.
+     *                     To do this, use syncLocale and specify the locale code as its value.
+     *                     However, if you do this, the subsequent syncs will only include the entries of the specified locales.
+     *                     </pre>
+     */
+    public void syncLocale(@NotNull String localeCode, SyncResultCallBack syncCallBack) {
+        if (syncParams == null) {
+            syncParams = new JSONObject();
+        }
+        try {
+            syncParams.put("init", true);
+            syncParams.put("locale", localeCode);
+        } catch (JSONException e) {
+            Log.e(TAG, e.getLocalizedMessage());
+        }
 
         this.requestSync(syncCallBack);
     }
 
 
     private String getLanguageCode(Language language) {
-
         String localeCode = null;
         if (language != null) {
-
             Language languageName = Language.valueOf(language.name());
             int localeValue = languageName.ordinal();
             LanguageCode[] languageCodeValues = LanguageCode.values();
             localeCode = languageCodeValues[localeValue].name();
             localeCode = localeCode.replace("_", "-");
         }
-
         return localeCode;
     }
 
@@ -596,9 +606,9 @@ public class Stack implements INotifyClass {
      *                     <br><br><b>Example :</b><br>
      *                     <pre class="prettyprint">
      *
-     *                                                                                   stackInstance.syncPublishType(Stack.PublishType.entry_published, new SyncResultCallBack()) { }
+     *                                                                                                                                                                                                                                                                                                                                                                                                                                       stackInstance.syncPublishType(Stack.PublishType.entry_published, new SyncResultCallBack()) { }
      *
-     *                                                                                  </pre>
+     *                                                                                                                                                                                                                                                                                                                                                                                                                                      </pre>
      */
 
     public void syncPublishType(PublishType type, SyncResultCallBack syncCallBack) {
@@ -619,25 +629,18 @@ public class Stack implements INotifyClass {
 
 
     /**
-     * @param contentType
-     * @param from_date
-     * @param language
-     * @param type
+     * @param contentType  the content type
+     * @param fromDate     the from date
+     * @param language     the language code
+     * @param type         the publish type
      * @param syncCallBack You can also initialize sync with entries that satisfy multiple parameters.
      *                     To do this, use syncWith and specify the parameters.
      *                     However, if you do this, the subsequent syncs will only include the entries of the specified parameters
-     *
-     *                     <br><br><b>Example :</b><br>
-     *                     <pre class="prettyprint">
-     *
-     *                                                                                  stackInstance.sync(String contentType, Date from_date, Language language, PublishType type,  SyncResultCallBack syncCallBack) { }
-     *
-     *
-     *                                                                                 </pre>
+     *                     </pre>
      */
 
-    public void sync(String contentType, Date from_date, Language language, PublishType type, SyncResultCallBack syncCallBack) {
-        start_from_date = convertUTCToISO(from_date);
+    public void sync(String contentType, Date fromDate, Language language, PublishType type, SyncResultCallBack syncCallBack) {
+        startFromDate = convertUTCToISO(fromDate);
         this.contentType = contentType;
         this.publishType = type;
         this.localeCode = getLanguageCode(language);
@@ -647,14 +650,33 @@ public class Stack implements INotifyClass {
         }
         try {
             syncParams.put("init", true);
-            syncParams.put("start_from", this.start_from_date);
+            syncParams.put("start_from", this.startFromDate);
             syncParams.put("content_type_uid", this.contentType);
             syncParams.put("type", publishType);
             syncParams.put("locale", this.localeCode);
         } catch (JSONException e) {
             Log.e(TAG, e.getLocalizedMessage());
         }
+        this.requestSync(syncCallBack);
+    }
 
+
+    public void sync(String contentType, Date fromDate, String locale, PublishType type, SyncResultCallBack syncCallBack) {
+        startFromDate = convertUTCToISO(fromDate);
+        this.contentType = contentType;
+        this.publishType = type;
+        if (syncParams == null) {
+            syncParams = new JSONObject();
+        }
+        try {
+            syncParams.put("init", true);
+            syncParams.put("start_from", this.startFromDate);
+            syncParams.put("content_type_uid", this.contentType);
+            syncParams.put("type", publishType);
+            syncParams.put("locale", locale);
+        } catch (JSONException e) {
+            Log.e(TAG, e.getLocalizedMessage());
+        }
         this.requestSync(syncCallBack);
     }
 
@@ -662,7 +684,6 @@ public class Stack implements INotifyClass {
     private void requestSync(final SyncResultCallBack callback) {
 
         try {
-
             String URL = "/" + this.VERSION + "/stacks/" + SYNC_KEY;
             ArrayMap<String, Object> headers = getHeader(localHeader);
 
@@ -670,26 +691,22 @@ public class Stack implements INotifyClass {
             if (headers.containsKey("environment")) {
                 syncParams.put("environment", headers.get("environment"));
             }
-
             urlQueries = syncParams;
             fetchFromNetwork(URL, urlQueries, headers, null, new SyncResultCallBack() {
                 @Override
                 public void onCompletion(SyncStack syncStack, Error error) {
-
                     if (error == null) {
                         String paginationToken = syncStack.getPaginationToken();
                         if (paginationToken != null) {
                             syncPaginationToken(paginationToken, callback);
                         }
                     }
-
                     callback.onCompletion(syncStack, error);
                 }
             });
 
 
         } catch (Exception e) {
-
             Error error = new Error();
             error.setErrorMessage(CSAppConstants.ErrorMessage_JsonNotProper);
             callback.onRequestFail(ResponseType.UNKNOWN, error);
@@ -707,9 +724,7 @@ public class Stack implements INotifyClass {
 
 
     private HashMap<String, Object> getUrlParams(JSONObject urlQueriesJSON) {
-
         HashMap<String, Object> hashMap = new HashMap<>();
-
         if (urlQueriesJSON != null && urlQueriesJSON.length() > 0) {
             Iterator<String> iter = urlQueriesJSON.keys();
             while (iter.hasNext()) {
@@ -721,10 +736,8 @@ public class Stack implements INotifyClass {
                     CSAppUtils.showLog(TAG, e.getLocalizedMessage());
                 }
             }
-
             return hashMap;
         }
-
         return null;
     }
 

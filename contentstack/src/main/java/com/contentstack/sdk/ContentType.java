@@ -50,10 +50,10 @@ public class ContentType {
      *
      *              <br><br><b>Example :</b><br>
      *              <pre class="prettyprint">
-     *               Stack stack = Contentstack.stack(context, "apiKey", "deliveryToken", "environment");
-     *               ContentType contentType = stack.contentType("form_name");<br>
-     *               contentType.setHeader("custom_key", "custom_value");
-     *               </pre>
+     *                            Stack stack = Contentstack.stack(context, "apiKey", "deliveryToken", "environment");
+     *                            ContentType contentType = stack.contentType("form_name");<br>
+     *                            contentType.setHeader("custom_key", "custom_value");
+     *                            </pre>
      */
     public void setHeader(String key, String value) {
         if (!TextUtils.isEmpty(key) && !TextUtils.isEmpty(value)) {
@@ -68,10 +68,10 @@ public class ContentType {
      *
      *            <br><br><b>Example :</b><br>
      *            <pre class="prettyprint">
-     *             Stack stack = Contentstack.stack(context, "apiKey", "deliveryToken", "environment");
-     *             ContentType contentType = stack.contentType("form_name");<br>
-     *             contentType.removeHeader("custom_header_key");
-     *            </pre>
+     *                        Stack stack = Contentstack.stack(context, "apiKey", "deliveryToken", "environment");
+     *                        ContentType contentType = stack.contentType("form_name");<br>
+     *                        contentType.removeHeader("custom_header_key");
+     *                       </pre>
      */
     public void removeHeader(String key) {
         if (!TextUtils.isEmpty(key)) {
@@ -139,21 +139,21 @@ public class ContentType {
      *
      *                 <br><br><b>Example :</b><br>
      *                 <pre class="prettyprint">
-     *                 ContentType  contentType = stack.contentType("content_type_uid");
-     *                 JSONObject params = new JSONObject();
-     *                 params.put("include_snippet_schema", true);
-     *                 params.put("limit", 3);
-     *                 contentType.fetch(new ContentTypesCallback() {
-     *                 @Override
-     *                 public void onCompletion(ContentTypesModel contentTypesModel, Error error) {
-     *                 if (error==null){
+     *                                 ContentType  contentType = stack.contentType("content_type_uid");
+     *                                 JSONObject params = new JSONObject();
+     *                                 params.put("include_snippet_schema", true);
+     *                                 params.put("limit", 3);
+     *                                 contentType.fetch(new ContentTypesCallback() {
+     *                                 @Override
+     *                                 public void onCompletion(ContentTypesModel contentTypesModel, Error error) {
+     *                                 if (error==null){
      *
-     *                 }else {
+     *                                 }else {
      *
-     *                 }
-     *                 }
-     *                 });
-     *                 </pre>
+     *                                 }
+     *                                 }
+     *                                 });
+     *                                 </pre>
      */
 
 
