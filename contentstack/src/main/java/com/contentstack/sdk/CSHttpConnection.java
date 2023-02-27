@@ -2,11 +2,10 @@ package com.contentstack.sdk;
 
 import android.util.ArrayMap;
 import android.text.TextUtils;
+import android.util.Log;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
-import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.contentstack.sdk.utilities.CSAppConstants;
@@ -28,12 +27,12 @@ import java.util.Map;
 class CSHttpConnection implements IURLRequestHTTP {
 
     private static final String TAG = "CSHttpConnection";
-    private String urlPath;
+    private final String urlPath;
     private String controller;
     private ArrayMap<String, Object> headers;
     private String info;
     private JSONObject requestJSON;
-    private IRequestModelHTTP connectionRequest;
+    private final IRequestModelHTTP connectionRequest;
     private ResultCallBack callBackObject;
     private CSAppConstants.RequestMethod requestMethod;
     private JSONObject responseJSON;
@@ -251,26 +250,17 @@ class CSHttpConnection implements IURLRequestHTTP {
         headers.put("User-Agent", defaultUserAgent());
         headers.put("X-User-Agent", "contentstack-android/" + CSAppConstants.SDK_VERSION);
 
-
-        jsonObjectRequest = new JSONUTF8Request(requestId, url, requestJSON, new Response.Listener<JSONObject>() {
-
-            @Override
-            public void onResponse(JSONObject response) {
-                responseJSON = response;
-                if (responseJSON != null) {
-                    connectionRequest.onRequestFinished(CSHttpConnection.this);
-                }
+        System.out.println(headers);
+        jsonObjectRequest = new JSONUTF8Request(requestId, url, requestJSON, response -> {
+            responseJSON = response;
+            Log.i("response", response.toString());
+            if (responseJSON != null) {
+                connectionRequest.onRequestFinished(CSHttpConnection.this);
             }
-        }, new Response.ErrorListener() {
+        }, this::generateBuiltError) {
 
             @Override
-            public void onErrorResponse(VolleyError error) {
-                generateBuiltError(error);
-            }
-        }) {
-
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
+            public Map<String, String> getHeaders() {
                 return headers;
             }
 
@@ -279,35 +269,20 @@ class CSHttpConnection implements IURLRequestHTTP {
         jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(CSAppConstants.TimeOutDuration, CSAppConstants.NumRetry, CSAppConstants.BackOFMultiplier));
         jsonObjectRequest.setShouldCache(false);
         Contentstack.addToRequestQueue(protocol, jsonObjectRequest, info);
-
     }
 
 
     private void httpRequest(String url) {
-
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
-                (Request.Method.GET, url, requestJSON, new Response.Listener<JSONObject>() {
-
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        responseJSON = response;
-                        if (responseJSON != null) {
-                            connectionRequest.onRequestFinished(CSHttpConnection.this);
-                        }
-                    }
-                }, new Response.ErrorListener() {
-
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        generateBuiltError(error);
-
-                    }
-                });
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, requestJSON, response -> {
+            responseJSON = response;
+            if (responseJSON != null) {
+                connectionRequest.onRequestFinished(CSHttpConnection.this);
+            }
+        }, this::generateBuiltError);
 
         jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(CSAppConstants.TimeOutDuration, CSAppConstants.NumRetry, CSAppConstants.BackOFMultiplier));
         jsonObjectRequest.setShouldCache(false);
         Contentstack.addToRequestQueue("https://", jsonObjectRequest, info);
-
     }
 
     private String defaultUserAgent() {

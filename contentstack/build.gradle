@@ -1,77 +1,39 @@
-apply plugin: 'maven-publish'
 apply plugin: 'com.android.library'
-apply plugin: 'maven'
-apply plugin: 'signing'
 apply plugin: 'jacoco'
+
+ext {
+    PUBLISH_GROUP_ID = 'com.contentstack.sdk'
+    PUBLISH_ARTIFACT_ID = 'android'
+    PUBLISH_VERSION = '3.11.0'
+    PUBLISH_DESCRIPTION = 'The Content Delivery SDK is used to retrieve content from your Contentstack account and deliver it to your web or mobile properties.'
+    PUBLISH_URL = 'https://github.com/contentstack/contentstack-android'
+    PUBLISH_LICENSE_NAME = 'MIT License'
+    PUBLISH_LICENSE_URL = 'https://github.com/contentstack/contentstack-android/blob/master/LICENSE'
+    PUBLISH_DEVELOPER_ID = 'ishaileshmishra'
+    PUBLISH_DEVELOPER_NAME = 'Shailesh Mishra'
+    PUBLISH_DEVELOPER_EMAIL = 'shailesh.mishra@contentstack.com'
+    PUBLISH_SCM_CONNECTION = 'scm:git@github.com:contentstack/contentstack-android'
+    PUBLISH_SCM_DEVELOPER_CONNECTION = 'scm:git@github.com:contentstack/contentstack-android'
+    PUBLISH_SCM_URL = 'https://github.com/contentstack/contentstack-android/tree/master'
+}
+
+apply from: "${rootProject.projectDir}/scripts/publish-module.gradle"
 
 def localProperties = new Properties()
 localProperties.load(new FileInputStream(rootProject.file("local.properties")))
 
-
-//https://medium.com/@rafael_toledo/setting-up-an-unified-coverage-report-in-android-with-jacoco-robolectric-and-espresso-ffe239aaf3fa
-// gradle clean jacocoTestReport
-task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest', 'createDebugCoverageReport']) {
-    reports {
-        html.enabled = true
-    }
-
-    afterEvaluate {
-        classDirectories.setFrom(files(classDirectories.files.collect {
-            fileTree(dir: it, exclude: '**com/contentstack/okhttp**')
-            fileTree(dir: it, exclude: '**com/contentstack/okio**')
-            fileTree(dir: it, exclude: '**com/contentstack/txtmark**')
-        }))
-    }
-}
 android {
+    compileSdkVersion 33
+    compileSdk 33
+    buildToolsVersion '30.0.2'
 
-    packagingOptions {
-        exclude 'META-INF/DEPENDENCIES'
-        exclude 'META-INF/LICENSE.md'
-        exclude 'META-INF/LICENSE-notice.md'
-        exclude 'META-INF/license.txt'
-        exclude 'META-INF/NOTICE'
-        exclude 'META-INF/NOTICE.txt'
-        exclude 'META-INF/notice.txt'
-        exclude 'META-INF/ASL2.0'
-        exclude("META-INF/*.kotlin_module")
-    }
-
-    testOptions {
-        unitTests.all {
-            jacoco {
-                includeNoLocationClasses = true
-            }
-        }
-    }
-
-    signingConfigs {
-        debug {
-            storeFile file("/Users/shaileshmishra/Documents/workspace/contentstack/android/keystore/debug.keystore")
-            storePassword 'android'
-            keyAlias 'androiddebugkey'
-            keyPassword 'android'
-        }
-
-        release {
-            storeFile file("/Users/shaileshmishra/Documents/workspace/contentstack/android/keystore/debug.keystore")
-            storePassword 'android'
-            keyAlias 'androiddebugkey'
-            keyPassword 'android'
-        }
-    }
-    compileSdkVersion 26
     defaultConfig {
         minSdkVersion 19
         versionCode 1
-        versionName "1.0"
-        useLibrary 'org.apache.http.legacy'
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        signingConfig signingConfigs.release
+        versionName "1.0.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
-
     buildTypes {
-
         debug {
             debuggable true
             testCoverageEnabled true
@@ -82,143 +44,42 @@ android {
             buildConfigField "String", "contentTypeUID", localProperties['contentType']
             buildConfigField "String", "assetUID", localProperties['assetUid']
         }
+
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            buildConfigField "String", "host", localProperties['host']
+            buildConfigField "String", "APIKey", localProperties['APIKey']
+            buildConfigField "String", "deliveryToken", localProperties['deliveryToken']
+            buildConfigField "String", "environment", localProperties['env']
+            buildConfigField "String", "contentTypeUID", localProperties['contentType']
+            buildConfigField "String", "assetUID", localProperties['assetUid']
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-    flavorDimensions "default"
-    lintOptions { abortOnError false }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-}
-repositories {
-    flatDir { dirs 'libs' }
-    mavenCentral()
-    mavenLocal()
-}
-configurations { archives }
-dependencies {
-    configurations.all { resolutionStrategy.force 'com.android.support:support-annotations:23.1.0' }
-    implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'com.contentstack.sdk:utils:1.1.2'
-    implementation 'com.android.support:appcompat-v7:26.1.0'
-    implementation 'com.android.support:support-v4:26.1.0'
-    implementation 'com.android.volley:volley:1.2.1'
-    implementation 'junit:junit:4.13.2'
-    testImplementation 'junit:junit:4.13.2'
 
-    androidTestImplementation('com.android.support.test.espresso:espresso-core:3.0.2', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
-}
-task clearJar(type: Delete) { delete 'build/libs/Contentstack.jar' }
-task unzip(type: Copy) {
-    def zipFile = file('build/intermediates/intermediate-jars/release/classes.jar')
-    def outputDir = file("${buildDir}/Contentstack-jar")
-    from zipTree(zipFile)
-    into outputDir
-}
-task createJar(type: Jar) {
-    archivesBaseName="contentstack.jar"
-    from('build/contentstack-jar/')
-    include 'com/contentstack/'
-    include 'META-INF/'
-}
-createJar.dependsOn(clearJar, unzip, build)
-
-/*=========== [ MAVEN-PUSH-UPLOAD ] ==========*/
-// to upload library to the maven repo run comman -> ./gradlew clean deploy uploadArchive
-// on successful upload completion
-// visit to the url https://oss.sonatype.org/#stagingRepositories
-// select the Staging Repository tab and select the build and close it
-// after successful closing publish the artifact to go live
-// it will drop the coordinates after successful deployment
-/*=============================================*/
-
-group = "com.contentstack.sdk"
-archivesBaseName = "android"
-version = "3.10.2-SNAPSHOT"
-
-task sourceJar(type: Jar) {
-    from android.sourceSets.main.java.srcDirs
-    classifier "source"
-}
-task javadoc(type: Javadoc) {
-    source = android.sourceSets.main.java.srcDirs
-    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
-    destinationDir = file("../javadoc/")
-    failOnError false
-}
-task javadocJar(type: Jar, dependsOn: javadoc) {
-    archiveClassifier.set("javadoc")
-    from tasks.javadoc.destinationDir
-}
-task androidSourcesJar(type: Jar) {
-    archiveClassifier.set("sources")
-    from android.sourceSets.main.java.srcDirs
-}
-artifacts {
-    archives javadocJar
-    archives androidSourcesJar
-}
-
-// In a case you lost the GPG key and password follow the link
-// https://github.com/kit-data-manager/nexus-publish-example
-signing { sign configurations.archives }
-
-uploadArchives {
-    repositories {
-        mavenDeployer {
-            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
-            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
-                authentication(userName: localProperties['ossrhUsername'], password: localProperties['ossrhPassword'])
-            }
-            snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
-                authentication(userName: localProperties['ossrhUsername'], password: localProperties['ossrhPassword'])
-            }
-            pom.project {
-                name 'contentstack-android'
-                packaging 'aar'
-                description 'Android SDK for Contentstack Content Delivery API, Contentstack is a headless CMS with an API-first approach'
-                artifactId "android"
-                url 'https://github.com/contentstack/contentstack-android'
-
-                scm {
-                    url 'https://github.com/contentstack/contentstack-android/'
-                    connection 'scm:git@github.com:contentstack/contentstack-android'
-                    developerConnection 'scm:git@github.com:contentstack/contentstack-android.git'
-                }
-
-                licenses {
-                    license {
-                        name 'The MIT License'
-                        url 'http://www.opensource.org/licenses/mit-license.php'
-                        distribution 'repo'
-                    }
-                }
-                developers {
-                    developer {
-                        id 'ishaileshmishra'
-                        name 'Shailesh Mishra'
-                        email 'mobile@contentstack.com'
-                    }
-                }
+    testOptions {
+        unitTests.all {
+            jacoco {
+                includeNoLocationClasses = true
             }
         }
+        unitTests.returnDefaultValues = true
     }
 }
 
-task uploadSnapshotArchives(dependsOn: uploadArchives) {
-    if (!version.endsWith("-SNAPSHOT")) {
-        enabled = false;
-        dependsOn = [];
-    }
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    //testImplementation 'junit:junit:5.9.2'
+    // https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.2'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'com.android.volley:volley:1.2.1'
+    androidTestImplementation 'androidx.test:core:1.5.0'
+    androidTestImplementation "androidx.test:runner:1.5.2"
+    androidTestImplementation "androidx.test:rules:1.5.0"
 }
-
-
-
-
-

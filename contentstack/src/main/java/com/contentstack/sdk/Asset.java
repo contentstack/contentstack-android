@@ -467,18 +467,10 @@ public class Asset {
         Error error = null;
         if (cacheFile.exists()) {
             boolean needToSendCall = false;
-
-            // if (maxCacheTimeForCall > 0) {
-            //     needToSendCall = new CSAppUtils().getResponseTimeFromCacheFile(cacheFile, (int) maxCacheTimeForCall);
-            // } else {
-            //     needToSendCall = new CSAppUtils().getResponseTimeFromCacheFile(cacheFile, (int) defaultCacheTimeInterval);
-            // }
             needToSendCall = new CSAppUtils().getResponseTimeFromCacheFile(cacheFile, (int) maxCacheTimeForCall);
-
             if (needToSendCall) {
                 error = new Error();
                 error.setErrorMessage(CSAppConstants.ErrorMessage_EntryNotFoundInCache);
-
             } else {
                 setCacheModel(cacheFile, callback);
             }
@@ -538,7 +530,7 @@ public class Asset {
                     Object value = urlQueriesJSON.opt(key);
                     hashMap.put(key, value);
                 } catch (Exception e) {
-                    CSAppUtils.showLog(TAG, "----------------setQueryJson" + e.toString());
+                    CSAppUtils.showLog(TAG, "setQueryJson" + e.getLocalizedMessage());
                 }
             }
             return hashMap;

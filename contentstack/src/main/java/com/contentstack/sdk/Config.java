@@ -32,8 +32,8 @@ public class Config {
      *
      *               <br><br><b>Example :</b><br>
      *               <pre class="prettyprint">
-     *                                                                                     config.setRegion(ContentstackRegion.US);
-     *                                                                                     </pre>
+     *                                                                                                   config.setRegion(ContentstackRegion.US);
+     *                                                                                                   </pre>
      */
 
     public ContentstackRegion setRegion(ContentstackRegion region) {

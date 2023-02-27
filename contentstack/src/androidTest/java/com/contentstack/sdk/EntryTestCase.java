@@ -1,7 +1,6 @@
 package com.contentstack.sdk;
 
 import android.content.Context;
-import android.support.test.InstrumentationRegistry;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -14,6 +13,8 @@ import java.util.ArrayList;
 import java.util.concurrent.CountDownLatch;
 
 import static junit.framework.TestCase.*;
+
+import androidx.test.core.app.ApplicationProvider;
 
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
@@ -28,7 +29,7 @@ public class EntryTestCase {
 
     @BeforeClass
     public static void oneTimeSetUp() throws Exception {
-        Context appContext = InstrumentationRegistry.getTargetContext();
+        Context appContext = ApplicationProvider.getApplicationContext();
         Config config = new Config();
         String DEFAULT_HOST = BuildConfig.host;
         config.setHost(DEFAULT_HOST);
@@ -65,6 +66,20 @@ public class EntryTestCase {
         latch.countDown();
     }
 
+
+    @Test
+    public void testCustomHeader() {
+        final Query query = stack.contentType(CONTENT_TYPE_UID).query();
+        query.setHeader("customHeaderKey", "customHeaderValue");
+        query.find(new QueryResultsCallBack() {
+            @Override
+            public void onCompletion(ResponseType responseType, QueryResult queryresult, Error error) {
+                if (error == null) {
+                    entryUID = queryresult.getResultObjects().get(15).getUid();
+                }
+            }
+        });
+    }
 
     @Test
     public void test_01_findAllEntries() {

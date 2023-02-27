@@ -28,35 +28,28 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-final class HlUtils
-{
-    final static AtomicInteger IN_COUNT  = new AtomicInteger(0);
+final class HlUtils {
+    final static AtomicInteger IN_COUNT = new AtomicInteger(0);
     final static AtomicInteger OUT_COUNT = new AtomicInteger(0);
-    final static long          ID        = System.nanoTime();
+    final static long ID = System.nanoTime();
 
     public static String highlight(final List<String> lines, final String meta, final String prog, final String encoding)
-            throws IOException
-    {
+            throws IOException {
         final File tmpIn = new File(System.getProperty("java.io.tmpdir"),
                 String.format("txtmark_code_%d_%d.in", ID, IN_COUNT.incrementAndGet()));
         final File tmpOut = new File(System.getProperty("java.io.tmpdir"),
                 String.format("txtmark_code_%d_%d.out", ID, OUT_COUNT.incrementAndGet()));
 
-        try
-        {
+        try {
 
             final Writer w = new OutputStreamWriter(new FileOutputStream(tmpIn), encoding);
 
-            try
-            {
-                for (final String s : lines)
-                {
+            try {
+                for (final String s : lines) {
                     w.write(s);
                     w.write('\n');
                 }
-            }
-            finally
-            {
+            } finally {
                 w.close();
             }
 
@@ -73,89 +66,68 @@ final class HlUtils
             final byte[] buffer = new byte[2048];
 
             int exitCode = 0;
-            for (;;)
-            {
-                if (pIn.available() > 0)
-                {
+            for (; ; ) {
+                if (pIn.available() > 0) {
                     pIn.read(buffer);
                 }
-                try
-                {
+                try {
                     exitCode = p.exitValue();
-                }
-                catch (final IllegalThreadStateException itse)
-                {
+                } catch (final IllegalThreadStateException itse) {
                     continue;
                 }
                 break;
             }
 
-            if (exitCode == 0)
-            {
+            if (exitCode == 0) {
                 final Reader r = new InputStreamReader(new FileInputStream(tmpOut), encoding);
-                try
-                {
+                try {
                     final StringBuilder sb = new StringBuilder();
-                    for (;;)
-                    {
+                    for (; ; ) {
                         final int c = r.read();
-                        if (c >= 0)
-                        {
-                            sb.append((char)c);
-                        }
-                        else
-                        {
+                        if (c >= 0) {
+                            sb.append((char) c);
+                        } else {
                             break;
                         }
                     }
                     return sb.toString();
-                }
-                finally
-                {
+                } finally {
                     r.close();
                 }
             }
 
             throw new IOException("Exited with exit code: " + exitCode);
-        }
-        finally
-        {
+        } finally {
             tmpIn.delete();
             tmpOut.delete();
         }
     }
 
-    public static void escapedAdd(final StringBuilder sb, final String str)
-    {
-        for (int i = 0; i < str.length(); i++)
-        {
+    public static void escapedAdd(final StringBuilder sb, final String str) {
+        for (int i = 0; i < str.length(); i++) {
             final char ch = str.charAt(i);
-            if (ch < 33 || Character.isWhitespace(ch) || Character.isSpaceChar(ch))
-            {
+            if (ch < 33 || Character.isWhitespace(ch) || Character.isSpaceChar(ch)) {
                 sb.append(' ');
-            }
-            else
-            {
-                switch (ch)
-                {
-                case '"':
-                    sb.append("&quot;");
-                    break;
-                case '\'':
-                    sb.append("&apos;");
-                    break;
-                case '<':
-                    sb.append("&lt;");
-                    break;
-                case '>':
-                    sb.append("&gt;");
-                    break;
-                case '&':
-                    sb.append("&amp;");
-                    break;
-                default:
-                    sb.append(ch);
-                    break;
+            } else {
+                switch (ch) {
+                    case '"':
+                        sb.append("&quot;");
+                        break;
+                    case '\'':
+                        sb.append("&apos;");
+                        break;
+                    case '<':
+                        sb.append("&lt;");
+                        break;
+                    case '>':
+                        sb.append("&gt;");
+                        break;
+                    case '&':
+                        sb.append("&amp;");
+                        break;
+                    default:
+                        sb.append(ch);
+                        break;
                 }
             }
         }

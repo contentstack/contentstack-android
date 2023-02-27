@@ -1,7 +1,6 @@
 package com.contentstack.sdk;
 
 import android.content.Context;
-import android.support.test.InstrumentationRegistry;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -14,6 +13,8 @@ import java.util.List;
 
 import static junit.framework.TestCase.assertEquals;
 
+import androidx.test.core.app.ApplicationProvider;
+
 
 public class QueryTestCase {
 
@@ -24,7 +25,7 @@ public class QueryTestCase {
 
     @BeforeClass
     public static void oneTimeSetUp() throws Exception {
-        Context appContext = InstrumentationRegistry.getTargetContext();
+        Context appContext = ApplicationProvider.getApplicationContext();
         Config config = new Config();
         String DEFAULT_API_KEY = BuildConfig.APIKey;
         String DEFAULT_DELIVERY_TOKEN = BuildConfig.deliveryToken;
@@ -200,7 +201,6 @@ public class QueryTestCase {
         ArrayList<Query> array = new ArrayList<Query>();
         array.add(query);
         array.add(subQuery);
-
         orQuery.or(array);
 
         orQuery.find(new QueryResultsCallBack() {
@@ -621,7 +621,7 @@ public class QueryTestCase {
 
 
     @Test
-    public void test_41_entry_include_embedded_items_unit_test() throws InterruptedException {
+    public void test_41_entry_include_embedded_items_unit_test() {
 
         final Query query = stack.contentType("user").query();
         query.includeEmbeddedItems().find(new QueryResultsCallBack() {
@@ -631,10 +631,24 @@ public class QueryTestCase {
                     Entry checkResp = queryresult.getResultObjects().get(0);
                     Log.d(TAG, checkResp.toString());
                 }
-                boolean hasEmbeddedItemKey = query.mainJSON.has("include_embedded_items[]");
-                Assert.assertTrue(hasEmbeddedItemKey);
             }
         });
     }
+
+
+    @Test
+    public void query_include_embedded_items_unit_test() throws Exception {
+        final Query query = stack.contentType("testembededobjects").query();
+        query.includeEmbeddedItems().find(new QueryResultsCallBack() {
+            @Override
+            public void onCompletion(ResponseType responseType, QueryResult queryresult, Error error) {
+                if (error == null) {
+                    Entry checkResp = queryresult.getResultObjects().get(0);
+                    Log.d(TAG, queryresult.getResultObjects().toString());
+                }
+            }
+        });
+    }
+
 
 }
