@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * AssetLibrary class to fetch all files details on Conentstack server.
@@ -352,6 +353,7 @@ public class AssetLibrary implements INotifyClass {
         }
         if (e != null) {
             error.setErrorMessage(e.getLocalizedMessage());
+            assert messageString != null;
             Log.d(tag, messageString);
         }
     }
@@ -434,17 +436,23 @@ public class AssetLibrary implements INotifyClass {
         try {
             urlQueries.put("include_fallback", true);
         } catch (JSONException e) {
-            Log.d("AssetLibrary", e.getLocalizedMessage());
+            Log.d("AssetLibrary", Objects.requireNonNull(e.getLocalizedMessage()));
             throwException("AssetLibrary", null, e);
         }
         return this;
     }
 
+
+    /**
+     * Include metadata asset response.
+     *
+     * @return the asset library
+     */
     public AssetLibrary includeMetadata() {
         try {
             urlQueries.put("include_metadata", true);
         } catch (JSONException e) {
-            Log.e(TAG, e.getLocalizedMessage());
+            Log.e(TAG, Objects.requireNonNull(e.getLocalizedMessage()));
         }
         return this;
     }

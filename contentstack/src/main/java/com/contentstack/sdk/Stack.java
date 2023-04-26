@@ -536,7 +536,7 @@ public class Stack implements INotifyClass {
         try {
             syncParams = new JSONObject();
             syncParams.put("init", true);
-            syncParams.put("type", type);
+            syncParams.put("type", type.toString().toLowerCase());
         } catch (JSONException e) {
             Log.e(TAG, Objects.requireNonNull(e.getLocalizedMessage()));
         }
@@ -576,7 +576,7 @@ public class Stack implements INotifyClass {
             syncParams.put("init", true);
             syncParams.put("start_from", startFromDate);
             syncParams.put("content_type_uid", contentType);
-            syncParams.put("type", type);
+            syncParams.put("type", type.toString().toLowerCase());
             syncParams.put("locale", this.localeCode);
         } catch (JSONException e) {
             Log.e(TAG, e.getLocalizedMessage());
@@ -591,7 +591,7 @@ public class Stack implements INotifyClass {
             syncParams.put("init", true);
             syncParams.put("start_from", startFromDate);
             syncParams.put("content_type_uid", contentType);
-            syncParams.put("type", type);
+            syncParams.put("type", type.toString().toLowerCase());
             syncParams.put("locale", locale);
         } catch (JSONException e) {
             Log.e(TAG, Objects.requireNonNull(e.getLocalizedMessage()));

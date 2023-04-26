@@ -20,7 +20,6 @@ import java.util.HashMap;
 public class ConnectionStatus extends BroadcastReceiver {
 
     public ConnectionStatus() {
-
     }
 
     @Override
@@ -37,9 +36,7 @@ public class ConnectionStatus extends BroadcastReceiver {
                 JSONObject jsonObj = null;
                 JSONObject headerObject = null;
                 HashMap<String, Object> headerGroup = new HashMap();
-
                 CSAppConstants.isNetworkAvailable = true;
-
                 File offlineCallsFolder = new File(context.getDir("OfflineCalls", 0).getPath());
 
                 if (offlineCallsFolder.isDirectory()) {
