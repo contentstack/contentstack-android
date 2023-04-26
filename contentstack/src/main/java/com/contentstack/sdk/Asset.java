@@ -390,61 +390,52 @@ public class Asset {
      *                 </pre>
      */
     public void fetch(FetchResultCallback callback) {
-
         try {
-
-            String URL = "/" + stackInstance.VERSION + "/assets/" + assetUid;
+            String urlEndpoint = "/" + stackInstance.VERSION + "/assets/" + assetUid;
             ArrayMap<String, Object> headers = getHeader(headerGroup_local);
             if (headers.containsKey("environment")) {
                 urlQueries.put("environment", headers.get("environment"));
             }
-
-            String mainStringForMD5 = URL + new JSONObject().toString() + headers.toString();
+            String mainStringForMD5 = urlEndpoint + new JSONObject().toString() + headers.toString();
             String md5Value = new CSAppUtils().getMD5FromString(mainStringForMD5.trim());
             File cacheFile = new File(CSAppConstants.cacheFolderName + File.separator + md5Value);
 
             switch (cachePolicyForCall) {
-
                 case IGNORE_CACHE:
-
-                case NETWORK_ONLY:
-                    fetchFromNetwork(URL, urlQueries, headers, cacheFile.getPath(), callback);
+                    fetchFromNetwork(urlEndpoint, urlQueries, headers, cacheFile.getPath(), callback);
                     break;
-
+                case NETWORK_ONLY:
+                    fetchFromNetwork(urlEndpoint, urlQueries, headers, cacheFile.getPath(), callback);
+                    break;
                 case CACHE_ONLY:
                     fetchFromCache(cacheFile, callback);
                     break;
-
                 case CACHE_ELSE_NETWORK:
-
                     if (cacheFile.exists()) {
                         boolean needToSendCall = false;
                         needToSendCall = new CSAppUtils().getResponseTimeFromCacheFile(cacheFile, (int) maxCacheTimeForCall);
                         if (needToSendCall) {
-                            fetchFromNetwork(URL, urlQueries, headers, cacheFile.getPath(), callback);
+                            fetchFromNetwork(urlEndpoint, urlQueries, headers, cacheFile.getPath(), callback);
                         } else {
                             setCacheModel(cacheFile, callback);
                         }
                     } else {
-                        fetchFromNetwork(URL, urlQueries, headers, cacheFile.getPath(), callback);
+                        fetchFromNetwork(urlEndpoint, urlQueries, headers, cacheFile.getPath(), callback);
                     }
                     break;
                 case CACHE_THEN_NETWORK:
                     if (cacheFile.exists()) {
                         setCacheModel(cacheFile, callback);
                     }
-                    // from network
-                    fetchFromNetwork(URL, urlQueries, headers, cacheFile.getPath(), callback);
+                    fetchFromNetwork(urlEndpoint, urlQueries, headers, cacheFile.getPath(), callback);
                     break;
 
                 case NETWORK_ELSE_CACHE:
-
                     if (CSAppConstants.isNetworkAvailable) {
-                        fetchFromNetwork(URL, urlQueries, headers, cacheFile.getPath(), callback);
+                        fetchFromNetwork(urlEndpoint, urlQueries, headers, cacheFile.getPath(), callback);
                     } else {
                         fetchFromCache(cacheFile, callback);
                     }
-
                     break;
             }
 

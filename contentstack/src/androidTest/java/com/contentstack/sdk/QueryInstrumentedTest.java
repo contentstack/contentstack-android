@@ -1,31 +1,34 @@
 package com.contentstack.sdk;
 
+import static junit.framework.TestCase.assertEquals;
+
 import android.content.Context;
 import android.util.Log;
 
+import androidx.test.platform.app.InstrumentationRegistry;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.junit.*;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import static junit.framework.TestCase.assertEquals;
 
-import androidx.test.core.app.ApplicationProvider;
+public class QueryInstrumentedTest {
 
-
-public class QueryTestCase {
-
-    private static final String TAG = AssetTestCase.class.getSimpleName();
+    private static final String TAG = QueryInstrumentedTest.class.getSimpleName();
     private static Stack stack;
     private static Query query;
     private static final String contentTypeUID = BuildConfig.contentTypeUID;
 
     @BeforeClass
     public static void oneTimeSetUp() throws Exception {
-        Context appContext = ApplicationProvider.getApplicationContext();
+        Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
+
         Config config = new Config();
         String DEFAULT_API_KEY = BuildConfig.APIKey;
         String DEFAULT_DELIVERY_TOKEN = BuildConfig.deliveryToken;
@@ -37,10 +40,6 @@ public class QueryTestCase {
     }
 
 
-    /**
-     * Sets up the test fixture.
-     * (Called before every test case method.)
-     */
     @Before
     public void setUp() {
         query = stack.contentType(contentTypeUID).query();
