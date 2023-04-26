@@ -2,8 +2,6 @@ package com.contentstack.sdk;
 
 import android.text.TextUtils;
 
-import com.contentstack.sdk.utilities.CSAppConstants;
-
 /**
  * Set Configuration for stack instance creation.
  *
@@ -11,18 +9,11 @@ import com.contentstack.sdk.utilities.CSAppConstants;
  */
 public class Config {
 
-    protected String URLSCHEMA = "https://";
+    protected String PROTOCOL = "https://";
     protected String URL = "cdn.contentstack.io";
     protected String VERSION = "v3";
     protected String environment = null;
     protected ContentstackRegion region = ContentstackRegion.US;
-
-    public enum ContentstackRegion {US, EU, AZURE_NA}
-
-
-    public ContentstackRegion getRegion() {
-        return this.region;
-    }
 
     /**
      * Sets region allow you to set your region for the Contentstack server.
@@ -32,14 +23,21 @@ public class Config {
      *
      *               <br><br><b>Example :</b><br>
      *               <pre class="prettyprint">
-     *                                                                                                   config.setRegion(ContentstackRegion.US);
-     *                                                                                                   </pre>
+     *                                                                                                                               config.setRegion(ContentstackRegion.US);
+     *                                                                                                                               </pre>
      */
 
     public ContentstackRegion setRegion(ContentstackRegion region) {
         this.region = region;
         return this.region;
     }
+
+
+    public ContentstackRegion getRegion() {
+        return this.region;
+    }
+
+    public enum ContentstackRegion {US, EU, AZURE_NA, AZURE_EU}
 
     /**
      * Config constructor

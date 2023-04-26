@@ -25,7 +25,7 @@ import java.util.Map;
  */
 public class AssetLibrary implements INotifyClass {
 
-    private final static String TAG = "AssetLibrary";
+    private final static String TAG = AssetLibrary.class.getSimpleName();
     private Stack stackInstance;
     private ArrayMap<String, Object> stackHeader;
     private ArrayMap<String, Object> localHeader;
@@ -34,7 +34,7 @@ public class AssetLibrary implements INotifyClass {
     private int count;
     private static CachePolicy cachePolicyForCall = CachePolicy.IGNORE_CACHE;
     private long maxCacheTimeForCall = 0;
-    private long defaultCacheTimeInterval = 0;
+    private final long defaultCacheTimeInterval = 0;
 
     /**
      * Sorting order enum for {@link AssetLibrary}.
@@ -436,6 +436,15 @@ public class AssetLibrary implements INotifyClass {
         } catch (JSONException e) {
             Log.d("AssetLibrary", e.getLocalizedMessage());
             throwException("AssetLibrary", null, e);
+        }
+        return this;
+    }
+
+    public AssetLibrary includeMetadata() {
+        try {
+            urlQueries.put("include_metadata", true);
+        } catch (JSONException e) {
+            Log.e(TAG, e.getLocalizedMessage());
         }
         return this;
     }

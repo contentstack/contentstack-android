@@ -2021,5 +2021,14 @@ public class Query implements INotifyClass {
         return this;
     }
 
+    public Query includeMetadata() {
+        try {
+            urlQueries.put("include_metadata", true);
+        } catch (JSONException e) {
+            Log.e(TAG, e.getLocalizedMessage());
+        }
+        return this;
+    }
+
 }
 

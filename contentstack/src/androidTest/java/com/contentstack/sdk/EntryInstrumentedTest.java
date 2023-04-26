@@ -1,26 +1,33 @@
 package com.contentstack.sdk;
 
+import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertTrue;
+
 import android.content.Context;
 import android.util.Log;
+
+import androidx.test.platform.app.InstrumentationRegistry;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.junit.*;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.FixMethodOrder;
+import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
 import java.util.ArrayList;
 import java.util.concurrent.CountDownLatch;
 
-import static junit.framework.TestCase.*;
-
-import androidx.test.core.app.ApplicationProvider;
-
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class EntryTestCase {
+public class EntryInstrumentedTest {
 
-    private final static String TAG = EntryTestCase.class.getSimpleName();
+    private final static String TAG = EntryInstrumentedTest.class.getSimpleName();
     private static String entryUID;
     private static final String CONTENT_TYPE_UID = BuildConfig.contentTypeUID;
     private static CountDownLatch latch;
@@ -29,7 +36,8 @@ public class EntryTestCase {
 
     @BeforeClass
     public static void oneTimeSetUp() throws Exception {
-        Context appContext = ApplicationProvider.getApplicationContext();
+        Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
+
         Config config = new Config();
         String DEFAULT_HOST = BuildConfig.host;
         config.setHost(DEFAULT_HOST);
@@ -46,20 +54,12 @@ public class EntryTestCase {
         Log.d(TAG, "Total testcase: " + latch.getCount());
     }
 
-    /**
-     * Sets up the test fixture.
-     * (Called before every test case method.)
-     */
     @Before
     public void setUp() {
         latch = new CountDownLatch(1);
     }
 
 
-    /**
-     * Tears down the test fixture.
-     * (Called after every test case method.)
-     */
     @After
     public void tearDown() {
         Log.d(TAG, "Runs after every testcase completes.");

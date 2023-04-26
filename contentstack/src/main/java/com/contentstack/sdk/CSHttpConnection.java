@@ -1,7 +1,7 @@
 package com.contentstack.sdk;
 
-import android.util.ArrayMap;
 import android.text.TextUtils;
+import android.util.ArrayMap;
 import android.util.Log;
 
 import com.android.volley.DefaultRetryPolicy;
@@ -240,17 +240,13 @@ class CSHttpConnection implements IURLRequestHTTP {
             url = urlPath;
         }
 
-
         for (Map.Entry<String, Object> entry : this.headers.entrySet()) {
             String key = entry.getKey();
             headers.put(key, (String) entry.getValue());
         }
-
         headers.put("Content-Type", "application/json");
         headers.put("User-Agent", defaultUserAgent());
         headers.put("X-User-Agent", "contentstack-android/" + CSAppConstants.SDK_VERSION);
-
-        System.out.println(headers);
         jsonObjectRequest = new JSONUTF8Request(requestId, url, requestJSON, response -> {
             responseJSON = response;
             Log.i("response", response.toString());

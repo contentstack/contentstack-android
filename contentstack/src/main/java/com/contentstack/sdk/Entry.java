@@ -1,7 +1,7 @@
 package com.contentstack.sdk;
 
-import android.util.ArrayMap;
 import android.text.TextUtils;
+import android.util.ArrayMap;
 import android.util.Log;
 
 import com.contentstack.sdk.utilities.CSAppConstants;
@@ -102,10 +102,10 @@ public class Entry {
      *
      *              <br><br><b>Example :</b><br>
      *              <pre class="prettyprint">
-     *                           Stack stack = Contentstack.stack(context, "apiKey", "deliveryToken",  "stag");
-     *                           Entry entry = stack.contentType("form_name").entry("entry_uid");
-     *                           entry.setHeader("custom_header_key", "custom_header_value");
-     *                           </pre>
+     *                                        Stack stack = Contentstack.stack(context, "apiKey", "deliveryToken",  "stag");
+     *                                        Entry entry = stack.contentType("form_name").entry("entry_uid");
+     *                                        entry.setHeader("custom_header_key", "custom_header_value");
+     *                                        </pre>
      */
     public void setHeader(String key, String value) {
         if (!TextUtils.isEmpty(key) && !TextUtils.isEmpty(value)) {
@@ -120,10 +120,10 @@ public class Entry {
      *
      *            <br><br><b>Example :</b><br>
      *            <pre class="prettyprint">
-     *                       Stack stack = Contentstack.stack(context, "apiKey", "deliveryToken",  "stag");
-     *                       Entry entry = stack.contentType("form_name").entry("entry_uid");
-     *                       entry.removeHeader("custom_header_key");
-     *                       </pre>
+     *                                  Stack stack = Contentstack.stack(context, "apiKey", "deliveryToken",  "stag");
+     *                                  Entry entry = stack.contentType("form_name").entry("entry_uid");
+     *                                  entry.removeHeader("custom_header_key");
+     *                                  </pre>
      */
     public void removeHeader(String key) {
         if (!TextUtils.isEmpty(key)) {
@@ -304,8 +304,8 @@ public class Entry {
      *
      *            <br><br><b>Example :</b><br>
      *            <pre class="prettyprint">
-     *                       Object obj = entry.get("key");
-     *                       </pre>
+     *                                  Object obj = entry.get("key");
+     *                                  </pre>
      */
     public Object get(String key) {
         try {
@@ -372,8 +372,8 @@ public class Entry {
      *
      *            <br><br><b>Example :</b><br>
      *            <pre class="prettyprint">
-     *                       String value = entry.getString("key");
-     *                       </pre>
+     *                                  String value = entry.getString("key");
+     *                                  </pre>
      */
     public String getString(String key) {
         Object value = get(key);
@@ -392,8 +392,8 @@ public class Entry {
      *
      *            <br><br><b>Example :</b><br>
      *            <pre class="prettyprint">
-     *                       Boolean value = entry.getBoolean("key");
-     *                       </pre>
+     *                                  Boolean value = entry.getBoolean("key");
+     *                                  </pre>
      */
     public Boolean getBoolean(String key) {
         Object value = get(key);
@@ -412,8 +412,8 @@ public class Entry {
      *
      *            <br><br><b>Example :</b><br>
      *            <pre class="prettyprint">
-     *                       JSONArray value = entry.getJSONArray("key");
-     *                       </pre>
+     *                                  JSONArray value = entry.getJSONArray("key");
+     *                                  </pre>
      */
     public JSONArray getJSONArray(String key) {
         Object value = get(key);
@@ -432,8 +432,8 @@ public class Entry {
      *
      *            <br><br><b>Example :</b><br>
      *            <pre class="prettyprint">
-     *                       JSONObject value = entry.getJSONObject("key");
-     *                       </pre>
+     *                                  JSONObject value = entry.getJSONObject("key");
+     *                                  </pre>
      */
     public JSONObject getJSONObject(String key) {
         Object value = get(key);
@@ -452,8 +452,8 @@ public class Entry {
      *
      *            <br><br><b>Example :</b><br>
      *            <pre class="prettyprint">
-     *                       JSONObject value = entry.getJSONObject("key");
-     *                       </pre>
+     *                                  JSONObject value = entry.getJSONObject("key");
+     *                                  </pre>
      */
     public Number getNumber(String key) {
         Object value = get(key);
@@ -472,8 +472,8 @@ public class Entry {
      *
      *            <br><br><b>Example :</b><br>
      *            <pre class="prettyprint">
-     *                       int value = entry.getInt("key");
-     *                       </pre>
+     *                                  int value = entry.getInt("key");
+     *                                  </pre>
      */
     public int getInt(String key) {
         Number value = getNumber(key);
@@ -490,8 +490,8 @@ public class Entry {
      *
      *            <br><br><b>Example :</b><br>
      *            <pre class="prettyprint">
-     *                       float value = entry.getFloat("key");
-     *                       </pre>
+     *                                  float value = entry.getFloat("key");
+     *                                  </pre>
      */
     public float getFloat(String key) {
         Number value = getNumber(key);
@@ -508,8 +508,8 @@ public class Entry {
      *
      *            <br><br><b>Example :</b><br>
      *            <pre class="prettyprint">
-     *                       double value = entry.getDouble("key");
-     *                       </pre>
+     *                                  double value = entry.getDouble("key");
+     *                                  </pre>
      */
     public double getDouble(String key) {
         Number value = getNumber(key);
@@ -526,8 +526,8 @@ public class Entry {
      *
      *            <br><br><b>Example :</b><br>
      *            <pre class="prettyprint">
-     *                       long value = entry.getLong("key");
-     *                       </pre>
+     *                                  long value = entry.getLong("key");
+     *                                  </pre>
      */
     public long getLong(String key) {
         Number value = getNumber(key);
@@ -544,8 +544,8 @@ public class Entry {
      *
      *            <br><br><b>Example :</b><br>
      *            <pre class="prettyprint">
-     *                       short value = entry.getShort("key");
-     *                       </pre>
+     *                                  short value = entry.getShort("key");
+     *                                  </pre>
      */
     public short getShort(String key) {
         Number value = getNumber(key);
@@ -562,8 +562,8 @@ public class Entry {
      *
      *            <br><br><b>Example :</b><br>
      *            <pre class="prettyprint">
-     *                       Calendar value = entry.getDate("key");
-     *                       </pre>
+     *                                  Calendar value = entry.getDate("key");
+     *                                  </pre>
      */
     public Calendar getDate(String key) {
 
@@ -681,8 +681,8 @@ public class Entry {
      *
      *            <br><br><b>Example :</b><br>
      *            <pre class="prettyprint">
-     *                       Asset asset = entry.getAsset("key");
-     *                       </pre>
+     *                                  Asset asset = entry.getAsset("key");
+     *                                  </pre>
      */
     public Asset getAsset(String key) {
 
@@ -699,8 +699,8 @@ public class Entry {
      *
      *            <br><br><b>Example :</b><br>
      *            <pre class="prettyprint">
-     *                       List<Asset> asset = entry.getAssets("key");
-     *                       </pre>
+     *                                  List<Asset> asset = entry.getAssets("key");
+     *                                  </pre>
      */
     public List<Asset> getAssets(String key) {
         List<Asset> assets = new ArrayList<>();
@@ -722,8 +722,8 @@ public class Entry {
      *
      *            <br><br><b>Example :</b><br>
      *            <pre class="prettyprint">
-     *                       Group innerGroup = entry.getGroup("key");
-     *                       </pre>
+     *                                  Group innerGroup = entry.getGroup("key");
+     *                                  </pre>
      */
     public Group getGroup(String key) {
 
@@ -743,8 +743,8 @@ public class Entry {
      *
      *            <br><br><b>Example :</b><br>
      *            <pre class="prettyprint">
-     *                       Group innerGroup = entry.getGroups("key");
-     *                       </pre>
+     *                                  Group innerGroup = entry.getGroups("key");
+     *                                  </pre>
      */
     public List<Group> getGroups(String key) {
 
@@ -1061,14 +1061,14 @@ public class Entry {
      *
      *                 <br><br><b>Example :</b><br>
      *                 <pre class="prettyprint">
-     *                                    Stack stack = Contentstack.stack(context, "apiKey", "deliveryToken",  "stag");
-     *                                    Entry entry = stack.contentType("form_name").entry("entry_uid");<br>
-     *                                    entry.fetch(new BuiltResultCallBack() {<br>
-     *                                           &#64;Override
-     *                                           public void onCompletion(ResponseType responseType, BuiltError builtError) {
+     *                                                    Stack stack = Contentstack.stack(context, "apiKey", "deliveryToken",  "stag");
+     *                                                    Entry entry = stack.contentType("form_name").entry("entry_uid");<br>
+     *                                                    entry.fetch(new BuiltResultCallBack() {<br>
+     *                                                           &#64;Override
+     *                                                           public void onCompletion(ResponseType responseType, BuiltError builtError) {
      *
-     *                                           }<br>
-     *                                    });<br>
+     *                                                           }<br>
+     *                                                    });<br>
      */
     public void fetch(EntryResultCallBack callBack) {
         try {
@@ -1111,28 +1111,17 @@ public class Entry {
                         break;
 
                     case CACHE_ELSE_NETWORK:
-
                         if (cacheFile.exists()) {
                             boolean needToSendCall = false;
-
-                            // if (maxCacheTimeForCall > 0) {
-                            //     needToSendCall = new CSAppUtils().getResponseTimeFromCacheFile(cacheFile, (int) maxCacheTimeForCall);
-                            // } else {
-                            //     needToSendCall = new CSAppUtils().getResponseTimeFromCacheFile(cacheFile, (int) defaultCacheTimeInterval);
-                            // }
                             needToSendCall = new CSAppUtils().getResponseTimeFromCacheFile(cacheFile, (int) maxCacheTimeForCall);
-
                             if (needToSendCall) {
                                 fetchFromNetwork(URL, urlQueries, cacheFile.getPath(), callBack);
-
                             } else {
                                 setCacheModel(cacheFile, callBack);
                             }
-
                         } else {
                             fetchFromNetwork(URL, urlQueries, cacheFile.getPath(), callBack);
                         }
-
                         break;
 
                     case CACHE_THEN_NETWORK:
@@ -1495,6 +1484,15 @@ public class Entry {
     public Entry includeEmbeddedItems() {
         try {
             otherPostJSON.put("include_embedded_items[]", "BASE");
+        } catch (JSONException e) {
+            Log.e(TAG, e.getLocalizedMessage());
+        }
+        return this;
+    }
+
+    public Entry includeMetadata() {
+        try {
+            otherPostJSON.put("include_metadata", true);
         } catch (JSONException e) {
             Log.e(TAG, e.getLocalizedMessage());
         }

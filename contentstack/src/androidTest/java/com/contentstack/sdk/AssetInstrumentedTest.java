@@ -6,7 +6,7 @@ import static junit.framework.TestCase.assertEquals;
 import android.content.Context;
 import android.util.Log;
 
-import androidx.test.core.app.ApplicationProvider;
+import androidx.test.platform.app.InstrumentationRegistry;
 
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
@@ -15,24 +15,24 @@ import org.junit.runners.MethodSorters;
 
 import java.util.List;
 
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class AssetTestCase {
 
-    private final String TAG = AssetTestCase.class.getSimpleName();
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+public class AssetInstrumentedTest {
+
     private static String assetUid = BuildConfig.assetUID;
     private static Stack stack;
+    private final String TAG = AssetInstrumentedTest.class.getSimpleName();
 
     @BeforeClass
     public static void oneTimeSetUp() throws Exception {
-        Context context = ApplicationProvider.getApplicationContext();
-
+        Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
         Config config = new Config();
         String DEFAULT_API_KEY = BuildConfig.APIKey;
         String DEFAULT_DELIVERY_TOKEN = BuildConfig.deliveryToken;
         String DEFAULT_ENV = BuildConfig.environment;
         String DEFAULT_HOST = BuildConfig.host;
         config.setHost(DEFAULT_HOST);
-        stack = Contentstack.stack(context, DEFAULT_API_KEY, DEFAULT_DELIVERY_TOKEN, DEFAULT_ENV, config);
+        stack = Contentstack.stack(appContext, DEFAULT_API_KEY, DEFAULT_DELIVERY_TOKEN, DEFAULT_ENV, config);
     }
 
 
@@ -164,17 +164,18 @@ public class AssetTestCase {
         });
     }
 
-    @Test
-    public void test_AZURE_NA() throws Exception {
-        Config config = new Config();
-        String DEFAULT_API_KEY = BuildConfig.APIKey;
-        String DEFAULT_DELIVERY_TOKEN = BuildConfig.deliveryToken;
-        String DEFAULT_ENV = BuildConfig.environment;
-        String DEFAULT_HOST = BuildConfig.host;
-        config.setHost(DEFAULT_HOST);
-        config.setRegion(Config.ContentstackRegion.AZURE_NA);
-        Context appContext = ApplicationProvider.getApplicationContext();
-        stack = Contentstack.stack(appContext, DEFAULT_API_KEY, DEFAULT_DELIVERY_TOKEN, DEFAULT_ENV, config);
-    }
+
+//    @Test
+//    public void test_AZURE_NA() throws Exception {
+//        Config config = new Config();
+//        String DEFAULT_API_KEY = BuildConfig.APIKey;
+//        String DEFAULT_DELIVERY_TOKEN = BuildConfig.deliveryToken;
+//        String DEFAULT_ENV = BuildConfig.environment;
+//        String DEFAULT_HOST = BuildConfig.host;
+//        config.setHost(DEFAULT_HOST);
+//        config.setRegion(Config.ContentstackRegion.AZURE_NA);
+//        Context appContext = ApplicationProvider.getApplicationContext();
+//        stack = Contentstack.stack(appContext, DEFAULT_API_KEY, DEFAULT_DELIVERY_TOKEN, DEFAULT_ENV, config);
+//    }
 
 }

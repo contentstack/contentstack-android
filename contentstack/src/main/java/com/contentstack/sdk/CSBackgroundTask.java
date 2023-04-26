@@ -18,7 +18,7 @@ class CSBackgroundTask {
         if (CSAppConstants.isNetworkAvailable) {
             if (headers != null && headers.size() > 0) {
 
-                String URL = stackInstance.URLSCHEMA + stackInstance.URL + url;
+                String URL = stackInstance.PROTOCOL + stackInstance.URL + url;
 
                 CSConnectionRequest csConnectionRequest = new CSConnectionRequest(queryInstance);
                 csConnectionRequest.setQueryInstance(queryInstance);
@@ -37,7 +37,7 @@ class CSBackgroundTask {
         if (CSAppConstants.isNetworkAvailable) {
             if (headers != null && headers.size() > 0) {
 
-                String URL = stackInstance.URLSCHEMA + stackInstance.URL + url;
+                String URL = stackInstance.PROTOCOL + stackInstance.URL + url;
 
                 CSConnectionRequest csConnectionRequest = new CSConnectionRequest(entryInstance);
                 csConnectionRequest.setURLQueries(urlQueries);
@@ -55,7 +55,7 @@ class CSBackgroundTask {
         if (CSAppConstants.isNetworkAvailable) {
             if (headers != null && headers.size() > 0) {
 
-                String URL = stackInstance.URLSCHEMA + stackInstance.URL + url;
+                String URL = stackInstance.PROTOCOL + stackInstance.URL + url;
 
                 CSConnectionRequest csConnectionRequest = new CSConnectionRequest(assetLibrary);
                 csConnectionRequest.setURLQueries(urlQueries);
@@ -73,7 +73,7 @@ class CSBackgroundTask {
         if (CSAppConstants.isNetworkAvailable) {
             if (headers != null && headers.size() > 0) {
 
-                String URL = stackInstance.URLSCHEMA + stackInstance.URL + url;
+                String URL = stackInstance.PROTOCOL + stackInstance.URL + url;
 
                 CSConnectionRequest csConnectionRequest = new CSConnectionRequest(asset);
                 csConnectionRequest.setURLQueries(urlQueries);
@@ -93,7 +93,7 @@ class CSBackgroundTask {
         if (CSAppConstants.isNetworkAvailable) {
             if (headers != null && headers.size() > 0) {
 
-                String URL = stackInstance.URLSCHEMA + stackInstance.URL + url;
+                String URL = stackInstance.PROTOCOL + stackInstance.URL + url;
 
                 CSConnectionRequest csConnectionRequest = new CSConnectionRequest(stack);
                 csConnectionRequest.setStackInstance(stack);
@@ -114,7 +114,7 @@ class CSBackgroundTask {
         if (CSAppConstants.isNetworkAvailable) {
             if (headers != null && headers.size() > 0) {
 
-                String URL = stackInstance.URLSCHEMA + stackInstance.URL + url;
+                String URL = stackInstance.PROTOCOL + stackInstance.URL + url;
 
                 CSConnectionRequest csConnectionRequest = new CSConnectionRequest(contentType);
                 csConnectionRequest.setContentTypeInstance(contentType);
