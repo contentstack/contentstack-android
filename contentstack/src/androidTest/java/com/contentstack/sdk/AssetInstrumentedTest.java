@@ -6,16 +6,20 @@ import static junit.framework.TestCase.assertEquals;
 import android.content.Context;
 import android.util.Log;
 
+import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
 import androidx.test.platform.app.InstrumentationRegistry;
 
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 import org.junit.runners.MethodSorters;
 
 import java.util.List;
 
 
+@RunWith(AndroidJUnit4ClassRunner.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class AssetInstrumentedTest {
 
@@ -37,15 +41,13 @@ public class AssetInstrumentedTest {
 
 
     @Test()
-    public void test_A_getAllAssetsToSetAssetUID() {
+    public void testAGetAllAssetsToSetAssetUid() {
         final AssetLibrary assetLibrary = stack.assetLibrary();
         assetLibrary.fetchAll(new FetchAssetsCallback() {
             @Override
             public void onCompletion(ResponseType responseType, List<Asset> assets, Error error) {
                 if (error == null) {
-                    Log.d(TAG, "response: " + assets.get(0).getAssetUid());
                     assetUid = assets.get(0).getAssetUid();
-                    Log.e(assetUid, assetUid);
                 }
             }
         });
@@ -164,18 +166,100 @@ public class AssetInstrumentedTest {
         });
     }
 
+    @Test
+    public void setStackInstance() {
+    }
 
-//    @Test
-//    public void test_AZURE_NA() throws Exception {
-//        Config config = new Config();
-//        String DEFAULT_API_KEY = BuildConfig.APIKey;
-//        String DEFAULT_DELIVERY_TOKEN = BuildConfig.deliveryToken;
-//        String DEFAULT_ENV = BuildConfig.environment;
-//        String DEFAULT_HOST = BuildConfig.host;
-//        config.setHost(DEFAULT_HOST);
-//        config.setRegion(Config.ContentstackRegion.AZURE_NA);
-//        Context appContext = ApplicationProvider.getApplicationContext();
-//        stack = Contentstack.stack(appContext, DEFAULT_API_KEY, DEFAULT_DELIVERY_TOKEN, DEFAULT_ENV, config);
-//    }
+    @Test
+    public void configure() {
+    }
+
+    @Test
+    public void setHeader() {
+    }
+
+    @Test
+    public void removeHeader() {
+    }
+
+    @Test
+    public void setUid() {
+    }
+
+    @Test
+    public void getAssetUid() {
+    }
+
+    @Test
+    public void getFileType() {
+    }
+
+    @Test
+    public void getFileSize() {
+    }
+
+    @Test
+    public void getFileName() {
+    }
+
+    @Test
+    public void getUrl() {
+    }
+
+    @Test
+    public void toJSON() {
+    }
+
+    @Test
+    public void getCreateAt() {
+    }
+
+    @Test
+    public void getCreatedBy() {
+    }
+
+    @Test
+    public void getUpdateAt() {
+    }
+
+    @Test
+    public void getUpdatedBy() {
+    }
+
+    @Test
+    public void getDeleteAt() {
+    }
+
+    @Test
+    public void getDeletedBy() {
+    }
+
+    @Test
+    public void getTags() {
+    }
+
+    @Test
+    public void setCachePolicy() {
+    }
+
+    @Test
+    public void fetch() {
+    }
+
+    @Test
+    public void setTags() {
+    }
+
+    @Test
+    public void addParam() {
+    }
+
+    @Test
+    public void includeDimension() {
+    }
+
+    @Test
+    public void includeFallback() {
+    }
 
 }

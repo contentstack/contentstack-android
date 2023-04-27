@@ -3,10 +3,6 @@ package com.contentstack.sdk;
 import android.util.ArrayMap;
 import android.text.TextUtils;
 
-import com.contentstack.sdk.utilities.CSAppConstants;
-import com.contentstack.sdk.utilities.CSAppUtils;
-import com.contentstack.sdk.utilities.CSController;
-
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -185,7 +181,7 @@ public class ContentType {
                 fetchContentTypes(URL, params, headers, null, callback);
             } else {
                 Error error = new Error();
-                error.setErrorMessage(CSAppConstants.ErrorMessage_JsonNotProper);
+                error.setErrorMessage(SDKConstant.ErrorMessage_JsonNotProper);
                 callback.onRequestFail(ResponseType.UNKNOWN, error);
             }
 
@@ -193,7 +189,7 @@ public class ContentType {
         } catch (Exception e) {
 
             Error error = new Error();
-            error.setErrorMessage(CSAppConstants.ErrorMessage_JsonNotProper);
+            error.setErrorMessage(SDKConstant.ErrorMessage_JsonNotProper);
             callback.onRequestFail(ResponseType.UNKNOWN, error);
         }
 
@@ -205,7 +201,7 @@ public class ContentType {
         if (callback != null) {
 
             HashMap<String, Object> urlParams = getUrlParams(urlQueries);
-            new CSBackgroundTask(this, stackInstance, CSController.FETCHCONTENTTYPES, urlString, headers, urlParams, new JSONObject(), cacheFilePath, CSAppConstants.callController.CONTENTTYPES.toString(), false, CSAppConstants.RequestMethod.GET, callback);
+            new CSBackgroundTask(this, stackInstance, SDKController.GET_CONTENT_TYPES, urlString, headers, urlParams, new JSONObject(), cacheFilePath, SDKConstant.callController.CONTENT_TYPES.toString(), false, SDKConstant.RequestMethod.GET, callback);
         }
     }
 
@@ -222,7 +218,7 @@ public class ContentType {
                     Object value = urlQueriesJSON.opt(key);
                     hashMap.put(key, value);
                 } catch (Exception e) {
-                    CSAppUtils.showLog(TAG, "------setQueryJson" + e.toString());
+                    SDKUtil.showLog(TAG, "------setQueryJson" + e.toString());
                 }
             }
 

@@ -80,5 +80,10 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.android.volley:volley:1.2.1'
     testImplementation 'junit:junit:5.9.2'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.8.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+
+    androidTestImplementation ("androidx.test.espresso:espresso-contrib:3.5.1") {
+        exclude module: "protobuf-lite"
+    }
 }

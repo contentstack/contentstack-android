@@ -1,7 +1,5 @@
 package com.contentstack.sdk;
 
-import com.contentstack.sdk.utilities.CSAppUtils;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -109,7 +107,7 @@ class EntryModel {
 
 
         } catch (Exception e) {
-            CSAppUtils.showLog("EntryModel", e.getLocalizedMessage());
+            SDKUtil.showLog("EntryModel", e.getLocalizedMessage());
         }
 
     }

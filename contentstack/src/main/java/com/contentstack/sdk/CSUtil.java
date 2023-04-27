@@ -1,4 +1,4 @@
-package com.contentstack.sdk.utilities;
+package com.contentstack.sdk;
 
 import android.annotation.SuppressLint;
 
@@ -14,7 +14,7 @@ import java.util.TimeZone;
  *
  * @author contentstack.com, Inc
  */
-public class ContentstackUtil {
+public class CSUtil {
 
     /**
      * Converts the given date to user&#39;s timezone.

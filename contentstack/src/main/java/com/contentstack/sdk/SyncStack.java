@@ -1,7 +1,5 @@
 package com.contentstack.sdk;
 
-import com.contentstack.sdk.utilities.CSAppUtils;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -93,7 +91,7 @@ public class SyncStack {
                     }
                 }
             } catch (Exception e) {
-                CSAppUtils.showLog(TAG, e.getLocalizedMessage());
+                SDKUtil.showLog(TAG, e.getLocalizedMessage());
             }
 
         }

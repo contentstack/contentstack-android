@@ -1,11 +1,11 @@
-package com.contentstack.sdk.utilities;
+package com.contentstack.sdk;
 
 import java.util.ArrayList;
 
 /**
  * @author contentstack.com, Inc
  */
-public class CSAppConstants {
+public class SDKConstant {
 
     public static final boolean debug = false;
     public static boolean isNetworkAvailable = true;
@@ -37,8 +37,8 @@ public class CSAppConstants {
         STACK,
         ASSET,
         SYNC,
-        CONTENTTYPES,
-        ASSETLIBRARY;
+        CONTENT_TYPES,
+        ASSET_LIBRARY;
     }
 
 
