@@ -252,14 +252,11 @@ class CSHttpConnection implements IURLRequestHTTP {
                 connectionRequest.onRequestFinished(CSHttpConnection.this);
             }
         }, this::generateBuiltError) {
-
             @Override
             public Map<String, String> getHeaders() {
                 return headers;
             }
-
         };
-
         jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(SDKConstant.TimeOutDuration, SDKConstant.NumRetry, SDKConstant.BackOFMultiplier));
         jsonObjectRequest.setShouldCache(false);
         Contentstack.addToRequestQueue(protocol, jsonObjectRequest, info);

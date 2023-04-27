@@ -4,6 +4,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.Iterator;
+import java.util.Objects;
 import java.util.WeakHashMap;
 
 /**
@@ -39,9 +40,14 @@ class EntryModel {
                 }
 
                 if (isFromDeltaResponse) {
-                    this.entryUid = (String) (jsonObject != null && jsonObject.isNull("uid") ? " " : jsonObject.opt("uid"));
+                    this.entryUid = (String) (jsonObject != null && jsonObject.isNull("uid") ? " " : Objects.requireNonNull(jsonObject).opt("uid"));
                 } else {
-                    jsonObject = jsonObject != null && jsonObject.opt("entry") == null ? null : jsonObject.optJSONObject("entry");
+                    if (jsonObject != null && jsonObject.opt("entry") == null) {
+                        jsonObject = null;
+                    } else {
+                        assert jsonObject != null;
+                        jsonObject = jsonObject.optJSONObject("entry");
+                    }
                 }
             }
             if (jsonObject != null && jsonObject.has("uid")) {
@@ -62,6 +68,7 @@ class EntryModel {
 
             if (jsonObject != null && jsonObject.has("_metadata")) {
                 JSONObject _metadataJSON = jsonObject.optJSONObject("_metadata");
+                assert _metadataJSON != null;
                 Iterator<String> iterator = _metadataJSON.keys();
                 _metadata = new WeakHashMap<>();
                 while (iterator.hasNext()) {
@@ -77,17 +84,18 @@ class EntryModel {
                 _metadata.put("publish_details", publishDetailsObj);
             }
 
-
             if (jsonObject != null && jsonObject.has("_owner") && (jsonObject.opt("_owner") != null) && (!jsonObject.opt("_owner").toString().equalsIgnoreCase("null"))) {
                 JSONObject ownerObject = jsonObject.optJSONObject("_owner");
+                assert ownerObject != null;
                 if (ownerObject.has("email") && ownerObject.opt("email") != null) {
                     ownerEmailId = (String) ownerObject.opt("email");
                 }
 
                 if (ownerObject.has("uid") && ownerObject.opt("uid") != null) {
-                    ownerUid = ownerObject.opt("uid").toString();
+                    ownerUid = Objects.requireNonNull(ownerObject.opt("uid")).toString();
                 }
                 JSONObject owner = jsonObject.optJSONObject("_owner");
+                assert owner != null;
                 Iterator<String> iterator = owner.keys();
                 ownerMap = new WeakHashMap<>();
                 while (iterator.hasNext()) {
@@ -96,6 +104,7 @@ class EntryModel {
                 }
             }
 
+            assert jsonObject != null;
             tagsArray = (JSONArray) jsonObject.opt("tags");
             if (tagsArray != null && tagsArray.length() > 0) {
                 int count = tagsArray.length();
