@@ -4,10 +4,6 @@ import android.text.TextUtils;
 import android.util.ArrayMap;
 import android.util.Log;
 
-import com.contentstack.sdk.utilities.CSAppConstants;
-import com.contentstack.sdk.utilities.CSAppUtils;
-import com.contentstack.sdk.utilities.CSController;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -120,7 +116,7 @@ public class AssetLibrary implements INotifyClass {
                     break;
             }
         } catch (Exception e) {
-            throwException("sort", CSAppConstants.ErrorMessage_QueryFilterException, e);
+            throwException("sort", SDKConstant.ErrorMessage_QueryFilterException, e);
         }
 
         return this;
@@ -141,7 +137,7 @@ public class AssetLibrary implements INotifyClass {
         try {
             urlQueries.put("include_count", "true");
         } catch (Exception e) {
-            throwException("includeCount", CSAppConstants.ErrorMessage_QueryFilterException, e);
+            throwException("includeCount", SDKConstant.ErrorMessage_QueryFilterException, e);
         }
         return this;
     }
@@ -161,7 +157,7 @@ public class AssetLibrary implements INotifyClass {
         try {
             urlQueries.put("relative_urls", "true");
         } catch (Exception e) {
-            throwException("relative_urls", CSAppConstants.ErrorMessage_QueryFilterException, e);
+            throwException("relative_urls", SDKConstant.ErrorMessage_QueryFilterException, e);
         }
         return this;
     }
@@ -219,8 +215,8 @@ public class AssetLibrary implements INotifyClass {
                 urlQueries.put("environment", headers.get("environment"));
             }
             String mainStringForMD5 = URL + new JSONObject().toString() + headers.toString();
-            String md5Value = new CSAppUtils().getMD5FromString(mainStringForMD5.trim());
-            File cacheFile = new File(CSAppConstants.cacheFolderName + File.separator + md5Value);
+            String md5Value = new SDKUtil().getMD5FromString(mainStringForMD5.trim());
+            File cacheFile = new File(SDKConstant.cacheFolderName + File.separator + md5Value);
             switch (cachePolicyForCall) {
                 case IGNORE_CACHE:
                     fetchFromNetwork(URL, urlQueries, headers, cacheFile.getPath(), assetsCallback);
@@ -234,7 +230,7 @@ public class AssetLibrary implements INotifyClass {
                 case CACHE_ELSE_NETWORK:
                     if (cacheFile.exists()) {
                         boolean needToSendCall = false;
-                        needToSendCall = new CSAppUtils().getResponseTimeFromCacheFile(cacheFile, (int) maxCacheTimeForCall);
+                        needToSendCall = new SDKUtil().getResponseTimeFromCacheFile(cacheFile, (int) maxCacheTimeForCall);
                         if (needToSendCall) {
                             fetchFromNetwork(URL, urlQueries, headers, cacheFile.getPath(), assetsCallback);
                         } else {
@@ -251,7 +247,7 @@ public class AssetLibrary implements INotifyClass {
                     fetchFromNetwork(URL, urlQueries, headers, cacheFile.getPath(), assetsCallback);
                     break;
                 case NETWORK_ELSE_CACHE:
-                    if (CSAppConstants.isNetworkAvailable) {
+                    if (SDKConstant.isNetworkAvailable) {
                         fetchFromNetwork(URL, urlQueries, headers, cacheFile.getPath(), assetsCallback);
                     } else {
                         fetchFromCache(cacheFile, assetsCallback);
@@ -260,14 +256,14 @@ public class AssetLibrary implements INotifyClass {
             }
 
         } catch (Exception e) {
-            CSAppUtils.showLog(TAG, e.toString());
+            SDKUtil.showLog(TAG, e.toString());
         }
     }
 
     private void fetchFromNetwork(String URL, JSONObject urlQueries, ArrayMap<String, Object> headers, String cacheFilePath, FetchAssetsCallback callback) {
         if (callback != null) {
             HashMap<String, Object> urlParams = getUrlParams(urlQueries);
-            new CSBackgroundTask(this, stackInstance, CSController.FETCHALLASSETS, URL, headers, urlParams, new JSONObject(), cacheFilePath, CSAppConstants.callController.ASSETLIBRARY.toString(), false, CSAppConstants.RequestMethod.GET, assetsCallback);
+            new CSBackgroundTask(this, stackInstance, SDKController.GET_ALL_ASSETS, URL, headers, urlParams, new JSONObject(), cacheFilePath, SDKConstant.callController.ASSET_LIBRARY.toString(), false, SDKConstant.RequestMethod.GET, assetsCallback);
         }
     }
 
@@ -275,16 +271,16 @@ public class AssetLibrary implements INotifyClass {
         Error error = null;
         if (cacheFile.exists()) {
             boolean needToSendCall = false;
-            needToSendCall = new CSAppUtils().getResponseTimeFromCacheFile(cacheFile, (int) maxCacheTimeForCall);
+            needToSendCall = new SDKUtil().getResponseTimeFromCacheFile(cacheFile, (int) maxCacheTimeForCall);
             if (needToSendCall) {
                 error = new Error();
-                error.setErrorMessage(CSAppConstants.ErrorMessage_EntryNotFoundInCache);
+                error.setErrorMessage(SDKConstant.ErrorMessage_EntryNotFoundInCache);
             } else {
                 setCacheModel(cacheFile, callback);
             }
         } else {
             error = new Error();
-            error.setErrorMessage(CSAppConstants.ErrorMessage_EntryNotFoundInCache);
+            error.setErrorMessage(SDKConstant.ErrorMessage_EntryNotFoundInCache);
         }
 
         if (callback != null && error != null) {
@@ -295,7 +291,7 @@ public class AssetLibrary implements INotifyClass {
     //Asset modeling from cache.
     private void setCacheModel(File cacheFile, FetchAssetsCallback callback) {
 
-        AssetsModel assetsModel = new AssetsModel(CSAppUtils.getJsonFromCacheFile(cacheFile), true);
+        AssetsModel assetsModel = new AssetsModel(SDKUtil.getJsonFromCacheFile(cacheFile), true);
         List<Object> objectList = assetsModel.objects;
         assetsModel = null;
         count = objectList.size();
@@ -335,7 +331,7 @@ public class AssetLibrary implements INotifyClass {
                     Object value = urlQueriesJSON.opt(key);
                     hashMap.put(key, value);
                 } catch (Exception e) {
-                    CSAppUtils.showLog(TAG, e.toString());
+                    SDKUtil.showLog(TAG, e.toString());
                 }
             }
 

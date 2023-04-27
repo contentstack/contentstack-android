@@ -1,4 +1,4 @@
-package com.contentstack.sdk.utilities;
+package com.contentstack.sdk;
 
 import android.annotation.SuppressLint;
 import android.util.Log;
@@ -21,13 +21,13 @@ import java.util.TimeZone;
 /**
  * @author contentstack.com
  */
-public class CSAppUtils {
+public class SDKUtil {
 
-    public CSAppUtils() {
+    public SDKUtil() {
     }
 
     public static void showLog(String tag, String message) {
-        if (CSAppConstants.debug) {
+        if (SDKConstant.debug) {
             Log.i(tag, message);
         }
     }

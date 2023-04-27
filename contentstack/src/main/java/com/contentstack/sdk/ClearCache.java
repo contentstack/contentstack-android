@@ -4,8 +4,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-import com.contentstack.sdk.utilities.CSAppUtils;
-
 import org.json.JSONObject;
 
 import java.io.File;
@@ -43,7 +41,7 @@ public class ClearCache extends BroadcastReceiver {
                 } else {
 
                     if (file.exists()) {
-                        JSONObject jsonObj = CSAppUtils.getJsonFromCacheFile(file);
+                        JSONObject jsonObj = SDKUtil.getJsonFromCacheFile(file);
                         if (jsonObj != null) {
                             if (jsonObj.optString("timestamp") != null) {
                                 long responseTime = Long.parseLong(jsonObj.optString("timestamp"));
@@ -59,7 +57,7 @@ public class ClearCache extends BroadcastReceiver {
                             }
                         }
                     } else {
-                        CSAppUtils.showLog("ClearCache", "--------------------no offline network calls");
+                        SDKUtil.showLog("ClearCache", "--------------------no offline network calls");
                     }
                 }
             }

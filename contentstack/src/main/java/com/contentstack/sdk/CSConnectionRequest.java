@@ -3,10 +3,6 @@ package com.contentstack.sdk;
 
 import android.util.ArrayMap;
 
-import com.contentstack.sdk.utilities.CSAppConstants;
-import com.contentstack.sdk.utilities.CSAppUtils;
-import com.contentstack.sdk.utilities.CSController;
-
 import org.json.JSONObject;
 
 import java.io.File;
@@ -27,7 +23,7 @@ class CSConnectionRequest implements IRequestModelHTTP {
     private static final String TAG = "CSConnectionRequest";
 
     private String urlToCall;
-    private CSAppConstants.RequestMethod method;
+    private SDKConstant.RequestMethod method;
     private String controller;
     private JSONObject paramsJSON;
     private ArrayMap<String, Object> header;
@@ -88,10 +84,10 @@ class CSConnectionRequest implements IRequestModelHTTP {
     }
 
     public void setParams(Object... objects) {
-        CSAppUtils.showLog(TAG, "ParallelTasks------|" + objects[0] + " started");
+        SDKUtil.showLog(TAG, "ParallelTasks------|" + objects[0] + " started");
 
         this.urlToCall = (String) objects[0];
-        this.method = (CSAppConstants.RequestMethod) objects[1];
+        this.method = (SDKConstant.RequestMethod) objects[1];
         this.controller = (String) objects[2];
         paramsJSON = (JSONObject) objects[3];
         this.header = (ArrayMap<String, Object>) objects[4];
@@ -164,11 +160,11 @@ class CSConnectionRequest implements IRequestModelHTTP {
             }
 
         } catch (Exception e) {
-            CSAppUtils.showLog(TAG, "------------------catch 210 urlReq---|" + e);
+            SDKUtil.showLog(TAG, "------------------catch 210 urlReq---|" + e);
             errorMessage = e.getLocalizedMessage();
         }
         if (errorMessage == null || (!(errorMessage.length() > 0))) {
-            errorMessage = CSAppConstants.ErrorMessage_Default;
+            errorMessage = SDKConstant.ErrorMessage_Default;
         }
         errorObject.setErrorCode(errorCode);
         errorObject.setErrorMessage(errorMessage);
@@ -190,21 +186,21 @@ class CSConnectionRequest implements IRequestModelHTTP {
             createFileIntoCacheDir(responseJSON);
         }
 
-        if (controller.equalsIgnoreCase(CSController.QUERYOBJECT)) {
+        if (controller.equalsIgnoreCase(SDKController.GET_QUERY_ENTRIES)) {
 
             EntriesModel model = new EntriesModel(responseJSON, null, false);
             notifyClass.getResult(model.formName, null);
             notifyClass.getResultObject(model.objectList, responseJSON, false);
             model = null;
 
-        } else if (controller.equalsIgnoreCase(CSController.SINGLEQUERYOBJECT)) {
+        } else if (controller.equalsIgnoreCase(SDKController.SINGLE_QUERY_ENTRIES)) {
 
             EntriesModel model = new EntriesModel(responseJSON, null, false);
             notifyClass.getResult(model.formName, null);
             notifyClass.getResultObject(model.objectList, responseJSON, true);
             model = null;
 
-        } else if (controller.equalsIgnoreCase(CSController.FETCHENTRY)) {
+        } else if (controller.equalsIgnoreCase(SDKController.GET_ENTRY)) {
 
             EntryModel model = new EntryModel(responseJSON, null, false, false, false);
             entryInstance.resultJson = model.jsonObject;
@@ -227,14 +223,14 @@ class CSConnectionRequest implements IRequestModelHTTP {
                 ((EntryResultCallBack) request.getCallBackObject()).onRequestFinish(ResponseType.NETWORK);
             }
 
-        } else if (controller.equalsIgnoreCase(CSController.FETCHALLASSETS)) {
+        } else if (controller.equalsIgnoreCase(SDKController.GET_ALL_ASSETS)) {
             AssetsModel assetsModel = new AssetsModel(responseJSON, false);
             List<Object> objectList = assetsModel.objects;
             assetsModel = null;
 
             assetLibrary.getResultObject(objectList, responseJSON, false);
 
-        } else if (controller.equalsIgnoreCase(CSController.FETCHASSETS)) {
+        } else if (controller.equalsIgnoreCase(SDKController.GET_ASSETS)) {
             AssetModel model = new AssetModel(responseJSON, false, false);
 
             assetInstance.contentType = model.contentType;
@@ -249,7 +245,7 @@ class CSConnectionRequest implements IRequestModelHTTP {
             if (request.getCallBackObject() != null) {
                 ((FetchResultCallback) request.getCallBackObject()).onRequestFinish(ResponseType.NETWORK);
             }
-        } else if (controller.equalsIgnoreCase(CSController.FETCHSYNC)) {
+        } else if (controller.equalsIgnoreCase(SDKController.GET_SYNC)) {
 
             SyncStack model = new SyncStack();
             model.setJSON(responseJSON);
@@ -257,7 +253,7 @@ class CSConnectionRequest implements IRequestModelHTTP {
                 ((SyncResultCallBack) request.getCallBackObject()).onRequestFinish(model);
             }
 
-        } else if (controller.equalsIgnoreCase(CSController.FETCHCONTENTTYPES)) {
+        } else if (controller.equalsIgnoreCase(SDKController.GET_CONTENT_TYPES)) {
 
             ContentTypesModel model = new ContentTypesModel();
             model.setJSON(responseJSON);
@@ -309,14 +305,14 @@ class CSConnectionRequest implements IRequestModelHTTP {
             file.close();
         } catch (Exception e) {
             Error error = new Error();
-            error.setErrorMessage(CSAppConstants.ErrorMessage_SavingNetworkCallResponseForCache);
+            error.setErrorMessage(SDKConstant.ErrorMessage_SavingNetworkCallResponseForCache);
             HashMap<String, Object> hashMap = new HashMap<String, Object>();
             hashMap.put("error", e.getLocalizedMessage());
             error.setErrors(hashMap);
             if (callBackObject != null) {
                 callBackObject.onRequestFail(ResponseType.CACHE, error);
             }
-            CSAppUtils.showLog(TAG, e.getLocalizedMessage());
+            SDKUtil.showLog(TAG, e.getLocalizedMessage());
         }
     }
 

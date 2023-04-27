@@ -4,10 +4,6 @@ import android.text.TextUtils;
 import android.util.ArrayMap;
 import android.util.Log;
 
-import com.contentstack.sdk.utilities.CSAppConstants;
-import com.contentstack.sdk.utilities.CSAppUtils;
-import com.contentstack.sdk.utilities.CSController;
-import com.contentstack.sdk.utilities.ContentstackUtil;
 import com.contentstack.txtmark.Configuration;
 import com.contentstack.txtmark.Processor;
 
@@ -315,7 +311,7 @@ public class Entry {
                 return null;
             }
         } catch (Exception e) {
-            CSAppUtils.showLog(TAG, e.getLocalizedMessage());
+            SDKUtil.showLog(TAG, e.getLocalizedMessage());
             return null;
         }
     }
@@ -335,7 +331,7 @@ public class Entry {
         try {
             return Processor.process(getString(markdownKey), Configuration.builder().forceExtentedProfile().build());
         } catch (Exception e) {
-            CSAppUtils.showLog(TAG, e.getLocalizedMessage());
+            SDKUtil.showLog(TAG, e.getLocalizedMessage());
             return null;
         }
     }
@@ -360,7 +356,7 @@ public class Entry {
             }
             return multipleHtmlStrings;
         } catch (Exception e) {
-            CSAppUtils.showLog(TAG, e.getLocalizedMessage());
+            SDKUtil.showLog(TAG, e.getLocalizedMessage());
             return null;
         }
     }
@@ -569,9 +565,9 @@ public class Entry {
 
         try {
             String value = getString(key);
-            return ContentstackUtil.parseDate(value, null);
+            return CSUtil.parseDate(value, null);
         } catch (Exception e) {
-            CSAppUtils.showLog(TAG, e.getLocalizedMessage());
+            SDKUtil.showLog(TAG, e.getLocalizedMessage());
         }
         return null;
     }
@@ -589,9 +585,9 @@ public class Entry {
 
         try {
             String value = getString("created_at");
-            return ContentstackUtil.parseDate(value, null);
+            return CSUtil.parseDate(value, null);
         } catch (Exception e) {
-            CSAppUtils.showLog(TAG, e.getLocalizedMessage());
+            SDKUtil.showLog(TAG, e.getLocalizedMessage());
         }
         return null;
     }
@@ -622,9 +618,9 @@ public class Entry {
 
         try {
             String value = getString("updated_at");
-            return ContentstackUtil.parseDate(value, null);
+            return CSUtil.parseDate(value, null);
         } catch (Exception e) {
-            CSAppUtils.showLog(TAG, e.getLocalizedMessage());
+            SDKUtil.showLog(TAG, e.getLocalizedMessage());
         }
         return null;
     }
@@ -654,9 +650,9 @@ public class Entry {
 
         try {
             String value = getString("deleted_at");
-            return ContentstackUtil.parseDate(value, null);
+            return CSUtil.parseDate(value, null);
         } catch (Exception e) {
-            CSAppUtils.showLog(TAG, e.getLocalizedMessage());
+            SDKUtil.showLog(TAG, e.getLocalizedMessage());
         }
         return null;
     }
@@ -813,7 +809,7 @@ public class Entry {
                             entryInstance = contentTypeInstance.stackInstance.contentType(refContentType).entry();
                         } catch (Exception e) {
                             entryInstance = new Entry(refContentType);
-                            CSAppUtils.showLog(TAG, e.getLocalizedMessage());
+                            SDKUtil.showLog(TAG, e.getLocalizedMessage());
                         }
                         entryInstance.setUid(model.entryUid);
                         entryInstance.ownerEmailId = model.ownerEmailId;
@@ -833,7 +829,7 @@ public class Entry {
                 }
             }
         } catch (Exception e) {
-            CSAppUtils.showLog(TAG, e.getLocalizedMessage());
+            SDKUtil.showLog(TAG, e.getLocalizedMessage());
             return null;
         }
 
@@ -867,7 +863,7 @@ public class Entry {
                 }
             }
         } catch (Exception e) {
-            CSAppUtils.showLog(TAG, "--except-catch|" + e);
+            SDKUtil.showLog(TAG, "--except-catch|" + e);
         }
         return this;
     }
@@ -897,7 +893,7 @@ public class Entry {
                 otherPostJSON.put("include[]", referenceArray);
             }
         } catch (Exception e) {
-            CSAppUtils.showLog(TAG, "--include Reference-catch|" + e.getLocalizedMessage());
+            SDKUtil.showLog(TAG, "--include Reference-catch|" + e.getLocalizedMessage());
         }
 
         return this;
@@ -929,7 +925,7 @@ public class Entry {
                 otherPostJSON.put("include[]", referenceArray);
             }
         } catch (Exception e) {
-            CSAppUtils.showLog(TAG, "--include Reference-catch|" + e.getLocalizedMessage());
+            SDKUtil.showLog(TAG, "--include Reference-catch|" + e.getLocalizedMessage());
         }
 
         return this;
@@ -961,7 +957,7 @@ public class Entry {
                 }
             }
         } catch (Exception e) {
-            CSAppUtils.showLog(TAG, "--include Reference-catch|" + e.getLocalizedMessage());
+            SDKUtil.showLog(TAG, "--include Reference-catch|" + e.getLocalizedMessage());
         }
 
         return this;
@@ -999,7 +995,7 @@ public class Entry {
                 includeReference(referenceFieldUid);
             }
         } catch (Exception e) {
-            CSAppUtils.showLog(TAG, "--onlyWithReferenceUid-catch|" + e.getLocalizedMessage());
+            SDKUtil.showLog(TAG, "--onlyWithReferenceUid-catch|" + e.getLocalizedMessage());
         }
         return this;
     }
@@ -1038,7 +1034,7 @@ public class Entry {
                 includeReference(referenceFieldUid);
             }
         } catch (Exception e) {
-            CSAppUtils.showLog(TAG, "--exceptWithReferenceUid-catch|" + e.getLocalizedMessage());
+            SDKUtil.showLog(TAG, "--exceptWithReferenceUid-catch|" + e.getLocalizedMessage());
         }
         return this;
     }
@@ -1091,9 +1087,9 @@ public class Entry {
                 }
 
                 String mainStringForMD5 = URL + new JSONObject().toString() + headerAll.toString();
-                String md5Value = new CSAppUtils().getMD5FromString(mainStringForMD5.trim());
+                String md5Value = new SDKUtil().getMD5FromString(mainStringForMD5.trim());
 
-                File cacheFile = new File(CSAppConstants.cacheFolderName + File.separator + md5Value);
+                File cacheFile = new File(SDKConstant.cacheFolderName + File.separator + md5Value);
 
 
                 switch (cachePolicyForCall) {
@@ -1113,7 +1109,7 @@ public class Entry {
                     case CACHE_ELSE_NETWORK:
                         if (cacheFile.exists()) {
                             boolean needToSendCall = false;
-                            needToSendCall = new CSAppUtils().getResponseTimeFromCacheFile(cacheFile, (int) maxCacheTimeForCall);
+                            needToSendCall = new SDKUtil().getResponseTimeFromCacheFile(cacheFile, (int) maxCacheTimeForCall);
                             if (needToSendCall) {
                                 fetchFromNetwork(URL, urlQueries, cacheFile.getPath(), callBack);
                             } else {
@@ -1135,7 +1131,7 @@ public class Entry {
 
                     case NETWORK_ELSE_CACHE:
 
-                        if (CSAppConstants.isNetworkAvailable) {
+                        if (SDKConstant.isNetworkAvailable) {
                             fetchFromNetwork(URL, urlQueries, cacheFile.getPath(), callBack);
                         } else {
                             fetchFromCache(cacheFile, callBack);
@@ -1146,7 +1142,7 @@ public class Entry {
                 }
 
             } else {
-                throwException(CSAppConstants.ErrorMessage_EntryUID, null, callBack);
+                throwException(SDKConstant.ErrorMessage_EntryUID, null, callBack);
             }
         } catch (Exception e) {
             throwException(null, e, callBack);
@@ -1161,11 +1157,11 @@ public class Entry {
             setIncludeJSON(urlQueries, callBack);
             mainJson.put("query", urlQueries);
 
-            mainJson.put("_method", CSAppConstants.RequestMethod.GET.toString());
+            mainJson.put("_method", SDKConstant.RequestMethod.GET.toString());
 
             HashMap<String, Object> urlParams = getUrlParams(mainJson);
 
-            new CSBackgroundTask(this, contentTypeInstance.stackInstance, CSController.FETCHENTRY, URL, getHeader(localHeader), urlParams, new JSONObject(), cacheFilePath, CSAppConstants.callController.ENTRY.toString(), false, CSAppConstants.RequestMethod.GET, callBack);
+            new CSBackgroundTask(this, contentTypeInstance.stackInstance, SDKController.GET_ENTRY, URL, getHeader(localHeader), urlParams, new JSONObject(), cacheFilePath, SDKConstant.callController.ENTRY.toString(), false, SDKConstant.RequestMethod.GET, callBack);
 
         } catch (Exception e) {
             throwException(null, e, callBack);
@@ -1183,18 +1179,18 @@ public class Entry {
             // } else {
             //     needToSendCall = new CSAppUtils().getResponseTimeFromCacheFile(cacheFile, (int) defaultCacheTimeInterval);
             // }
-            needToSendCall = new CSAppUtils().getResponseTimeFromCacheFile(cacheFile, (int) maxCacheTimeForCall);
+            needToSendCall = new SDKUtil().getResponseTimeFromCacheFile(cacheFile, (int) maxCacheTimeForCall);
 
             if (needToSendCall) {
                 error = new Error();
-                error.setErrorMessage(CSAppConstants.ErrorMessage_EntryNotFoundInCache);
+                error.setErrorMessage(SDKConstant.ErrorMessage_EntryNotFoundInCache);
 
             } else {
                 setCacheModel(cacheFile, callback);
             }
         } else {
             error = new Error();
-            error.setErrorMessage(CSAppConstants.ErrorMessage_EntryNotFoundInCache);
+            error.setErrorMessage(SDKConstant.ErrorMessage_EntryNotFoundInCache);
         }
 
         if (callback != null && error != null) {
@@ -1205,7 +1201,7 @@ public class Entry {
     //Entry modeling from cache.
     private void setCacheModel(File cacheFile, EntryResultCallBack callback) {
 
-        EntryModel model = new EntryModel(CSAppUtils.getJsonFromCacheFile(cacheFile), null, false, true, false);
+        EntryModel model = new EntryModel(SDKUtil.getJsonFromCacheFile(cacheFile), null, false, true, false);
         this.resultJson = model.jsonObject;
         this.ownerEmailId = model.ownerEmailId;
         this.ownerUid = model.ownerUid;
@@ -1237,10 +1233,10 @@ public class Entry {
      */
 
     public void cancelRequest() {
-        CSAppConstants.cancelledCallController.add(CSAppConstants.callController.ENTRY.toString());
+        SDKConstant.cancelledCallController.add(SDKConstant.callController.ENTRY.toString());
 
         if (Contentstack.requestQueue != null) {
-            Contentstack.requestQueue.cancelAll(CSAppConstants.callController.ENTRY.toString());
+            Contentstack.requestQueue.cancelAll(SDKConstant.callController.ENTRY.toString());
         }
     }
 
@@ -1274,7 +1270,7 @@ public class Entry {
                     Object value = queryJSON.opt(key);
                     hashMap.put(key, value);
                 } catch (Exception e) {
-                    CSAppUtils.showLog(TAG, e.getLocalizedMessage());
+                    SDKUtil.showLog(TAG, e.getLocalizedMessage());
                 }
             }
 

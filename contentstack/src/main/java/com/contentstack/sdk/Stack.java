@@ -4,10 +4,6 @@ import android.text.TextUtils;
 import android.util.ArrayMap;
 import android.util.Log;
 
-import com.contentstack.sdk.utilities.CSAppConstants;
-import com.contentstack.sdk.utilities.CSAppUtils;
-import com.contentstack.sdk.utilities.CSController;
-
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -58,8 +54,7 @@ public class Stack implements INotifyClass {
 
     protected Stack(String stackApiKey) {
         this.stackApiKey = stackApiKey;
-        this.localHeader = new ArrayMap<String, Object>();
-
+        this.localHeader = new ArrayMap<>();
     }
 
     protected void setConfig(Config config) {
@@ -71,7 +66,6 @@ public class Stack implements INotifyClass {
         if (!TextUtils.isEmpty(config.environment)) {
             setHeader("environment", config.environment);
         }
-
         if (!config.region.name().isEmpty()) {
             String region = config.region.name().toLowerCase();
             if (!region.equalsIgnoreCase("us")) {
@@ -129,7 +123,6 @@ public class Stack implements INotifyClass {
     public ContentType contentType(String contentTypeName) {
         ContentType contentType = new ContentType(contentTypeName);
         contentType.setStackInstance(this);
-
         return contentType;
     }
 
@@ -148,7 +141,6 @@ public class Stack implements INotifyClass {
     public Asset asset(String uid) {
         Asset asset = new Asset(uid);
         asset.setStackInstance(this);
-
         return asset;
     }
 
@@ -166,7 +158,6 @@ public class Stack implements INotifyClass {
     protected Asset asset() {
         Asset asset = new Asset();
         asset.setStackInstance(this);
-
         return asset;
     }
 
@@ -244,7 +235,7 @@ public class Stack implements INotifyClass {
      *              <br><br><b>Example :</b><br>
      *              <pre
      *              Stack stack = Contentstack.stack(context, "apiKey", "deliveryToken", "stag");<br>
-     *              stack.setHeader("custom_key", "custom_value");
+     *              stack.setHeader("key", "value");
      *              </pre>
      */
     public void setHeader(String key, String value) {
@@ -271,9 +262,6 @@ public class Stack implements INotifyClass {
      *  imageParams.put("height",100);
      *  imageUrl = Stack.ImageTransform(image_url, parameters);
      *  stack.ImageTransform(image_url, parameters);
-     *
-     *
-     *
      *  </pre>
      */
     public String ImageTransform(String image_url, LinkedHashMap<String, Object> parameters) {
@@ -284,17 +272,13 @@ public class Stack implements INotifyClass {
 
 
     private String getImageUrl() {
-
         if (imageParams == null || imageParams.size() == 0) {
             return imageTransformationUrl;
         }
-
         for (Map.Entry<String, Object> param : imageParams.entrySet()) {
             try {
-
                 String paramKey = param.getKey();
                 String paramValue = param.getValue().toString();
-
                 final String encodedKey = URLEncoder.encode(paramKey, "UTF-8");
                 final String encodedValue = URLEncoder.encode(paramValue, "UTF-8");
                 if (!imageTransformationUrl.contains("?")) {
@@ -302,12 +286,10 @@ public class Stack implements INotifyClass {
                 } else {
                     imageTransformationUrl += "&" + encodedKey + "=" + encodedValue;
                 }
-
             } catch (UnsupportedEncodingException e) {
-                Log.e(TAG, e.getLocalizedMessage());
+                Log.e(TAG, Objects.requireNonNull(e.getLocalizedMessage()));
             }
         }
-
         return imageTransformationUrl;
     }
 
@@ -332,7 +314,6 @@ public class Stack implements INotifyClass {
      * </pre>
      */
     public void getContentTypes(JSONObject params, final ContentTypesCallback callback) {
-
         try {
             String URL = "/" + this.VERSION + "/content_types";
             ArrayMap<String, Object> headers = getHeader(localHeader);
@@ -341,11 +322,8 @@ public class Stack implements INotifyClass {
             }
             Iterator<String> keys = params.keys();
             while (keys.hasNext()) {
-                // loop to get the dynamic key
                 String key = (String) keys.next();
-                // get the value of the dynamic key
                 Object value = params.opt(key);
-                // do something here with the value...
                 params.put(key, value);
             }
 
@@ -353,13 +331,12 @@ public class Stack implements INotifyClass {
                 params.put("environment", headers.get("environment"));
                 params.put("include_count", true);
             }
-
             fetchContentTypes(URL, params, headers, null, callback);
 
         } catch (Exception e) {
 
             Error error = new Error();
-            error.setErrorMessage(CSAppConstants.ErrorMessage_JsonNotProper);
+            error.setErrorMessage(SDKConstant.ErrorMessage_JsonNotProper);
             callback.onRequestFail(ResponseType.UNKNOWN, error);
         }
     }
@@ -368,7 +345,7 @@ public class Stack implements INotifyClass {
     private void fetchContentTypes(String urlString, JSONObject urlQueries, ArrayMap<String, Object> headers, String cacheFilePath, ContentTypesCallback callback) {
         if (callback != null) {
             HashMap<String, Object> urlParams = getUrlParams(urlQueries);
-            new CSBackgroundTask(this, this, CSController.FETCHCONTENTTYPES, urlString, headers, urlParams, new JSONObject(), cacheFilePath, CSAppConstants.callController.CONTENTTYPES.toString(), false, CSAppConstants.RequestMethod.GET, callback);
+            new CSBackgroundTask(this, this, SDKController.GET_CONTENT_TYPES, urlString, headers, urlParams, new JSONObject(), cacheFilePath, SDKConstant.callController.CONTENT_TYPES.toString(), false, SDKConstant.RequestMethod.GET, callback);
         }
     }
 
@@ -409,9 +386,7 @@ public class Stack implements INotifyClass {
      *                     and the details of the content that was deleted or updated.
      *                     <br><br><b>Example :</b><br>
      *                     <pre class="prettyprint">
-     *                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  stack.syncToken(sync_token, new SyncResultCallBack() ){ }
-     *
-     *                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 </pre>
+     *                                             </pre>
      */
     public void syncToken(String syncToken, SyncResultCallBack syncCallBack) {
         try {
@@ -432,8 +407,8 @@ public class Stack implements INotifyClass {
      *
      *                     <br><br><b>Example :</b><br>
      *                     <pre class="prettyprint">
-     *                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                stack.syncFromDate(start_date, new SyncResultCallBack()) { }
-     *                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  </pre>
+     *                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            stack.syncFromDate(start_date, new SyncResultCallBack()) { }
+     *                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              </pre>
      */
     public void syncFromDate(Date fromDate, SyncResultCallBack syncCallBack) {
         String startFromDate = convertUTCToISO(fromDate);
@@ -637,7 +612,7 @@ public class Stack implements INotifyClass {
             });
         } catch (Exception e) {
             Error error = new Error();
-            error.setErrorMessage(CSAppConstants.ErrorMessage_JsonNotProper);
+            error.setErrorMessage(SDKConstant.ErrorMessage_JsonNotProper);
             callback.onRequestFail(ResponseType.UNKNOWN, error);
         }
     }
@@ -646,7 +621,7 @@ public class Stack implements INotifyClass {
     private void fetchFromNetwork(String urlString, JSONObject urlQueries, ArrayMap<String, Object> headers, String cacheFilePath, SyncResultCallBack callback) {
         if (callback != null) {
             HashMap<String, Object> urlParams = getUrlParams(urlQueries);
-            new CSBackgroundTask(this, this, CSController.FETCHSYNC, urlString, headers, urlParams, new JSONObject(), cacheFilePath, CSAppConstants.callController.SYNC.toString(), false, CSAppConstants.RequestMethod.GET, callback);
+            new CSBackgroundTask(this, this, SDKController.GET_SYNC, urlString, headers, urlParams, new JSONObject(), cacheFilePath, SDKConstant.callController.SYNC.toString(), false, SDKConstant.RequestMethod.GET, callback);
         }
     }
 
@@ -661,7 +636,7 @@ public class Stack implements INotifyClass {
                     Object value = urlQueriesJSON.opt(key);
                     hashMap.put(key, value);
                 } catch (Exception e) {
-                    CSAppUtils.showLog(TAG, e.getLocalizedMessage());
+                    SDKUtil.showLog(TAG, e.getLocalizedMessage());
                 }
             }
             return hashMap;

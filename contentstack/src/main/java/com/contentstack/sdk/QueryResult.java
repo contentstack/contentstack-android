@@ -1,7 +1,5 @@
 package com.contentstack.sdk;
 
-import com.contentstack.sdk.utilities.CSAppUtils;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -111,7 +109,7 @@ public class QueryResult {
             }
 
         } catch (Exception e) {
-            CSAppUtils.showLog(TAG, "----------------------QueryResult--setJSON--" + e.toString());
+            SDKUtil.showLog(TAG, "----------------------QueryResult--setJSON--" + e.toString());
         }
     }
 }
