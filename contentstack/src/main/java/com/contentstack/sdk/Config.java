@@ -73,8 +73,7 @@ public class Config {
 
 
     /**
-     * Get URL.
-     *
+     * Get Host.
      *
      * <br><br><b>Example :</b><br>
      * <pre

@@ -84,27 +84,6 @@ public class Stack implements INotifyClass {
 
     }
 
-    /**
-     * @param syncCallBack returns callback for sync result.
-     *                     <p>
-     *                     <p>
-     *                     The Sync request performs a complete sync of your app data.
-     *                     It returns all the published entries and assets of the specified stack in response.
-     *                     The response also contains a sync token, which you need to store,
-     *                     since this token is used to get subsequent delta updates later.
-     *                     </pre>
-     */
-
-    public void sync(SyncResultCallBack syncCallBack) {
-        try {
-            syncParams = new JSONObject();
-            syncParams.put("init", true);
-        } catch (JSONException e) {
-            Log.e(TAG, Objects.requireNonNull(e.getLocalizedMessage()));
-        }
-        this.requestSync(syncCallBack);
-
-    }
 
     /**
      * Represents a {@link ContentType}.<br>
@@ -349,6 +328,32 @@ public class Stack implements INotifyClass {
         }
     }
 
+
+    /**
+     * @param syncCallBack returns callback for sync result.
+     *                     <p>
+     *                     <p>
+     *                     The Sync request performs a complete sync of your app data.
+     *                     It returns all the published entries and assets of the specified stack in response.
+     *                     The response also contains a sync token, which you need to store,
+     *                     since this token is used to get subsequent delta updates later.
+     *
+     *                     <code>
+     *                     Stack stack = Contentstack.stack("apiKey", "deliveryToken", "environment");
+     *                     stack.syncPaginationToken(pagination_token, new SyncResultCallBack()) {}
+     *                     </code>
+     */
+
+    public void sync(SyncResultCallBack syncCallBack) {
+        try {
+            syncParams = new JSONObject();
+            syncParams.put("init", true);
+        } catch (JSONException e) {
+            Log.e(TAG, Objects.requireNonNull(e.getLocalizedMessage()));
+        }
+        this.requestSync(syncCallBack);
+    }
+
     /**
      * @param paginationToken If the response is paginated, use the pagination token under this parameter.
      * @param syncCallBack    returns callback for sync result
@@ -362,9 +367,9 @@ public class Stack implements INotifyClass {
      *                        In such cases, this token can be used to restart the sync process from where it was interrupted.
      *
      *                        <code>
+     *                        Stack stack = Contentstack.stack("apiKey", "deliveryToken", "environment");
      *                        stack.syncPaginationToken(pagination_token, new SyncResultCallBack()) {}
      *                        </code>
-     *
      *                        </pre>
      */
     public void syncPaginationToken(String paginationToken, SyncResultCallBack syncCallBack) {
@@ -386,7 +391,7 @@ public class Stack implements INotifyClass {
      *                     and the details of the content that was deleted or updated.
      *                     <br><br><b>Example :</b><br>
      *                     <pre class="prettyprint">
-     *                                             </pre>
+     *                                                                                                                                            </pre>
      */
     public void syncToken(String syncToken, SyncResultCallBack syncCallBack) {
         try {
@@ -407,8 +412,8 @@ public class Stack implements INotifyClass {
      *
      *                     <br><br><b>Example :</b><br>
      *                     <pre class="prettyprint">
-     *                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            stack.syncFromDate(start_date, new SyncResultCallBack()) { }
-     *                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              </pre>
+     *                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    stack.syncFromDate(start_date, new SyncResultCallBack()) { }
+     *                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      </pre>
      */
     public void syncFromDate(Date fromDate, SyncResultCallBack syncCallBack) {
         String startFromDate = convertUTCToISO(fromDate);
@@ -467,7 +472,6 @@ public class Stack implements INotifyClass {
         } catch (JSONException e) {
             Log.e(TAG, Objects.requireNonNull(e.getLocalizedMessage()));
         }
-
         this.requestSync(syncCallBack);
     }
 
@@ -501,7 +505,7 @@ public class Stack implements INotifyClass {
      *                     If you do not specify any value, it will bring all published entries and published assets.
      *                     <p>
      *                     <code>
-     *                     stackInstance.syncPublishType(Stack.PublishType.entry_published, new SyncResultCallBack()) { }
+     *                     stackInstance.syncPublishType(Stack.PublishType.ENTRY_PUBLISHED, new SyncResultCallBack()) { }
      *                     </code>
      *
      *                     </pre>
@@ -554,7 +558,7 @@ public class Stack implements INotifyClass {
             syncParams.put("type", type.toString().toLowerCase());
             syncParams.put("locale", this.localeCode);
         } catch (JSONException e) {
-            Log.e(TAG, e.getLocalizedMessage());
+            Log.e(TAG, Objects.requireNonNull(e.getLocalizedMessage()));
         }
         this.requestSync(syncCallBack);
     }
