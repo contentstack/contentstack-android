@@ -9,6 +9,7 @@
 - General code and API document improvements
 - Breaking changes : PublishType Enums are updated to all CAPS
 - Kotlin support removed due to build issue
+- EntryModel publish_details parsing issue fixed #30
 
 ---
 
