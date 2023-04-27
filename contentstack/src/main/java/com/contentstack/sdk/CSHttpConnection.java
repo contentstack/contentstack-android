@@ -222,7 +222,7 @@ class CSHttpConnection implements IURLRequestHTTP {
     @Override
     public void send() {
         String url = null;
-        String protocol = SDKConstant.URLSCHEMA_HTTPS;
+        String protocol = SDKConstant.PROTOCOL;
         int requestId = getRequestId(requestMethod);
         final HashMap<String, String> headers = new HashMap<>();
         int count = this.headers.size();
@@ -303,7 +303,7 @@ class CSHttpConnection implements IURLRequestHTTP {
         try {
             int statusCode = 0;
             responseJSON = new JSONObject();
-            responseJSON.put("error_message", SDKConstant.ErrorMessage_Default);
+            responseJSON.put("error_message", SDKConstant.ERROR_MESSAGE_DEFAULT);
 
             if (error != null) {
 
@@ -316,27 +316,27 @@ class CSHttpConnection implements IURLRequestHTTP {
                     } else {
                         if (error.toString().equalsIgnoreCase("NoConnectionError")) {
 
-                            responseJSON.put("error_message", SDKConstant.ErrorMessage_VolleyNoConnectionError);
+                            responseJSON.put("error_message", SDKConstant.CONNECTION_ERROR);
 
                         } else if (error.toString().equalsIgnoreCase("AuthFailureError")) {
 
-                            responseJSON.put("error_message", SDKConstant.ErrorMessage_VolleyAuthFailureError);
+                            responseJSON.put("error_message", SDKConstant.AUTHENTICATION_NOT_PRESENT);
 
                         } else if (error.toString().equalsIgnoreCase("NetworkError")) {
 
-                            responseJSON.put("error_message", SDKConstant.ErrorMessage_NoNetwork);
+                            responseJSON.put("error_message", SDKConstant.NOT_AVAILABLE);
 
                         } else if (error.toString().equalsIgnoreCase("ParseError")) {
 
-                            responseJSON.put("error_message", SDKConstant.ErrorMessage_VolleyParseError);
+                            responseJSON.put("error_message", SDKConstant.PARSING_ERROR);
 
                         } else if (error.toString().equalsIgnoreCase("ServerError")) {
 
-                            responseJSON.put("error_message", SDKConstant.ErrorMessage_VolleyServerError);
+                            responseJSON.put("error_message", SDKConstant.TRY_AGAIN);
 
                         } else if (error.toString().equalsIgnoreCase("TimeoutError")) {
 
-                            responseJSON.put("error_message", SDKConstant.ErrorMessage_VolleyServerError);
+                            responseJSON.put("error_message", SDKConstant.TRY_AGAIN);
 
                         } else {
                             if (error.getMessage() != null) {

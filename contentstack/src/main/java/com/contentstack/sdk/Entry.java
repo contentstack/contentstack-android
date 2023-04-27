@@ -1131,7 +1131,7 @@ public class Entry {
 
                     case NETWORK_ELSE_CACHE:
 
-                        if (SDKConstant.isNetworkAvailable) {
+                        if (SDKConstant.IS_NETWORK_AVAILABLE) {
                             fetchFromNetwork(URL, urlQueries, cacheFile.getPath(), callBack);
                         } else {
                             fetchFromCache(cacheFile, callBack);
@@ -1142,7 +1142,7 @@ public class Entry {
                 }
 
             } else {
-                throwException(SDKConstant.ErrorMessage_EntryUID, null, callBack);
+                throwException(SDKConstant.PLEASE_SET_ENTRY_UID, null, callBack);
             }
         } catch (Exception e) {
             throwException(null, e, callBack);
@@ -1183,14 +1183,14 @@ public class Entry {
 
             if (needToSendCall) {
                 error = new Error();
-                error.setErrorMessage(SDKConstant.ErrorMessage_EntryNotFoundInCache);
+                error.setErrorMessage(SDKConstant.ENTRY_IS_NOT_PRESENT_IN_CACHE);
 
             } else {
                 setCacheModel(cacheFile, callback);
             }
         } else {
             error = new Error();
-            error.setErrorMessage(SDKConstant.ErrorMessage_EntryNotFoundInCache);
+            error.setErrorMessage(SDKConstant.ENTRY_IS_NOT_PRESENT_IN_CACHE);
         }
 
         if (callback != null && error != null) {

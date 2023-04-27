@@ -336,7 +336,7 @@ public class Stack implements INotifyClass {
         } catch (Exception e) {
 
             Error error = new Error();
-            error.setErrorMessage(SDKConstant.ErrorMessage_JsonNotProper);
+            error.setErrorMessage(SDKConstant.PLEASE_PROVIDE_VALID_JSON);
             callback.onRequestFail(ResponseType.UNKNOWN, error);
         }
     }
@@ -612,7 +612,7 @@ public class Stack implements INotifyClass {
             });
         } catch (Exception e) {
             Error error = new Error();
-            error.setErrorMessage(SDKConstant.ErrorMessage_JsonNotProper);
+            error.setErrorMessage(SDKConstant.PLEASE_PROVIDE_VALID_JSON);
             callback.onRequestFail(ResponseType.UNKNOWN, error);
         }
     }

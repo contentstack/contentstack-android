@@ -22,7 +22,7 @@ import java.io.File;
  */
 public class Contentstack {
 
-    private static final String TAG = "Contentstack";
+    private static final String TAG = Contentstack.class.getSimpleName();
     protected static RequestQueue requestQueue;
     private static Contentstack instance;
     protected static Context context = null;
@@ -61,16 +61,16 @@ public class Contentstack {
                         config.setEnvironment(environment);
                         return initializeStack(context, apiKey, deliveryToken, config);
                     } else {
-                        throw new Exception(SDKConstant.ErrorMessage_Stack_Environment_IsNull);
+                        throw new Exception(SDKConstant.ERROR_MESSAGE_STACK_ENVIRONMENT_IS_NULL);
                     }
                 } else {
-                    throw new Exception(SDKConstant.ErrorMessage_Stack_AccessToken_IsNull);
+                    throw new Exception(SDKConstant.ERROR_MESSAGE_STACK_ACCESS_TOKEN_IS_NULL);
                 }
             } else {
-                throw new Exception(SDKConstant.ErrorMessage_StackApiKeyIsNull);
+                throw new Exception(SDKConstant.ERROR_MESSAGE_STACK_API_KEY_IS_NULL);
             }
         } else {
-            throw new Exception(SDKConstant.ErrorMessage_StackContextIsNull);
+            throw new Exception(SDKConstant.ERROR_MESSAGE_STACK_CONTEXT_IS_NULL);
         }
     }
 
@@ -106,16 +106,16 @@ public class Contentstack {
                         }
                         return initializeStack(context, apiKey, deliveryToken, config);
                     } else {
-                        throw new Exception(SDKConstant.ErrorMessage_Stack_Environment_IsNull);
+                        throw new Exception(SDKConstant.ERROR_MESSAGE_STACK_ENVIRONMENT_IS_NULL);
                     }
                 } else {
-                    throw new Exception(SDKConstant.ErrorMessage_Stack_AccessToken_IsNull);
+                    throw new Exception(SDKConstant.ERROR_MESSAGE_STACK_ACCESS_TOKEN_IS_NULL);
                 }
             } else {
-                throw new Exception(SDKConstant.ErrorMessage_StackApiKeyIsNull);
+                throw new Exception(SDKConstant.ERROR_MESSAGE_STACK_API_KEY_IS_NULL);
             }
         } else {
-            throw new Exception(SDKConstant.ErrorMessage_StackContextIsNull);
+            throw new Exception(SDKConstant.ERROR_MESSAGE_STACK_CONTEXT_IS_NULL);
         }
     }
 
@@ -198,8 +198,8 @@ public class Contentstack {
     protected static void isNetworkAvailable(Context context) {
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         if (connectivityManager.getNetworkInfo(0) != null || connectivityManager.getNetworkInfo(1).getState() != null) {
-            SDKConstant.isNetworkAvailable = connectivityManager.getActiveNetworkInfo() != null;
+            SDKConstant.IS_NETWORK_AVAILABLE = connectivityManager.getActiveNetworkInfo() != null;
         } else
-            SDKConstant.isNetworkAvailable = connectivityManager.getNetworkInfo(0).getState() == NetworkInfo.State.CONNECTED || connectivityManager.getNetworkInfo(1).getState() == NetworkInfo.State.CONNECTED;
+            SDKConstant.IS_NETWORK_AVAILABLE = connectivityManager.getNetworkInfo(0).getState() == NetworkInfo.State.CONNECTED || connectivityManager.getNetworkInfo(1).getState() == NetworkInfo.State.CONNECTED;
     }
 }

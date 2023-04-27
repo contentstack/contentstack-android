@@ -3,20 +3,49 @@ package com.contentstack.sdk;
 import java.util.ArrayList;
 
 /**
+ * The Contentstack Sdk contain constants.
+ *
  * @author contentstack.com, Inc
  */
 public class SDKConstant {
 
+    /**
+     * The constant debug.
+     */
     public static final boolean debug = false;
-    public static boolean isNetworkAvailable = true;
-    public static String URLSCHEMA_HTTPS = "https://";
-    public static String SDK_VERSION = "3.11.0";
-    public final static int NONETWORKCONNECTION = 408;
+    /**
+     * The constant IS_NETWORK_AVAILABLE.
+     */
+    public static boolean IS_NETWORK_AVAILABLE = true;
+    /**
+     * The constant PROTOCOL.
+     */
+    public static String PROTOCOL = "https://";
+    /**
+     * The constant SDK_VERSION.
+     */
+    public static String SDK_VERSION = "3.12.0";
+    /**
+     * The constant NO_NETWORK_CONNECTION.
+     */
+    public final static int NO_NETWORK_CONNECTION = 408;
+    /**
+     * The constant TimeOutDuration.
+     */
     public final static int TimeOutDuration = 30000; // timeout in millisecond
+    /**
+     * The constant NumRetry.
+     */
     public final static int NumRetry = 0;
+    /**
+     * The constant BackOFMultiplier.
+     */
     public final static int BackOFMultiplier = 0;
 
-    //Implemented for single network call cancellation. for class-level network call cancellation.
+    /**
+     * The constant cancelledCallController.
+     */
+//Implemented for single network call cancellation. for class-level network call cancellation.
     public static ArrayList<String> cancelledCallController = new ArrayList<String>();
 
     /**
@@ -25,39 +54,131 @@ public class SDKConstant {
      */
     public static String cacheFolderName;
 
+    /**
+     * The enum Request method.
+     */
     public static enum RequestMethod {
 
-        GET, POST, PUT, DELETE
+        /**
+         * Get request method.
+         */
+        GET,
+        /**
+         * Post request method.
+         */
+        POST,
+        /**
+         * Put request method.
+         */
+        PUT,
+        /**
+         * Delete request method.
+         */
+        DELETE
     }
 
+    /**
+     * The enum Call controller.
+     */
     public static enum callController {
-
+        /**
+         * Query call controller.
+         */
         QUERY,
+        /**
+         * Entry call controller.
+         */
         ENTRY,
+        /**
+         * Stack call controller.
+         */
         STACK,
+        /**
+         * Asset call controller.
+         */
         ASSET,
+        /**
+         * Sync call controller.
+         */
         SYNC,
+        /**
+         * Content types call controller.
+         */
         CONTENT_TYPES,
+        /**
+         * Asset library call controller.
+         */
         ASSET_LIBRARY;
     }
 
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    public final static String ErrorMessage_JsonNotProper = "Please provide valid JSON.";
-    public final static String ErrorMessage_StackContextIsNull = "Context can not be null.";
-    public final static String ErrorMessage_StackApiKeyIsNull = "Stack api key can not be null.";
-    public final static String ErrorMessage_FormName = "Please set contentType name.";
-    public final static String ErrorMessage_EntryUID = "Please set entry uid.";
-    public final static String ErrorMessage_Stack_AccessToken_IsNull = "Access token can not be null.";
-    public final static String ErrorMessage_Stack_Environment_IsNull = "Environment can not be null.";
-    public final static String ErrorMessage_VolleyNoConnectionError = "Connection error";
-    public final static String ErrorMessage_VolleyAuthFailureError = "Authentication Not present.";
-    public final static String ErrorMessage_VolleyParseError = "Parsing Error.";
-    public final static String ErrorMessage_VolleyServerError = "Server interaction went wrong, Please try again.";
-    public final static String ErrorMessage_Default = "Oops! Something went wrong. Please try again.";
-    public final static String ErrorMessage_NoNetwork = "Network not available.";
-    public final static String ErrorMessage_CalledDefaultMethod = "You must called Contentstack.stack() first";
-    public final static String ErrorMessage_QueryFilterException = "Please provide valid params.";
-    public final static String ErrorMessage_EntryNotFoundInCache = "ENTRY is not present in cache";
-    public final static String ErrorMessage_SavingNetworkCallResponseForCache = "Error while saving network call response.";
+    /**
+     * The constant PLEASE_PROVIDE_VALID_JSON.
+     */
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    public final static String PLEASE_PROVIDE_VALID_JSON = "Please provide valid JSON.";
+    /**
+     * The constant ERROR_MESSAGE_STACK_CONTEXT_IS_NULL.
+     */
+    public final static String ERROR_MESSAGE_STACK_CONTEXT_IS_NULL = "Context can not be null.";
+    /**
+     * The constant ERROR_MESSAGE_STACK_API_KEY_IS_NULL.
+     */
+    public final static String ERROR_MESSAGE_STACK_API_KEY_IS_NULL = "Stack api key can not be null.";
+    /**
+     * The constant PLEASE_SET_CONTENT_TYPE_NAME.
+     */
+    public final static String PLEASE_SET_CONTENT_TYPE_NAME = "Please set contentType name.";
+    /**
+     * The constant PLEASE_SET_ENTRY_UID.
+     */
+    public final static String PLEASE_SET_ENTRY_UID = "Please set entry uid.";
+    /**
+     * The constant ERROR_MESSAGE_STACK_ACCESS_TOKEN_IS_NULL.
+     */
+    public final static String ERROR_MESSAGE_STACK_ACCESS_TOKEN_IS_NULL = "Access token can not be null.";
+    /**
+     * The constant ERROR_MESSAGE_STACK_ENVIRONMENT_IS_NULL.
+     */
+    public final static String ERROR_MESSAGE_STACK_ENVIRONMENT_IS_NULL = "Environment can not be null.";
+    /**
+     * The constant CONNECTION_ERROR.
+     */
+    public final static String CONNECTION_ERROR = "Connection error";
+    /**
+     * The constant AUTHENTICATION_NOT_PRESENT.
+     */
+    public final static String AUTHENTICATION_NOT_PRESENT = "Authentication Not present.";
+    /**
+     * The constant PARSING_ERROR.
+     */
+    public final static String PARSING_ERROR = "Parsing Error.";
+    /**
+     * The constant TRY_AGAIN.
+     */
+    public final static String TRY_AGAIN = "Server interaction went wrong, Please try again.";
+    /**
+     * The constant ERROR_MESSAGE_DEFAULT.
+     */
+    public final static String ERROR_MESSAGE_DEFAULT = "Oops! Something went wrong. Please try again.";
+    /**
+     * The constant NOT_AVAILABLE.
+     */
+    public final static String NOT_AVAILABLE = "Network not available.";
+    /**
+     * The constant STACK_FIRST.
+     */
+    public final static String STACK_FIRST = "You must called Contentstack.stack() first";
+    /**
+     * The constant PROVIDE_VALID_PARAMS.
+     */
+    public final static String PROVIDE_VALID_PARAMS = "Please provide valid params.";
+    /**
+     * The constant ENTRY_IS_NOT_PRESENT_IN_CACHE.
+     */
+    public final static String ENTRY_IS_NOT_PRESENT_IN_CACHE = "ENTRY is not present in cache";
+    /**
+     * The constant NETWORK_CALL_RESPONSE.
+     */
+    public final static String NETWORK_CALL_RESPONSE = "Error while saving network call response.";
 }

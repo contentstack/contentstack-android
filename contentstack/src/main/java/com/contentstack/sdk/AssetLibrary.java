@@ -116,7 +116,7 @@ public class AssetLibrary implements INotifyClass {
                     break;
             }
         } catch (Exception e) {
-            throwException("sort", SDKConstant.ErrorMessage_QueryFilterException, e);
+            throwException("sort", SDKConstant.PROVIDE_VALID_PARAMS, e);
         }
 
         return this;
@@ -137,7 +137,7 @@ public class AssetLibrary implements INotifyClass {
         try {
             urlQueries.put("include_count", "true");
         } catch (Exception e) {
-            throwException("includeCount", SDKConstant.ErrorMessage_QueryFilterException, e);
+            throwException("includeCount", SDKConstant.PROVIDE_VALID_PARAMS, e);
         }
         return this;
     }
@@ -157,7 +157,7 @@ public class AssetLibrary implements INotifyClass {
         try {
             urlQueries.put("relative_urls", "true");
         } catch (Exception e) {
-            throwException("relative_urls", SDKConstant.ErrorMessage_QueryFilterException, e);
+            throwException("relative_urls", SDKConstant.PROVIDE_VALID_PARAMS, e);
         }
         return this;
     }
@@ -247,7 +247,7 @@ public class AssetLibrary implements INotifyClass {
                     fetchFromNetwork(URL, urlQueries, headers, cacheFile.getPath(), assetsCallback);
                     break;
                 case NETWORK_ELSE_CACHE:
-                    if (SDKConstant.isNetworkAvailable) {
+                    if (SDKConstant.IS_NETWORK_AVAILABLE) {
                         fetchFromNetwork(URL, urlQueries, headers, cacheFile.getPath(), assetsCallback);
                     } else {
                         fetchFromCache(cacheFile, assetsCallback);
@@ -274,13 +274,13 @@ public class AssetLibrary implements INotifyClass {
             needToSendCall = new SDKUtil().getResponseTimeFromCacheFile(cacheFile, (int) maxCacheTimeForCall);
             if (needToSendCall) {
                 error = new Error();
-                error.setErrorMessage(SDKConstant.ErrorMessage_EntryNotFoundInCache);
+                error.setErrorMessage(SDKConstant.ENTRY_IS_NOT_PRESENT_IN_CACHE);
             } else {
                 setCacheModel(cacheFile, callback);
             }
         } else {
             error = new Error();
-            error.setErrorMessage(SDKConstant.ErrorMessage_EntryNotFoundInCache);
+            error.setErrorMessage(SDKConstant.ENTRY_IS_NOT_PRESENT_IN_CACHE);
         }
 
         if (callback != null && error != null) {

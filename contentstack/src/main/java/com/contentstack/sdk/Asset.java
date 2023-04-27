@@ -419,7 +419,7 @@ public class Asset {
                     break;
 
                 case NETWORK_ELSE_CACHE:
-                    if (SDKConstant.isNetworkAvailable) {
+                    if (SDKConstant.IS_NETWORK_AVAILABLE) {
                         fetchFromNetwork(urlEndpoint, urlQueries, headers, cacheFile.getPath(), callback);
                     } else {
                         fetchFromCache(cacheFile, callback);
@@ -429,7 +429,7 @@ public class Asset {
 
         } catch (Exception e) {
             Error error = new Error();
-            error.setErrorMessage(SDKConstant.ErrorMessage_JsonNotProper);
+            error.setErrorMessage(SDKConstant.PLEASE_PROVIDE_VALID_JSON);
             callback.onRequestFail(ResponseType.UNKNOWN, error);
         }
     }
@@ -449,13 +449,13 @@ public class Asset {
             needToSendCall = new SDKUtil().getResponseTimeFromCacheFile(cacheFile, (int) MAX_CACHE_TIME_FOR_CALL);
             if (needToSendCall) {
                 error = new Error();
-                error.setErrorMessage(SDKConstant.ErrorMessage_EntryNotFoundInCache);
+                error.setErrorMessage(SDKConstant.ENTRY_IS_NOT_PRESENT_IN_CACHE);
             } else {
                 setCacheModel(cacheFile, callback);
             }
         } else {
             error = new Error();
-            error.setErrorMessage(SDKConstant.ErrorMessage_EntryNotFoundInCache);
+            error.setErrorMessage(SDKConstant.ENTRY_IS_NOT_PRESENT_IN_CACHE);
         }
 
         if (callback != null && error != null) {
