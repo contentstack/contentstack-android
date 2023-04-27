@@ -32,15 +32,15 @@ public class ConnectionStatus extends BroadcastReceiver {
 
         Contentstack.isNetworkAvailable(context);
 
-        if (!isNetworkAvailable) {
+        if (!IS_NETWORK_AVAILABLE) {
             //no net connection
-            isNetworkAvailable = false;
+            IS_NETWORK_AVAILABLE = false;
         } else {
             try {
                 JSONObject jsonObj = null;
                 JSONObject headerObject = null;
                 HashMap<String, Object> headerGroup = new HashMap<>();
-                isNetworkAvailable = true;
+                IS_NETWORK_AVAILABLE = true;
                 File offlineCallsFolder = new File(context.getDir("OfflineCalls", 0).getPath());
 
                 if (offlineCallsFolder.isDirectory()) {

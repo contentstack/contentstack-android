@@ -127,10 +127,10 @@ public class Query implements INotifyClass {
             if (key != null && value != null) {
                 queryValueJSON.put(key, value);
             } else {
-                throwException("where", SDKConstant.ErrorMessage_QueryFilterException, null);
+                throwException("where", SDKConstant.PROVIDE_VALID_PARAMS, null);
             }
         } catch (Exception e) {
-            throwException("where", SDKConstant.ErrorMessage_QueryFilterException, e);
+            throwException("where", SDKConstant.PROVIDE_VALID_PARAMS, e);
         }
 
         return this;
@@ -157,10 +157,10 @@ public class Query implements INotifyClass {
 
                 urlQueries.put(key, value);
             } else {
-                throwException("and", SDKConstant.ErrorMessage_QueryFilterException, null);
+                throwException("and", SDKConstant.PROVIDE_VALID_PARAMS, null);
             }
         } catch (Exception e) {
-            throwException("and", SDKConstant.ErrorMessage_QueryFilterException, e);
+            throwException("and", SDKConstant.PROVIDE_VALID_PARAMS, e);
         }
         return this;
     }
@@ -182,7 +182,7 @@ public class Query implements INotifyClass {
                 urlQueries.remove(key);
             }
         } catch (Exception e) {
-            throwException("and", SDKConstant.ErrorMessage_QueryFilterException, e);
+            throwException("and", SDKConstant.PROVIDE_VALID_PARAMS, e);
         }
         return this;
     }
@@ -222,10 +222,10 @@ public class Query implements INotifyClass {
                 queryValueJSON.put("$and", orValueJson);
 
             } catch (Exception e) {
-                throwException("and", SDKConstant.ErrorMessage_QueryFilterException, e);
+                throwException("and", SDKConstant.PROVIDE_VALID_PARAMS, e);
             }
         } else {
-            throwException("and", SDKConstant.ErrorMessage_QueryFilterException, null);
+            throwException("and", SDKConstant.PROVIDE_VALID_PARAMS, null);
         }
 
         return this;
@@ -267,10 +267,10 @@ public class Query implements INotifyClass {
                 queryValueJSON.put("$or", orValueJson);
 
             } catch (Exception e) {
-                throwException("or", SDKConstant.ErrorMessage_QueryFilterException, e);
+                throwException("or", SDKConstant.PROVIDE_VALID_PARAMS, e);
             }
         } else {
-            throwException("or", SDKConstant.ErrorMessage_QueryFilterException, null);
+            throwException("or", SDKConstant.PROVIDE_VALID_PARAMS, null);
         }
 
         return this;
@@ -310,10 +310,10 @@ public class Query implements INotifyClass {
 
                 }
             } catch (Exception e) {
-                throwException("lessThan", SDKConstant.ErrorMessage_QueryFilterException, e);
+                throwException("lessThan", SDKConstant.PROVIDE_VALID_PARAMS, e);
             }
         } else {
-            throwException("lessThan", SDKConstant.ErrorMessage_QueryFilterException, null);
+            throwException("lessThan", SDKConstant.PROVIDE_VALID_PARAMS, null);
         }
 
         return this;
@@ -354,10 +354,10 @@ public class Query implements INotifyClass {
 
                 }
             } catch (Exception e) {
-                throwException("lessThanOrEqualTo", SDKConstant.ErrorMessage_QueryFilterException, e);
+                throwException("lessThanOrEqualTo", SDKConstant.PROVIDE_VALID_PARAMS, e);
             }
         } else {
-            throwException("lessThanOrEqualTo", SDKConstant.ErrorMessage_QueryFilterException, null);
+            throwException("lessThanOrEqualTo", SDKConstant.PROVIDE_VALID_PARAMS, null);
         }
         return this;
     }
@@ -396,10 +396,10 @@ public class Query implements INotifyClass {
 
                 }
             } catch (Exception e) {
-                throwException("greaterThan", SDKConstant.ErrorMessage_QueryFilterException, e);
+                throwException("greaterThan", SDKConstant.PROVIDE_VALID_PARAMS, e);
             }
         } else {
-            throwException("greaterThan", SDKConstant.ErrorMessage_QueryFilterException, null);
+            throwException("greaterThan", SDKConstant.PROVIDE_VALID_PARAMS, null);
         }
 
         return this;
@@ -439,10 +439,10 @@ public class Query implements INotifyClass {
 
                 }
             } catch (Exception e) {
-                throwException("greaterThanOrEqualTo", SDKConstant.ErrorMessage_QueryFilterException, e);
+                throwException("greaterThanOrEqualTo", SDKConstant.PROVIDE_VALID_PARAMS, e);
             }
         } else {
-            throwException("greaterThanOrEqualTo", SDKConstant.ErrorMessage_QueryFilterException, null);
+            throwException("greaterThanOrEqualTo", SDKConstant.PROVIDE_VALID_PARAMS, null);
         }
 
         return this;
@@ -488,7 +488,7 @@ public class Query implements INotifyClass {
             }
 
         } else {
-            throwException("notEqualTo", SDKConstant.ErrorMessage_QueryFilterException, null);
+            throwException("notEqualTo", SDKConstant.PROVIDE_VALID_PARAMS, null);
         }
 
         return this;
@@ -532,10 +532,10 @@ public class Query implements INotifyClass {
 
                 }
             } catch (Exception e) {
-                throwException("containedIn", SDKConstant.ErrorMessage_QueryFilterException, e);
+                throwException("containedIn", SDKConstant.PROVIDE_VALID_PARAMS, e);
             }
         } else {
-            throwException("containedIn", SDKConstant.ErrorMessage_QueryFilterException, null);
+            throwException("containedIn", SDKConstant.PROVIDE_VALID_PARAMS, null);
         }
 
         return this;
@@ -577,10 +577,10 @@ public class Query implements INotifyClass {
 
                 }
             } catch (Exception e) {
-                throwException("containedIn", SDKConstant.ErrorMessage_QueryFilterException, e);
+                throwException("containedIn", SDKConstant.PROVIDE_VALID_PARAMS, e);
             }
         } else {
-            throwException("containedIn", SDKConstant.ErrorMessage_QueryFilterException, null);
+            throwException("containedIn", SDKConstant.PROVIDE_VALID_PARAMS, null);
         }
 
         return this;
@@ -618,10 +618,10 @@ public class Query implements INotifyClass {
                     queryValueJSON.put(key, queryValue);
                 }
             } catch (Exception e) {
-                throwException("exists", SDKConstant.ErrorMessage_QueryFilterException, e);
+                throwException("exists", SDKConstant.PROVIDE_VALID_PARAMS, e);
             }
         } else {
-            throwException("exists", SDKConstant.ErrorMessage_QueryFilterException, null);
+            throwException("exists", SDKConstant.PROVIDE_VALID_PARAMS, null);
         }
 
         return this;
@@ -657,10 +657,10 @@ public class Query implements INotifyClass {
                     queryValueJSON.put(key, queryValue);
                 }
             } catch (Exception e) {
-                throwException("notExists", SDKConstant.ErrorMessage_QueryFilterException, e);
+                throwException("notExists", SDKConstant.PROVIDE_VALID_PARAMS, e);
             }
         } else {
-            throwException("notExists", SDKConstant.ErrorMessage_QueryFilterException, null);
+            throwException("notExists", SDKConstant.PROVIDE_VALID_PARAMS, null);
         }
 
         return this;
@@ -714,7 +714,7 @@ public class Query implements INotifyClass {
                 objectUidForInclude.put(key);
             }
         } else {
-            throwException("includeReference", SDKConstant.ErrorMessage_QueryFilterException, null);
+            throwException("includeReference", SDKConstant.PROVIDE_VALID_PARAMS, null);
         }
         return this;
     }
@@ -743,10 +743,10 @@ public class Query implements INotifyClass {
                 }
                 urlQueries.put("tags", tagsvalue);
             } else {
-                throwException("tags", SDKConstant.ErrorMessage_QueryFilterException, null);
+                throwException("tags", SDKConstant.PROVIDE_VALID_PARAMS, null);
             }
         } catch (Exception e) {
-            throwException("tags", SDKConstant.ErrorMessage_QueryFilterException, e);
+            throwException("tags", SDKConstant.PROVIDE_VALID_PARAMS, e);
         }
         return this;
     }
@@ -771,10 +771,10 @@ public class Query implements INotifyClass {
             try {
                 urlQueries.put("asc", key);
             } catch (Exception e) {
-                throwException("ascending", SDKConstant.ErrorMessage_QueryFilterException, e);
+                throwException("ascending", SDKConstant.PROVIDE_VALID_PARAMS, e);
             }
         } else {
-            throwException("ascending", SDKConstant.ErrorMessage_QueryFilterException, null);
+            throwException("ascending", SDKConstant.PROVIDE_VALID_PARAMS, null);
         }
         return this;
     }
@@ -799,10 +799,10 @@ public class Query implements INotifyClass {
             try {
                 urlQueries.put("desc", key);
             } catch (Exception e) {
-                throwException("descending", SDKConstant.ErrorMessage_QueryFilterException, e);
+                throwException("descending", SDKConstant.PROVIDE_VALID_PARAMS, e);
             }
         } else {
-            throwException("descending", SDKConstant.ErrorMessage_QueryFilterException, null);
+            throwException("descending", SDKConstant.PROVIDE_VALID_PARAMS, null);
         }
         return this;
     }
@@ -835,10 +835,10 @@ public class Query implements INotifyClass {
                     objectUidForExcept.put(fieldUid.get(i));
                 }
             } else {
-                throwException("except", SDKConstant.ErrorMessage_QueryFilterException, null);
+                throwException("except", SDKConstant.PROVIDE_VALID_PARAMS, null);
             }
         } catch (Exception e) {
-            throwException("except", SDKConstant.ErrorMessage_QueryFilterException, e);
+            throwException("except", SDKConstant.PROVIDE_VALID_PARAMS, e);
         }
         return this;
     }
@@ -868,10 +868,10 @@ public class Query implements INotifyClass {
                     objectUidForExcept.put(fieldUids[i]);
                 }
             } else {
-                throwException("except", SDKConstant.ErrorMessage_QueryFilterException, null);
+                throwException("except", SDKConstant.PROVIDE_VALID_PARAMS, null);
             }
         } catch (Exception e) {
-            throwException("except", SDKConstant.ErrorMessage_QueryFilterException, e);
+            throwException("except", SDKConstant.PROVIDE_VALID_PARAMS, e);
         }
         return this;
     }
@@ -901,10 +901,10 @@ public class Query implements INotifyClass {
                     objectUidForOnly.put(fieldUid[i]);
                 }
             } else {
-                throwException("only", SDKConstant.ErrorMessage_QueryFilterException, null);
+                throwException("only", SDKConstant.PROVIDE_VALID_PARAMS, null);
             }
         } catch (Exception e) {
-            throwException("only", SDKConstant.ErrorMessage_QueryFilterException, e);
+            throwException("only", SDKConstant.PROVIDE_VALID_PARAMS, e);
         }
         return this;
     }
@@ -946,10 +946,10 @@ public class Query implements INotifyClass {
                 objectUidForInclude.put(referenceFieldUid);
 
             } else {
-                throwException("onlyWithReferenceUid", SDKConstant.ErrorMessage_QueryFilterException, null);
+                throwException("onlyWithReferenceUid", SDKConstant.PROVIDE_VALID_PARAMS, null);
             }
         } catch (Exception e) {
-            throwException("onlyWithReferenceUid", SDKConstant.ErrorMessage_QueryFilterException, e);
+            throwException("onlyWithReferenceUid", SDKConstant.PROVIDE_VALID_PARAMS, e);
         }
         return this;
     }
@@ -991,10 +991,10 @@ public class Query implements INotifyClass {
                 objectUidForInclude.put(referenceFieldUid);
 
             } else {
-                throwException("exceptWithReferenceUid", SDKConstant.ErrorMessage_QueryFilterException, null);
+                throwException("exceptWithReferenceUid", SDKConstant.PROVIDE_VALID_PARAMS, null);
             }
         } catch (Exception e) {
-            throwException("exceptWithReferenceUid", SDKConstant.ErrorMessage_QueryFilterException, e);
+            throwException("exceptWithReferenceUid", SDKConstant.PROVIDE_VALID_PARAMS, e);
         }
         return this;
     }
@@ -1018,7 +1018,7 @@ public class Query implements INotifyClass {
         try {
             urlQueries.put("count", "true");
         } catch (Exception e) {
-            throwException("count", SDKConstant.ErrorMessage_QueryFilterException, e);
+            throwException("count", SDKConstant.PROVIDE_VALID_PARAMS, e);
         }
         return this;
     }
@@ -1042,7 +1042,7 @@ public class Query implements INotifyClass {
         try {
             urlQueries.put("include_count", "true");
         } catch (Exception e) {
-            throwException("includeCount", SDKConstant.ErrorMessage_QueryFilterException, e);
+            throwException("includeCount", SDKConstant.PROVIDE_VALID_PARAMS, e);
         }
         return this;
     }
@@ -1067,7 +1067,7 @@ public class Query implements INotifyClass {
             urlQueries.put("include_content_type", true);
             urlQueries.put("include_global_field_schema", true);
         } catch (Exception e) {
-            throwException("include_content_type", SDKConstant.ErrorMessage_QueryFilterException, e);
+            throwException("include_content_type", SDKConstant.PROVIDE_VALID_PARAMS, e);
         }
         return this;
     }
@@ -1091,10 +1091,10 @@ public class Query implements INotifyClass {
             try {
                 urlQueries.put("before_uid", uid);
             } catch (Exception e) {
-                throwException("beforeUid", SDKConstant.ErrorMessage_QueryFilterException, e);
+                throwException("beforeUid", SDKConstant.PROVIDE_VALID_PARAMS, e);
             }
         } else {
-            throwException("beforeUid", SDKConstant.ErrorMessage_QueryFilterException, null);
+            throwException("beforeUid", SDKConstant.PROVIDE_VALID_PARAMS, null);
         }
         return this;
     }
@@ -1117,10 +1117,10 @@ public class Query implements INotifyClass {
             try {
                 urlQueries.put("after_uid", uid);
             } catch (Exception e) {
-                throwException("afterUid", SDKConstant.ErrorMessage_QueryFilterException, e);
+                throwException("afterUid", SDKConstant.PROVIDE_VALID_PARAMS, e);
             }
         } else {
-            throwException("afterUid", SDKConstant.ErrorMessage_QueryFilterException, null);
+            throwException("afterUid", SDKConstant.PROVIDE_VALID_PARAMS, null);
         }
         return this;
     }
@@ -1145,7 +1145,7 @@ public class Query implements INotifyClass {
         try {
             urlQueries.put("skip", number);
         } catch (Exception e) {
-            throwException("skip", SDKConstant.ErrorMessage_QueryFilterException, e);
+            throwException("skip", SDKConstant.PROVIDE_VALID_PARAMS, e);
         }
         return this;
     }
@@ -1169,7 +1169,7 @@ public class Query implements INotifyClass {
         try {
             urlQueries.put("limit", number);
         } catch (Exception e) {
-            throwException("limit", SDKConstant.ErrorMessage_QueryFilterException, e);
+            throwException("limit", SDKConstant.PROVIDE_VALID_PARAMS, e);
         }
         return this;
     }
@@ -1213,10 +1213,10 @@ public class Query implements INotifyClass {
                 }
 
             } catch (Exception e) {
-                throwException("matches", SDKConstant.ErrorMessage_QueryFilterException, e);
+                throwException("matches", SDKConstant.PROVIDE_VALID_PARAMS, e);
             }
         } else {
-            throwException("matches", SDKConstant.ErrorMessage_QueryFilterException, null);
+            throwException("matches", SDKConstant.PROVIDE_VALID_PARAMS, null);
         }
         return this;
     }
@@ -1270,10 +1270,10 @@ public class Query implements INotifyClass {
                 }
 
             } catch (Exception e) {
-                throwException("matches", SDKConstant.ErrorMessage_QueryFilterException, e);
+                throwException("matches", SDKConstant.PROVIDE_VALID_PARAMS, e);
             }
         } else {
-            throwException("matches", SDKConstant.ErrorMessage_QueryFilterException, null);
+            throwException("matches", SDKConstant.PROVIDE_VALID_PARAMS, null);
         }
         return this;
     }
@@ -1306,10 +1306,10 @@ public class Query implements INotifyClass {
                 }
 
             } catch (Exception e) {
-                throwException("language", SDKConstant.ErrorMessage_QueryFilterException, e);
+                throwException("language", SDKConstant.PROVIDE_VALID_PARAMS, e);
             }
         } else {
-            throwException("language", SDKConstant.ErrorMessage_QueryFilterException, null);
+            throwException("language", SDKConstant.PROVIDE_VALID_PARAMS, null);
         }
 
         return this;
@@ -1336,10 +1336,10 @@ public class Query implements INotifyClass {
                 }
 
             } catch (Exception e) {
-                throwException("locale", SDKConstant.ErrorMessage_QueryFilterException, e);
+                throwException("locale", SDKConstant.PROVIDE_VALID_PARAMS, e);
             }
         } else {
-            throwException("locale", SDKConstant.ErrorMessage_QueryFilterException, null);
+            throwException("locale", SDKConstant.PROVIDE_VALID_PARAMS, null);
         }
 
         return this;
@@ -1367,10 +1367,10 @@ public class Query implements INotifyClass {
                     urlQueries.put("typeahead", value);
                 }
             } catch (Exception e) {
-                throwException("value", SDKConstant.ErrorMessage_QueryFilterException, e);
+                throwException("value", SDKConstant.PROVIDE_VALID_PARAMS, e);
             }
         } else {
-            throwException("value", SDKConstant.ErrorMessage_QueryFilterException, null);
+            throwException("value", SDKConstant.PROVIDE_VALID_PARAMS, null);
         }
 
         return this;
@@ -1422,7 +1422,7 @@ public class Query implements INotifyClass {
 
                     execQuery(null, callback, false);
                 } else {
-                    throwException("find", SDKConstant.ErrorMessage_FormName, null);
+                    throwException("find", SDKConstant.PLEASE_SET_CONTENT_TYPE_NAME, null);
                     error = new Error();
                     error.setErrorMessage(errorString);
                     error.setErrors(errorHashMap);
@@ -1433,7 +1433,7 @@ public class Query implements INotifyClass {
                 error.setErrors(errorHashMap);
             }
         } catch (Exception e) {
-            throwException("find", SDKConstant.ErrorMessage_JsonNotProper, null);
+            throwException("find", SDKConstant.PLEASE_PROVIDE_VALID_JSON, null);
             error = new Error();
             error.setErrorMessage(errorString);
             error.setErrors(errorHashMap);
@@ -1483,7 +1483,7 @@ public class Query implements INotifyClass {
                     }
 
                 } else {
-                    throwException("find", SDKConstant.ErrorMessage_FormName, null);
+                    throwException("find", SDKConstant.PLEASE_SET_CONTENT_TYPE_NAME, null);
                     error = new Error();
                     error.setErrorMessage(errorString);
                     error.setErrors(errorHashMap);
@@ -1494,7 +1494,7 @@ public class Query implements INotifyClass {
                 error.setErrors(errorHashMap);
             }
         } catch (Exception e) {
-            throwException("find", SDKConstant.ErrorMessage_JsonNotProper, null);
+            throwException("find", SDKConstant.PLEASE_PROVIDE_VALID_JSON, null);
             error = new Error();
             error.setErrorMessage(errorString);
             error.setErrors(errorHashMap);
@@ -1574,7 +1574,7 @@ public class Query implements INotifyClass {
             }
 
         } catch (Exception e) {
-            throwException("find", SDKConstant.ErrorMessage_QueryFilterException, e);
+            throwException("find", SDKConstant.PROVIDE_VALID_PARAMS, e);
         }
     }
 
@@ -1588,7 +1588,7 @@ public class Query implements INotifyClass {
             ArrayMap<String, Object> headers = getHeader(localHeader);
 
             if (headers.size() < 1) {
-                throwException("find", SDKConstant.ErrorMessage_CalledDefaultMethod, null);
+                throwException("find", SDKConstant.STACK_FIRST, null);
             } else {
                 if (headers.containsKey("environment")) {
                     urlQueries.put("environment", headers.get("environment"));
@@ -1630,7 +1630,7 @@ public class Query implements INotifyClass {
                         }
                         break;
                     case NETWORK_ELSE_CACHE:
-                        if (SDKConstant.isNetworkAvailable) {
+                        if (SDKConstant.IS_NETWORK_AVAILABLE) {
                             fetchFromNetwork(URL, headers, mainJSON, cacheFile.getPath(), callback, callBack);
                         } else {
                             fetchFromCache(cacheFile, callback, callBack);
@@ -1651,7 +1651,7 @@ public class Query implements INotifyClass {
 
 
         } catch (Exception e) {
-            throwException("find", SDKConstant.ErrorMessage_QueryFilterException, e);
+            throwException("find", SDKConstant.PROVIDE_VALID_PARAMS, e);
         }
     }
 
@@ -1705,14 +1705,14 @@ public class Query implements INotifyClass {
 
             if (needToSendCall) {
                 error = new Error();
-                error.setErrorMessage(SDKConstant.ErrorMessage_EntryNotFoundInCache);
+                error.setErrorMessage(SDKConstant.ENTRY_IS_NOT_PRESENT_IN_CACHE);
 
             } else {
                 setCacheModel(cacheFile, callback, callBack);
             }
         } else {
             error = new Error();
-            error.setErrorMessage(SDKConstant.ErrorMessage_EntryNotFoundInCache);
+            error.setErrorMessage(SDKConstant.ENTRY_IS_NOT_PRESENT_IN_CACHE);
         }
 
         if (callback != null && error != null) {
@@ -1879,10 +1879,10 @@ public class Query implements INotifyClass {
             if (key != null && value != null) {
                 urlQueries.put(key, value);
             } else {
-                throwException("and", SDKConstant.ErrorMessage_QueryFilterException, null);
+                throwException("and", SDKConstant.PROVIDE_VALID_PARAMS, null);
             }
         } catch (Exception e) {
-            throwException("and", SDKConstant.ErrorMessage_QueryFilterException, e);
+            throwException("and", SDKConstant.PROVIDE_VALID_PARAMS, e);
         }
         return this;
     }
@@ -1939,10 +1939,10 @@ public class Query implements INotifyClass {
                 inQueryObj.put("$in_query", queryObject.queryValueJSON.toString());
                 queryValueJSON.put(key, inQueryObj);
             } catch (Exception e) {
-                throwException("in_query", SDKConstant.ErrorMessage_QueryFilterException, e);
+                throwException("in_query", SDKConstant.PROVIDE_VALID_PARAMS, e);
             }
         } else {
-            throwException("in_query", SDKConstant.ErrorMessage_QueryFilterException, null);
+            throwException("in_query", SDKConstant.PROVIDE_VALID_PARAMS, null);
         }
         return this;
     }
@@ -1970,10 +1970,10 @@ public class Query implements INotifyClass {
                 inQueryObj.put("$nin_query", queryObject.queryValueJSON.toString());
                 queryValueJSON.put(key, inQueryObj);
             } catch (Exception e) {
-                throwException("nin_query", SDKConstant.ErrorMessage_QueryFilterException, e);
+                throwException("nin_query", SDKConstant.PROVIDE_VALID_PARAMS, e);
             }
         } else {
-            throwException("nin_query", SDKConstant.ErrorMessage_QueryFilterException, null);
+            throwException("nin_query", SDKConstant.PROVIDE_VALID_PARAMS, null);
         }
         return this;
     }

@@ -13,7 +13,7 @@ class CSBackgroundTask {
 
     public CSBackgroundTask(Query queryInstance, Stack stackInstance, String controller, String url, ArrayMap<String, Object> headers, HashMap<String, Object> urlQueries, JSONObject jsonMain, String cacheFilePath, String requestInfo, SDKConstant.RequestMethod method, ResultCallBack callback) {
 
-        if (SDKConstant.isNetworkAvailable) {
+        if (SDKConstant.IS_NETWORK_AVAILABLE) {
             if (headers != null && headers.size() > 0) {
 
                 String URL = stackInstance.PROTOCOL + stackInstance.URL + url;
@@ -32,7 +32,7 @@ class CSBackgroundTask {
     }
 
     public CSBackgroundTask(Entry entryInstance, Stack stackInstance, String controller, String url, ArrayMap<String, Object> headers, HashMap<String, Object> urlQueries, JSONObject jsonMain, String cacheFilePath, String requestInfo, boolean isOffline, SDKConstant.RequestMethod method, ResultCallBack callBack) {
-        if (SDKConstant.isNetworkAvailable) {
+        if (SDKConstant.IS_NETWORK_AVAILABLE) {
             if (headers != null && headers.size() > 0) {
 
                 String URL = stackInstance.PROTOCOL + stackInstance.URL + url;
@@ -50,7 +50,7 @@ class CSBackgroundTask {
     }
 
     public CSBackgroundTask(AssetLibrary assetLibrary, Stack stackInstance, String controller, String url, ArrayMap<String, Object> headers, HashMap<String, Object> urlQueries, JSONObject jsonMain, String cacheFilePath, String requestInfo, boolean isOffline, SDKConstant.RequestMethod method, ResultCallBack callback) {
-        if (SDKConstant.isNetworkAvailable) {
+        if (SDKConstant.IS_NETWORK_AVAILABLE) {
             if (headers != null && headers.size() > 0) {
 
                 String URL = stackInstance.PROTOCOL + stackInstance.URL + url;
@@ -68,7 +68,7 @@ class CSBackgroundTask {
     }
 
     public CSBackgroundTask(Asset asset, Stack stackInstance, String controller, String url, ArrayMap<String, Object> headers, HashMap<String, Object> urlQueries, JSONObject jsonMain, String cacheFilePath, String requestInfo, boolean isOffline, SDKConstant.RequestMethod method, ResultCallBack callback) {
-        if (SDKConstant.isNetworkAvailable) {
+        if (SDKConstant.IS_NETWORK_AVAILABLE) {
             if (headers != null && headers.size() > 0) {
 
                 String URL = stackInstance.PROTOCOL + stackInstance.URL + url;
@@ -88,7 +88,7 @@ class CSBackgroundTask {
 
     public CSBackgroundTask(Stack stack, Stack stackInstance, String controller, String url, ArrayMap<String, Object> headers, HashMap<String, Object> urlParams, JSONObject jsonMain, String cacheFilePath, String requestInfo, boolean b, SDKConstant.RequestMethod method, ResultCallBack callback) {
 
-        if (SDKConstant.isNetworkAvailable) {
+        if (SDKConstant.IS_NETWORK_AVAILABLE) {
             if (headers != null && headers.size() > 0) {
 
                 String URL = stackInstance.PROTOCOL + stackInstance.URL + url;
@@ -109,7 +109,7 @@ class CSBackgroundTask {
 
     public CSBackgroundTask(ContentType contentType, Stack stackInstance, String controller, String url, ArrayMap<String, Object> headers, HashMap<String, Object> urlParams, JSONObject jsonMain, String cacheFilePath, String requestInfo, boolean b, SDKConstant.RequestMethod method, ResultCallBack callback) {
 
-        if (SDKConstant.isNetworkAvailable) {
+        if (SDKConstant.IS_NETWORK_AVAILABLE) {
             if (headers != null && headers.size() > 0) {
 
                 String URL = stackInstance.PROTOCOL + stackInstance.URL + url;
@@ -130,8 +130,8 @@ class CSBackgroundTask {
 
     private void sendErrorToUser(ResultCallBack callbackObject) {
         Error error = new Error();
-        error.setErrorCode(SDKConstant.NONETWORKCONNECTION);
-        error.setErrorMessage(SDKConstant.ErrorMessage_NoNetwork);
+        error.setErrorCode(SDKConstant.NO_NETWORK_CONNECTION);
+        error.setErrorMessage(SDKConstant.NOT_AVAILABLE);
         if (callbackObject != null) {
             callbackObject.onRequestFail(ResponseType.UNKNOWN, error);
         }
@@ -139,7 +139,7 @@ class CSBackgroundTask {
 
     private void sendErrorForHeader(ResultCallBack callbackObject) {
         Error error = new Error();
-        error.setErrorMessage(SDKConstant.ErrorMessage_CalledDefaultMethod);
+        error.setErrorMessage(SDKConstant.STACK_FIRST);
         if (callbackObject != null) {
             callbackObject.onRequestFail(ResponseType.UNKNOWN, error);
         }

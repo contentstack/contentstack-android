@@ -27,14 +27,13 @@ public class ContentType {
 
     protected ContentType(String contentTypeName) {
         this.contentTypeName = contentTypeName;
-        this.localHeader = new ArrayMap<String, Object>();
+        this.localHeader = new ArrayMap<>();
     }
 
     protected void setStackInstance(Stack stack) {
         this.stackInstance = stack;
         this.stackHeader = stack.localHeader;
     }
-
 
     /**
      * To set headers for Contentstack rest calls.
@@ -46,10 +45,10 @@ public class ContentType {
      *
      *              <br><br><b>Example :</b><br>
      *              <pre class="prettyprint">
-     *                            Stack stack = Contentstack.stack(context, "apiKey", "deliveryToken", "environment");
-     *                            ContentType contentType = stack.contentType("form_name");<br>
-     *                            contentType.setHeader("custom_key", "custom_value");
-     *                            </pre>
+     *                                                      Stack stack = Contentstack.stack(context, "apiKey", "deliveryToken", "environment");
+     *                                                      ContentType contentType = stack.contentType("form_name");<br>
+     *                                                      contentType.setHeader("custom_key", "custom_value");
+     *                                                      </pre>
      */
     public void setHeader(String key, String value) {
         if (!TextUtils.isEmpty(key) && !TextUtils.isEmpty(value)) {
@@ -64,10 +63,10 @@ public class ContentType {
      *
      *            <br><br><b>Example :</b><br>
      *            <pre class="prettyprint">
-     *                        Stack stack = Contentstack.stack(context, "apiKey", "deliveryToken", "environment");
-     *                        ContentType contentType = stack.contentType("form_name");<br>
-     *                        contentType.removeHeader("custom_header_key");
-     *                       </pre>
+     *                                              Stack stack = Contentstack.stack(context, "apiKey", "deliveryToken", "environment");
+     *                                              ContentType contentType = stack.contentType("form_name");<br>
+     *                                              contentType.removeHeader("custom_header_key");
+     *                                             </pre>
      */
     public void removeHeader(String key) {
         if (!TextUtils.isEmpty(key)) {
@@ -135,61 +134,48 @@ public class ContentType {
      *
      *                 <br><br><b>Example :</b><br>
      *                 <pre class="prettyprint">
-     *                                 ContentType  contentType = stack.contentType("content_type_uid");
-     *                                 JSONObject params = new JSONObject();
-     *                                 params.put("include_snippet_schema", true);
-     *                                 params.put("limit", 3);
-     *                                 contentType.fetch(new ContentTypesCallback() {
-     *                                 @Override
-     *                                 public void onCompletion(ContentTypesModel contentTypesModel, Error error) {
-     *                                 if (error==null){
-     *
-     *                                 }else {
-     *
-     *                                 }
-     *                                 }
-     *                                 });
-     *                                 </pre>
+     *                                                                 ContentType  contentType = stack.contentType("content_type_uid");
+     *                                                                 JSONObject params = new JSONObject();
+     *                                                                 params.put("include_snippet_schema", true);
+     *                                                                 params.put("limit", 3);
+     *                                                                 contentType.fetch(new ContentTypesCallback() {
+     *                                                                 @Override
+     *                                                                 public void onCompletion(ContentTypesModel contentTypesModel, Error error) {
+     *                                                                 if (error==null){
+     *                                                                 }else {
+     *                                                                 }
+     *                                                                 }
+     *                                                                 });
+     *                                                                 </pre>
      */
 
 
     public void fetch(JSONObject params, final ContentTypesCallback callback) {
-
         try {
-
             String URL = "/" + stackInstance.VERSION + "/content_types/" + contentTypeName;
             ArrayMap<String, Object> headers = getHeader(localHeader);
             if (params == null) {
                 params = new JSONObject();
             }
-
             Iterator keys = params.keys();
             while (keys.hasNext()) {
-                // loop to get the dynamic key
                 String key = (String) keys.next();
-                // get the value of the dynamic key
                 Object value = params.opt(key);
-                // do something here with the value...
                 params.put(key, value);
             }
-
             if (headers.containsKey("environment")) {
                 params.put("environment", headers.get("environment"));
             }
-
             if (contentTypeName != null && !contentTypeName.isEmpty()) {
                 fetchContentTypes(URL, params, headers, null, callback);
             } else {
                 Error error = new Error();
-                error.setErrorMessage(SDKConstant.ErrorMessage_JsonNotProper);
+                error.setErrorMessage(SDKConstant.PLEASE_PROVIDE_VALID_JSON);
                 callback.onRequestFail(ResponseType.UNKNOWN, error);
             }
-
-
         } catch (Exception e) {
-
             Error error = new Error();
-            error.setErrorMessage(SDKConstant.ErrorMessage_JsonNotProper);
+            error.setErrorMessage(SDKConstant.PLEASE_PROVIDE_VALID_JSON);
             callback.onRequestFail(ResponseType.UNKNOWN, error);
         }
 

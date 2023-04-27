@@ -164,7 +164,7 @@ class CSConnectionRequest implements IRequestModelHTTP {
             errorMessage = e.getLocalizedMessage();
         }
         if (errorMessage == null || (!(errorMessage.length() > 0))) {
-            errorMessage = SDKConstant.ErrorMessage_Default;
+            errorMessage = SDKConstant.ERROR_MESSAGE_DEFAULT;
         }
         errorObject.setErrorCode(errorCode);
         errorObject.setErrorMessage(errorMessage);
@@ -305,7 +305,7 @@ class CSConnectionRequest implements IRequestModelHTTP {
             file.close();
         } catch (Exception e) {
             Error error = new Error();
-            error.setErrorMessage(SDKConstant.ErrorMessage_SavingNetworkCallResponseForCache);
+            error.setErrorMessage(SDKConstant.NETWORK_CALL_RESPONSE);
             HashMap<String, Object> hashMap = new HashMap<String, Object>();
             hashMap.put("error", e.getLocalizedMessage());
             error.setErrors(hashMap);
