@@ -30,7 +30,7 @@ public class ConnectionStatus extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
 
-        Contentstack.isNetworkAvailable(context);
+        CSUtil.isNetworkAvailable(context);
 
         if (!IS_NETWORK_AVAILABLE) {
             //no net connection

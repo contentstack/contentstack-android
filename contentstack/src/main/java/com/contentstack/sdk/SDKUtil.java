@@ -1,6 +1,11 @@
 package com.contentstack.sdk;
 
 import android.annotation.SuppressLint;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
+import android.os.SystemClock;
 import android.util.Log;
 
 import org.json.JSONObject;
@@ -23,6 +28,8 @@ import java.util.TimeZone;
  */
 public class SDKUtil {
 
+    private static final String CLEAR_CACHE = "StartContentStackClearingCache";
+
     public SDKUtil() {
     }
 
@@ -32,6 +39,15 @@ public class SDKUtil {
         }
     }
 
+    protected static void clearCache(Context context) {
+        Intent alarmIntent = new Intent(CLEAR_CACHE);
+        alarmIntent.setPackage(context.getPackageName());
+        int flag = PendingIntent.FLAG_UPDATE_CURRENT;
+        if (android.os.Build.VERSION.SDK_INT >= 23) flag = PendingIntent.FLAG_IMMUTABLE | flag;
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, alarmIntent, flag);
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(), AlarmManager.INTERVAL_DAY, pendingIntent);
+    }
 
     /**
      * To check if required response within given time window available in cache
@@ -152,8 +168,8 @@ public class SDKUtil {
      * @return {@link Calendar} object.
      * @throws ParseException <br><br><b>Example :</b><br>
      *                        <pre class="prettyprint">
-     *                                                                        Util.parseDate(dateString, TimeZone.getDefault());
-     *                                                                      </pre>
+     *                                                                                                                      Util.parseDate(dateString, TimeZone.getDefault());
+     *                                                                                                                    </pre>
      */
     public static Calendar parseDate(String date, TimeZone timeZone) {
         ArrayList<String> knownPatterns = new ArrayList<>();
@@ -187,8 +203,8 @@ public class SDKUtil {
      * @return {@link Calendar} object.
      * @throws ParseException <br><br><b>Example :</b><br>
      *                        <pre class="prettyprint">
-     *                                                                        BuiltUtil.parseDate(dateString, "yyyy-MM-dd'T'HH:mm:ssZ", TimeZone.getTimeZone("GMT"));
-     *                                                                      </pre>
+     *                                                                                                                      BuiltUtil.parseDate(dateString, "yyyy-MM-dd'T'HH:mm:ssZ", TimeZone.getTimeZone("GMT"));
+     *                                                                                                                    </pre>
      */
     @SuppressLint("SimpleDateFormat")
     public static Calendar parseDate(String date, String dateFormat, TimeZone timeZone) throws ParseException {

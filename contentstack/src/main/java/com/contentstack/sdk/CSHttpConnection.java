@@ -222,11 +222,8 @@ class CSHttpConnection implements IURLRequestHTTP {
     @Override
     public void send() {
         String url = null;
-        String protocol = SDKConstant.PROTOCOL;
         int requestId = getRequestId(requestMethod);
         final HashMap<String, String> headers = new HashMap<>();
-        int count = this.headers.size();
-
         if (requestMethod == SDKConstant.RequestMethod.GET) {
             String params = setFormParamsGET(formParams);
             if (params != null) {
@@ -247,7 +244,6 @@ class CSHttpConnection implements IURLRequestHTTP {
         headers.put("X-User-Agent", "contentstack-android/" + SDKConstant.SDK_VERSION);
         jsonObjectRequest = new JSONUTF8Request(requestId, url, requestJSON, response -> {
             responseJSON = response;
-            Log.i("response", response.toString());
             if (responseJSON != null) {
                 connectionRequest.onRequestFinished(CSHttpConnection.this);
             }
@@ -259,22 +255,9 @@ class CSHttpConnection implements IURLRequestHTTP {
         };
         jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(SDKConstant.TimeOutDuration, SDKConstant.NumRetry, SDKConstant.BackOFMultiplier));
         jsonObjectRequest.setShouldCache(false);
-        Contentstack.addToRequestQueue(protocol, jsonObjectRequest, info);
+        Contentstack.addToRequestQueue(SDKConstant.PROTOCOL, jsonObjectRequest, info);
     }
 
-
-    private void httpRequest(String url) {
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, requestJSON, response -> {
-            responseJSON = response;
-            if (responseJSON != null) {
-                connectionRequest.onRequestFinished(CSHttpConnection.this);
-            }
-        }, this::generateBuiltError);
-
-        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(SDKConstant.TimeOutDuration, SDKConstant.NumRetry, SDKConstant.BackOFMultiplier));
-        jsonObjectRequest.setShouldCache(false);
-        Contentstack.addToRequestQueue("https://", jsonObjectRequest, info);
-    }
 
     private String defaultUserAgent() {
         String agent = System.getProperty("http.agent");

@@ -29,17 +29,13 @@ public class ClearCache extends BroadcastReceiver {
 
         if (cacheResponseFolder.isDirectory()) {
             File[] childFiles = cacheResponseFolder.listFiles();
-
             for (File child : childFiles) {
                 File file = new File(cacheResponseFolder, child.getName());
-
                 File sessionFile = new File(cacheResponseFolder.getPath() + File.separator + "Session");
                 File installationFile = new File(cacheResponseFolder.getPath() + File.separator + "Installation");
-
                 if ((file.getName().equalsIgnoreCase(sessionFile.getName())) || (file.getName().equalsIgnoreCase(installationFile.getName()))) {
 
                 } else {
-
                     if (file.exists()) {
                         JSONObject jsonObj = SDKUtil.getJsonFromCacheFile(file);
                         if (jsonObj != null) {
