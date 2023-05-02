@@ -20,8 +20,7 @@ import java.util.TimeZone;
  */
 class CSConnectionRequest implements IRequestModelHTTP {
 
-    private static final String TAG = "CSConnectionRequest";
-
+    private static final String TAG = CSConnectionRequest.class.getSimpleName();
     private String urlToCall;
     private SDKConstant.RequestMethod method;
     private String controller;
@@ -138,11 +137,9 @@ class CSConnectionRequest implements IRequestModelHTTP {
 
             if (errorJObject != null) {
                 errorMessage = (errorJObject).isNull("error_message") ? "" : (errorJObject).optString("error_message");
-
                 if ((!errorJObject.isNull("error_code")) && (!errorJObject.optString("error_code").contains(" "))) {
                     errorCode = (Integer) errorJObject.opt("error_code");
                 }
-
                 if (!errorJObject.isNull("errors")) {
                     resultHashMap = new HashMap<String, Object>();
                     if (errorJObject.opt("errors") instanceof JSONObject) {
@@ -178,30 +175,24 @@ class CSConnectionRequest implements IRequestModelHTTP {
 
     @Override
     public void onRequestFinished(CSHttpConnection request) {
-
         responseJSON = request.getResponse();
-
         String controller = request.getController();
         if (cacheFileName != null) {
             createFileIntoCacheDir(responseJSON);
         }
-
         if (controller.equalsIgnoreCase(SDKController.GET_QUERY_ENTRIES)) {
-
             EntriesModel model = new EntriesModel(responseJSON, null, false);
             notifyClass.getResult(model.formName, null);
             notifyClass.getResultObject(model.objectList, responseJSON, false);
             model = null;
 
         } else if (controller.equalsIgnoreCase(SDKController.SINGLE_QUERY_ENTRIES)) {
-
             EntriesModel model = new EntriesModel(responseJSON, null, false);
             notifyClass.getResult(model.formName, null);
             notifyClass.getResultObject(model.objectList, responseJSON, true);
             model = null;
 
         } else if (controller.equalsIgnoreCase(SDKController.GET_ENTRY)) {
-
             EntryModel model = new EntryModel(responseJSON, null, false, false, false);
             entryInstance.resultJson = model.jsonObject;
             entryInstance.ownerEmailId = model.ownerEmailId;
@@ -227,12 +218,9 @@ class CSConnectionRequest implements IRequestModelHTTP {
             AssetsModel assetsModel = new AssetsModel(responseJSON, false);
             List<Object> objectList = assetsModel.objects;
             assetsModel = null;
-
             assetLibrary.getResultObject(objectList, responseJSON, false);
-
         } else if (controller.equalsIgnoreCase(SDKController.GET_ASSETS)) {
             AssetModel model = new AssetModel(responseJSON, false, false);
-
             assetInstance.contentType = model.contentType;
             assetInstance.fileSize = model.fileSize;
             assetInstance.uploadUrl = model.uploadUrl;
@@ -260,9 +248,7 @@ class CSConnectionRequest implements IRequestModelHTTP {
             if (request.getCallBackObject() != null) {
                 ((ContentTypesCallback) request.getCallBackObject()).onRequestFinish(model);
             }
-
         }
-
     }
 
     protected void createFileIntoCacheDir(Object jsonObject) {
@@ -270,10 +256,7 @@ class CSConnectionRequest implements IRequestModelHTTP {
             JSONObject jsonObj = new JSONObject();
             JSONObject mainJsonObj = new JSONObject();
             JSONObject headerJson = new JSONObject();
-
-
             jsonObj = paramsJSON;
-
             Calendar cal = Calendar.getInstance();
             cal.setTimeZone(TimeZone.getTimeZone("UTC"));
             cal.setTime(new Date());
@@ -292,9 +275,7 @@ class CSConnectionRequest implements IRequestModelHTTP {
                 headerJson.put(key, entry.getValue());
             }
             mainJsonObj.put("header", headerJson);
-
             File cacheFile = new File(cacheFileName);
-
             if (cacheFile.exists()) {
                 cacheFile.delete();
             }

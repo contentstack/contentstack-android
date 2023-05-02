@@ -8,7 +8,6 @@ import android.text.TextUtils;
  * @author contentstack.com, Inc
  */
 public class Config {
-
     protected String PROTOCOL = "https://";
     protected String URL = "cdn.contentstack.io";
     protected String VERSION = "v3";
@@ -21,12 +20,14 @@ public class Config {
      * @param region <p>
      *               <b>Note:</b> Default region sets to us </a>
      *
-     *               <br><br><b>Example :</b><br>
+     *               <br><br><b>Example For Different Regions:</b><br>
      *               <pre class="prettyprint">
-     *                                                                                                                               config.setRegion(ContentstackRegion.US);
-     *                                                                                                                               </pre>
+     *               config.setRegion(ContentstackRegion.US);
+     *               config.setRegion(ContentstackRegion.EU);
+     *               config.setRegion(ContentstackRegion.AZURE_EU);
+     *               config.setRegion(ContentstackRegion.AZURE_NA);
+     *            </pre>
      */
-
     public ContentstackRegion setRegion(ContentstackRegion region) {
         this.region = region;
         return this.region;
@@ -47,7 +48,6 @@ public class Config {
      * Config config = new Config();
      * </pre>
      */
-
     public Config() {
     }
 
@@ -55,7 +55,6 @@ public class Config {
      * Sets host name of the Contentstack server.
      *
      * @param hostName host name.
-     *
      *                 <p>
      *                 <b>Note:</b> Default hostname sets to <a href ="https://cdn.contentstack.io"> cdn.contentstack.io </a>
      *                 and default protocol is HTTPS.

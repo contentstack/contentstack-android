@@ -12,13 +12,15 @@ if (secretPropsFile.exists()) {
     new FileInputStream(secretPropsFile).withCloseable { is -> p.load(is) }
     p.each { name, value -> ext[name] = value }
 } else {
-    // Use system environment variables
-    ext["ossrhUsername"] = System.getenv('OSSRH_USERNAME')
-    ext["ossrhPassword"] = System.getenv('OSSRH_PASSWORD')
-    ext["sonatypeStagingProfileId"] = System.getenv('SONATYPE_STAGING_PROFILE_ID')
-    ext["signing.keyId"] = System.getenv('SIGNING_KEY_ID')
-    ext["signing.password"] = System.getenv('SIGNING_PASSWORD')
-    ext["signing.secretKeyRingFile"] = System.getenv('SIGNING_SECRET_KEY_RING_FILE')
+    def localProperties = new Properties()
+    localProperties.load(new FileInputStream(rootProject.file("local.properties")))
+
+    ext["ossrhUsername"] = localProperties['mavenCentralUsername']
+    ext["ossrhPassword"] = localProperties['mavenCentralPassword']
+    ext["sonatypeStagingProfileId"] = localProperties['sonatypeStagingProfileId']
+    ext["signing.keyId"] = localProperties['signing.keyId']
+    ext["signing.password"] = localProperties['signing.password']
+    ext["signing.secretKeyRingFile"] = localProperties['signing.secretKeyRingFile']
 }
 
 nexusPublishing {
@@ -27,11 +29,15 @@ nexusPublishing {
             stagingProfileId = sonatypeStagingProfileId
             username = ossrhUsername
             password = ossrhPassword
-            if (project.version.endsWith('-SNAPSHOT')) {
-                snapshotRepositoryUrl.set(uri("https://oss.sonatype.org/content/repositories/snapshots"))
-            } else {
-                nexusUrl.set(uri("https://oss.sonatype.org/service/local/"))
-            }
+            nexusUrl.set(uri("https://oss.sonatype.org/service/local/"))
+            snapshotRepositoryUrl.set(uri("https://oss.sonatype.org/content/repositories/snapshots/"))
+
+
+//            if (project.version.endsWith('-SNAPSHOT')) {
+//                snapshotRepositoryUrl.set(uri("https://oss.sonatype.org/content/repositories/snapshots"))
+//            } else {
+//                nexusUrl.set(uri("https://oss.sonatype.org/service/local/"))
+//            }
         }
     }
 }

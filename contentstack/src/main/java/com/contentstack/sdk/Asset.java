@@ -78,7 +78,6 @@ public class Asset {
      * @return {@link Asset} instance.
      */
     public Asset configure(JSONObject jsonObject) {
-
         AssetModel model = null;
         model = new AssetModel(jsonObject, true, false);
         this.contentType = model.contentType;
@@ -108,7 +107,6 @@ public class Asset {
      *              </pre>
      */
     public void setHeader(String key, String value) {
-
         if (!TextUtils.isEmpty(key) && !TextUtils.isEmpty(value)) {
             removeHeader(key);
             headerGroupLocal.put(key, value);
@@ -465,9 +463,7 @@ public class Asset {
 
     //Asset modeling from cache.
     private void setCacheModel(File cacheFile, FetchResultCallback callback) {
-
         AssetModel model = new AssetModel(SDKUtil.getJsonFromCacheFile(cacheFile), false, true);
-
         this.contentType = model.contentType;
         this.fileSize = model.fileSize;
         this.uploadUrl = model.uploadUrl;
@@ -475,9 +471,7 @@ public class Asset {
         this.json = model.json;
         this.assetUid = model.uploadedUid;
         this.setTags(model.tags);
-
         model = null;
-
         if (callback != null) {
             callback.onRequestFinish(ResponseType.CACHE);
         }

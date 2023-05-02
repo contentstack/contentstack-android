@@ -101,7 +101,6 @@ public class ContentType {
         entry.formHeader = getHeader(localHeader);
         entry.setContentTypeInstance(this);
         entry.setUid(entryUid);
-
         return entry;
     }
 

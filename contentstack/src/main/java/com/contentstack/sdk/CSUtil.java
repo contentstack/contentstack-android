@@ -1,6 +1,9 @@
 package com.contentstack.sdk;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -23,8 +26,8 @@ public class CSUtil {
      * @return {@link Calendar} object.
      * @throws ParseException <br><br><b>Example :</b><br>
      *                        <pre class="prettyprint">
-     *                                                                       Util.parseDate(dateString, TimeZone.getDefault());
-     *                                                                       </pre>
+     *                                                                                              Util.parseDate(dateString, TimeZone.getDefault());
+     *                                                                                              </pre>
      */
     public static Calendar parseDate(String date, TimeZone timeZone) throws ParseException {
         ArrayList<String> knownPatterns = new ArrayList<String>();
@@ -59,8 +62,8 @@ public class CSUtil {
      * @return {@link Calendar} object.
      * @throws ParseException <br><br><b>Example :</b><br>
      *                        <pre class="prettyprint">
-     *                                                                                               Util.parseDate(dateString, "yyyy-MM-dd'T'HH:mm:ssZ", TimeZone.getTimeZone("GMT"));
-     *                                                                                             </pre>
+     *                                               Util.parseDate(dateString, "yyyy-MM-dd'T'HH:mm:ssZ", TimeZone.getTimeZone("GMT"));
+     *                                             </pre>
      */
     @SuppressLint("SimpleDateFormat")
     public static Calendar parseDate(String date, String dateFormat, TimeZone timeZone) throws ParseException {
@@ -108,4 +111,12 @@ public class CSUtil {
     }
 
     ;
+
+    protected static void isNetworkAvailable(Context context) {
+        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (connectivityManager.getNetworkInfo(0) != null || connectivityManager.getNetworkInfo(1).getState() != null) {
+            SDKConstant.IS_NETWORK_AVAILABLE = connectivityManager.getActiveNetworkInfo() != null;
+        } else
+            SDKConstant.IS_NETWORK_AVAILABLE = connectivityManager.getNetworkInfo(0).getState() == NetworkInfo.State.CONNECTED || connectivityManager.getNetworkInfo(1).getState() == NetworkInfo.State.CONNECTED;
+    }
 }
