@@ -1,6 +1,7 @@
 apply plugin: 'maven-publish'
 apply plugin: 'signing'
 
+
 ext {
     PUBLISH_GROUP_ID = 'com.contentstack.sdk'
     PUBLISH_ARTIFACT_ID = 'android'
@@ -23,16 +24,15 @@ tasks.register('androidSourcesJar', Jar) {
     archiveClassifier.set('sources')
     if (project.plugins.findPlugin("com.android.library")) {
         from android.sourceSets.main.java.srcDirs
-        from android.sourceSets.main.kotlin.srcDirs
     } else {
         from sourceSets.main.java.srcDirs
-        from sourceSets.main.kotlin.srcDirs
     }
 }
 
 artifacts {
     archives androidSourcesJar
 }
+
 
 afterEvaluate {
     publishing {
@@ -75,6 +75,7 @@ afterEvaluate {
         }
     }
 }
+
 
 ext["signing.keyId"] = rootProject.ext["signing.keyId"]
 ext["signing.password"] = rootProject.ext["signing.password"]
