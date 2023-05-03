@@ -42,7 +42,7 @@ afterEvaluate {
                 artifactId = PUBLISH_ARTIFACT_ID
                 version = PUBLISH_VERSION
                 if (project.plugins.findPlugin("com.android.library")) {
-                    //from components.release
+                    from components.release
                 } else {
                     artifact("$buildDir/libs/${project.getName()}-${version}.jar")
                 }
