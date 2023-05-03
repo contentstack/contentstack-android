@@ -1,11 +1,11 @@
 package com.contentstack.sdk;
 
-import org.junit.Test;
-
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import android.util.ArrayMap;
 import android.util.Log;
+
+import org.junit.Test;
 
 public class ExampleUnitTest {
     @Test
@@ -15,8 +15,11 @@ public class ExampleUnitTest {
 
     @Test
     public void stack() {
-        Stack stack = new Stack("blte00eab6e0747e802");
+        Stack stack = new Stack("");
         ArrayMap<String, String> headers = new ArrayMap<>();
+        headers.put("api_key", "");
+        headers.put("access_token", "");
+        headers.put("environment", "");
         stack.setHeaders(headers);
         stack.sync(new SyncResultCallBack() {
             @Override
