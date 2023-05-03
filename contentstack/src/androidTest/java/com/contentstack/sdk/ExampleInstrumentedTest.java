@@ -7,8 +7,6 @@ import android.content.Context;
 
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
-
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -23,9 +21,9 @@ public class ExampleInstrumentedTest {
     static final String environment = BuildConfig.environment;
     static Stack stack = null;
 
+
     @Test
-    @BeforeClass
-    public static void useAppContext() throws Exception {
+    public void useAppContext() throws Exception {
         Context ctx = ApplicationProvider.getApplicationContext();
         stack = Contentstack.stack(ctx, apiKey, deliveryToken, environment);
         assertEquals("com.contentstack.sdk.test", ctx.getPackageName().toLowerCase());
@@ -52,10 +50,21 @@ public class ExampleInstrumentedTest {
         assertNotNull(stack.syncParams);
     }
 
+    @Test
+    public void syncLocale() {
+        stack.syncLocale("ar-eu", new SyncResultCallBack() {
+            @Override
+            public void onCompletion(SyncStack syncStack, Error error) {
+
+            }
+        });
+        assertNotNull(stack.syncParams);
+    }
+
 
     @Test
     public void syncSDKWIthAllParams() {
-        stack.sync("abcd", new Date(), "en-us", Stack.PublishType.ENTRY_PUBLISHED, new SyncResultCallBack() {
+        stack.sync("content_type", new Date(), "en-us", Stack.PublishType.ENTRY_PUBLISHED, new SyncResultCallBack() {
             @Override
             public void onCompletion(SyncStack syncStack, Error error) {
 

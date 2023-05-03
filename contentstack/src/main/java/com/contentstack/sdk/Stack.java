@@ -357,8 +357,8 @@ public class Stack implements INotifyClass {
 
     public void sync(SyncResultCallBack syncCallBack) {
         try {
-            syncParams = new JSONObject();
-            syncParams.put("init", true);
+            this.syncParams = new JSONObject();
+            this.syncParams.put("init", true);
         } catch (JSONException e) {
             Log.e(TAG, Objects.requireNonNull(e.getLocalizedMessage()));
         }
@@ -385,8 +385,8 @@ public class Stack implements INotifyClass {
      */
     public void syncPaginationToken(String paginationToken, SyncResultCallBack syncCallBack) {
         try {
-            syncParams = new JSONObject();
-            syncParams.put("pagination_token", paginationToken);
+            this.syncParams = new JSONObject();
+            this.syncParams.put("pagination_token", paginationToken);
         } catch (JSONException e) {
             Log.e(TAG, Objects.requireNonNull(e.getLocalizedMessage()));
         }
@@ -406,8 +406,8 @@ public class Stack implements INotifyClass {
      */
     public void syncToken(String syncToken, SyncResultCallBack syncCallBack) {
         try {
-            syncParams = new JSONObject();
-            syncParams.put("sync_token", syncToken);
+            this.syncParams = new JSONObject();
+            this.syncParams.put("sync_token", syncToken);
         } catch (JSONException e) {
             Log.e(TAG, Objects.requireNonNull(e.getLocalizedMessage()));
         }
@@ -429,9 +429,9 @@ public class Stack implements INotifyClass {
     public void syncFromDate(Date fromDate, SyncResultCallBack syncCallBack) {
         String startFromDate = convertUTCToISO(fromDate);
         try {
-            syncParams = new JSONObject();
-            syncParams.put("init", true);
-            syncParams.put("start_from", startFromDate);
+            this.syncParams = new JSONObject();
+            this.syncParams.put("init", true);
+            this.syncParams.put("start_from", startFromDate);
         } catch (JSONException e) {
             Log.e(TAG, Objects.requireNonNull(e.getLocalizedMessage()));
         }
@@ -449,9 +449,9 @@ public class Stack implements INotifyClass {
      */
     public void syncContentType(String contentType, SyncResultCallBack syncCallBack) {
         try {
-            syncParams = new JSONObject();
-            syncParams.put("init", true);
-            syncParams.put("content_type_uid", contentType);
+            this.syncParams = new JSONObject();
+            this.syncParams.put("init", true);
+            this.syncParams.put("content_type_uid", contentType);
         } catch (JSONException e) {
             Log.e(TAG, Objects.requireNonNull(e.getLocalizedMessage()));
         }
@@ -477,9 +477,9 @@ public class Stack implements INotifyClass {
     public void syncLocale(Language language, SyncResultCallBack syncCallBack) {
         String localeCode = getLanguageCode(language);
         try {
-            syncParams = new JSONObject();
-            syncParams.put("init", true);
-            syncParams.put("locale", localeCode);
+            this.syncParams = new JSONObject();
+            this.syncParams.put("init", true);
+            this.syncParams.put("locale", localeCode);
         } catch (JSONException e) {
             Log.e(TAG, Objects.requireNonNull(e.getLocalizedMessage()));
         }
@@ -496,9 +496,9 @@ public class Stack implements INotifyClass {
      */
     public void syncLocale(@NotNull String localeCode, SyncResultCallBack syncCallBack) {
         try {
-            syncParams = new JSONObject();
-            syncParams.put("init", true);
-            syncParams.put("locale", localeCode);
+            this.syncParams = new JSONObject();
+            this.syncParams.put("init", true);
+            this.syncParams.put("locale", localeCode);
         } catch (JSONException e) {
             Log.e(TAG, Objects.requireNonNull(e.getLocalizedMessage()));
         }
@@ -524,9 +524,9 @@ public class Stack implements INotifyClass {
 
     public void syncPublishType(PublishType type, SyncResultCallBack syncCallBack) {
         try {
-            syncParams = new JSONObject();
-            syncParams.put("init", true);
-            syncParams.put("type", type.toString().toLowerCase());
+            this.syncParams = new JSONObject();
+            this.syncParams.put("init", true);
+            this.syncParams.put("type", type.toString().toLowerCase());
         } catch (JSONException e) {
             Log.e(TAG, Objects.requireNonNull(e.getLocalizedMessage()));
         }
@@ -566,21 +566,20 @@ public class Stack implements INotifyClass {
     public void sync(String contentType, Date fromDate, String locale, PublishType type, SyncResultCallBack syncCallBack) {
         String startFromDate = convertUTCToISO(fromDate);
         try {
-            syncParams = new JSONObject();
-            syncParams.put("init", true);
+            this.syncParams = new JSONObject();
+            this.syncParams.put("init", true);
             if (contentType != null && !contentType.isEmpty()) {
-                syncParams.put("content_type_uid", contentType);
+                this.syncParams.put("content_type_uid", contentType);
             }
             if (!startFromDate.isEmpty()) {
-                syncParams.put("start_from", startFromDate);
+                this.syncParams.put("start_from", startFromDate);
             }
             if (locale != null && locale.isEmpty()) {
-                syncParams.put("locale", locale);
+                this.syncParams.put("locale", locale);
             }
             if (type != null && !type.toString().isEmpty()) {
-                syncParams.put("type", type.toString().toLowerCase());
+                this.syncParams.put("type", type.toString().toLowerCase());
             }
-            Log.e(TAG, syncParams.toString());
         } catch (JSONException e) {
             Log.e(TAG, Objects.requireNonNull(e.getLocalizedMessage()));
         }
@@ -601,9 +600,10 @@ public class Stack implements INotifyClass {
             String URL = "/" + this.VERSION + "/stacks/sync";
             ArrayMap<String, Object> headers = getHeader(this.localHeader);
             if (headers.containsKey(SDKConstant.ENVIRONMENT)) {
-                syncParams.put(SDKConstant.ENVIRONMENT, headers.get(SDKConstant.ENVIRONMENT));
+                this.syncParams.put(SDKConstant.ENVIRONMENT, headers.get(SDKConstant.ENVIRONMENT));
             }
-            fetchFromNetwork(URL, syncParams, headers, null, new SyncResultCallBack() {
+
+            fetchFromNetwork(URL, this.syncParams, headers, null, new SyncResultCallBack() {
                 @Override
                 public void onCompletion(SyncStack syncStack, Error error) {
                     if (error == null) {

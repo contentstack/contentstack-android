@@ -5,9 +5,7 @@ import android.util.ArrayMap;
 import android.util.Log;
 
 import com.android.volley.DefaultRetryPolicy;
-import com.android.volley.Request;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -242,6 +240,8 @@ class CSHttpConnection implements IURLRequestHTTP {
         headers.put("Content-Type", "application/json");
         headers.put("User-Agent", defaultUserAgent());
         headers.put("X-User-Agent", "contentstack-android/" + SDKConstant.SDK_VERSION);
+
+        Log.d("url requested", url);
         jsonObjectRequest = new JSONUTF8Request(requestId, url, requestJSON, response -> {
             responseJSON = response;
             if (responseJSON != null) {
