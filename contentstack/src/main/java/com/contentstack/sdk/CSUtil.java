@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.util.Log;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -24,13 +25,9 @@ public class CSUtil {
      *
      * @param date date in ISO format.
      * @return {@link Calendar} object.
-     * @throws ParseException <br><br><b>Example :</b><br>
-     *                        <pre class="prettyprint">
-     *                                                                                              Util.parseDate(dateString, TimeZone.getDefault());
-     *                                                                                              </pre>
      */
-    public static Calendar parseDate(String date, TimeZone timeZone) throws ParseException {
-        ArrayList<String> knownPatterns = new ArrayList<String>();
+    public static Calendar parseDate(String date, TimeZone timeZone) {
+        ArrayList<String> knownPatterns = new ArrayList<>();
         knownPatterns.add("yyyy-MM-dd'T'HH:mm:ssZ");
         knownPatterns.add("yyyy-MM-dd'T'HH:mm:ss'Z'");
         knownPatterns.add("yyyy-MM-dd'T'HH:mm.ss'Z'");
@@ -47,7 +44,7 @@ public class CSUtil {
             try {
                 return parseDate(date, formatString, timeZone);
             } catch (ParseException e) {
-                System.out.println(e.getLocalizedMessage());
+                Log.e("CSUtils", e.getLocalizedMessage());
             }
         }
 
@@ -62,8 +59,8 @@ public class CSUtil {
      * @return {@link Calendar} object.
      * @throws ParseException <br><br><b>Example :</b><br>
      *                        <pre class="prettyprint">
-     *                                               Util.parseDate(dateString, "yyyy-MM-dd'T'HH:mm:ssZ", TimeZone.getTimeZone("GMT"));
-     *                                             </pre>
+     *                                                                                                                    Util.parseDate(dateString, "yyyy-MM-dd'T'HH:mm:ssZ", TimeZone.getTimeZone("GMT"));
+     *                                                                                                                  </pre>
      */
     @SuppressLint("SimpleDateFormat")
     public static Calendar parseDate(String date, String dateFormat, TimeZone timeZone) throws ParseException {
@@ -110,7 +107,6 @@ public class CSUtil {
         return cal;
     }
 
-    ;
 
     protected static void isNetworkAvailable(Context context) {
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);

@@ -7,19 +7,29 @@
     <application
         android:allowBackup="true"
         android:label="@string/app_name">
-                <receiver
-                    android:name="com.contentstack.sdk.ConnectionStatus"
-                    android:enabled="true"
-                    android:exported="true">
-                </receiver>
-                <receiver
-                    android:name="com.contentstack.sdk.ClearCache"
-                    android:enabled="true"
-                    android:exported="true">
-                    <intent-filter>
-                        <action android:name="StartContentStackClearingCache" />
-                    </intent-filter>
-                </receiver>
+        <receiver
+            android:name="com.contentstack.sdk.ConnectionStatus"
+            android:enabled="true"
+            android:exported="true"></receiver>
+        <receiver
+            android:name="com.contentstack.sdk.ClearCache"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="StartContentStackClearingCache" />
+            </intent-filter>
+        </receiver>
+
+        <activity
+            android:name=".TestActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/TextAppearance.AppCompat">
+            <meta-data
+                android:name=".TestActivity"
+                android:value=".ui.MainActivity" />
+        </activity>
+
     </application>
 
 </manifest>

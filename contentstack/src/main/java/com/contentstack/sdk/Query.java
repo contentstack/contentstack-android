@@ -154,7 +154,6 @@ public class Query implements INotifyClass {
     public Query addQuery(String key, String value) {
         try {
             if (key != null && value != null) {
-
                 urlQueries.put(key, value);
             } else {
                 throwException("and", SDKConstant.PROVIDE_VALID_PARAMS, null);
