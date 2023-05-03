@@ -7,20 +7,10 @@ ext["ossrhPassword"] = ''
 ext["sonatypeStagingProfileId"] = ''
 
 File secretPropsFile = project.rootProject.file('local.properties')
-if (secretPropsFile.exists()) {
+if (!secretPropsFile.exists()) {
     Properties p = new Properties()
     new FileInputStream(secretPropsFile).withCloseable { is -> p.load(is) }
     p.each { name, value -> ext[name] = value }
-} else {
-    def localProperties = new Properties()
-    localProperties.load(new FileInputStream(rootProject.file("local.properties")))
-
-    ext["ossrhUsername"] = localProperties['mavenCentralUsername']
-    ext["ossrhPassword"] = localProperties['mavenCentralPassword']
-    ext["sonatypeStagingProfileId"] = localProperties['sonatypeStagingProfileId']
-    ext["signing.keyId"] = localProperties['signing.keyId']
-    ext["signing.password"] = localProperties['signing.password']
-    ext["signing.secretKeyRingFile"] = localProperties['signing.secretKeyRingFile']
 }
 
 nexusPublishing {
