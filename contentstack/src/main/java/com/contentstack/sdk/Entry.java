@@ -1,13 +1,9 @@
 package com.contentstack.sdk;
 
-import android.util.ArrayMap;
 import android.text.TextUtils;
+import android.util.ArrayMap;
 import android.util.Log;
 
-import com.contentstack.sdk.utilities.CSAppConstants;
-import com.contentstack.sdk.utilities.CSAppUtils;
-import com.contentstack.sdk.utilities.CSController;
-import com.contentstack.sdk.utilities.ContentstackUtil;
 import com.contentstack.txtmark.Configuration;
 import com.contentstack.txtmark.Processor;
 
@@ -102,10 +98,10 @@ public class Entry {
      *
      *              <br><br><b>Example :</b><br>
      *              <pre class="prettyprint">
-     *                           Stack stack = Contentstack.stack(context, "apiKey", "deliveryToken",  "stag");
-     *                           Entry entry = stack.contentType("form_name").entry("entry_uid");
-     *                           entry.setHeader("custom_header_key", "custom_header_value");
-     *                           </pre>
+     *                                        Stack stack = Contentstack.stack(context, "apiKey", "deliveryToken",  "stag");
+     *                                        Entry entry = stack.contentType("form_name").entry("entry_uid");
+     *                                        entry.setHeader("custom_header_key", "custom_header_value");
+     *                                        </pre>
      */
     public void setHeader(String key, String value) {
         if (!TextUtils.isEmpty(key) && !TextUtils.isEmpty(value)) {
@@ -120,10 +116,10 @@ public class Entry {
      *
      *            <br><br><b>Example :</b><br>
      *            <pre class="prettyprint">
-     *                       Stack stack = Contentstack.stack(context, "apiKey", "deliveryToken",  "stag");
-     *                       Entry entry = stack.contentType("form_name").entry("entry_uid");
-     *                       entry.removeHeader("custom_header_key");
-     *                       </pre>
+     *                                  Stack stack = Contentstack.stack(context, "apiKey", "deliveryToken",  "stag");
+     *                                  Entry entry = stack.contentType("form_name").entry("entry_uid");
+     *                                  entry.removeHeader("custom_header_key");
+     *                                  </pre>
      */
     public void removeHeader(String key) {
         if (!TextUtils.isEmpty(key)) {
@@ -304,8 +300,8 @@ public class Entry {
      *
      *            <br><br><b>Example :</b><br>
      *            <pre class="prettyprint">
-     *                       Object obj = entry.get("key");
-     *                       </pre>
+     *                                  Object obj = entry.get("key");
+     *                                  </pre>
      */
     public Object get(String key) {
         try {
@@ -315,7 +311,7 @@ public class Entry {
                 return null;
             }
         } catch (Exception e) {
-            CSAppUtils.showLog(TAG, e.getLocalizedMessage());
+            SDKUtil.showLog(TAG, e.getLocalizedMessage());
             return null;
         }
     }
@@ -335,7 +331,7 @@ public class Entry {
         try {
             return Processor.process(getString(markdownKey), Configuration.builder().forceExtentedProfile().build());
         } catch (Exception e) {
-            CSAppUtils.showLog(TAG, e.getLocalizedMessage());
+            SDKUtil.showLog(TAG, e.getLocalizedMessage());
             return null;
         }
     }
@@ -360,7 +356,7 @@ public class Entry {
             }
             return multipleHtmlStrings;
         } catch (Exception e) {
-            CSAppUtils.showLog(TAG, e.getLocalizedMessage());
+            SDKUtil.showLog(TAG, e.getLocalizedMessage());
             return null;
         }
     }
@@ -372,8 +368,8 @@ public class Entry {
      *
      *            <br><br><b>Example :</b><br>
      *            <pre class="prettyprint">
-     *                       String value = entry.getString("key");
-     *                       </pre>
+     *                                  String value = entry.getString("key");
+     *                                  </pre>
      */
     public String getString(String key) {
         Object value = get(key);
@@ -392,8 +388,8 @@ public class Entry {
      *
      *            <br><br><b>Example :</b><br>
      *            <pre class="prettyprint">
-     *                       Boolean value = entry.getBoolean("key");
-     *                       </pre>
+     *                                  Boolean value = entry.getBoolean("key");
+     *                                  </pre>
      */
     public Boolean getBoolean(String key) {
         Object value = get(key);
@@ -412,8 +408,8 @@ public class Entry {
      *
      *            <br><br><b>Example :</b><br>
      *            <pre class="prettyprint">
-     *                       JSONArray value = entry.getJSONArray("key");
-     *                       </pre>
+     *                                  JSONArray value = entry.getJSONArray("key");
+     *                                  </pre>
      */
     public JSONArray getJSONArray(String key) {
         Object value = get(key);
@@ -432,8 +428,8 @@ public class Entry {
      *
      *            <br><br><b>Example :</b><br>
      *            <pre class="prettyprint">
-     *                       JSONObject value = entry.getJSONObject("key");
-     *                       </pre>
+     *                                  JSONObject value = entry.getJSONObject("key");
+     *                                  </pre>
      */
     public JSONObject getJSONObject(String key) {
         Object value = get(key);
@@ -452,8 +448,8 @@ public class Entry {
      *
      *            <br><br><b>Example :</b><br>
      *            <pre class="prettyprint">
-     *                       JSONObject value = entry.getJSONObject("key");
-     *                       </pre>
+     *                                  JSONObject value = entry.getJSONObject("key");
+     *                                  </pre>
      */
     public Number getNumber(String key) {
         Object value = get(key);
@@ -472,8 +468,8 @@ public class Entry {
      *
      *            <br><br><b>Example :</b><br>
      *            <pre class="prettyprint">
-     *                       int value = entry.getInt("key");
-     *                       </pre>
+     *                                  int value = entry.getInt("key");
+     *                                  </pre>
      */
     public int getInt(String key) {
         Number value = getNumber(key);
@@ -490,8 +486,8 @@ public class Entry {
      *
      *            <br><br><b>Example :</b><br>
      *            <pre class="prettyprint">
-     *                       float value = entry.getFloat("key");
-     *                       </pre>
+     *                                  float value = entry.getFloat("key");
+     *                                  </pre>
      */
     public float getFloat(String key) {
         Number value = getNumber(key);
@@ -508,8 +504,8 @@ public class Entry {
      *
      *            <br><br><b>Example :</b><br>
      *            <pre class="prettyprint">
-     *                       double value = entry.getDouble("key");
-     *                       </pre>
+     *                                  double value = entry.getDouble("key");
+     *                                  </pre>
      */
     public double getDouble(String key) {
         Number value = getNumber(key);
@@ -526,8 +522,8 @@ public class Entry {
      *
      *            <br><br><b>Example :</b><br>
      *            <pre class="prettyprint">
-     *                       long value = entry.getLong("key");
-     *                       </pre>
+     *                                  long value = entry.getLong("key");
+     *                                  </pre>
      */
     public long getLong(String key) {
         Number value = getNumber(key);
@@ -544,8 +540,8 @@ public class Entry {
      *
      *            <br><br><b>Example :</b><br>
      *            <pre class="prettyprint">
-     *                       short value = entry.getShort("key");
-     *                       </pre>
+     *                                  short value = entry.getShort("key");
+     *                                  </pre>
      */
     public short getShort(String key) {
         Number value = getNumber(key);
@@ -562,16 +558,16 @@ public class Entry {
      *
      *            <br><br><b>Example :</b><br>
      *            <pre class="prettyprint">
-     *                       Calendar value = entry.getDate("key");
-     *                       </pre>
+     *                                  Calendar value = entry.getDate("key");
+     *                                  </pre>
      */
     public Calendar getDate(String key) {
 
         try {
             String value = getString(key);
-            return ContentstackUtil.parseDate(value, null);
+            return CSUtil.parseDate(value, null);
         } catch (Exception e) {
-            CSAppUtils.showLog(TAG, e.getLocalizedMessage());
+            SDKUtil.showLog(TAG, e.getLocalizedMessage());
         }
         return null;
     }
@@ -589,9 +585,9 @@ public class Entry {
 
         try {
             String value = getString("created_at");
-            return ContentstackUtil.parseDate(value, null);
+            return CSUtil.parseDate(value, null);
         } catch (Exception e) {
-            CSAppUtils.showLog(TAG, e.getLocalizedMessage());
+            SDKUtil.showLog(TAG, e.getLocalizedMessage());
         }
         return null;
     }
@@ -622,9 +618,9 @@ public class Entry {
 
         try {
             String value = getString("updated_at");
-            return ContentstackUtil.parseDate(value, null);
+            return CSUtil.parseDate(value, null);
         } catch (Exception e) {
-            CSAppUtils.showLog(TAG, e.getLocalizedMessage());
+            SDKUtil.showLog(TAG, e.getLocalizedMessage());
         }
         return null;
     }
@@ -654,9 +650,9 @@ public class Entry {
 
         try {
             String value = getString("deleted_at");
-            return ContentstackUtil.parseDate(value, null);
+            return CSUtil.parseDate(value, null);
         } catch (Exception e) {
-            CSAppUtils.showLog(TAG, e.getLocalizedMessage());
+            SDKUtil.showLog(TAG, e.getLocalizedMessage());
         }
         return null;
     }
@@ -681,8 +677,8 @@ public class Entry {
      *
      *            <br><br><b>Example :</b><br>
      *            <pre class="prettyprint">
-     *                       Asset asset = entry.getAsset("key");
-     *                       </pre>
+     *                                  Asset asset = entry.getAsset("key");
+     *                                  </pre>
      */
     public Asset getAsset(String key) {
 
@@ -699,8 +695,8 @@ public class Entry {
      *
      *            <br><br><b>Example :</b><br>
      *            <pre class="prettyprint">
-     *                       List<Asset> asset = entry.getAssets("key");
-     *                       </pre>
+     *                                  List<Asset> asset = entry.getAssets("key");
+     *                                  </pre>
      */
     public List<Asset> getAssets(String key) {
         List<Asset> assets = new ArrayList<>();
@@ -722,8 +718,8 @@ public class Entry {
      *
      *            <br><br><b>Example :</b><br>
      *            <pre class="prettyprint">
-     *                       Group innerGroup = entry.getGroup("key");
-     *                       </pre>
+     *                                  Group innerGroup = entry.getGroup("key");
+     *                                  </pre>
      */
     public Group getGroup(String key) {
 
@@ -743,8 +739,8 @@ public class Entry {
      *
      *            <br><br><b>Example :</b><br>
      *            <pre class="prettyprint">
-     *                       Group innerGroup = entry.getGroups("key");
-     *                       </pre>
+     *                                  Group innerGroup = entry.getGroups("key");
+     *                                  </pre>
      */
     public List<Group> getGroups(String key) {
 
@@ -813,7 +809,7 @@ public class Entry {
                             entryInstance = contentTypeInstance.stackInstance.contentType(refContentType).entry();
                         } catch (Exception e) {
                             entryInstance = new Entry(refContentType);
-                            CSAppUtils.showLog(TAG, e.getLocalizedMessage());
+                            SDKUtil.showLog(TAG, e.getLocalizedMessage());
                         }
                         entryInstance.setUid(model.entryUid);
                         entryInstance.ownerEmailId = model.ownerEmailId;
@@ -833,7 +829,7 @@ public class Entry {
                 }
             }
         } catch (Exception e) {
-            CSAppUtils.showLog(TAG, e.getLocalizedMessage());
+            SDKUtil.showLog(TAG, e.getLocalizedMessage());
             return null;
         }
 
@@ -867,7 +863,7 @@ public class Entry {
                 }
             }
         } catch (Exception e) {
-            CSAppUtils.showLog(TAG, "--except-catch|" + e);
+            SDKUtil.showLog(TAG, "--except-catch|" + e);
         }
         return this;
     }
@@ -897,7 +893,7 @@ public class Entry {
                 otherPostJSON.put("include[]", referenceArray);
             }
         } catch (Exception e) {
-            CSAppUtils.showLog(TAG, "--include Reference-catch|" + e.getLocalizedMessage());
+            SDKUtil.showLog(TAG, "--include Reference-catch|" + e.getLocalizedMessage());
         }
 
         return this;
@@ -929,7 +925,7 @@ public class Entry {
                 otherPostJSON.put("include[]", referenceArray);
             }
         } catch (Exception e) {
-            CSAppUtils.showLog(TAG, "--include Reference-catch|" + e.getLocalizedMessage());
+            SDKUtil.showLog(TAG, "--include Reference-catch|" + e.getLocalizedMessage());
         }
 
         return this;
@@ -961,7 +957,7 @@ public class Entry {
                 }
             }
         } catch (Exception e) {
-            CSAppUtils.showLog(TAG, "--include Reference-catch|" + e.getLocalizedMessage());
+            SDKUtil.showLog(TAG, "--include Reference-catch|" + e.getLocalizedMessage());
         }
 
         return this;
@@ -999,7 +995,7 @@ public class Entry {
                 includeReference(referenceFieldUid);
             }
         } catch (Exception e) {
-            CSAppUtils.showLog(TAG, "--onlyWithReferenceUid-catch|" + e.getLocalizedMessage());
+            SDKUtil.showLog(TAG, "--onlyWithReferenceUid-catch|" + e.getLocalizedMessage());
         }
         return this;
     }
@@ -1038,7 +1034,7 @@ public class Entry {
                 includeReference(referenceFieldUid);
             }
         } catch (Exception e) {
-            CSAppUtils.showLog(TAG, "--exceptWithReferenceUid-catch|" + e.getLocalizedMessage());
+            SDKUtil.showLog(TAG, "--exceptWithReferenceUid-catch|" + e.getLocalizedMessage());
         }
         return this;
     }
@@ -1061,14 +1057,14 @@ public class Entry {
      *
      *                 <br><br><b>Example :</b><br>
      *                 <pre class="prettyprint">
-     *                                    Stack stack = Contentstack.stack(context, "apiKey", "deliveryToken",  "stag");
-     *                                    Entry entry = stack.contentType("form_name").entry("entry_uid");<br>
-     *                                    entry.fetch(new BuiltResultCallBack() {<br>
-     *                                           &#64;Override
-     *                                           public void onCompletion(ResponseType responseType, BuiltError builtError) {
+     *                                                    Stack stack = Contentstack.stack(context, "apiKey", "deliveryToken",  "stag");
+     *                                                    Entry entry = stack.contentType("form_name").entry("entry_uid");<br>
+     *                                                    entry.fetch(new BuiltResultCallBack() {<br>
+     *                                                           &#64;Override
+     *                                                           public void onCompletion(ResponseType responseType, BuiltError builtError) {
      *
-     *                                           }<br>
-     *                                    });<br>
+     *                                                           }<br>
+     *                                                    });<br>
      */
     public void fetch(EntryResultCallBack callBack) {
         try {
@@ -1091,9 +1087,9 @@ public class Entry {
                 }
 
                 String mainStringForMD5 = URL + new JSONObject().toString() + headerAll.toString();
-                String md5Value = new CSAppUtils().getMD5FromString(mainStringForMD5.trim());
+                String md5Value = new SDKUtil().getMD5FromString(mainStringForMD5.trim());
 
-                File cacheFile = new File(CSAppConstants.cacheFolderName + File.separator + md5Value);
+                File cacheFile = new File(SDKConstant.cacheFolderName + File.separator + md5Value);
 
 
                 switch (cachePolicyForCall) {
@@ -1111,28 +1107,17 @@ public class Entry {
                         break;
 
                     case CACHE_ELSE_NETWORK:
-
                         if (cacheFile.exists()) {
                             boolean needToSendCall = false;
-
-                            // if (maxCacheTimeForCall > 0) {
-                            //     needToSendCall = new CSAppUtils().getResponseTimeFromCacheFile(cacheFile, (int) maxCacheTimeForCall);
-                            // } else {
-                            //     needToSendCall = new CSAppUtils().getResponseTimeFromCacheFile(cacheFile, (int) defaultCacheTimeInterval);
-                            // }
-                            needToSendCall = new CSAppUtils().getResponseTimeFromCacheFile(cacheFile, (int) maxCacheTimeForCall);
-
+                            needToSendCall = new SDKUtil().getResponseTimeFromCacheFile(cacheFile, (int) maxCacheTimeForCall);
                             if (needToSendCall) {
                                 fetchFromNetwork(URL, urlQueries, cacheFile.getPath(), callBack);
-
                             } else {
                                 setCacheModel(cacheFile, callBack);
                             }
-
                         } else {
                             fetchFromNetwork(URL, urlQueries, cacheFile.getPath(), callBack);
                         }
-
                         break;
 
                     case CACHE_THEN_NETWORK:
@@ -1146,7 +1131,7 @@ public class Entry {
 
                     case NETWORK_ELSE_CACHE:
 
-                        if (CSAppConstants.isNetworkAvailable) {
+                        if (SDKConstant.IS_NETWORK_AVAILABLE) {
                             fetchFromNetwork(URL, urlQueries, cacheFile.getPath(), callBack);
                         } else {
                             fetchFromCache(cacheFile, callBack);
@@ -1157,7 +1142,7 @@ public class Entry {
                 }
 
             } else {
-                throwException(CSAppConstants.ErrorMessage_EntryUID, null, callBack);
+                throwException(SDKConstant.PLEASE_SET_ENTRY_UID, null, callBack);
             }
         } catch (Exception e) {
             throwException(null, e, callBack);
@@ -1172,11 +1157,11 @@ public class Entry {
             setIncludeJSON(urlQueries, callBack);
             mainJson.put("query", urlQueries);
 
-            mainJson.put("_method", CSAppConstants.RequestMethod.GET.toString());
+            mainJson.put("_method", SDKConstant.RequestMethod.GET.toString());
 
             HashMap<String, Object> urlParams = getUrlParams(mainJson);
 
-            new CSBackgroundTask(this, contentTypeInstance.stackInstance, CSController.FETCHENTRY, URL, getHeader(localHeader), urlParams, new JSONObject(), cacheFilePath, CSAppConstants.callController.ENTRY.toString(), false, CSAppConstants.RequestMethod.GET, callBack);
+            new CSBackgroundTask(this, contentTypeInstance.stackInstance, SDKController.GET_ENTRY, URL, getHeader(localHeader), urlParams, new JSONObject(), cacheFilePath, SDKConstant.callController.ENTRY.toString(), false, SDKConstant.RequestMethod.GET, callBack);
 
         } catch (Exception e) {
             throwException(null, e, callBack);
@@ -1194,18 +1179,18 @@ public class Entry {
             // } else {
             //     needToSendCall = new CSAppUtils().getResponseTimeFromCacheFile(cacheFile, (int) defaultCacheTimeInterval);
             // }
-            needToSendCall = new CSAppUtils().getResponseTimeFromCacheFile(cacheFile, (int) maxCacheTimeForCall);
+            needToSendCall = new SDKUtil().getResponseTimeFromCacheFile(cacheFile, (int) maxCacheTimeForCall);
 
             if (needToSendCall) {
                 error = new Error();
-                error.setErrorMessage(CSAppConstants.ErrorMessage_EntryNotFoundInCache);
+                error.setErrorMessage(SDKConstant.ENTRY_IS_NOT_PRESENT_IN_CACHE);
 
             } else {
                 setCacheModel(cacheFile, callback);
             }
         } else {
             error = new Error();
-            error.setErrorMessage(CSAppConstants.ErrorMessage_EntryNotFoundInCache);
+            error.setErrorMessage(SDKConstant.ENTRY_IS_NOT_PRESENT_IN_CACHE);
         }
 
         if (callback != null && error != null) {
@@ -1216,7 +1201,7 @@ public class Entry {
     //Entry modeling from cache.
     private void setCacheModel(File cacheFile, EntryResultCallBack callback) {
 
-        EntryModel model = new EntryModel(CSAppUtils.getJsonFromCacheFile(cacheFile), null, false, true, false);
+        EntryModel model = new EntryModel(SDKUtil.getJsonFromCacheFile(cacheFile), null, false, true, false);
         this.resultJson = model.jsonObject;
         this.ownerEmailId = model.ownerEmailId;
         this.ownerUid = model.ownerUid;
@@ -1248,10 +1233,10 @@ public class Entry {
      */
 
     public void cancelRequest() {
-        CSAppConstants.cancelledCallController.add(CSAppConstants.callController.ENTRY.toString());
+        SDKConstant.cancelledCallController.add(SDKConstant.callController.ENTRY.toString());
 
         if (Contentstack.requestQueue != null) {
-            Contentstack.requestQueue.cancelAll(CSAppConstants.callController.ENTRY.toString());
+            Contentstack.requestQueue.cancelAll(SDKConstant.callController.ENTRY.toString());
         }
     }
 
@@ -1285,7 +1270,7 @@ public class Entry {
                     Object value = queryJSON.opt(key);
                     hashMap.put(key, value);
                 } catch (Exception e) {
-                    CSAppUtils.showLog(TAG, e.getLocalizedMessage());
+                    SDKUtil.showLog(TAG, e.getLocalizedMessage());
                 }
             }
 
@@ -1495,6 +1480,15 @@ public class Entry {
     public Entry includeEmbeddedItems() {
         try {
             otherPostJSON.put("include_embedded_items[]", "BASE");
+        } catch (JSONException e) {
+            Log.e(TAG, e.getLocalizedMessage());
+        }
+        return this;
+    }
+
+    public Entry includeMetadata() {
+        try {
+            otherPostJSON.put("include_metadata", true);
         } catch (JSONException e) {
             Log.e(TAG, e.getLocalizedMessage());
         }

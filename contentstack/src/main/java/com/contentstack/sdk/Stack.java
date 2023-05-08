@@ -1,12 +1,9 @@
 package com.contentstack.sdk;
 
-import android.util.ArrayMap;
+import android.os.Build;
 import android.text.TextUtils;
+import android.util.ArrayMap;
 import android.util.Log;
-
-import com.contentstack.sdk.utilities.CSAppConstants;
-import com.contentstack.sdk.utilities.CSAppUtils;
-import com.contentstack.sdk.utilities.CSController;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
@@ -23,6 +20,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.TimeZone;
 
 /**
@@ -38,55 +36,38 @@ public class Stack implements INotifyClass {
     protected ArrayMap<String, Object> localHeader = null;
     private String imageTransformationUrl;
     private LinkedHashMap<String, Object> imageParams = new LinkedHashMap<>();
-    protected String URLSCHEMA = "https://";
+    protected String PROTOCOL = "https://";
     protected String URL = "cdn.contentstack.io";
     protected String VERSION = "v3";
-    protected String SYNC_KEY = "sync";
     protected Config config;
-    protected ArrayMap<String, Object> headerGroup_app;
-    private JSONObject syncParams = null;
+    protected ArrayMap<String, Object> headerGroupApp;
+    protected JSONObject syncParams = null;
     protected String skip = null;
     protected String limit = null;
-    protected String sync_token = null;
-    protected String pagination_token = null;
-    protected String contentType;
     protected String localeCode;
-    protected PublishType publishType;
-    protected String startFromDate;
     private SyncResultCallBack syncCallBack;
 
 
-    public enum PublishType {
-        entry_published,
-        entry_unpublished,
-        entry_deleted,
-        asset_published,
-        asset_unpublished,
-        asset_deleted,
-        content_type_deleted
+    protected Stack() {
     }
 
-
-    private Stack() {
-    }
-
-
-    protected Stack(String stackApiKey) {
-        this.stackApiKey = stackApiKey;
-        this.localHeader = new ArrayMap<String, Object>();
-
+    protected Stack(@NotNull String apiKey) {
+        this.stackApiKey = apiKey;
+        if (this.localHeader == null) {
+            this.localHeader = new ArrayMap<>();
+        }
+        this.localHeader.put("api_key", this.stackApiKey);
     }
 
     protected void setConfig(Config config) {
         this.config = config;
-        URLSCHEMA = config.URLSCHEMA;
+        PROTOCOL = config.PROTOCOL;
         URL = config.URL;
         VERSION = config.VERSION;
 
         if (!TextUtils.isEmpty(config.environment)) {
             setHeader("environment", config.environment);
         }
-
         if (!config.region.name().isEmpty()) {
             String region = config.region.name().toLowerCase();
             if (!region.equalsIgnoreCase("us")) {
@@ -95,6 +76,8 @@ public class Stack implements INotifyClass {
                 }
                 if (region.equalsIgnoreCase("azure_na")) {
                     URL = "azure-na-cdn.contentstack.com";
+                } else if (region.equalsIgnoreCase("azure_eu")) {
+                    URL = "azure-eu-cdn.contentstack.com";
                 } else {
                     URL = region + "-" + URL;
                 }
@@ -102,6 +85,7 @@ public class Stack implements INotifyClass {
         }
 
     }
+
 
     /**
      * Represents a {@link ContentType}.<br>
@@ -113,14 +97,12 @@ public class Stack implements INotifyClass {
      * <br><br><b>Example :</b><br>
      * <pre class="prettyprint">
      * Stack stack = Contentstack.stack(context, "apiKey", "deliveryToken", "stag");
-     *
      * ContentType contentType = stack.contentType("blog");
      * </pre>
      */
     public ContentType contentType(String contentTypeName) {
         ContentType contentType = new ContentType(contentTypeName);
         contentType.setStackInstance(this);
-
         return contentType;
     }
 
@@ -139,7 +121,6 @@ public class Stack implements INotifyClass {
     public Asset asset(String uid) {
         Asset asset = new Asset(uid);
         asset.setStackInstance(this);
-
         return asset;
     }
 
@@ -157,7 +138,6 @@ public class Stack implements INotifyClass {
     protected Asset asset() {
         Asset asset = new Asset();
         asset.setStackInstance(this);
-
         return asset;
     }
 
@@ -204,7 +184,7 @@ public class Stack implements INotifyClass {
      * </p>
      */
     public String getAccessToken() {
-        return localHeader != null ? (String) localHeader.get("access_token") : null;
+        return this.localHeader != null ? (String) this.localHeader.get("access_token") : null;
     }
 
     /**
@@ -220,7 +200,7 @@ public class Stack implements INotifyClass {
      */
     public void removeHeader(String key) {
         if (!TextUtils.isEmpty(key)) {
-            localHeader.remove(key);
+            this.localHeader.remove(key);
         }
     }
 
@@ -235,12 +215,21 @@ public class Stack implements INotifyClass {
      *              <br><br><b>Example :</b><br>
      *              <pre
      *              Stack stack = Contentstack.stack(context, "apiKey", "deliveryToken", "stag");<br>
-     *              stack.setHeader("custom_key", "custom_value");
+     *              stack.setHeader("key", "value");
      *              </pre>
      */
     public void setHeader(String key, String value) {
         if (!TextUtils.isEmpty(key) && !TextUtils.isEmpty(value)) {
-            localHeader.put(key, value);
+            this.localHeader.put(key, value);
+        }
+    }
+
+    public void setHeaders(@NotNull ArrayMap<String, String> headers) {
+        if (this.localHeader == null) {
+            this.localHeader = new ArrayMap<>();
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            headers.forEach((key, value) -> this.localHeader.put(key, value));
         }
     }
 
@@ -262,9 +251,6 @@ public class Stack implements INotifyClass {
      *  imageParams.put("height",100);
      *  imageUrl = Stack.ImageTransform(image_url, parameters);
      *  stack.ImageTransform(image_url, parameters);
-     *
-     *
-     *
      *  </pre>
      */
     public String ImageTransform(String image_url, LinkedHashMap<String, Object> parameters) {
@@ -275,17 +261,13 @@ public class Stack implements INotifyClass {
 
 
     private String getImageUrl() {
-
         if (imageParams == null || imageParams.size() == 0) {
             return imageTransformationUrl;
         }
-
         for (Map.Entry<String, Object> param : imageParams.entrySet()) {
             try {
-
                 String paramKey = param.getKey();
                 String paramValue = param.getValue().toString();
-
                 final String encodedKey = URLEncoder.encode(paramKey, "UTF-8");
                 final String encodedValue = URLEncoder.encode(paramValue, "UTF-8");
                 if (!imageTransformationUrl.contains("?")) {
@@ -293,12 +275,10 @@ public class Stack implements INotifyClass {
                 } else {
                     imageTransformationUrl += "&" + encodedKey + "=" + encodedValue;
                 }
-
             } catch (UnsupportedEncodingException e) {
-                Log.e(TAG, e.getLocalizedMessage());
+                Log.e(TAG, Objects.requireNonNull(e.getLocalizedMessage()));
             }
         }
-
         return imageTransformationUrl;
     }
 
@@ -307,36 +287,31 @@ public class Stack implements INotifyClass {
      * @param params   query parameters
      * @param callback ContentTypesCallback
      *                 This call returns comprehensive information of all the content types available in a particular stack in your account.
-     *
      *                 <br><br><b>Example :</b><br>
-     *                 <pre
-     *                 JSONObject params = new JSONObject();
-     *                 params.put("include_snippet_schema", true);
-     *                 params.put("limit", 3);
-     *                 stack.getContentTypes(params, new ContentTypesCallback() {
-     * @Override public void onCompletion(ContentTypesModel contentTypesModel, Error error) {
-     * if (error == null){
-     * // do your stuff.
-     * }
-     * }
-     * });
-     * </pre>
+     *                 <pre>
+     *                                                                                                                                                                                                                                                                                                                                                                                 JSONObject params = new JSONObject();
+     *                                                                                                                                                                                                                                                                                                                                                                                 params.put("include_snippet_schema", true);
+     *                                                                                                                                                                                                                                                                                                                                                                                 params.put("limit", 3);
+     *                                                                                                                                                                                                                                                                                                                                                                                 stack.getContentTypes(params, new ContentTypesCallback() {
+     *                                                                                                                                                                                                                                                                                                                                                                                 &#064;Override  public void onCompletion(ContentTypesModel contentTypesModel, Error error) {
+     *                                                                                                                                                                                                                                                                                                                                                                                 if (error == null){
+     *                                                                                                                                                                                                                                                                                                                                                                                 // do your stuff.
+     *                                                                                                                                                                                                                                                                                                                                                                                 }
+     *                                                                                                                                                                                                                                                                                                                                                                                 }
+     *                                                                                                                                                                                                                                                                                                                                                                                 });
+     *                                                                                                                                                                                                                                                                                                                                                                                 </pre>
      */
     public void getContentTypes(JSONObject params, final ContentTypesCallback callback) {
-
         try {
             String URL = "/" + this.VERSION + "/content_types";
-            ArrayMap<String, Object> headers = getHeader(localHeader);
+            ArrayMap<String, Object> headers = getHeader(this.localHeader);
             if (params == null) {
                 params = new JSONObject();
             }
             Iterator<String> keys = params.keys();
             while (keys.hasNext()) {
-                // loop to get the dynamic key
                 String key = (String) keys.next();
-                // get the value of the dynamic key
                 Object value = params.opt(key);
-                // do something here with the value...
                 params.put(key, value);
             }
 
@@ -344,24 +319,21 @@ public class Stack implements INotifyClass {
                 params.put("environment", headers.get("environment"));
                 params.put("include_count", true);
             }
-
             fetchContentTypes(URL, params, headers, null, callback);
 
         } catch (Exception e) {
 
             Error error = new Error();
-            error.setErrorMessage(CSAppConstants.ErrorMessage_JsonNotProper);
+            error.setErrorMessage(SDKConstant.PLEASE_PROVIDE_VALID_JSON);
             callback.onRequestFail(ResponseType.UNKNOWN, error);
         }
     }
 
 
     private void fetchContentTypes(String urlString, JSONObject urlQueries, ArrayMap<String, Object> headers, String cacheFilePath, ContentTypesCallback callback) {
-
         if (callback != null) {
-
             HashMap<String, Object> urlParams = getUrlParams(urlQueries);
-            new CSBackgroundTask(this, this, CSController.FETCHCONTENTTYPES, urlString, headers, urlParams, new JSONObject(), cacheFilePath, CSAppConstants.callController.CONTENTTYPES.toString(), false, CSAppConstants.RequestMethod.GET, callback);
+            new CSBackgroundTask(this, this, SDKController.GET_CONTENT_TYPES, urlString, headers, urlParams, new JSONObject(), cacheFilePath, SDKConstant.callController.CONTENT_TYPES.toString(), false, SDKConstant.RequestMethod.GET, callback);
         }
     }
 
@@ -376,65 +348,53 @@ public class Stack implements INotifyClass {
      *                     since this token is used to get subsequent delta updates later.
      *
      *                     <br><br><b>Example :</b><br>
-     *                     <pre class="prettyprint">
+     *                     <pre>
      *
-     *                                                                                                                                                                                                                                                                                                                                                                                                                                     stack.sync(SyncResultCallBack syncCallBack){  }
-     *
-     *                                                                                                                                                                                                                                                                                                                                                                                                                                     </pre>
+     *                                                                                                                                                                                                                                                                                                                                                                                                                                                         Stack stack = Contentstack.stack("apiKey", "deliveryToken", "environment");
+     *                                                                                                                                                                                                                                                                                                                                                                                                                                                         stack.syncPaginationToken(pagination_token, new SyncResultCallBack()) {}
+     *                                                                                                                                                                                                                                                                                                                                                                                                                                                         </pre>
      */
 
     public void sync(SyncResultCallBack syncCallBack) {
-
-        if (syncParams == null) {
-            syncParams = new JSONObject();
-        }
         try {
-            syncParams.put("init", true);
+            this.syncParams = new JSONObject();
+            this.syncParams.put("init", true);
         } catch (JSONException e) {
-            Log.e(TAG, e.getLocalizedMessage());
+            Log.e(TAG, Objects.requireNonNull(e.getLocalizedMessage()));
         }
-
         this.requestSync(syncCallBack);
-
     }
 
-
     /**
-     * @param pagination_token If the response is paginated, use the pagination token under this parameter.
-     * @param syncCallBack     returns callback for sync result
-     *                         <p>
-     *                         If the result of the initial sync (or subsequent sync) contains more than 100 records,
-     *                         the response would be paginated. It provides pagination token in the response. However,
-     *                         you do not have to use the pagination token manually to get the next batch,
-     *                         the SDK does that automatically until the sync is complete.
-     *                         Pagination token can be used in case you want to fetch only selected batches.
-     *                         It is especially useful if the sync process is interrupted midway (due to network issues, etc.).
-     *                         In such cases, this token can be used to restart the sync process from where it was interrupted.
+     * @param paginationToken If the response is paginated, use the pagination token under this parameter.
+     * @param syncCallBack    returns callback for sync result
+     *                        <p>
+     *                        If the result of the initial sync (or subsequent sync) contains more than 100 records,
+     *                        the response would be paginated. It provides pagination token in the response. However,
+     *                        you do not have to use the pagination token manually to get the next batch,
+     *                        the SDK does that automatically until the sync is complete.
+     *                        Pagination token can be used in case you want to fetch only selected batches.
+     *                        It is especially useful if the sync process is interrupted midway (due to network issues, etc.).
+     *                        In such cases, this token can be used to restart the sync process from where it was interrupted.
      *
-     *                         <br><br><b>Example :</b><br>
-     *                         <pre class="prettyprint">
-     *                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         stack.syncPaginationToken(pagination_token, new SyncResultCallBack()) {}
-     *                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         </pre>
+     *                        <code>
+     *                        Stack stack = Contentstack.stack("apiKey", "deliveryToken", "environment");
+     *                        stack.syncPaginationToken(pagination_token, new SyncResultCallBack()) {}
+     *                        </code>
+     *                        </pre>
      */
-    public void syncPaginationToken(String pagination_token, SyncResultCallBack syncCallBack) {
-        this.pagination_token = pagination_token;
-        if (syncParams == null) {
-            syncParams = new JSONObject();
-        }
-
+    public void syncPaginationToken(String paginationToken, SyncResultCallBack syncCallBack) {
         try {
-            syncParams.put("init", true);
-            syncParams.put("pagination_token", pagination_token);
+            this.syncParams = new JSONObject();
+            this.syncParams.put("pagination_token", paginationToken);
         } catch (JSONException e) {
-            Log.e(TAG, e.getLocalizedMessage());
+            Log.e(TAG, Objects.requireNonNull(e.getLocalizedMessage()));
         }
-
         this.requestSync(syncCallBack);
     }
 
-
     /**
-     * @param sync_token   Use the sync token that you received in the previous/initial sync under this parameter.
+     * @param syncToken    Use the sync token that you received in the previous/initial sync under this parameter.
      * @param syncCallBack returns callback for sync result
      *                     <p>
      *                     You can use the sync token (that you receive after initial sync) to get the updated content next time.
@@ -442,29 +402,20 @@ public class Stack implements INotifyClass {
      *                     and the details of the content that was deleted or updated.
      *                     <br><br><b>Example :</b><br>
      *                     <pre class="prettyprint">
-     *                                                                                                                                                                                                                                                                                                                                                                                                                                      stack.syncToken(sync_token, new SyncResultCallBack() ){ }
-     *
-     *                                                                                                                                                                                                                                                                                                                                                                                                                                     </pre>
+     *                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                </pre>
      */
-    public void syncToken(String sync_token, SyncResultCallBack syncCallBack) {
-
-        this.sync_token = sync_token;
-        if (syncParams == null) {
-            syncParams = new JSONObject();
-        }
+    public void syncToken(String syncToken, SyncResultCallBack syncCallBack) {
         try {
-            syncParams.put("init", true);
-            syncParams.put("sync_token", sync_token);
+            this.syncParams = new JSONObject();
+            this.syncParams.put("sync_token", syncToken);
         } catch (JSONException e) {
-            Log.e(TAG, e.getLocalizedMessage());
+            Log.e(TAG, Objects.requireNonNull(e.getLocalizedMessage()));
         }
-
         this.requestSync(syncCallBack);
     }
 
-
     /**
-     * @param from_date    Enter the start date for initial sync.
+     * @param fromDate     Enter the start date for initial sync.
      * @param syncCallBack Returns callback for sync result.
      *                     <p>
      *                     You can also initialize sync with entries published after a specific date. To do this, use syncWithDate
@@ -472,66 +423,48 @@ public class Stack implements INotifyClass {
      *
      *                     <br><br><b>Example :</b><br>
      *                     <pre class="prettyprint">
-     *                                                                                                                                                                                                                                                                                                                                                                                                                                    stack.syncFromDate(start_date, new SyncResultCallBack()) { }
-     *                                                                                                                                                                                                                                                                                                                                                                                                                                      </pre>
+     *                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        stack.syncFromDate(start_date, new SyncResultCallBack()) { }
+     *                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          </pre>
      */
-    public void syncFromDate(Date from_date, SyncResultCallBack syncCallBack) {
-        startFromDate = convertUTCToISO(from_date);
-        if (syncParams == null) {
-            syncParams = new JSONObject();
-        }
-
+    public void syncFromDate(Date fromDate, SyncResultCallBack syncCallBack) {
+        String startFromDate = convertUTCToISO(fromDate);
         try {
-            syncParams.put("init", true);
-            syncParams.put("start_from", startFromDate);
+            this.syncParams = new JSONObject();
+            this.syncParams.put("init", true);
+            this.syncParams.put("start_from", startFromDate);
         } catch (JSONException e) {
-            Log.e(TAG, e.getLocalizedMessage());
+            Log.e(TAG, Objects.requireNonNull(e.getLocalizedMessage()));
+        }
+        this.requestSync(syncCallBack);
+    }
+
+    /**
+     * @param contentType  Provide uid of your content_type
+     * @param syncCallBack Returns callback for sync result.
+     *                     <p>
+     *                     You can also initialize sync with entries of only specific content_type.
+     *                     To do this, use syncContentType and specify the content type uid as its value.
+     *                     However, if you do this, the subsequent syncs will only include the entries of the specified content_type.
+     *                     <p>
+     */
+    public void syncContentType(String contentType, SyncResultCallBack syncCallBack) {
+        try {
+            this.syncParams = new JSONObject();
+            this.syncParams.put("init", true);
+            this.syncParams.put("content_type_uid", contentType);
+        } catch (JSONException e) {
+            Log.e(TAG, Objects.requireNonNull(e.getLocalizedMessage()));
         }
         this.requestSync(syncCallBack);
     }
 
 
     private String convertUTCToISO(Date date) {
-
         TimeZone tz = TimeZone.getTimeZone("UTC");
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US);
         dateFormat.setTimeZone(tz);
         return dateFormat.format(date);
     }
-
-
-    /**
-     * @param content_type Provide uid of your content_type
-     * @param syncCallBack Returns callback for sync result.
-     *                     <p>
-     *                     You can also initialize sync with entries of only specific content_type.
-     *                     To do this, use syncContentType and specify the content type uid as its value.
-     *                     However, if you do this, the subsequent syncs will only include the entries of the specified content_type.
-     *
-     *                     <br><br><b>Example :</b><br>
-     *                     <pre class="prettyprint">
-     *
-     *                                                                                                                                                                                                                                                                                                                                                                                                                                     // dummy content_type like "session"
-     *                                                                                                                                                                                                                                                                                                                                                                                                                                     stack.syncContentType(String content_type, new SyncResultCallBack()){  }
-     *
-     *                                                                                                                                                                                                                                                                                                                                                                                                                                      </pre>
-     */
-    public void syncContentType(String content_type, SyncResultCallBack syncCallBack) {
-
-        this.contentType = content_type;
-        if (syncParams == null) {
-            syncParams = new JSONObject();
-        }
-        try {
-            syncParams.put("init", true);
-            syncParams.put("content_type_uid", contentType);
-        } catch (JSONException e) {
-            Log.e(TAG, e.getLocalizedMessage());
-        }
-
-        this.requestSync(syncCallBack);
-    }
-
 
     /**
      * @param language     Select the required locale from the Language class.
@@ -542,21 +475,16 @@ public class Stack implements INotifyClass {
      *                     </pre>
      */
     public void syncLocale(Language language, SyncResultCallBack syncCallBack) {
-        this.localeCode = getLanguageCode(language);
-
-        if (syncParams == null) {
-            syncParams = new JSONObject();
-        }
+        String localeCode = getLanguageCode(language);
         try {
-            syncParams.put("init", true);
-            syncParams.put("locale", localeCode);
+            this.syncParams = new JSONObject();
+            this.syncParams.put("init", true);
+            this.syncParams.put("locale", localeCode);
         } catch (JSONException e) {
-            Log.e(TAG, e.getLocalizedMessage());
+            Log.e(TAG, Objects.requireNonNull(e.getLocalizedMessage()));
         }
-
         this.requestSync(syncCallBack);
     }
-
 
     /**
      * @param localeCode   Provide locale code
@@ -567,14 +495,40 @@ public class Stack implements INotifyClass {
      *                     </pre>
      */
     public void syncLocale(@NotNull String localeCode, SyncResultCallBack syncCallBack) {
-        if (syncParams == null) {
-            syncParams = new JSONObject();
-        }
         try {
-            syncParams.put("init", true);
-            syncParams.put("locale", localeCode);
+            this.syncParams = new JSONObject();
+            this.syncParams.put("init", true);
+            this.syncParams.put("locale", localeCode);
         } catch (JSONException e) {
-            Log.e(TAG, e.getLocalizedMessage());
+            Log.e(TAG, Objects.requireNonNull(e.getLocalizedMessage()));
+        }
+
+        this.requestSync(syncCallBack);
+    }
+
+    /**
+     * @param type         - Use the type parameter to get a specific type of content
+     *                     like  ( asset_published, entry_published, asset_unpublished, asset_deleted, entry_unpublished, entry_deleted, content_type_deleted.)
+     * @param syncCallBack returns callback for sync result.
+     *                     <p>
+     *                     Use the type parameter to get a specific type of content. You can pass one of the following values:
+     *                     asset_published, entry_published, asset_unpublished, asset_deleted, entry_unpublished, entry_deleted,  content_type_deleted.
+     *                     If you do not specify any value, it will bring all published entries and published assets.
+     *                     <p>
+     *                     <code>
+     *                     stackInstance.syncPublishType(Stack.PublishType.ENTRY_PUBLISHED, new SyncResultCallBack()) { }
+     *                     </code>
+     *
+     *                     </pre>
+     */
+
+    public void syncPublishType(PublishType type, SyncResultCallBack syncCallBack) {
+        try {
+            this.syncParams = new JSONObject();
+            this.syncParams.put("init", true);
+            this.syncParams.put("type", type.toString().toLowerCase());
+        } catch (JSONException e) {
+            Log.e(TAG, Objects.requireNonNull(e.getLocalizedMessage()));
         }
 
         this.requestSync(syncCallBack);
@@ -593,41 +547,6 @@ public class Stack implements INotifyClass {
         return localeCode;
     }
 
-
-    /**
-     * @param type         - Use the type parameter to get a specific type of content
-     *                     like  ( asset_published, entry_published, asset_unpublished, asset_deleted, entry_unpublished, entry_deleted, content_type_deleted.)
-     * @param syncCallBack returns callback for sync result.
-     *                     <p>
-     *                     Use the type parameter to get a specific type of content. You can pass one of the following values:
-     *                     asset_published, entry_published, asset_unpublished, asset_deleted, entry_unpublished, entry_deleted,  content_type_deleted.
-     *                     If you do not specify any value, it will bring all published entries and published assets.
-     *
-     *                     <br><br><b>Example :</b><br>
-     *                     <pre class="prettyprint">
-     *
-     *                                                                                                                                                                                                                                                                                                                                                                                                                                       stackInstance.syncPublishType(Stack.PublishType.entry_published, new SyncResultCallBack()) { }
-     *
-     *                                                                                                                                                                                                                                                                                                                                                                                                                                      </pre>
-     */
-
-    public void syncPublishType(PublishType type, SyncResultCallBack syncCallBack) {
-        this.publishType = type;
-        if (syncParams == null) {
-            syncParams = new JSONObject();
-        }
-
-        try {
-            syncParams.put("init", true);
-            syncParams.put("type", publishType);
-        } catch (JSONException e) {
-            Log.e(TAG, e.getLocalizedMessage());
-        }
-
-        this.requestSync(syncCallBack);
-    }
-
-
     /**
      * @param contentType  the content type
      * @param fromDate     the from date
@@ -640,59 +559,51 @@ public class Stack implements INotifyClass {
      */
 
     public void sync(String contentType, Date fromDate, Language language, PublishType type, SyncResultCallBack syncCallBack) {
-        startFromDate = convertUTCToISO(fromDate);
-        this.contentType = contentType;
-        this.publishType = type;
-        this.localeCode = getLanguageCode(language);
+        String locale = getLanguageCode(language);
+        sync(contentType, fromDate, locale, type, syncCallBack);
+    }
 
-        if (syncParams == null) {
-            syncParams = new JSONObject();
-        }
+    public void sync(String contentType, Date fromDate, String locale, PublishType type, SyncResultCallBack syncCallBack) {
+        String startFromDate = convertUTCToISO(fromDate);
         try {
-            syncParams.put("init", true);
-            syncParams.put("start_from", this.startFromDate);
-            syncParams.put("content_type_uid", this.contentType);
-            syncParams.put("type", publishType);
-            syncParams.put("locale", this.localeCode);
+            this.syncParams = new JSONObject();
+            this.syncParams.put("init", true);
+            if (contentType != null && !contentType.isEmpty()) {
+                this.syncParams.put("content_type_uid", contentType);
+            }
+            if (!startFromDate.isEmpty()) {
+                this.syncParams.put("start_from", startFromDate);
+            }
+            if (locale != null && locale.isEmpty()) {
+                this.syncParams.put("locale", locale);
+            }
+            if (type != null && !type.toString().isEmpty()) {
+                this.syncParams.put("type", type.toString().toLowerCase());
+            }
         } catch (JSONException e) {
-            Log.e(TAG, e.getLocalizedMessage());
+            Log.e(TAG, Objects.requireNonNull(e.getLocalizedMessage()));
         }
         this.requestSync(syncCallBack);
     }
 
 
-    public void sync(String contentType, Date fromDate, String locale, PublishType type, SyncResultCallBack syncCallBack) {
-        startFromDate = convertUTCToISO(fromDate);
-        this.contentType = contentType;
-        this.publishType = type;
-        if (syncParams == null) {
-            syncParams = new JSONObject();
-        }
-        try {
-            syncParams.put("init", true);
-            syncParams.put("start_from", this.startFromDate);
-            syncParams.put("content_type_uid", this.contentType);
-            syncParams.put("type", publishType);
-            syncParams.put("locale", locale);
-        } catch (JSONException e) {
-            Log.e(TAG, e.getLocalizedMessage());
-        }
-        this.requestSync(syncCallBack);
+    /**
+     * The enum Publish type.
+     */
+    public enum PublishType {
+        ENTRY_PUBLISHED, ENTRY_UNPUBLISHED, ENTRY_DELETED, ASSET_PUBLISHED, ASSET_UNPUBLISHED, ASSET_DELETED, CONTENT_TYPE_DELETED
     }
 
 
     private void requestSync(final SyncResultCallBack callback) {
-
         try {
-            String URL = "/" + this.VERSION + "/stacks/" + SYNC_KEY;
-            ArrayMap<String, Object> headers = getHeader(localHeader);
-
-            JSONObject urlQueries = new JSONObject();
-            if (headers.containsKey("environment")) {
-                syncParams.put("environment", headers.get("environment"));
+            String URL = "/" + this.VERSION + "/stacks/sync";
+            ArrayMap<String, Object> headers = getHeader(this.localHeader);
+            if (headers.containsKey(SDKConstant.ENVIRONMENT)) {
+                this.syncParams.put(SDKConstant.ENVIRONMENT, headers.get(SDKConstant.ENVIRONMENT));
             }
-            urlQueries = syncParams;
-            fetchFromNetwork(URL, urlQueries, headers, null, new SyncResultCallBack() {
+
+            fetchFromNetwork(URL, this.syncParams, headers, null, new SyncResultCallBack() {
                 @Override
                 public void onCompletion(SyncStack syncStack, Error error) {
                     if (error == null) {
@@ -704,21 +615,18 @@ public class Stack implements INotifyClass {
                     callback.onCompletion(syncStack, error);
                 }
             });
-
-
         } catch (Exception e) {
             Error error = new Error();
-            error.setErrorMessage(CSAppConstants.ErrorMessage_JsonNotProper);
+            error.setErrorMessage(SDKConstant.PLEASE_PROVIDE_VALID_JSON);
             callback.onRequestFail(ResponseType.UNKNOWN, error);
         }
-
     }
 
 
     private void fetchFromNetwork(String urlString, JSONObject urlQueries, ArrayMap<String, Object> headers, String cacheFilePath, SyncResultCallBack callback) {
         if (callback != null) {
             HashMap<String, Object> urlParams = getUrlParams(urlQueries);
-            new CSBackgroundTask(this, this, CSController.FETCHSYNC, urlString, headers, urlParams, new JSONObject(), cacheFilePath, CSAppConstants.callController.SYNC.toString(), false, CSAppConstants.RequestMethod.GET, callback);
+            new CSBackgroundTask(this, this, SDKController.GET_SYNC, urlString, headers, urlParams, new JSONObject(), cacheFilePath, SDKConstant.callController.SYNC.toString(), false, SDKConstant.RequestMethod.GET, callback);
         }
     }
 
@@ -733,7 +641,7 @@ public class Stack implements INotifyClass {
                     Object value = urlQueriesJSON.opt(key);
                     hashMap.put(key, value);
                 } catch (Exception e) {
-                    CSAppUtils.showLog(TAG, e.getLocalizedMessage());
+                    SDKUtil.showLog(TAG, e.getLocalizedMessage());
                 }
             }
             return hashMap;
@@ -743,7 +651,7 @@ public class Stack implements INotifyClass {
 
 
     private ArrayMap<String, Object> getHeader(ArrayMap<String, Object> localHeader) {
-        ArrayMap<String, Object> mainHeader = headerGroup_app;
+        ArrayMap<String, Object> mainHeader = headerGroupApp;
         ArrayMap<String, Object> classHeaders = new ArrayMap<>();
         if (localHeader != null && localHeader.size() > 0) {
             if (mainHeader != null && mainHeader.size() > 0) {
@@ -762,7 +670,7 @@ public class Stack implements INotifyClass {
                 return localHeader;
             }
         } else {
-            return headerGroup_app;
+            return headerGroupApp;
         }
 
     }

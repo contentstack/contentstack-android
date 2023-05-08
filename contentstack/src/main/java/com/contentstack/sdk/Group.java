@@ -2,8 +2,6 @@ package com.contentstack.sdk;
 
 import android.text.TextUtils;
 
-import com.contentstack.sdk.utilities.CSAppUtils;
-import com.contentstack.sdk.utilities.ContentstackUtil;
 import com.contentstack.txtmark.Configuration;
 import com.contentstack.txtmark.Processor;
 
@@ -64,7 +62,7 @@ public class Group {
                 return null;
             }
         } catch (Exception e) {
-            CSAppUtils.showLog(TAG, "-----------------get|" + e);
+            SDKUtil.showLog(TAG, "-----------------get|" + e);
             return null;
         }
     }
@@ -84,7 +82,7 @@ public class Group {
         try {
             return Processor.process(getString(markdownKey), Configuration.builder().forceExtentedProfile().build());
         } catch (Exception e) {
-            CSAppUtils.showLog(TAG, "-----------------getHtmlText|" + e);
+            SDKUtil.showLog(TAG, "-----------------getHtmlText|" + e);
             return null;
         }
     }
@@ -111,7 +109,7 @@ public class Group {
 
             return multipleHtmlStrings;
         } catch (Exception e) {
-            CSAppUtils.showLog(TAG, e.getLocalizedMessage());
+            SDKUtil.showLog(TAG, e.getLocalizedMessage());
             return null;
         }
     }
@@ -320,9 +318,9 @@ public class Group {
 
         try {
             String value = getString(key);
-            return ContentstackUtil.parseDate(value, null);
+            return CSUtil.parseDate(value, null);
         } catch (Exception e) {
-            CSAppUtils.showLog(TAG, "-----------------getDate|" + e);
+            SDKUtil.showLog(TAG, "-----------------getDate|" + e);
         }
         return null;
     }
@@ -469,7 +467,7 @@ public class Group {
                             entryInstance = stackInstance.contentType(refContentType).entry();
                         } catch (Exception e) {
                             entryInstance = new Entry(refContentType);
-                            CSAppUtils.showLog("BuiltObject", e.getLocalizedMessage());
+                            SDKUtil.showLog("BuiltObject", e.getLocalizedMessage());
                         }
                         entryInstance.setUid(model.entryUid);
                         entryInstance.ownerEmailId = model.ownerEmailId;
@@ -489,7 +487,7 @@ public class Group {
                 }
             }
         } catch (Exception e) {
-            CSAppUtils.showLog(TAG, e.getLocalizedMessage());
+            SDKUtil.showLog(TAG, e.getLocalizedMessage());
             return null;
         }
 

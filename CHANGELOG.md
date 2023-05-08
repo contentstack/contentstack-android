@@ -1,5 +1,18 @@
 ﻿# CHANGELOG
 
+## Version 3.12.0
+
+### Date: 02-May-2023
+
+- Added support for include metadata in asset, entry and query class
+- Added support of Region for Azure-EU
+- General code and API document improvements
+- Breaking changes : PublishType Enums are updated to all CAPS
+- Kotlin support removed due to build issue
+- EntryModel publish_details parsing issue fixed #30
+
+---
+
 ## Version 3.11.0
 
 ### Date: 08-Feb-2023
@@ -131,15 +144,8 @@ Below two support from the Config class has been removed permanently
 Change:
 
 - Removed support for unsafe (HTTP) request.
-- Below two breaking changes from Config class has been deprecated
-
-```java
-@Deprecated
-public void setSSL(boolean isSSL)setSSL()
-
-@Deprecated
-public boolean isSSL()
-```
+- Deprecated setSSL(boolean isSSL)setSSL() from config class
+- Deprecated isSSL() from config class
 
 ---
 
@@ -172,11 +178,11 @@ Added below function support for sync in Stack class
 New Features:
 
 - Entry
-  - added method ‘addParam’
+    - added method ‘addParam’
 - Query
-  - added method 'addParam'
+    - added method 'addParam'
 - Asset
-  - added method ‘addParam'
+    - added method ‘addParam'
 
 ---
 
@@ -187,21 +193,21 @@ New Features:
 New Features:
 
 - Stack
-  - added method 'ImageTransform'
+    - added method 'ImageTransform'
 - Query
-  - added method 'includeContentType'
+    - added method 'includeContentType'
 - QueryResult
-  - added method 'content_type'
+    - added method 'content_type'
 - API Modifications:
-  - None
+    - None
 
 API deprecation:
 
 - Query
-  - Deprecated method 'includeSchema'
+    - Deprecated method 'includeSchema'
 
 - Bug Fixes:
-  - None
+    - None
 
 ---
 
@@ -210,18 +216,18 @@ API deprecation:
 ### Date: 28-July-2017
 
 - New Features:
-  - None
+    - None
 
 - API Modifications:
-  - None
+    - None
 
 API deprecation:
 
 None
 
 - Bug Fixes:
-  - Cache Policy bug fixed.
-  - Cache Policy timeout increased.
+    - Cache Policy bug fixed.
+    - Cache Policy timeout increased.
 
 ---
 
@@ -234,15 +240,18 @@ New Features:
 - None
 
 API Modifications:
-    - None
+
+- None
 
 API deprecation:
-    - Asset
+
+- Asset
 
 1] Removed getPublishDetails() method. Entry 1] Removed getPublishDetails() method.
 
 Bug Fixes:
-    - None.
+
+- None.
 
 ---
 
@@ -251,10 +260,12 @@ Bug Fixes:
 ### Date: 17-May-2017
 
 New Features:
-    - None
+
+- None
 
 API Modifications:
-    - None
+
+- None
 
 API deprecation:
 
@@ -275,16 +286,16 @@ New Features:
 Added new class Group
 
 Entry
-     1] Added getAllEntries(String refKey, String refContentType) method.
-     2] Added getGroups(String key) method.
-     3] Added getGroup(String key) method.
+1] Added getAllEntries(String refKey, String refContentType) method.
+2] Added getGroups(String key) method.
+3] Added getGroup(String key) method.
 
 Asset
-     1] Added setCachePolicy(CachePolicy policy) method.
-     2] Added getTags() method.
+1] Added setCachePolicy(CachePolicy policy) method.
+2] Added getTags() method.
 
 AssetLibrary
-     1] Added setCachePolicy(CachePolicy policy) method.
+1] Added setCachePolicy(CachePolicy policy) method.
 
 API Modifications:
 
@@ -320,7 +331,7 @@ environment, Config config) method.
 Stack 1] Added asset() method. 2] Added assetLibrary() method.
 
 Entry
-     1] Added getPublishDetails() method.
+1] Added getPublishDetails() method.
 
 API Modifications:
 
@@ -332,20 +343,20 @@ Conetntstack 1] Removed stack(Context context, String stackApiKey, String access
 environment, boolean isEnvironmentUid) method.
 
 Stack
-     1] Removed setVersion(String version) method.
-     2] Removed setURL(String hostName, boolean isSSL) method.
-     3] Removed setEnvironment(String environment, boolean isEnvironmentUid) method.
-     4] Removed isEnvironmentUid() method.
-     5] Removed getEnvironment() method.
-     6] Removed getVersion() method.
-     7] Removed getURL() method
+1] Removed setVersion(String version) method.
+2] Removed setURL(String hostName, boolean isSSL) method.
+3] Removed setEnvironment(String environment, boolean isEnvironmentUid) method.
+4] Removed isEnvironmentUid() method.
+5] Removed getEnvironment() method.
+6] Removed getVersion() method.
+7] Removed getURL() method
 
 Entry
-     1] Removed getMetadata() method.
+1] Removed getMetadata() method.
 
 Query
-     1] Removed afterUid() method.
-     2] Removed beforeUid() method.
+1] Removed afterUid() method.
+2] Removed beforeUid() method.
 
 Bug Fixes:
 
@@ -379,17 +390,20 @@ Fixed API calls issue for Android 7.0 Nougat.
 ### Date: 22-September-2016
 
 New Features:
-    - None
-API Modifications:
-    - None
+
+- None
+  API Modifications:
+- None
 
 API deprecation:
-    - None
+
+- None
 
 Bug Fixes:
-    - Query 1] Fixed search method issue causing improper result.
-    - Entry 1] Fixed includeReference method issue causing improper result. 2] Fixed fetch method which
-now return response as per environment.
+
+- Query 1] Fixed search method issue causing improper result.
+- Entry 1] Fixed includeReference method issue causing improper result. 2] Fixed fetch method which
+  now return response as per environment.
 
 ---
 
