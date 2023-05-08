@@ -21,11 +21,11 @@ nexusPublishing {
             password = ossrhPassword
             nexusUrl.set(uri("https://oss.sonatype.org/service/local/"))
             snapshotRepositoryUrl.set(uri("https://oss.sonatype.org/content/repositories/snapshots/"))
-//            if (project.version.endsWith('-SNAPSHOT')) {
-//                snapshotRepositoryUrl.set(uri("https://oss.sonatype.org/content/repositories/snapshots"))
-//            } else {
-//                nexusUrl.set(uri("https://oss.sonatype.org/service/local/"))
-//            }
+            if (project.version.endsWith('-SNAPSHOT')) {
+                snapshotRepositoryUrl.set(uri("https://oss.sonatype.org/content/repositories/snapshots"))
+            } else {
+                nexusUrl.set(uri("https://oss.sonatype.org/service/local/"))
+            }
         }
     }
 }
