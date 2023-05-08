@@ -17,29 +17,6 @@ android {
     buildTypes {
         def localProperties = new Properties()
         localProperties.load(new FileInputStream(rootProject.file("local.properties")))
-        debug {
-            debuggable true
-            testCoverageEnabled true
-            buildConfigField "String", "host", localProperties['host']
-            buildConfigField "String", "APIKey", localProperties['APIKey']
-            buildConfigField "String", "deliveryToken", localProperties['deliveryToken']
-            buildConfigField "String", "environment", localProperties['env']
-            buildConfigField "String", "contentTypeUID", localProperties['contentType']
-            buildConfigField "String", "assetUID", localProperties['assetUid']
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
-        release {
-            debuggable false
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            buildConfigField "String", "host", localProperties['host']
-            buildConfigField "String", "APIKey", localProperties['APIKey']
-            buildConfigField "String", "deliveryToken", localProperties['deliveryToken']
-            buildConfigField "String", "environment", localProperties['env']
-            buildConfigField "String", "contentTypeUID", localProperties['contentType']
-            buildConfigField "String", "assetUID", localProperties['assetUid']
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
