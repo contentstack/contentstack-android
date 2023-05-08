@@ -6,6 +6,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Objects;
+
 public class ContentTypesModel {
 
     private JSONObject responseJSON = new JSONObject();
@@ -20,7 +22,7 @@ public class ContentTypesModel {
                 try {
                     this.responseJSON = responseJSON.getJSONObject("content_type");
                 } catch (JSONException e) {
-                    Log.e(TAG, e.getLocalizedMessage());
+                    Log.e(TAG, Objects.requireNonNull(e.getLocalizedMessage()));
                 }
             }
 
@@ -28,7 +30,7 @@ public class ContentTypesModel {
                 try {
                     this.responseJSONArray = responseJSON.getJSONArray("content_types");
                 } catch (JSONException e) {
-                    Log.e(TAG, e.getLocalizedMessage());
+                    Log.e(TAG, Objects.requireNonNull(e.getLocalizedMessage()));
                 }
             }
 

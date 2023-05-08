@@ -1,7 +1,5 @@
 package com.contentstack.sdk;
 
-import com.contentstack.sdk.utilities.CSAppUtils;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -37,7 +35,7 @@ class EntriesModel {
                 }
             }
         } catch (Exception localException) {
-            CSAppUtils.showLog("EntriesModel", "Parsing Error" + localException);
+            SDKUtil.showLog("EntriesModel", "Parsing Error" + localException);
         }
 
     }

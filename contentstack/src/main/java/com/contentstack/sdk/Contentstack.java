@@ -1,79 +1,56 @@
 package com.contentstack.sdk;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.Context;
-import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.os.SystemClock;
 import android.text.TextUtils;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
-import com.contentstack.sdk.utilities.CSAppConstants;
-import com.contentstack.sdk.utilities.CSAppUtils;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 
 /**
- * Contains all Contentstack API classes and functions.
+ * Contains all Contentstack SDK Classes And Methods.
  *
- * @author contentstack.com, Inc
+ * @author ishaileshmishra
  */
 public class Contentstack {
 
-    private static final String TAG = "Contentstack";
+    private static final String TAG = Contentstack.class.getSimpleName();
+    /**
+     * The constant requestQueue.
+     */
     protected static RequestQueue requestQueue;
-    private static Contentstack instance;
-    protected static Context context = null;
 
-    private Contentstack() {
+    private static Context ctx;
+    private static Contentstack instance;
+
+    private Contentstack(Context context) {
         throw new IllegalStateException("Private constructor not allowed");
     }
 
-    public Contentstack(Context applicationContext) {
-        context = applicationContext;
-    }
-
     /**
      * Authenticates the stack api key of your stack.
      * This must be called before your stack uses Contentstack sdk.
      * <br>
      * You can find your stack api key from web.
      *
-     * @param context     application context.
-     * @param stackApiKey application api Key of your application on Contentstack.
-     * @param accessToken access token
-     * @param environment environment name
-     * @return {@link Stack} instance.
-     *
-     *
-     * <br><br><b>Example :</b><br>
-     * <pre class="prettyprint">
-     * Stack stack = Contentstack.stack(context, "apiKey", "deliveryToken", "stag");
-     * </pre>
+     * @param context       application context.
+     * @param apiKey        The api Key of your stack on Contentstack.
+     * @param deliveryToken The Delivery Token for the stack
+     * @param environment   environment name
+     * @return {@link Stack} instance. <br><br><b>Example :</b><br> <pre class="prettyprint"> Stack stack = Contentstack.stack(context, "apiKey", "deliveryToken", "stag"); </pre>
+     * @throws Exception the exception
      */
-    public static Stack stack(Context context, String stackApiKey, String accessToken, String environment) throws Exception {
-        if (context != null) {
-            if (!TextUtils.isEmpty(stackApiKey)) {
-                if (!TextUtils.isEmpty(accessToken)) {
-                    if (!TextUtils.isEmpty(environment)) {
-                        Config config = new Config();
-                        config.setEnvironment(environment);
-                        return initializeStack(context, stackApiKey, accessToken, config);
-                    } else {
-                        throw new Exception(CSAppConstants.ErrorMessage_Stack_Environment_IsNull);
-                    }
-                } else {
-                    throw new Exception(CSAppConstants.ErrorMessage_Stack_AccessToken_IsNull);
-                }
-            } else {
-                throw new Exception(CSAppConstants.ErrorMessage_StackApiKeyIsNull);
-            }
+    public static Stack stack(@NotNull Context context, @NotNull String apiKey, @NotNull String deliveryToken, @NotNull String environment) throws Exception {
+        if (!TextUtils.isEmpty(apiKey) || !TextUtils.isEmpty(deliveryToken) || !TextUtils.isEmpty(environment)) {
+            Config config = new Config();
+            config.setEnvironment(environment);
+            return initializeStack(context, apiKey, deliveryToken, config);
         } else {
-            throw new Exception(CSAppConstants.ErrorMessage_StackContextIsNull);
+            throw new Exception(SDKConstant.EMPTY_CREDENTIALS_NOT_ALLOWED);
         }
     }
 
@@ -83,136 +60,101 @@ public class Contentstack {
      * <br>
      * You can find your stack api key from web.
      *
-     * @param context     application context.
-     * @param stackApiKey application api Key of your application on Contentstack.
-     * @param accessToken access token
-     * @param config      {@link Config} instance to set environment and other configuration details.
-     * @return {@link Stack} instance.
-     *
-     *
-     * <br><br><b>Example :</b><br>
-     * <pre class="prettyprint">
-     * Config config = new Config();
-     * config.setEnvironment("stag");
-     * Stack stack = Contentstack.stack(context, "apiKey", "delierytoken", config);
+     * @param context       application context.
+     * @param apiKey        The api Key of your stack on Contentstack.
+     * @param deliveryToken The delivery token for the stack on Contentstack
+     * @param environment   the environment
+     * @param config        {@link Config} instance to set environment and other configuration details.
+     * @return {@link Stack} instance. <br><br><b>Example :</b><br> <pre class="prettyprint"> Config config = new Config(); config.setEnvironment("stag"); Stack stack = Contentstack.stack(context, "apiKey", "deliveryToken", config);
+     * @throws Exception the exception
      */
-
-
-    public static Stack stack(Context context, String stackApiKey, String accessToken,
-                              String environment, Config config) throws Exception {
-        if (context != null) {
-            if (!TextUtils.isEmpty(stackApiKey)) {
-                if (!TextUtils.isEmpty(accessToken)) {
-                    if (!TextUtils.isEmpty(environment)) {
-
-                        if (config != null) {
-                            config.setEnvironment(environment);
-                        } else {
-                            config = new Config();
-                            config.setEnvironment(environment);
-                        }
-                        return initializeStack(context, stackApiKey, accessToken, config);
-                    } else {
-                        throw new Exception(CSAppConstants.ErrorMessage_Stack_Environment_IsNull);
-                    }
-                } else {
-                    throw new Exception(CSAppConstants.ErrorMessage_Stack_AccessToken_IsNull);
-                }
-            } else {
-                throw new Exception(CSAppConstants.ErrorMessage_StackApiKeyIsNull);
-            }
+    public static Stack stack(@NotNull Context context, @NotNull String apiKey, @NotNull String deliveryToken, @NotNull String environment, @NotNull Config config) throws Exception {
+        if (!TextUtils.isEmpty(apiKey) || !TextUtils.isEmpty(deliveryToken) || !TextUtils.isEmpty(environment)) {
+            config = new Config();
+            config.setEnvironment(environment);
+            return initializeStack(context, apiKey, deliveryToken, config);
         } else {
-            throw new Exception(CSAppConstants.ErrorMessage_StackContextIsNull);
+            throw new Exception(SDKConstant.EMPTY_CREDENTIALS_NOT_ALLOWED);
         }
     }
 
 
-    private static Stack initializeStack(Context mContext, String stackApiKey, String accessToken, Config config) {
-        Stack stack = new Stack(stackApiKey.trim());
-        stack.setHeader("api_key", stackApiKey);
-        stack.setHeader("access_token", accessToken);
-        context = mContext;
+    private static Stack initializeStack(Context appContext, String apiKey, String deliveryToken, Config config) {
+        Stack stack = new Stack(apiKey.trim());
+        stack.setHeader("api_key", apiKey);
+        stack.setHeader("access_token", deliveryToken);
         stack.setConfig(config);
-
-        if (context != null) {
-            try {
-                File queryCacheFile = context.getDir("ContentstackCache", 0);
-                CSAppConstants.cacheFolderName = queryCacheFile.getPath();
-                clearCache(context);
-            } catch (Exception e) {
-                CSAppUtils.showLog(TAG, "Contentstack-" + e.getLocalizedMessage());
-            }
+        try {
+            ctx = appContext;
+            File queryCacheFile = appContext.getDir(SDKConstant.CACHE, 0);
+            SDKConstant.cacheFolderName = queryCacheFile.getPath();
+            SDKUtil.clearCache(appContext);
+        } catch (Exception e) {
+            SDKUtil.showLog(TAG, SDKConstant.CACHE + e.getLocalizedMessage());
         }
         return stack;
     }
 
-
-    /********************************************************************************************************
+    /**
+     * Gets instance.
      *
-     * // Private Functionality
-     *
-     ********************************************************************************************************/
-
-
-    public static synchronized Contentstack getInstance(Context context) {
+     * @param context the context
+     * @return the instance
+     */
+    protected static synchronized Contentstack getInstance(Context context) {
         if (instance == null) {
             instance = new Contentstack(context);
         }
         return instance;
     }
 
-    public RequestQueue getRequestQueue() {
+    /**
+     * Gets request queue.
+     *
+     * @return the request queue
+     */
+    protected RequestQueue getRequestQueue() {
         if (requestQueue == null) {
-            // getApplicationContext() is key, it keeps you from leaking the
-            // Activity or BroadcastReceiver if someone passes one in.
-            requestQueue = Volley.newRequestQueue(context);
+            requestQueue = Volley.newRequestQueue(ctx);
         }
         return requestQueue;
     }
 
-    public <T> void addToRequestQueue(Request<T> req) {
+    /**
+     * Add to request queue.
+     *
+     * @param <T> the type parameter
+     * @param req the req
+     */
+    protected <T> void addToRequestQueue(Request<T> req) {
         getRequestQueue().add(req);
     }
 
+    /**
+     * Gets request queue.
+     *
+     * @param protocol the protocol
+     * @return the request queue
+     */
     protected static RequestQueue getRequestQueue(String protocol) {
         if (requestQueue == null) {
-            requestQueue = Volley.newRequestQueue(context);
+            requestQueue = Volley.newRequestQueue(ctx);
         }
         return requestQueue;
     }
 
+    /**
+     * Add to request queue.
+     *
+     * @param <T>      the type parameter
+     * @param protocol the protocol
+     * @param req      the req
+     * @param tag      the tag
+     */
     protected static <T> void addToRequestQueue(String protocol, Request<T> req, String tag) {
-        // set the default tag if tag is empty
         req.setTag(TextUtils.isEmpty(tag) ? TAG : tag);
         getRequestQueue(protocol).add(req);
     }
 
-    /**
-     * To start schedule for clearing cache.
-     *
-     * @param context application context.
-     */
 
-    private static void clearCache(Context context) {
-        Intent alarmIntent = new Intent("StartContentStackClearingCache");
-        alarmIntent.setPackage(context.getPackageName());
-        int flag = PendingIntent.FLAG_UPDATE_CURRENT;
-        if (android.os.Build.VERSION.SDK_INT >= 23) flag = PendingIntent.FLAG_IMMUTABLE | flag;
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, alarmIntent, flag);
-        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                SystemClock.elapsedRealtime(), AlarmManager.INTERVAL_DAY, pendingIntent);
-    }
-
-    /**
-     * To check network availability.
-     */
-    protected static void isNetworkAvailable(Context context) {
-        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        if (connectivityManager.getNetworkInfo(0) != null || connectivityManager.getNetworkInfo(1).getState() != null) {
-            CSAppConstants.isNetworkAvailable = connectivityManager.getActiveNetworkInfo() != null;
-        } else
-            CSAppConstants.isNetworkAvailable = connectivityManager.getNetworkInfo(0).getState() == NetworkInfo.State.CONNECTED ||
-                    connectivityManager.getNetworkInfo(1).getState() == NetworkInfo.State.CONNECTED;
-    }
 }
