@@ -2,13 +2,13 @@
 
 ## Version 3.12.0
 
-### Date: 02-May-2023
+### Date: 10-May-2023
 
 - Added support for include metadata in asset, entry and query class
 - Added support of Region for Azure-EU
 - General code and API document improvements
 - Breaking changes : PublishType Enums are updated to all CAPS
-- Kotlin support removed due to build issue
+- release version debug to release build type
 - EntryModel publish_details parsing issue fixed #30
 
 ---
