@@ -2,27 +2,17 @@ package com.contentstack.sdk;
 
 import android.text.TextUtils;
 
-import com.contentstack.sdk.utilities.CSAppConstants;
-
 /**
  * Set Configuration for stack instance creation.
  *
  * @author contentstack.com, Inc
  */
 public class Config {
-
-    protected String URLSCHEMA = "https://";
+    protected String PROTOCOL = "https://";
     protected String URL = "cdn.contentstack.io";
     protected String VERSION = "v3";
     protected String environment = null;
     protected ContentstackRegion region = ContentstackRegion.US;
-
-    public enum ContentstackRegion {US, EU, AZURE_NA}
-
-
-    public ContentstackRegion getRegion() {
-        return this.region;
-    }
 
     /**
      * Sets region allow you to set your region for the Contentstack server.
@@ -30,16 +20,25 @@ public class Config {
      * @param region <p>
      *               <b>Note:</b> Default region sets to us </a>
      *
-     *               <br><br><b>Example :</b><br>
+     *               <br><br><b>Example For Different Regions:</b><br>
      *               <pre class="prettyprint">
-     *                                                                                                   config.setRegion(ContentstackRegion.US);
-     *                                                                                                   </pre>
+     *               config.setRegion(ContentstackRegion.US);
+     *               config.setRegion(ContentstackRegion.EU);
+     *               config.setRegion(ContentstackRegion.AZURE_EU);
+     *               config.setRegion(ContentstackRegion.AZURE_NA);
+     *            </pre>
      */
-
     public ContentstackRegion setRegion(ContentstackRegion region) {
         this.region = region;
         return this.region;
     }
+
+
+    public ContentstackRegion getRegion() {
+        return this.region;
+    }
+
+    public enum ContentstackRegion {US, EU, AZURE_NA, AZURE_EU}
 
     /**
      * Config constructor
@@ -49,7 +48,6 @@ public class Config {
      * Config config = new Config();
      * </pre>
      */
-
     public Config() {
     }
 
@@ -57,7 +55,6 @@ public class Config {
      * Sets host name of the Contentstack server.
      *
      * @param hostName host name.
-     *
      *                 <p>
      *                 <b>Note:</b> Default hostname sets to <a href ="https://cdn.contentstack.io"> cdn.contentstack.io </a>
      *                 and default protocol is HTTPS.
@@ -75,8 +72,7 @@ public class Config {
 
 
     /**
-     * Get URL.
-     *
+     * Get Host.
      *
      * <br><br><b>Example :</b><br>
      * <pre

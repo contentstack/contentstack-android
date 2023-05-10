@@ -4,10 +4,6 @@ import android.text.TextUtils;
 import android.util.ArrayMap;
 import android.util.Log;
 
-import com.contentstack.sdk.utilities.CSAppConstants;
-import com.contentstack.sdk.utilities.CSAppUtils;
-import com.contentstack.sdk.utilities.CSController;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -17,6 +13,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * AssetLibrary class to fetch all files details on Conentstack server.
@@ -25,7 +22,7 @@ import java.util.Map;
  */
 public class AssetLibrary implements INotifyClass {
 
-    private final static String TAG = "AssetLibrary";
+    private final static String TAG = AssetLibrary.class.getSimpleName();
     private Stack stackInstance;
     private ArrayMap<String, Object> stackHeader;
     private ArrayMap<String, Object> localHeader;
@@ -34,7 +31,7 @@ public class AssetLibrary implements INotifyClass {
     private int count;
     private static CachePolicy cachePolicyForCall = CachePolicy.IGNORE_CACHE;
     private long maxCacheTimeForCall = 0;
-    private long defaultCacheTimeInterval = 0;
+    private final long defaultCacheTimeInterval = 0;
 
     /**
      * Sorting order enum for {@link AssetLibrary}.
@@ -119,7 +116,7 @@ public class AssetLibrary implements INotifyClass {
                     break;
             }
         } catch (Exception e) {
-            throwException("sort", CSAppConstants.ErrorMessage_QueryFilterException, e);
+            throwException("sort", SDKConstant.PROVIDE_VALID_PARAMS, e);
         }
 
         return this;
@@ -140,7 +137,7 @@ public class AssetLibrary implements INotifyClass {
         try {
             urlQueries.put("include_count", "true");
         } catch (Exception e) {
-            throwException("includeCount", CSAppConstants.ErrorMessage_QueryFilterException, e);
+            throwException("includeCount", SDKConstant.PROVIDE_VALID_PARAMS, e);
         }
         return this;
     }
@@ -160,7 +157,7 @@ public class AssetLibrary implements INotifyClass {
         try {
             urlQueries.put("relative_urls", "true");
         } catch (Exception e) {
-            throwException("relative_urls", CSAppConstants.ErrorMessage_QueryFilterException, e);
+            throwException("relative_urls", SDKConstant.PROVIDE_VALID_PARAMS, e);
         }
         return this;
     }
@@ -218,8 +215,8 @@ public class AssetLibrary implements INotifyClass {
                 urlQueries.put("environment", headers.get("environment"));
             }
             String mainStringForMD5 = URL + new JSONObject().toString() + headers.toString();
-            String md5Value = new CSAppUtils().getMD5FromString(mainStringForMD5.trim());
-            File cacheFile = new File(CSAppConstants.cacheFolderName + File.separator + md5Value);
+            String md5Value = new SDKUtil().getMD5FromString(mainStringForMD5.trim());
+            File cacheFile = new File(SDKConstant.cacheFolderName + File.separator + md5Value);
             switch (cachePolicyForCall) {
                 case IGNORE_CACHE:
                     fetchFromNetwork(URL, urlQueries, headers, cacheFile.getPath(), assetsCallback);
@@ -233,7 +230,7 @@ public class AssetLibrary implements INotifyClass {
                 case CACHE_ELSE_NETWORK:
                     if (cacheFile.exists()) {
                         boolean needToSendCall = false;
-                        needToSendCall = new CSAppUtils().getResponseTimeFromCacheFile(cacheFile, (int) maxCacheTimeForCall);
+                        needToSendCall = new SDKUtil().getResponseTimeFromCacheFile(cacheFile, (int) maxCacheTimeForCall);
                         if (needToSendCall) {
                             fetchFromNetwork(URL, urlQueries, headers, cacheFile.getPath(), assetsCallback);
                         } else {
@@ -250,7 +247,7 @@ public class AssetLibrary implements INotifyClass {
                     fetchFromNetwork(URL, urlQueries, headers, cacheFile.getPath(), assetsCallback);
                     break;
                 case NETWORK_ELSE_CACHE:
-                    if (CSAppConstants.isNetworkAvailable) {
+                    if (SDKConstant.IS_NETWORK_AVAILABLE) {
                         fetchFromNetwork(URL, urlQueries, headers, cacheFile.getPath(), assetsCallback);
                     } else {
                         fetchFromCache(cacheFile, assetsCallback);
@@ -259,14 +256,14 @@ public class AssetLibrary implements INotifyClass {
             }
 
         } catch (Exception e) {
-            CSAppUtils.showLog(TAG, e.toString());
+            SDKUtil.showLog(TAG, e.toString());
         }
     }
 
     private void fetchFromNetwork(String URL, JSONObject urlQueries, ArrayMap<String, Object> headers, String cacheFilePath, FetchAssetsCallback callback) {
         if (callback != null) {
             HashMap<String, Object> urlParams = getUrlParams(urlQueries);
-            new CSBackgroundTask(this, stackInstance, CSController.FETCHALLASSETS, URL, headers, urlParams, new JSONObject(), cacheFilePath, CSAppConstants.callController.ASSETLIBRARY.toString(), false, CSAppConstants.RequestMethod.GET, assetsCallback);
+            new CSBackgroundTask(this, stackInstance, SDKController.GET_ALL_ASSETS, URL, headers, urlParams, new JSONObject(), cacheFilePath, SDKConstant.callController.ASSET_LIBRARY.toString(), false, SDKConstant.RequestMethod.GET, assetsCallback);
         }
     }
 
@@ -274,16 +271,16 @@ public class AssetLibrary implements INotifyClass {
         Error error = null;
         if (cacheFile.exists()) {
             boolean needToSendCall = false;
-            needToSendCall = new CSAppUtils().getResponseTimeFromCacheFile(cacheFile, (int) maxCacheTimeForCall);
+            needToSendCall = new SDKUtil().getResponseTimeFromCacheFile(cacheFile, (int) maxCacheTimeForCall);
             if (needToSendCall) {
                 error = new Error();
-                error.setErrorMessage(CSAppConstants.ErrorMessage_EntryNotFoundInCache);
+                error.setErrorMessage(SDKConstant.ENTRY_IS_NOT_PRESENT_IN_CACHE);
             } else {
                 setCacheModel(cacheFile, callback);
             }
         } else {
             error = new Error();
-            error.setErrorMessage(CSAppConstants.ErrorMessage_EntryNotFoundInCache);
+            error.setErrorMessage(SDKConstant.ENTRY_IS_NOT_PRESENT_IN_CACHE);
         }
 
         if (callback != null && error != null) {
@@ -294,7 +291,7 @@ public class AssetLibrary implements INotifyClass {
     //Asset modeling from cache.
     private void setCacheModel(File cacheFile, FetchAssetsCallback callback) {
 
-        AssetsModel assetsModel = new AssetsModel(CSAppUtils.getJsonFromCacheFile(cacheFile), true);
+        AssetsModel assetsModel = new AssetsModel(SDKUtil.getJsonFromCacheFile(cacheFile), true);
         List<Object> objectList = assetsModel.objects;
         assetsModel = null;
         count = objectList.size();
@@ -334,7 +331,7 @@ public class AssetLibrary implements INotifyClass {
                     Object value = urlQueriesJSON.opt(key);
                     hashMap.put(key, value);
                 } catch (Exception e) {
-                    CSAppUtils.showLog(TAG, e.toString());
+                    SDKUtil.showLog(TAG, e.toString());
                 }
             }
 
@@ -352,6 +349,7 @@ public class AssetLibrary implements INotifyClass {
         }
         if (e != null) {
             error.setErrorMessage(e.getLocalizedMessage());
+            assert messageString != null;
             Log.d(tag, messageString);
         }
     }
@@ -434,8 +432,23 @@ public class AssetLibrary implements INotifyClass {
         try {
             urlQueries.put("include_fallback", true);
         } catch (JSONException e) {
-            Log.d("AssetLibrary", e.getLocalizedMessage());
+            Log.d("AssetLibrary", Objects.requireNonNull(e.getLocalizedMessage()));
             throwException("AssetLibrary", null, e);
+        }
+        return this;
+    }
+
+
+    /**
+     * Include metadata asset response.
+     *
+     * @return the asset library
+     */
+    public AssetLibrary includeMetadata() {
+        try {
+            urlQueries.put("include_metadata", true);
+        } catch (JSONException e) {
+            Log.e(TAG, Objects.requireNonNull(e.getLocalizedMessage()));
         }
         return this;
     }

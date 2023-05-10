@@ -45,7 +45,6 @@ class AssetModel {
 
         if (json.opt("tags") instanceof JSONArray) {
             if ((json.has("tags")) && (json.opt("tags") != null) && (!(json.opt("tags").equals("")))) {
-
                 JSONArray tagsArray = (JSONArray) json.opt("tags");
                 if (tagsArray.length() > 0) {
                     int count = tagsArray.length();
@@ -59,6 +58,7 @@ class AssetModel {
 
         if (json != null && json.has("_metadata")) {
             JSONObject _metadataJSON = json.optJSONObject("_metadata");
+            assert _metadataJSON != null;
             Iterator<String> iterator = _metadataJSON.keys();
             _metadata = new WeakHashMap<>();
             while (iterator.hasNext()) {

@@ -1,13 +1,14 @@
 package com.contentstack.sdk;
 
-import com.contentstack.sdk.utilities.CSAppUtils;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 
 
+/**
+ * The type Sync stack.
+ */
 public class SyncStack {
 
     private static final String TAG = SyncStack.class.getSimpleName();
@@ -21,38 +22,83 @@ public class SyncStack {
     private ArrayList<JSONObject> syncItems;
 
 
+    /**
+     * Gets url.
+     *
+     * @return the url
+     */
     public String getURL() {
         return this.URL;
     }
 
+    /**
+     * Gets json response.
+     *
+     * @return the json response
+     */
     public JSONObject getJSONResponse() {
         return this.receiveJson;
     }
 
+    /**
+     * Gets count.
+     *
+     * @return the count
+     */
     public int getCount() {
         return this.count;
     }
 
+    /**
+     * Gets limit.
+     *
+     * @return the limit
+     */
     public int getLimit() {
         return this.limit;
     }
 
+    /**
+     * Gets skip.
+     *
+     * @return the skip
+     */
     public int getSkip() {
         return this.skip;
     }
 
+    /**
+     * Gets pagination token.
+     *
+     * @return the pagination token
+     */
     public String getPaginationToken() {
         return this.pagination_token;
     }
 
+    /**
+     * Gets sync token.
+     *
+     * @return the sync token
+     */
     public String getSyncToken() {
         return this.sync_token;
     }
 
+    /**
+     * Gets items.
+     *
+     * @return the items
+     */
     public ArrayList<JSONObject> getItems() {
         return this.syncItems;
     }
 
+    /**
+     * Sets json.
+     *
+     * @param jsonobject the jsonobject
+     */
     protected void setJSON(JSONObject jsonobject) {
 
         if (jsonobject != null) {
@@ -93,7 +139,7 @@ public class SyncStack {
                     }
                 }
             } catch (Exception e) {
-                CSAppUtils.showLog(TAG, e.getLocalizedMessage());
+                SDKUtil.showLog(TAG, e.getLocalizedMessage());
             }
 
         }
