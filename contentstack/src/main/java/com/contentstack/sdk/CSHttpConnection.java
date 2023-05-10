@@ -1,15 +1,11 @@
 package com.contentstack.sdk;
 
-import android.util.ArrayMap;
 import android.text.TextUtils;
+import android.util.ArrayMap;
 import android.util.Log;
 
 import com.android.volley.DefaultRetryPolicy;
-import com.android.volley.Request;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.contentstack.sdk.utilities.CSAppConstants;
-import com.contentstack.sdk.utilities.CSAppUtils;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -34,7 +30,7 @@ class CSHttpConnection implements IURLRequestHTTP {
     private JSONObject requestJSON;
     private final IRequestModelHTTP connectionRequest;
     private ResultCallBack callBackObject;
-    private CSAppConstants.RequestMethod requestMethod;
+    private SDKConstant.RequestMethod requestMethod;
     private JSONObject responseJSON;
 
     public HashMap<String, Object> getFormParams() {
@@ -110,12 +106,12 @@ class CSHttpConnection implements IURLRequestHTTP {
     }
 
     @Override
-    public void setRequestMethod(CSAppConstants.RequestMethod requestMethod) {
+    public void setRequestMethod(SDKConstant.RequestMethod requestMethod) {
         this.requestMethod = requestMethod;
     }
 
     @Override
-    public CSAppConstants.RequestMethod getRequestMethod() {
+    public SDKConstant.RequestMethod getRequestMethod() {
         return requestMethod;
     }
 
@@ -129,7 +125,7 @@ class CSHttpConnection implements IURLRequestHTTP {
         if (params != null && params.size() > 0) {
             String urlParams = null;
 
-            urlParams = info.equalsIgnoreCase(CSAppConstants.callController.QUERY.name()) || info.equalsIgnoreCase(CSAppConstants.callController.ENTRY.name()) ? getParams(params) : null;
+            urlParams = info.equalsIgnoreCase(SDKConstant.callController.QUERY.name()) || info.equalsIgnoreCase(SDKConstant.callController.ENTRY.name()) ? getParams(params) : null;
             if (TextUtils.isEmpty(urlParams)) {
                 for (Map.Entry<String, Object> e : params.entrySet()) {
 
@@ -213,7 +209,7 @@ class CSHttpConnection implements IURLRequestHTTP {
                 }
 
             } catch (Exception e1) {
-                CSAppUtils.showLog(TAG, "--------------------getQueryParam--||" + e1.toString());
+                SDKUtil.showLog(TAG, "--------------------getQueryParam--||" + e1.toString());
             }
         }
 
@@ -224,12 +220,9 @@ class CSHttpConnection implements IURLRequestHTTP {
     @Override
     public void send() {
         String url = null;
-        String protocol = CSAppConstants.URLSCHEMA_HTTPS;
         int requestId = getRequestId(requestMethod);
         final HashMap<String, String> headers = new HashMap<>();
-        int count = this.headers.size();
-
-        if (requestMethod == CSAppConstants.RequestMethod.GET) {
+        if (requestMethod == SDKConstant.RequestMethod.GET) {
             String params = setFormParamsGET(formParams);
             if (params != null) {
                 url = urlPath + params;
@@ -240,57 +233,38 @@ class CSHttpConnection implements IURLRequestHTTP {
             url = urlPath;
         }
 
-
         for (Map.Entry<String, Object> entry : this.headers.entrySet()) {
             String key = entry.getKey();
             headers.put(key, (String) entry.getValue());
         }
-
         headers.put("Content-Type", "application/json");
         headers.put("User-Agent", defaultUserAgent());
-        headers.put("X-User-Agent", "contentstack-android/" + CSAppConstants.SDK_VERSION);
+        headers.put("X-User-Agent", "contentstack-android/" + SDKConstant.SDK_VERSION);
 
-        System.out.println(headers);
+        Log.d("url requested", url);
         jsonObjectRequest = new JSONUTF8Request(requestId, url, requestJSON, response -> {
             responseJSON = response;
-            Log.i("response", response.toString());
             if (responseJSON != null) {
                 connectionRequest.onRequestFinished(CSHttpConnection.this);
             }
         }, this::generateBuiltError) {
-
             @Override
             public Map<String, String> getHeaders() {
                 return headers;
             }
-
         };
-
-        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(CSAppConstants.TimeOutDuration, CSAppConstants.NumRetry, CSAppConstants.BackOFMultiplier));
+        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(SDKConstant.TimeOutDuration, SDKConstant.NumRetry, SDKConstant.BackOFMultiplier));
         jsonObjectRequest.setShouldCache(false);
-        Contentstack.addToRequestQueue(protocol, jsonObjectRequest, info);
+        Contentstack.addToRequestQueue(SDKConstant.PROTOCOL, jsonObjectRequest, info);
     }
 
-
-    private void httpRequest(String url) {
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, requestJSON, response -> {
-            responseJSON = response;
-            if (responseJSON != null) {
-                connectionRequest.onRequestFinished(CSHttpConnection.this);
-            }
-        }, this::generateBuiltError);
-
-        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(CSAppConstants.TimeOutDuration, CSAppConstants.NumRetry, CSAppConstants.BackOFMultiplier));
-        jsonObjectRequest.setShouldCache(false);
-        Contentstack.addToRequestQueue("https://", jsonObjectRequest, info);
-    }
 
     private String defaultUserAgent() {
         String agent = System.getProperty("http.agent");
         return agent != null ? agent : ("Android" + System.getProperty("java.version"));
     }
 
-    private int getRequestId(CSAppConstants.RequestMethod requestMethod) {
+    private int getRequestId(SDKConstant.RequestMethod requestMethod) {
         switch (requestMethod) {
             case GET:
                 return 0;
@@ -309,7 +283,7 @@ class CSHttpConnection implements IURLRequestHTTP {
         try {
             int statusCode = 0;
             responseJSON = new JSONObject();
-            responseJSON.put("error_message", CSAppConstants.ErrorMessage_Default);
+            responseJSON.put("error_message", SDKConstant.ERROR_MESSAGE_DEFAULT);
 
             if (error != null) {
 
@@ -322,27 +296,27 @@ class CSHttpConnection implements IURLRequestHTTP {
                     } else {
                         if (error.toString().equalsIgnoreCase("NoConnectionError")) {
 
-                            responseJSON.put("error_message", CSAppConstants.ErrorMessage_VolleyNoConnectionError);
+                            responseJSON.put("error_message", SDKConstant.CONNECTION_ERROR);
 
                         } else if (error.toString().equalsIgnoreCase("AuthFailureError")) {
 
-                            responseJSON.put("error_message", CSAppConstants.ErrorMessage_VolleyAuthFailureError);
+                            responseJSON.put("error_message", SDKConstant.AUTHENTICATION_NOT_PRESENT);
 
                         } else if (error.toString().equalsIgnoreCase("NetworkError")) {
 
-                            responseJSON.put("error_message", CSAppConstants.ErrorMessage_NoNetwork);
+                            responseJSON.put("error_message", SDKConstant.NOT_AVAILABLE);
 
                         } else if (error.toString().equalsIgnoreCase("ParseError")) {
 
-                            responseJSON.put("error_message", CSAppConstants.ErrorMessage_VolleyParseError);
+                            responseJSON.put("error_message", SDKConstant.PARSING_ERROR);
 
                         } else if (error.toString().equalsIgnoreCase("ServerError")) {
 
-                            responseJSON.put("error_message", CSAppConstants.ErrorMessage_VolleyServerError);
+                            responseJSON.put("error_message", SDKConstant.TRY_AGAIN);
 
                         } else if (error.toString().equalsIgnoreCase("TimeoutError")) {
 
-                            responseJSON.put("error_message", CSAppConstants.ErrorMessage_VolleyServerError);
+                            responseJSON.put("error_message", SDKConstant.TRY_AGAIN);
 
                         } else {
                             if (error.getMessage() != null) {
@@ -364,7 +338,7 @@ class CSHttpConnection implements IURLRequestHTTP {
                 connectionRequest.onRequestFailed(responseJSON, 0, callBackObject);
             }
         } catch (Exception exception) {
-            CSAppUtils.showLog(TAG, exception.toString());
+            SDKUtil.showLog(TAG, exception.toString());
         }
     }
 

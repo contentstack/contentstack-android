@@ -2,8 +2,6 @@ package com.contentstack.sdk;
 
 import android.util.ArrayMap;
 
-import com.contentstack.sdk.utilities.CSAppConstants;
-
 import org.json.JSONObject;
 
 /**
@@ -17,9 +15,9 @@ public interface IURLRequestHTTP {
 
     public ArrayMap getHeaders();
 
-    public void setRequestMethod(CSAppConstants.RequestMethod requestMethod);
+    public void setRequestMethod(SDKConstant.RequestMethod requestMethod);
 
-    public CSAppConstants.RequestMethod getRequestMethod();
+    public SDKConstant.RequestMethod getRequestMethod();
 
     public JSONObject getResponse();
 

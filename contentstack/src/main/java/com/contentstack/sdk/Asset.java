@@ -4,11 +4,6 @@ import android.text.TextUtils;
 import android.util.ArrayMap;
 import android.util.Log;
 
-import com.contentstack.sdk.utilities.CSAppConstants;
-import com.contentstack.sdk.utilities.CSAppUtils;
-import com.contentstack.sdk.utilities.CSController;
-import com.contentstack.sdk.utilities.ContentstackUtil;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -17,15 +12,16 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Objects;
 
 /**
- * Asset class to fetch files details on Conentstack server.
+ * Asset class to fetch files details on Contentstack server.
  *
  * @author contentstack.com
  */
 public class Asset {
 
-    private final static String TAG = "Asset";
+    private final static String TAG = Asset.class.getSimpleName();
     protected String assetUid = null;
     protected String contentType = null;
     protected String fileSize = null;
@@ -34,28 +30,26 @@ public class Asset {
     protected JSONObject json = null;
     protected String[] tagsArray = null;
     JSONObject urlQueries = new JSONObject();
-    protected ArrayMap<String, Object> headerGroup_app;
-    protected ArrayMap<String, Object> headerGroup_local;
+    protected ArrayMap<String, Object> headerGroupApp;
+    protected ArrayMap<String, Object> headerGroupLocal;
     protected Stack stackInstance;
     private CachePolicy cachePolicyForCall = CachePolicy.IGNORE_CACHE;
-
-    private final long maxCacheTimeForCall = 0;
-    private final long defaultCacheTimeInterval = 0;
+    private final long MAX_CACHE_TIME_FOR_CALL = 0;
 
     protected Asset() {
-        this.headerGroup_local = new ArrayMap<>();
-        this.headerGroup_app = new ArrayMap<>();
+        this.headerGroupLocal = new ArrayMap<>();
+        this.headerGroupApp = new ArrayMap<>();
     }
 
     protected Asset(String assetUid) {
         this.assetUid = assetUid;
-        this.headerGroup_local = new ArrayMap<>();
-        this.headerGroup_app = new ArrayMap<>();
+        this.headerGroupLocal = new ArrayMap<>();
+        this.headerGroupApp = new ArrayMap<>();
     }
 
     protected void setStackInstance(Stack stack) {
         this.stackInstance = stack;
-        this.headerGroup_app = stack.localHeader;
+        this.headerGroupApp = stack.localHeader;
     }
 
     /**
@@ -64,28 +58,26 @@ public class Asset {
      *
      * @param jsonObject json object of particular file attached in the built object.<br>
      *                   <p>
-     *                   {@link Asset} can be generate using of data filled {@link Entry} and {@link #configure(JSONObject)}.<br>
-     *
+     *                   {@link Asset} can be generate using of data filled {@link Entry}
+     *                   and {@link #configure(JSONObject)}.<br>
      *                   <br><br><b>Example :</b><br>
      *                   <br>1. Single Attachment :-<br>
      *                   <pre
      *                   Stack stack = Contentstack.stack(context, "apiKey", "deliveryToken",  config);
      *                   Asset assetObject = stack.asset("assetUid");<br>
      *                   assetObject.configure(entryObject.getJSONObject(attached_image_field_uid));</pre>
-     *
-     *                   <br>2. Multiple Attachment :-<br>
+     *                   <br>2. Multiple Attachment :
      *                   <p>
      *                   <pre
      *                   JSONArray array = entryObject.getJSONArray(Attach_Image_Field_Uid);<br>
      *                   for (int i = 0; i < array.length(); i++) {<br>
      *                   Asset assetObject = stack.asset("assetUid");<br>
-     *                   assetObject.configure(entryObject.getJSONObject(attached_image_field_uid));<br>
+     *                   assetObject.configure(entryObject.getJSONObject(attached_image_field_uid));
      *                   }<br>
      *                   </pre>
      * @return {@link Asset} instance.
      */
     public Asset configure(JSONObject jsonObject) {
-
         AssetModel model = null;
         model = new AssetModel(jsonObject, true, false);
         this.contentType = model.contentType;
@@ -115,10 +107,9 @@ public class Asset {
      *              </pre>
      */
     public void setHeader(String key, String value) {
-
         if (!TextUtils.isEmpty(key) && !TextUtils.isEmpty(value)) {
             removeHeader(key);
-            headerGroup_local.put(key, value);
+            headerGroupLocal.put(key, value);
         }
     }
 
@@ -136,12 +127,9 @@ public class Asset {
      *            </pre>
      */
     public void removeHeader(String key) {
-        if (headerGroup_local != null) {
-
+        if (headerGroupLocal != null) {
             if (!TextUtils.isEmpty(key)) {
-                if (headerGroup_local.containsKey(key)) {
-                    headerGroup_local.remove(key);
-                }
+                headerGroupLocal.remove(key);
             }
         }
     }
@@ -253,9 +241,9 @@ public class Asset {
 
         try {
             String value = json.optString("created_at");
-            return ContentstackUtil.parseDate(value, null);
+            return CSUtil.parseDate(value, null);
         } catch (Exception e) {
-            CSAppUtils.showLog(TAG, e.getLocalizedMessage());
+            SDKUtil.showLog(TAG, e.getLocalizedMessage());
         }
         return null;
     }
@@ -286,9 +274,9 @@ public class Asset {
 
         try {
             String value = json.optString("updated_at");
-            return ContentstackUtil.parseDate(value, null);
+            return CSUtil.parseDate(value, null);
         } catch (Exception e) {
-            CSAppUtils.showLog(TAG, e.getLocalizedMessage());
+            SDKUtil.showLog(TAG, e.getLocalizedMessage());
         }
         return null;
     }
@@ -319,9 +307,9 @@ public class Asset {
 
         try {
             String value = json.optString("deleted_at");
-            return ContentstackUtil.parseDate(value, null);
+            return CSUtil.parseDate(value, null);
         } catch (Exception e) {
-            CSAppUtils.showLog(TAG, e.getLocalizedMessage());
+            SDKUtil.showLog(TAG, e.getLocalizedMessage());
         }
         return null;
     }
@@ -390,67 +378,56 @@ public class Asset {
      *                 </pre>
      */
     public void fetch(FetchResultCallback callback) {
-
         try {
-
-            String URL = "/" + stackInstance.VERSION + "/assets/" + assetUid;
-            ArrayMap<String, Object> headers = getHeader(headerGroup_local);
+            String urlEndpoint = "/" + stackInstance.VERSION + "/assets/" + assetUid;
+            ArrayMap<String, Object> headers = getHeader(headerGroupLocal);
             if (headers.containsKey("environment")) {
                 urlQueries.put("environment", headers.get("environment"));
             }
-
-            String mainStringForMD5 = URL + new JSONObject().toString() + headers.toString();
-            String md5Value = new CSAppUtils().getMD5FromString(mainStringForMD5.trim());
-            File cacheFile = new File(CSAppConstants.cacheFolderName + File.separator + md5Value);
+            String mainStringForMD5 = urlEndpoint + new JSONObject().toString() + headers.toString();
+            String md5Value = new SDKUtil().getMD5FromString(mainStringForMD5.trim());
+            File cacheFile = new File(SDKConstant.cacheFolderName + File.separator + md5Value);
 
             switch (cachePolicyForCall) {
-
                 case IGNORE_CACHE:
-
                 case NETWORK_ONLY:
-                    fetchFromNetwork(URL, urlQueries, headers, cacheFile.getPath(), callback);
+                    fetchFromNetwork(urlEndpoint, urlQueries, headers, cacheFile.getPath(), callback);
                     break;
-
                 case CACHE_ONLY:
                     fetchFromCache(cacheFile, callback);
                     break;
-
                 case CACHE_ELSE_NETWORK:
-
                     if (cacheFile.exists()) {
                         boolean needToSendCall = false;
-                        needToSendCall = new CSAppUtils().getResponseTimeFromCacheFile(cacheFile, (int) maxCacheTimeForCall);
+                        needToSendCall = new SDKUtil().getResponseTimeFromCacheFile(cacheFile, (int) MAX_CACHE_TIME_FOR_CALL);
                         if (needToSendCall) {
-                            fetchFromNetwork(URL, urlQueries, headers, cacheFile.getPath(), callback);
+                            fetchFromNetwork(urlEndpoint, urlQueries, headers, cacheFile.getPath(), callback);
                         } else {
                             setCacheModel(cacheFile, callback);
                         }
                     } else {
-                        fetchFromNetwork(URL, urlQueries, headers, cacheFile.getPath(), callback);
+                        fetchFromNetwork(urlEndpoint, urlQueries, headers, cacheFile.getPath(), callback);
                     }
                     break;
                 case CACHE_THEN_NETWORK:
                     if (cacheFile.exists()) {
                         setCacheModel(cacheFile, callback);
                     }
-                    // from network
-                    fetchFromNetwork(URL, urlQueries, headers, cacheFile.getPath(), callback);
+                    fetchFromNetwork(urlEndpoint, urlQueries, headers, cacheFile.getPath(), callback);
                     break;
 
                 case NETWORK_ELSE_CACHE:
-
-                    if (CSAppConstants.isNetworkAvailable) {
-                        fetchFromNetwork(URL, urlQueries, headers, cacheFile.getPath(), callback);
+                    if (SDKConstant.IS_NETWORK_AVAILABLE) {
+                        fetchFromNetwork(urlEndpoint, urlQueries, headers, cacheFile.getPath(), callback);
                     } else {
                         fetchFromCache(cacheFile, callback);
                     }
-
                     break;
             }
 
         } catch (Exception e) {
             Error error = new Error();
-            error.setErrorMessage(CSAppConstants.ErrorMessage_JsonNotProper);
+            error.setErrorMessage(SDKConstant.PLEASE_PROVIDE_VALID_JSON);
             callback.onRequestFail(ResponseType.UNKNOWN, error);
         }
     }
@@ -458,7 +435,7 @@ public class Asset {
     private void fetchFromNetwork(String URL, JSONObject urlQueries, ArrayMap<String, Object> headers, String cacheFilePath, FetchResultCallback callback) {
         if (callback != null) {
             HashMap<String, Object> urlParams = getUrlParams(urlQueries);
-            new CSBackgroundTask(this, stackInstance, CSController.FETCHASSETS, URL, headers, urlParams, new JSONObject(), cacheFilePath, CSAppConstants.callController.ASSET.toString(), false, CSAppConstants.RequestMethod.GET, callback);
+            new CSBackgroundTask(this, stackInstance, SDKController.GET_ASSETS, URL, headers, urlParams, new JSONObject(), cacheFilePath, SDKConstant.callController.ASSET.toString(), false, SDKConstant.RequestMethod.GET, callback);
         }
     }
 
@@ -467,16 +444,16 @@ public class Asset {
         Error error = null;
         if (cacheFile.exists()) {
             boolean needToSendCall = false;
-            needToSendCall = new CSAppUtils().getResponseTimeFromCacheFile(cacheFile, (int) maxCacheTimeForCall);
+            needToSendCall = new SDKUtil().getResponseTimeFromCacheFile(cacheFile, (int) MAX_CACHE_TIME_FOR_CALL);
             if (needToSendCall) {
                 error = new Error();
-                error.setErrorMessage(CSAppConstants.ErrorMessage_EntryNotFoundInCache);
+                error.setErrorMessage(SDKConstant.ENTRY_IS_NOT_PRESENT_IN_CACHE);
             } else {
                 setCacheModel(cacheFile, callback);
             }
         } else {
             error = new Error();
-            error.setErrorMessage(CSAppConstants.ErrorMessage_EntryNotFoundInCache);
+            error.setErrorMessage(SDKConstant.ENTRY_IS_NOT_PRESENT_IN_CACHE);
         }
 
         if (callback != null && error != null) {
@@ -486,9 +463,7 @@ public class Asset {
 
     //Asset modeling from cache.
     private void setCacheModel(File cacheFile, FetchResultCallback callback) {
-
-        AssetModel model = new AssetModel(CSAppUtils.getJsonFromCacheFile(cacheFile), false, true);
-
+        AssetModel model = new AssetModel(SDKUtil.getJsonFromCacheFile(cacheFile), false, true);
         this.contentType = model.contentType;
         this.fileSize = model.fileSize;
         this.uploadUrl = model.uploadUrl;
@@ -496,9 +471,7 @@ public class Asset {
         this.json = model.json;
         this.assetUid = model.uploadedUid;
         this.setTags(model.tags);
-
         model = null;
-
         if (callback != null) {
             callback.onRequestFinish(ResponseType.CACHE);
         }
@@ -523,14 +496,14 @@ public class Asset {
     private HashMap<String, Object> getUrlParams(JSONObject urlQueriesJSON) {
         HashMap<String, Object> hashMap = new HashMap<>();
         if (urlQueriesJSON != null && urlQueriesJSON.length() > 0) {
-            Iterator<String> iter = urlQueriesJSON.keys();
-            while (iter.hasNext()) {
-                String key = iter.next();
+            Iterator<String> iterator = urlQueriesJSON.keys();
+            while (iterator.hasNext()) {
+                String key = iterator.next();
                 try {
                     Object value = urlQueriesJSON.opt(key);
                     hashMap.put(key, value);
                 } catch (Exception e) {
-                    CSAppUtils.showLog(TAG, "setQueryJson" + e.getLocalizedMessage());
+                    SDKUtil.showLog(TAG, "setQueryJson" + e.getLocalizedMessage());
                 }
             }
             return hashMap;
@@ -539,7 +512,7 @@ public class Asset {
     }
 
     private ArrayMap<String, Object> getHeader(ArrayMap<String, Object> localHeader) {
-        ArrayMap<String, Object> mainHeader = headerGroup_app;
+        ArrayMap<String, Object> mainHeader = headerGroupApp;
         ArrayMap<String, Object> classHeaders = new ArrayMap<>();
         if (localHeader != null && localHeader.size() > 0) {
             if (mainHeader != null && mainHeader.size() > 0) {
@@ -558,7 +531,7 @@ public class Asset {
                 return localHeader;
             }
         } else {
-            return headerGroup_app;
+            return headerGroupApp;
         }
     }
 
@@ -591,7 +564,7 @@ public class Asset {
             try {
                 urlQueries.put(key, value);
             } catch (JSONException e) {
-                Log.e(TAG, e.getLocalizedMessage());
+                Log.e(TAG, Objects.requireNonNull(e.getLocalizedMessage()));
             }
         }
         return this;
@@ -608,7 +581,7 @@ public class Asset {
         try {
             urlQueries.put("include_dimension", true);
         } catch (JSONException e) {
-            Log.e(TAG, e.getLocalizedMessage());
+            Log.e(TAG, Objects.requireNonNull(e.getLocalizedMessage()));
         }
         return this;
     }
@@ -629,7 +602,7 @@ public class Asset {
         try {
             urlQueries.put("include_fallback", true);
         } catch (JSONException e) {
-            Log.e(TAG, e.getLocalizedMessage());
+            Log.e(TAG, Objects.requireNonNull(e.getLocalizedMessage()));
         }
         return this;
     }
