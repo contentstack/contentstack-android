@@ -1,0 +1,27 @@
+name: Android CI
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          java-version: '11'
+
+      - name: Build and test
+        run: ./gradlew build
+
+      - name: Publish to GitHub Packages
+        run: ./gradlew publishPackagePublish
+

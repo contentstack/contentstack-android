@@ -70,7 +70,6 @@ public class Contentstack {
      */
     public static Stack stack(@NotNull Context context, @NotNull String apiKey, @NotNull String deliveryToken, @NotNull String environment, @NotNull Config config) throws Exception {
         if (!TextUtils.isEmpty(apiKey) || !TextUtils.isEmpty(deliveryToken) || !TextUtils.isEmpty(environment)) {
-            config = new Config();
             config.setEnvironment(environment);
             return initializeStack(context, apiKey, deliveryToken, config);
         } else {

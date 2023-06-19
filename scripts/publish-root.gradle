@@ -17,10 +17,11 @@ nexusPublishing {
     repositories {
         sonatype {
             stagingProfileId = sonatypeStagingProfileId
-            username = ossrhUsername
-            password = ossrhPassword
+            username = project.findProperty("OSSRHUSERNAME") ?: { { secrets.OSSRHUSERNAME } }
+            password = project.findProperty("OSSRHPASSWORD") ?: { { secrets.OSSRHPASSWORD } }
             nexusUrl.set(uri("https://oss.sonatype.org/service/local/"))
             snapshotRepositoryUrl.set(uri("https://oss.sonatype.org/content/repositories/snapshots/"))
+            println("lib version" + project.version)
             if (project.version.endsWith('-SNAPSHOT')) {
                 snapshotRepositoryUrl.set(uri("https://oss.sonatype.org/content/repositories/snapshots"))
             } else {
