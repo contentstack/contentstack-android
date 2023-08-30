@@ -70,7 +70,6 @@ public class Contentstack {
      */
     public static Stack stack(@NotNull Context context, @NotNull String apiKey, @NotNull String deliveryToken, @NotNull String environment, @NotNull Config config) throws Exception {
         if (!TextUtils.isEmpty(apiKey) || !TextUtils.isEmpty(deliveryToken) || !TextUtils.isEmpty(environment)) {
-            config = new Config();
             config.setEnvironment(environment);
             return initializeStack(context, apiKey, deliveryToken, config);
         } else {
@@ -83,16 +82,27 @@ public class Contentstack {
         Stack stack = new Stack(apiKey.trim());
         stack.setHeader("api_key", apiKey);
         stack.setHeader("access_token", deliveryToken);
+        if (config.getBranch() != null) {
+            stack.setHeader("branch", config.getBranch());
+        }
         stack.setConfig(config);
+        initializeCache(appContext);
+        return stack;
+    }
+
+
+    private static void initializeCache(Context appContext) {
         try {
-            ctx = appContext;
             File queryCacheFile = appContext.getDir(SDKConstant.CACHE, 0);
             SDKConstant.cacheFolderName = queryCacheFile.getPath();
             SDKUtil.clearCache(appContext);
         } catch (Exception e) {
-            SDKUtil.showLog(TAG, SDKConstant.CACHE + e.getLocalizedMessage());
+            handleCacheInitializationError(e);
         }
-        return stack;
+    }
+
+    private static void handleCacheInitializationError(Exception e) {
+        SDKUtil.showLog(TAG, SDKConstant.CACHE + e.getLocalizedMessage());
     }
 
     /**
