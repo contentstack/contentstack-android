@@ -5,7 +5,7 @@ apply plugin: 'signing'
 ext {
     PUBLISH_GROUP_ID = 'com.contentstack.sdk'
     PUBLISH_ARTIFACT_ID = 'android'
-    PUBLISH_VERSION = '3.12.0-SNAPSHOT'
+    PUBLISH_VERSION = '3.12.1'
     POM_NAME = 'contentstack-android'
     WEBSITE = 'http://www.contentstack.com'
     PUBLISH_DESCRIPTION = 'The Content Delivery SDK is used to retrieve content from your Contentstack account and deliver it to your web or mobile properties.'
