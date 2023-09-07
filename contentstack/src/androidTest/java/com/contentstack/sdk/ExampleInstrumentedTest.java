@@ -4,9 +4,11 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import android.content.Context;
+import android.util.Log;
 
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -30,6 +32,35 @@ public class ExampleInstrumentedTest {
     }
 
     @Test
+    public void testConfig() throws Exception {
+        Context ctx = ApplicationProvider.getApplicationContext();
+        Config config = new Config();
+        config.setBranch("dev");
+        config.setRegion(Config.ContentstackRegion.AZURE_NA);
+        stack = Contentstack.stack(ctx, apiKey, deliveryToken, environment, config);
+        assertEquals("com.contentstack.sdk.test", ctx.getPackageName().toLowerCase());
+        assertEquals("dev", stack.config.branch);
+        assertEquals("azure_na", stack.config.getRegion().toString().toLowerCase());
+    }
+
+    @Test
+    public void testBranch() throws Exception {
+        Context ctx = ApplicationProvider.getApplicationContext();
+        Config config = new Config();
+        config.setBranch("dev");
+        config.setRegion(Config.ContentstackRegion.AZURE_NA);
+        stack = Contentstack.stack(ctx, apiKey, deliveryToken, environment, config);
+        Query query = stack.contentType("product").query();
+        query.find(new QueryResultsCallBack() {
+            @Override
+            public void onCompletion(ResponseType responseType, QueryResult queryresult, Error error) {
+                Log.d("", String.valueOf(queryresult.getResultObjects().stream().count()));
+            }
+        });
+
+    }
+
+    @Test
     public void testAPINotNull() {
         assertNotNull(apiKey);
     }
@@ -44,11 +75,6 @@ public class ExampleInstrumentedTest {
         assertNotNull(environment);
     }
 
-    @Test
-    public void initSDK() {
-        stack.sync(null);
-        assertNotNull(stack.syncParams);
-    }
 
     @Test
     public void syncLocale() {

@@ -12,6 +12,27 @@ public class Config {
     protected String URL = "cdn.contentstack.io";
     protected String VERSION = "v3";
     protected String environment = null;
+    protected String branch = null;
+
+
+    /**
+     * get branch is used for internal use
+     *
+     * @return branch
+     */
+    protected String getBranch() {
+        return branch;
+    }
+
+    /**
+     * Set branch to the config
+     *
+     * @param branch
+     */
+    public void setBranch(String branch) {
+        this.branch = branch;
+    }
+
     protected ContentstackRegion region = ContentstackRegion.US;
 
     /**
@@ -22,11 +43,11 @@ public class Config {
      *
      *               <br><br><b>Example For Different Regions:</b><br>
      *               <pre class="prettyprint">
-     *               config.setRegion(ContentstackRegion.US);
-     *               config.setRegion(ContentstackRegion.EU);
-     *               config.setRegion(ContentstackRegion.AZURE_EU);
-     *               config.setRegion(ContentstackRegion.AZURE_NA);
-     *            </pre>
+     *                                                                       config.setRegion(ContentstackRegion.US);
+     *                                                                       config.setRegion(ContentstackRegion.EU);
+     *                                                                       config.setRegion(ContentstackRegion.AZURE_EU);
+     *                                                                       config.setRegion(ContentstackRegion.AZURE_NA);
+     *                                                                    </pre>
      */
     public ContentstackRegion setRegion(ContentstackRegion region) {
         this.region = region;
