@@ -1,5 +1,14 @@
 ﻿# CHANGELOG
 
+
+## Version 3.12.4
+
+### Date: 10-Oct-2023
+
+- Fixed Context Issue introduced in v3.12.3
+
+---
+
 ## Version 3.12.0
 
 ### Date: 02-May-2023

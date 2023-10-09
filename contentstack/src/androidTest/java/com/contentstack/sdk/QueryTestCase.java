@@ -38,7 +38,6 @@ public class QueryTestCase {
     }
 
 
-
     @Test
     public void test_01_fetchAllEntries() {
         query.find(new QueryResultsCallBack() {
@@ -615,7 +614,6 @@ public class QueryTestCase {
 
     @Test
     public void test_41_entry_include_embedded_items_unit_test() throws Exception {
-
         final Query query = TestCred.stack().contentType("user").query();
         query.includeEmbeddedItems().find(new QueryResultsCallBack() {
             @Override
