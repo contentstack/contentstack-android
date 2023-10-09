@@ -42,12 +42,14 @@ public class Config {
      *               <b>Note:</b> Default region sets to us </a>
      *
      *               <br><br><b>Example For Different Regions:</b><br>
-     *               <pre class="prettyprint">
-     *                                                                       config.setRegion(ContentstackRegion.US);
-     *                                                                       config.setRegion(ContentstackRegion.EU);
-     *                                                                       config.setRegion(ContentstackRegion.AZURE_EU);
-     *                                                                       config.setRegion(ContentstackRegion.AZURE_NA);
-     *                                                                    </pre>
+     *               <pre>
+     *               {@code
+     *               config.setRegion(ContentstackRegion.US);
+     *               config.setRegion(ContentstackRegion.EU);
+     *               config.setRegion(ContentstackRegion.AZURE_EU);
+     *               config.setRegion(ContentstackRegion.AZURE_NA);
+     *               }
+     *               </pre>
      */
     public ContentstackRegion setRegion(ContentstackRegion region) {
         this.region = region;

@@ -80,7 +80,7 @@ public class AssetTestCase {
                     assertEquals("phoenix2.jpg", asset.getFileName());
                     assertEquals("482141", asset.getFileSize());
                 } else {
-                    assertEquals(0, error.getErrorCode());
+                    assertEquals(105, error.getErrorCode());
                 }
             }
         });
