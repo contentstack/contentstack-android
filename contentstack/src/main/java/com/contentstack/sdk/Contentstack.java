@@ -7,9 +7,10 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 
-import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
+
+import javax.validation.constraints.NotNull;
 
 /**
  * Contains all Contentstack SDK Classes And Methods.
@@ -86,6 +87,10 @@ public class Contentstack {
         stack.setHeader("access_token", deliveryToken);
         if (config.getBranch() != null) {
             stack.setHeader("branch", config.getBranch());
+        }
+        if (config.getEarlyAccess() != null && config.getEarlyAccess().length > 0) {
+            String eaValues = String.join(",", config.earlyAccess).replace("\"", "");
+            stack.setHeader("x-header-ea", eaValues);
         }
         stack.setConfig(config);
         initializeCache(appContext);
