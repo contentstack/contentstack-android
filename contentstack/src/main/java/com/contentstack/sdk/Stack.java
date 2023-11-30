@@ -617,7 +617,7 @@ public class Stack implements INotifyClass {
             });
         } catch (Exception e) {
             Error error = new Error();
-            error.setErrorMessage(SDKConstant.PLEASE_PROVIDE_VALID_JSON);
+            error.setErrorMessage(e.getLocalizedMessage());
             callback.onRequestFail(ResponseType.UNKNOWN, error);
         }
     }
