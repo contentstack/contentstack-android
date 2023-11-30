@@ -2,6 +2,9 @@ package com.contentstack.sdk;
 
 import android.text.TextUtils;
 
+
+import javax.validation.constraints.NotNull;
+
 /**
  * Set Configuration for stack instance creation.
  *
@@ -13,6 +16,7 @@ public class Config {
     protected String VERSION = "v3";
     protected String environment = null;
     protected String branch = null;
+    protected String[] earlyAccess = null;
 
 
     /**
@@ -43,13 +47,13 @@ public class Config {
      *
      *               <br><br><b>Example For Different Regions:</b><br>
      *               <pre>
-     *               {@code
-     *               config.setRegion(ContentstackRegion.US);
-     *               config.setRegion(ContentstackRegion.EU);
-     *               config.setRegion(ContentstackRegion.AZURE_EU);
-     *               config.setRegion(ContentstackRegion.AZURE_NA);
-     *               }
-     *               </pre>
+     *                                           {@code
+     *                                           config.setRegion(ContentstackRegion.US);
+     *                                           config.setRegion(ContentstackRegion.EU);
+     *                                           config.setRegion(ContentstackRegion.AZURE_EU);
+     *                                           config.setRegion(ContentstackRegion.AZURE_NA);
+     *                                           }
+     *                                           </pre>
      */
     public ContentstackRegion setRegion(ContentstackRegion region) {
         this.region = region;
@@ -59,6 +63,15 @@ public class Config {
 
     public ContentstackRegion getRegion() {
         return this.region;
+    }
+
+    public String[] getEarlyAccess() {
+        return this.earlyAccess;
+    }
+
+    public Config earlyAccess(@NotNull String[] earlyAccess) {
+        this.earlyAccess = earlyAccess;
+        return this;
     }
 
     public enum ContentstackRegion {US, EU, AZURE_NA, AZURE_EU}

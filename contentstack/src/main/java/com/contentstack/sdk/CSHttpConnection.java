@@ -2,7 +2,6 @@ package com.contentstack.sdk;
 
 import android.text.TextUtils;
 import android.util.ArrayMap;
-import android.util.Log;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.VolleyError;
@@ -209,7 +208,7 @@ class CSHttpConnection implements IURLRequestHTTP {
                 }
 
             } catch (Exception e1) {
-                SDKUtil.showLog(TAG, "--------------------getQueryParam--||" + e1.toString());
+                SDKUtil.showLog(TAG, "-getQueryParam--||" + e1.toString());
             }
         }
 
@@ -239,7 +238,7 @@ class CSHttpConnection implements IURLRequestHTTP {
         }
         headers.put("Content-Type", "application/json");
         headers.put("User-Agent", defaultUserAgent());
-        headers.put("X-User-Agent", "contentstack-android/" + SDKConstant.SDK_VERSION);
+        headers.put("X-User-Agent", "contentstack-delivery-android/" + SDKConstant.SDK_VERSION);
         jsonObjectRequest = new JSONUTF8Request(requestId, url, requestJSON, response -> {
             this.responseJSON = response;
             if (this.responseJSON != null) {

@@ -15,18 +15,18 @@ if (secretPropsFile.exists()) {
 
 nexusPublishing {
     repositories {
-//        sonatype {
-//            stagingProfileId = sonatypeStagingProfileId
-//            username = ossrhUsername
-//            password = ossrhPassword
-//            nexusUrl.set(uri("https://oss.sonatype.org/service/local/"))
-//            snapshotRepositoryUrl.set(uri("https://oss.sonatype.org/content/repositories/snapshots/"))
-//            if (project.version.endsWith('-SNAPSHOT')) {
-//                snapshotRepositoryUrl.set(uri("https://oss.sonatype.org/content/repositories/snapshots"))
-//            } else {
-//                nexusUrl.set(uri("https://oss.sonatype.org/service/local/"))
-//            }
-//        }
+        sonatype {
+            stagingProfileId = sonatypeStagingProfileId
+            username = ossrhUsername
+            password = ossrhPassword
+            nexusUrl.set(uri("https://oss.sonatype.org/service/local/"))
+            snapshotRepositoryUrl.set(uri("https://oss.sonatype.org/content/repositories/snapshots/"))
+            if (project.version.endsWith('-SNAPSHOT')) {
+                snapshotRepositoryUrl.set(uri("https://oss.sonatype.org/content/repositories/snapshots"))
+            } else {
+                nexusUrl.set(uri("https://oss.sonatype.org/service/local/"))
+            }
+        }
 
 //        sonatype {
 //            stagingProfileId = sonatypeStagingProfileId
@@ -40,13 +40,13 @@ nexusPublishing {
 //            }
 //        }
 
-        sonatype {
-            stagingProfileId = sonatypeStagingProfileId
-            username = ossrhUsername
-            password = ossrhPassword
-            //nexusUrl.set(uri("https://oss.sonatype.org/service/local/"))
-            snapshotRepositoryUrl.set(uri("https://oss.sonatype.org/content/repositories/snapshots/"))
-        }
+//        sonatype {
+//            stagingProfileId = sonatypeStagingProfileId
+//            username = ossrhUsername
+//            password = ossrhPassword
+//            //nexusUrl.set(uri("https://oss.sonatype.org/service/local/"))
+//            snapshotRepositoryUrl.set(uri("https://oss.sonatype.org/content/repositories/snapshots/"))
+//        }
 
     }
 }
