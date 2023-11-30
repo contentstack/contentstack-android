@@ -48,6 +48,7 @@ public class Contentstack {
         if (!TextUtils.isEmpty(apiKey) || !TextUtils.isEmpty(deliveryToken) || !TextUtils.isEmpty(environment)) {
             Config config = new Config();
             config.setEnvironment(environment);
+            ctx = context;
             return initializeStack(context, apiKey, deliveryToken, config);
         } else {
             throw new Exception(SDKConstant.EMPTY_CREDENTIALS_NOT_ALLOWED);
@@ -71,6 +72,7 @@ public class Contentstack {
     public static Stack stack(@NotNull Context context, @NotNull String apiKey, @NotNull String deliveryToken, @NotNull String environment, @NotNull Config config) throws Exception {
         if (!TextUtils.isEmpty(apiKey) || !TextUtils.isEmpty(deliveryToken) || !TextUtils.isEmpty(environment)) {
             config.setEnvironment(environment);
+            ctx = context;
             return initializeStack(context, apiKey, deliveryToken, config);
         } else {
             throw new Exception(SDKConstant.EMPTY_CREDENTIALS_NOT_ALLOWED);
