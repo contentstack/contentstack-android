@@ -4,8 +4,6 @@ import android.os.Build;
 import android.text.TextUtils;
 import android.util.ArrayMap;
 import android.util.Log;
-
-import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -22,6 +20,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.TimeZone;
+
+import javax.validation.constraints.NotNull;
 
 /**
  * To fetch stack level information of your application from Contentstack server.
