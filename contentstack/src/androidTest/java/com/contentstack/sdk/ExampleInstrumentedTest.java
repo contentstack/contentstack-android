@@ -4,10 +4,10 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import android.content.Context;
+import android.support.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
 import android.util.Log;
 
 import androidx.test.core.app.ApplicationProvider;
-import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
