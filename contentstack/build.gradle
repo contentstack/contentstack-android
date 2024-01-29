@@ -4,17 +4,19 @@ plugins {
 }
 
 import com.vanniktech.maven.publish.SonatypeHost
+
 android.buildFeatures.buildConfig true
 
 mavenPublishing {
     publishToMavenCentral(SonatypeHost.DEFAULT)
     signAllPublications()
-    coordinates("com.contentstack.sdk", "android", "3.12.4-rc2-SNAPSHOT")
+    coordinates("com.contentstack.sdk", "android", "3.12.5")
 
     pom {
         name = "contentstack-android"
         description = "The Content Delivery SDK facilitates the retrieval of content from your Contentstack account, enabling seamless delivery to your web or mobile properties.."
         inceptionYear = "2018"
+        packaging 'aar'
         url = "https://github.com/contentstack/contentstack-android"
         licenses {
             license {
@@ -32,7 +34,7 @@ mavenPublishing {
         }
         scm {
             url = "scm:git@github.com:contentstack/contentstack-android"
-            connection = "scm:git:git://github.com/username/mylibrary.git"
+            connection = "scm:git:git://github.com/contentstack/contentstack-android.git"
             developerConnection = "scm:git@github.com:contentstack/contentstack-android.git"
         }
     }
@@ -52,17 +54,18 @@ tasks.register('jacocoTestReport', JacocoReport) {
         }))
     }
 }
+
 android {
-    namespace "com.contentstack.sdk"
+    //namespace "com.contentstack.sdk"
     packagingOptions {
-        exclude 'META-INF/DEPENDENCIES'
-        exclude 'META-INF/LICENSE.md'
-        exclude 'META-INF/LICENSE-notice.md'
-        exclude 'META-INF/license.txt'
-        exclude 'META-INF/NOTICE'
-        exclude 'META-INF/NOTICE.txt'
-        exclude 'META-INF/notice.txt'
-        exclude 'META-INF/ASL2.0'
+        exclude("META-INF/DEPENDENCIES")
+        exclude("META-INF/LICENSE")
+        exclude("META-INF/LICENSE.txt")
+        exclude("META-INF/license.txt")
+        exclude("META-INF/NOTICE")
+        exclude("META-INF/NOTICE.txt")
+        exclude("META-INF/notice.txt")
+        exclude("META-INF/ASL2.0")
         exclude("META-INF/*.kotlin_module")
     }
 
@@ -75,22 +78,23 @@ android {
     }
     signingConfigs {
         debug {
-            storeFile file("/Users/shaileshmishra/keystore/release.keystore")
+            storeFile file("/Users/shaileshmishra/keystore/key.keystore")
             storePassword 'android'
-            keyAlias 'androiddebugkey'
+            keyAlias 'key0'
             keyPassword 'android'
         }
         release {
-            storeFile file("/Users/shaileshmishra/keystore/release.keystore")
+            storeFile file("/Users/shaileshmishra/keystore/key.keystore")
             storePassword 'android'
-            keyAlias 'androiddebugkey'
+            keyAlias 'key0'
             keyPassword 'android'
         }
     }
-    compileSdk 26
+    compileSdk 30
     defaultConfig {
+        // Required when setting minSdkVersion to 20 or lower
         multiDexEnabled true
-        minSdkVersion 19
+        minSdkVersion 23
         versionCode 1
         versionName "1.0"
         useLibrary 'org.apache.http.legacy'
@@ -105,6 +109,8 @@ android {
         debug {
             debuggable true
             testCoverageEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
             buildConfigField "String", "host", localProperties['host']
             buildConfigField "String", "APIKey", localProperties['APIKey']
             buildConfigField "String", "deliveryToken", localProperties['deliveryToken']
@@ -118,26 +124,32 @@ android {
         }
     }
     //flavorDimensions "default"
-    lintOptions { abortOnError false }
+    //lintOptions { abortOnError false }
     compileOptions {
-        //coreLibraryDesugaringEnabled true
+        // Flag to enable support for the new language APIs
+        coreLibraryDesugaringEnabled true
+        // Sets Java compatibility to Java 8
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
 }
 configurations { archives }
 dependencies {
-    def multidex_version = "2.0.1"
+    def multidex = "2.0.1"
+    //def sdk_utils = "1.2.6"
+    def volley = "1.2.1"
+    def junit = "4.13.2"
     configurations.configureEach { resolutionStrategy.force 'com.android.support:support-annotations:23.1.0' }
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'com.contentstack.sdk:utils:1.2.6'
-    implementation 'com.android.volley:volley:1.2.1'
-    implementation 'junit:junit:4.13.2'
+    //implementation "com.contentstack.sdk:utils:$sdk_utils"
+    implementation "com.android.volley:volley:$volley"
+    implementation "junit:junit:$junit"
+    // For AGP 7.4+
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.4'
-    implementation "androidx.multidex:multidex:$multidex_version"
-
+    //implementation "androidx.multidex:multidex:$multidex"
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test:core:1.5.0'
+    //testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     androidTestImplementation('com.android.support.test.espresso:espresso-core:3.0.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
