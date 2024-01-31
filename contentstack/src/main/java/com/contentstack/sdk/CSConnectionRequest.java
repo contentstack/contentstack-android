@@ -166,6 +166,7 @@ class CSConnectionRequest implements IRequestModelHTTP {
         errorObject.setErrorCode(errorCode);
         errorObject.setErrorMessage(errorMessage);
         errorObject.setErrors(resultHashMap);
+        errorObject.setStatusCode(statusCode);
 
         if (this.callBackObject != null) {
             this.callBackObject.onRequestFail(ResponseType.NETWORK, errorObject);

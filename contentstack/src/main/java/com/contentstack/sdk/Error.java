@@ -11,6 +11,16 @@ public class Error {
 
     String errorMessage = null;
     int errorCode = 0;
+
+    public int getStatusCode() {
+        return statusCode;
+    }
+
+    public void setStatusCode(int statusCode) {
+        this.statusCode = statusCode;
+    }
+
+    int statusCode = 0;
     HashMap<String, Object> errorHashMap = new HashMap<>();
 
     /**
