@@ -2,8 +2,8 @@ package com.contentstack.sdk;
 
 import android.text.TextUtils;
 
+import java.util.Objects;
 
-import javax.validation.constraints.NotNull;
 
 /**
  * Set Configuration for stack instance creation.
@@ -47,13 +47,13 @@ public class Config {
      *
      *               <br><br><b>Example For Different Regions:</b><br>
      *               <pre>
-     *                                           {@code
-     *                                           config.setRegion(ContentstackRegion.US);
-     *                                           config.setRegion(ContentstackRegion.EU);
-     *                                           config.setRegion(ContentstackRegion.AZURE_EU);
-     *                                           config.setRegion(ContentstackRegion.AZURE_NA);
-     *                                           }
-     *                                           </pre>
+     *                                                         {@code
+     *                                                         config.setRegion(ContentstackRegion.US);
+     *                                                         config.setRegion(ContentstackRegion.EU);
+     *                                                         config.setRegion(ContentstackRegion.AZURE_EU);
+     *                                                         config.setRegion(ContentstackRegion.AZURE_NA);
+     *                                                         }
+     *                                                         </pre>
      */
     public ContentstackRegion setRegion(ContentstackRegion region) {
         this.region = region;
@@ -69,7 +69,10 @@ public class Config {
         return this.earlyAccess;
     }
 
-    public Config earlyAccess(@NotNull String[] earlyAccess) {
+    public Config earlyAccess(String[] earlyAccess) {
+        if (earlyAccess == null) {
+            Objects.requireNonNull("Null early access");
+        }
         this.earlyAccess = earlyAccess;
         return this;
     }

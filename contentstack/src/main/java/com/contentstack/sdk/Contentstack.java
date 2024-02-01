@@ -7,10 +7,8 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 
-
 import java.io.File;
-
-import javax.validation.constraints.NotNull;
+import java.util.Objects;
 
 /**
  * Contains all Contentstack SDK Classes And Methods.
@@ -45,7 +43,9 @@ public class Contentstack {
      * @return {@link Stack} instance. <br><br><b>Example :</b><br> <pre class="prettyprint"> Stack stack = Contentstack.stack(context, "apiKey", "deliveryToken", "stag"); </pre>
      * @throws Exception the exception
      */
-    public static Stack stack(@NotNull Context context, @NotNull String apiKey, @NotNull String deliveryToken, @NotNull String environment) throws Exception {
+    public static Stack stack(Context context, String apiKey, String deliveryToken, String environment) throws Exception {
+        checkIfNull(context, apiKey, deliveryToken, environment);
+
         if (!TextUtils.isEmpty(apiKey) || !TextUtils.isEmpty(deliveryToken) || !TextUtils.isEmpty(environment)) {
             Config config = new Config();
             config.setEnvironment(environment);
@@ -54,6 +54,13 @@ public class Contentstack {
         } else {
             throw new Exception(SDKConstant.EMPTY_CREDENTIALS_NOT_ALLOWED);
         }
+    }
+
+    private static void checkIfNull(Context context, String apiKey, String deliveryToken, String environment) {
+        Objects.requireNonNull(context, "can not be null");
+        Objects.requireNonNull(apiKey, "can not be null");
+        Objects.requireNonNull(deliveryToken, "can not be null");
+        Objects.requireNonNull(environment, "can not be null");
     }
 
     /**
@@ -70,7 +77,9 @@ public class Contentstack {
      * @return {@link Stack} instance. <br><br><b>Example :</b><br> <pre class="prettyprint"> Config config = new Config(); config.setEnvironment("stag"); Stack stack = Contentstack.stack(context, "apiKey", "deliveryToken", config);
      * @throws Exception the exception
      */
-    public static Stack stack(@NotNull Context context, @NotNull String apiKey, @NotNull String deliveryToken, @NotNull String environment, @NotNull Config config) throws Exception {
+    public static Stack stack(Context context, String apiKey, String deliveryToken, String environment, Config config) throws Exception {
+        checkIfNull(context, apiKey, deliveryToken, environment);
+        Objects.requireNonNull(config, "Config can not be null");
         if (!TextUtils.isEmpty(apiKey) || !TextUtils.isEmpty(deliveryToken) || !TextUtils.isEmpty(environment)) {
             config.setEnvironment(environment);
             ctx = context;

@@ -1,107 +1,74 @@
 plugins {
-    id 'signing'
-    id 'maven-publish'
-    id 'com.android.library'
-    id 'jacoco'
+    id "com.vanniktech.maven.publish" version "0.27.0"
+    id "com.android.library"
 }
 
-def localProperties = new Properties()
-localProperties.load(new FileInputStream(rootProject.file("local.properties")))
+import com.vanniktech.maven.publish.SonatypeHost
 
-group = 'com.contentstack.sdk'
-version = '3.12.4-SNAPSHOT'
+android.buildFeatures.buildConfig true
 
+mavenPublishing {
+    publishToMavenCentral(SonatypeHost.DEFAULT)
+    signAllPublications()
+    coordinates("com.contentstack.sdk", "android", "3.13.0")
 
-//publishing {
-//    publications {
-//        mavenJava(MavenPublication) {
-//            artifactId = 'android'
-//            versionMapping {
-//                usage('java-api') {
-//                    fromResolutionOf('runtimeClasspath')
-//                }
-//                usage('java-runtime') {
-//                    fromResolutionResult()
-//                }
-//            }
-//            pom {
-//
-//                name = 'contentstack-android'
-//                packaging 'aar'
-//                artifactId "android"
-//                description = 'Android SDK for Contentstack Content Delivery API, Contentstack is a headless CMS with an API-first approach'
-//                url = 'https://github.com/contentstack/contentstack-android'
-//
-//                scm {
-//                    url 'https://github.com/contentstack/contentstack-android/'
-//                    connection 'scm:git@github.com:contentstack/contentstack-android'
-//                    developerConnection 'scm:git@github.com:contentstack/contentstack-android.git'
-//                }
-//
-//                licenses {
-//                    license {
-//                        name 'The MIT License'
-//                        url 'http://www.opensource.org/licenses/mit-license.php'
-//                        distribution 'repo'
-//                    }
-//                }
-//                developers {
-//                    developer {
-//                        id 'ishaileshmishra'
-//                        name 'Shailesh Mishra'
-//                        email 'mobile@contentstack.com'
-//                    }
-//                }
-//            }
-//        }
-//    }
-//    repositories {
-//        maven {
-//            def releasesRepoUrl = layout.buildDirectory.dir('repos/releases')
-//            def snapshotsRepoUrl = layout.buildDirectory.dir('repos/snapshots')
-//            url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
-//        }
-//    }
-//}
-
-//signing {
-//    sign publishing.publications.mavenJava
-//}
-
-
-//javadoc {
-//    if (JavaVersion.current().isJava9Compatible()) {
-//        options.addBooleanOption('html5', true)
-//    }
-//}
+    pom {
+        name = "contentstack-android"
+        description = "The Content Delivery SDK facilitates the retrieval of content from your Contentstack account, enabling seamless delivery to your web or mobile properties.."
+        inceptionYear = "2018"
+        packaging 'aar'
+        url = "https://github.com/contentstack/contentstack-android"
+        licenses {
+            license {
+                name = "The MIT License"
+                url = "https://github.com/contentstack/contentstack-android/blob/master/LICENSE"
+                distribution = "https://github.com/contentstack/contentstack-android/blob/master/LICENSE"
+            }
+        }
+        developers {
+            developer {
+                id = "ishaileshmishra"
+                name = "contentstack"
+                url = "https://github.com/contentstack/contentstack-android"
+            }
+        }
+        scm {
+            url = "scm:git@github.com:contentstack/contentstack-android"
+            connection = "scm:git:git://github.com/contentstack/contentstack-android.git"
+            developerConnection = "scm:git@github.com:contentstack/contentstack-android.git"
+        }
+    }
+}
 
 
 tasks.register('jacocoTestReport', JacocoReport) {
-//    dependsOn['testDebugUnitTest', 'createDebugCoverageReport']
+    dependsOn['testDebugUnitTest', 'createDebugCoverageReport']
     reports {
         html.enabled = true
     }
-
-//    afterEvaluate {
-//        classDirectories.setFrom(files(classDirectories.files.collect {
-//            fileTree(dir: it, exclude: '**com/contentstack/okhttp**')
-//            fileTree(dir: it, exclude: '**com/contentstack/okio**')
-//            fileTree(dir: it, exclude: '**com/contentstack/txtmark**')
-//        }))
-//    }
+    afterEvaluate {
+        classDirectories.setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it, exclude: '**com/contentstack/okhttp**')
+            fileTree(dir: it, exclude: '**com/contentstack/okio**')
+            fileTree(dir: it, exclude: '**com/contentstack/txtmark**')
+        }))
+    }
 }
+
 android {
+    //namespace "com.contentstack.sdk"
     packagingOptions {
-        exclude 'META-INF/DEPENDENCIES'
-        exclude 'META-INF/LICENSE.md'
-        exclude 'META-INF/LICENSE-notice.md'
-        exclude 'META-INF/license.txt'
-        exclude 'META-INF/NOTICE'
-        exclude 'META-INF/NOTICE.txt'
-        exclude 'META-INF/notice.txt'
-        exclude 'META-INF/ASL2.0'
+        exclude("META-INF/DEPENDENCIES")
+        exclude("META-INF/LICENSE")
+        exclude("META-INF/LICENSE.txt")
+        exclude("META-INF/license.txt")
+        exclude("META-INF/NOTICE")
+        exclude("META-INF/NOTICE.txt")
+        exclude("META-INF/notice.txt")
+        exclude("META-INF/ASL2.0")
         exclude("META-INF/*.kotlin_module")
     }
+
     testOptions {
         unitTests.all {
             jacoco {
@@ -111,21 +78,23 @@ android {
     }
     signingConfigs {
         debug {
-            storeFile file("/Users/shaileshmishra/keystore/release.keystore")
+            storeFile file("/Users/shaileshmishra/keystore/key.keystore")
             storePassword 'android'
-            keyAlias 'androiddebugkey'
+            keyAlias 'key0'
             keyPassword 'android'
         }
         release {
-            storeFile file("/Users/shaileshmishra/keystore/release.keystore")
+            storeFile file("/Users/shaileshmishra/keystore/key.keystore")
             storePassword 'android'
-            keyAlias 'androiddebugkey'
+            keyAlias 'key0'
             keyPassword 'android'
         }
     }
-    compileSdk 26
+    compileSdk 30
     defaultConfig {
-        minSdkVersion 19
+        // Required when setting minSdkVersion to 20 or lower
+        multiDexEnabled true
+        minSdkVersion 23
         versionCode 1
         versionName "1.0"
         useLibrary 'org.apache.http.legacy'
@@ -133,14 +102,19 @@ android {
         signingConfig signingConfigs.release
     }
 
+
+    def localProperties = new Properties()
+    localProperties.load(new FileInputStream(rootProject.file("local.properties")))
     buildTypes {
         debug {
             debuggable true
             testCoverageEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
             buildConfigField "String", "host", localProperties['host']
             buildConfigField "String", "APIKey", localProperties['APIKey']
             buildConfigField "String", "deliveryToken", localProperties['deliveryToken']
-            buildConfigField "String", "environment", localProperties['env']
+            buildConfigField "String", "environment", localProperties['environment']
             buildConfigField "String", "contentTypeUID", localProperties['contentType']
             buildConfigField "String", "assetUID", localProperties['assetUid']
         }
@@ -149,38 +123,31 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    flavorDimensions "default"
-    lintOptions { abortOnError false }
+
     compileOptions {
+        coreLibraryDesugaringEnabled true
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
 }
-repositories {
-//    flatDir { dirs 'libs' }
-//    mavenCentral()
-//    mavenLocal()
-}
-
 configurations { archives }
-
 dependencies {
+    def multidex = "2.0.1"
+    def volley = "1.2.1"
+    def junit = "4.13.2"
     configurations.configureEach { resolutionStrategy.force 'com.android.support:support-annotations:23.1.0' }
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'com.contentstack.sdk:utils:1.2.6'
-//    implementation 'com.android.support:appcompat-v7:26.1.0'
-//    implementation 'com.android.support:support-v4:26.1.0'
-    implementation 'com.android.volley:volley:1.2.1'
-    implementation 'junit:junit:4.13.2'
+    implementation "com.android.volley:volley:$volley"
+    implementation "junit:junit:$junit"
+    // For AGP 7.4+
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.4'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test:core:1.5.0'
-    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.4'
-
     androidTestImplementation('com.android.support.test.espresso:espresso-core:3.0.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 }
-tasks.register('clearJar', Delete) { delete 'build/libs/Contentstack.jar' }
+tasks.register('clearJar', Delete) { delete 'build/libs/contentstack.jar' }
 tasks.register('unzip', Copy) {
     def zipFile = file('build/intermediates/intermediate-jars/release/classes.jar')
     def outputDir = file("${buildDir}/contentstack-jar")
@@ -191,11 +158,6 @@ tasks.register('createJar', Jar) {
     archivesBaseName = "contentstack.jar"
     from('build/contentstack-jar/')
     include 'com/contentstack/'
-    include 'META-INF/'
+    //include 'META-INF/'
 }
 createJar.dependsOn(clearJar, unzip, build)
-
-java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
-}

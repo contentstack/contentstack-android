@@ -9,7 +9,7 @@ public class SDKConstant {
     public static final boolean debug = false;
     public static boolean IS_NETWORK_AVAILABLE = true;
     public static String PROTOCOL = "https://";
-    public static String SDK_VERSION = "3.12.4";
+    public static String SDK_VERSION = "3.13.0";
     public final static int NO_NETWORK_CONNECTION = 408;
     public final static int TimeOutDuration = 30000; // timeout in millisecond
     public final static int NumRetry = 0;
