@@ -16,7 +16,6 @@ import static junit.framework.TestCase.assertEquals;
 import androidx.test.InstrumentationRegistry;
 import androidx.test.core.app.ApplicationProvider;
 
-
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class AssetTestCase {
 

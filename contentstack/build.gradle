@@ -1,27 +1,72 @@
-apply plugin: 'com.android.library'
-apply plugin: 'jacoco'
+plugins {
+    id "com.vanniktech.maven.publish" version "0.27.0"
+    id "com.android.library"
+}
 
-apply from: "${rootProject.projectDir}/scripts/publish-module.gradle"
+import com.vanniktech.maven.publish.SonatypeHost
+
+android.buildFeatures.buildConfig true
+
+mavenPublishing {
+    publishToMavenCentral(SonatypeHost.DEFAULT)
+    signAllPublications()
+    coordinates("com.contentstack.sdk", "android", "3.13.0")
+
+    pom {
+        name = "contentstack-android"
+        description = "The Content Delivery SDK facilitates the retrieval of content from your Contentstack account, enabling seamless delivery to your web or mobile properties.."
+        inceptionYear = "2018"
+        packaging 'aar'
+        url = "https://github.com/contentstack/contentstack-android"
+        licenses {
+            license {
+                name = "The MIT License"
+                url = "https://github.com/contentstack/contentstack-android/blob/master/LICENSE"
+                distribution = "https://github.com/contentstack/contentstack-android/blob/master/LICENSE"
+            }
+        }
+        developers {
+            developer {
+                id = "ishaileshmishra"
+                name = "contentstack"
+                url = "https://github.com/contentstack/contentstack-android"
+            }
+        }
+        scm {
+            url = "scm:git@github.com:contentstack/contentstack-android"
+            connection = "scm:git:git://github.com/contentstack/contentstack-android.git"
+            developerConnection = "scm:git@github.com:contentstack/contentstack-android.git"
+        }
+    }
+}
+
+
+tasks.register('jacocoTestReport', JacocoReport) {
+    dependsOn['testDebugUnitTest', 'createDebugCoverageReport']
+    reports {
+        html.enabled = true
+    }
+    afterEvaluate {
+        classDirectories.setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it, exclude: '**com/contentstack/okhttp**')
+            fileTree(dir: it, exclude: '**com/contentstack/okio**')
+            fileTree(dir: it, exclude: '**com/contentstack/txtmark**')
+        }))
+    }
+}
 
 android {
-    compileSdk 33
-    defaultConfig {
-        minSdk 19
-        targetSdk 33
-        versionCode 1
-        versionName "1.0"
-        multiDexEnabled true
-        vectorDrawables.useSupportLibrary = true
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        signingConfig signingConfigs.debug
-    }
-    buildTypes {
-        def localProperties = new Properties()
-        localProperties.load(new FileInputStream(rootProject.file("local.properties")))
-    }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+    //namespace "com.contentstack.sdk"
+    packagingOptions {
+        exclude("META-INF/DEPENDENCIES")
+        exclude("META-INF/LICENSE")
+        exclude("META-INF/LICENSE.txt")
+        exclude("META-INF/license.txt")
+        exclude("META-INF/NOTICE")
+        exclude("META-INF/NOTICE.txt")
+        exclude("META-INF/notice.txt")
+        exclude("META-INF/ASL2.0")
+        exclude("META-INF/*.kotlin_module")
     }
 
     testOptions {
@@ -30,20 +75,89 @@ android {
                 includeNoLocationClasses = true
             }
         }
-        unitTests.returnDefaultValues = true
+    }
+    signingConfigs {
+        debug {
+            storeFile file("/Users/shaileshmishra/keystore/key.keystore")
+            storePassword 'android'
+            keyAlias 'key0'
+            keyPassword 'android'
+        }
+        release {
+            storeFile file("/Users/shaileshmishra/keystore/key.keystore")
+            storePassword 'android'
+            keyAlias 'key0'
+            keyPassword 'android'
+        }
+    }
+    compileSdk 30
+    defaultConfig {
+        // Required when setting minSdkVersion to 20 or lower
+        multiDexEnabled true
+        minSdkVersion 23
+        versionCode 1
+        versionName "1.0"
+        useLibrary 'org.apache.http.legacy'
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        signingConfig signingConfigs.release
+    }
+
+
+    def localProperties = new Properties()
+    localProperties.load(new FileInputStream(rootProject.file("local.properties")))
+    buildTypes {
+        debug {
+            debuggable true
+            testCoverageEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+            buildConfigField "String", "host", localProperties['host']
+            buildConfigField "String", "APIKey", localProperties['APIKey']
+            buildConfigField "String", "deliveryToken", localProperties['deliveryToken']
+            buildConfigField "String", "environment", localProperties['environment']
+            buildConfigField "String", "contentTypeUID", localProperties['contentType']
+            buildConfigField "String", "assetUID", localProperties['assetUid']
+        }
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        coreLibraryDesugaringEnabled true
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 }
-
+configurations { archives }
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'com.android.volley:volley:1.2.1'
-    implementation 'androidx.test:core:1.5.0'
+    def multidex = "2.0.1"
+    def volley = "1.2.1"
+    def junit = "4.13.2"
+    configurations.configureEach { resolutionStrategy.force 'com.android.support:support-annotations:23.1.0' }
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation "com.android.volley:volley:$volley"
+    implementation "junit:junit:$junit"
+    // For AGP 7.4+
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.4'
     testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    androidTestImplementation 'androidx.test:core:1.5.0'
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:3.0.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
 }
-java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+tasks.register('clearJar', Delete) { delete 'build/libs/contentstack.jar' }
+tasks.register('unzip', Copy) {
+    def zipFile = file('build/intermediates/intermediate-jars/release/classes.jar')
+    def outputDir = file("${buildDir}/contentstack-jar")
+    from zipTree(zipFile)
+    into outputDir
 }
+tasks.register('createJar', Jar) {
+    archivesBaseName = "contentstack.jar"
+    from('build/contentstack-jar/')
+    include 'com/contentstack/'
+    //include 'META-INF/'
+}
+createJar.dependsOn(clearJar, unzip, build)
