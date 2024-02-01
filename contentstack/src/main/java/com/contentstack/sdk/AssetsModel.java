@@ -11,7 +11,7 @@ import java.util.List;
  */
 
 class AssetsModel {
-    List<Object> objects = new ArrayList<Object>();
+    List<Object> objects = new ArrayList<>();
 
     public AssetsModel(JSONObject jsonObject, boolean isFromCache) {
         jsonObject = !isFromCache && jsonObject.opt("response") == null ? jsonObject : jsonObject.optJSONObject("response");
