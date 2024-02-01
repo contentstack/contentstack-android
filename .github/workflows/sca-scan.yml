@@ -1,26 +1,15 @@
 name: Source Composition Analysis Scan
 on:
   pull_request:
-    types: [ opened, synchronize, reopened ]
+    types: [opened, synchronize, reopened]
 jobs:
   security:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@master
-      - name: Generate local.properties
-        run:  echo "sdk.dir=${ANDROID_SDK_ROOT}" > local.properties
-      - name: cat
-        run: cat local.properties
-      - name: pwd
-        run: pwd
-      - name: env
-        run: env
       - name: Run Snyk to check for vulnerabilities
         uses: snyk/actions/gradle@master
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
-          args: --fail-on=all
-          command: test || ls
-
+          args: --fail-on=all --all-sub-projects
