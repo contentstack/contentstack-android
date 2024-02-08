@@ -25,7 +25,7 @@ import java.util.TimeZone;
 /**
  * To fetch stack level information of your application from Contentstack server.
  * <p>
- * Created by Shailesh Mishra.
+ * Created by ishaileshmishra.
  * Contentstack pvt Ltd
  */
 public class Stack implements INotifyClass {
@@ -51,7 +51,7 @@ public class Stack implements INotifyClass {
     }
 
     protected Stack(String apiKey) {
-        if (apiKey==null){
+        if (apiKey == null) {
             Objects.requireNonNull("Please provide a valid ApiKey");
         }
         this.stackApiKey = apiKey;
@@ -291,17 +291,17 @@ public class Stack implements INotifyClass {
      *                 This call returns comprehensive information of all the content types available in a particular stack in your account.
      *                 <br><br><b>Example :</b><br>
      *                 <pre>
-     *                                                                                                                                                                                                                                                                                                                                                                                                 JSONObject params = new JSONObject();
-     *                                                                                                                                                                                                                                                                                                                                                                                                 params.put("include_snippet_schema", true);
-     *                                                                                                                                                                                                                                                                                                                                                                                                 params.put("limit", 3);
-     *                                                                                                                                                                                                                                                                                                                                                                                                 stack.getContentTypes(params, new ContentTypesCallback() {
-     *                                                                                                                                                                                                                                                                                                                                                                                                 &#064;Override  public void onCompletion(ContentTypesModel contentTypesModel, Error error) {
-     *                                                                                                                                                                                                                                                                                                                                                                                                 if (error == null){
-     *                                                                                                                                                                                                                                                                                                                                                                                                 // do your stuff.
-     *                                                                                                                                                                                                                                                                                                                                                                                                 }
-     *                                                                                                                                                                                                                                                                                                                                                                                                 }
-     *                                                                                                                                                                                                                                                                                                                                                                                                 });
-     *                                                                                                                                                                                                                                                                                                                                                                                                 </pre>
+     *                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 JSONObject params = new JSONObject();
+     *                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 params.put("include_snippet_schema", true);
+     *                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 params.put("limit", 3);
+     *                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 stack.getContentTypes(params, new ContentTypesCallback() {
+     *                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 &#064;Override  public void onCompletion(ContentTypesModel contentTypesModel, Error error) {
+     *                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 if (error == null){
+     *                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 // do your stuff.
+     *                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 }
+     *                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 }
+     *                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 });
+     *                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 </pre>
      */
     public void getContentTypes(JSONObject params, final ContentTypesCallback callback) {
         try {
@@ -348,15 +348,14 @@ public class Stack implements INotifyClass {
      *                     It returns all the published entries and assets of the specified stack in response.
      *                     The response also contains a sync token, which you need to store,
      *                     since this token is used to get subsequent delta updates later.
-     *
-     *                     <br><br><b>Example :</b><br>
      *                     <pre>
-     *
-     *                                                                                                                                                                                                                                                                                                                                                                                                                                                                             Stack stack = Contentstack.stack("apiKey", "deliveryToken", "environment");
-     *                                                                                                                                                                                                                                                                                                                                                                                                                                                                             stack.syncPaginationToken(pagination_token, new SyncResultCallBack()) {}
-     *                                                                                                                                                                                                                                                                                                                                                                                                                                                                             </pre>
+     *                     <br><br><b>Example :</b><br>
+     *                     Stack stack = Contentstack.stack("apiKey", "deliveryToken", "environment");
+     *                     </pre>
+     * @deprecated This method is deprecated. Use {@link #seqSync(String, SyncResultCallBack)}  instead.
      */
 
+    @Deprecated
     public void sync(SyncResultCallBack syncCallBack) {
         try {
             this.syncParams = new JSONObject();
@@ -384,7 +383,9 @@ public class Stack implements INotifyClass {
      *                        stack.syncPaginationToken(pagination_token, new SyncResultCallBack()) {}
      *                        </code>
      *                        </pre>
+     * @deprecated This method is deprecated. Use {@link #seqSync(String, SyncResultCallBack)}  instead.
      */
+    @Deprecated
     public void syncPaginationToken(String paginationToken, SyncResultCallBack syncCallBack) {
         try {
             this.syncParams = new JSONObject();
@@ -404,8 +405,9 @@ public class Stack implements INotifyClass {
      *                     and the details of the content that was deleted or updated.
      *                     <br><br><b>Example :</b><br>
      *                     <pre class="prettyprint">
-     *                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </pre>
+     *                                                             @deprecated This method is deprecated. Use {@link #seqSync(String, SyncResultCallBack)}  instead.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               </pre>
      */
+    @Deprecated
     public void syncToken(String syncToken, SyncResultCallBack syncCallBack) {
         try {
             this.syncParams = new JSONObject();
@@ -416,6 +418,42 @@ public class Stack implements INotifyClass {
         this.requestSync(syncCallBack);
     }
 
+
+    /**
+     * The initSeqSync is used to make initial call to receive data in sequential pattern, based on sequence id
+     *
+     * @param syncCallBack the callback that contains response or error
+     */
+    public void initSeqSync(SyncResultCallBack syncCallBack) {
+        try {
+            this.syncParams = new JSONObject();
+            this.syncParams.put("init", true);
+            this.syncParams.put("seq_id", true);
+        } catch (JSONException e) {
+            Log.e(TAG, Objects.requireNonNull(e.getLocalizedMessage()));
+        }
+        this.requestSync(syncCallBack);
+    }
+
+
+    /**
+     * Use the sequential token to receive data in sequential manner, based on sequence id
+     *
+     * @param seqId        the sequence id
+     * @param syncCallBack the callback that contains response or error
+     */
+    public void seqSync(String seqId, SyncResultCallBack syncCallBack) {
+        Objects.requireNonNull(seqId, "SequenceId should not be null");
+        try {
+            this.syncParams = new JSONObject();
+            this.syncParams.put("seq_id", seqId);
+        } catch (JSONException e) {
+            Log.e(TAG, Objects.requireNonNull(e.getLocalizedMessage()));
+        }
+        this.requestSync(syncCallBack);
+    }
+
+
     /**
      * @param fromDate     Enter the start date for initial sync.
      * @param syncCallBack Returns callback for sync result.
@@ -425,8 +463,8 @@ public class Stack implements INotifyClass {
      *
      *                     <br><br><b>Example :</b><br>
      *                     <pre class="prettyprint">
-     *                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            stack.syncFromDate(start_date, new SyncResultCallBack()) { }
-     *                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              </pre>
+     *                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            stack.syncFromDate(start_date, new SyncResultCallBack()) { }
+     *                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              </pre>
      */
     public void syncFromDate(Date fromDate, SyncResultCallBack syncCallBack) {
         String startFromDate = convertUTCToISO(fromDate);
@@ -475,7 +513,9 @@ public class Stack implements INotifyClass {
      *                     To do this, use syncLocale and specify the locale code as its value.
      *                     However, if you do this, the subsequent syncs will only include the entries of the specified locales.
      *                     </pre>
+     * @deprecated This method is deprecated. Use {@link #syncLocale(String, SyncResultCallBack)} ()} instead.
      */
+    @Deprecated()
     public void syncLocale(Language language, SyncResultCallBack syncCallBack) {
         String localeCode = getLanguageCode(language);
         try {
@@ -497,8 +537,8 @@ public class Stack implements INotifyClass {
      *                     </pre>
      */
     public void syncLocale(String localeCode, SyncResultCallBack syncCallBack) {
-        if (localeCode==null){
-            Objects.requireNonNull("localeCode can not be null");
+        if (localeCode == null) {
+            Objects.requireNonNull("Locale code can not be null");
         }
         try {
             this.syncParams = new JSONObject();
@@ -563,6 +603,7 @@ public class Stack implements INotifyClass {
      *                     </pre>
      */
 
+    @Deprecated
     public void sync(String contentType, Date fromDate, Language language, PublishType type, SyncResultCallBack syncCallBack) {
         String locale = getLanguageCode(language);
         sync(contentType, fromDate, locale, type, syncCallBack);
