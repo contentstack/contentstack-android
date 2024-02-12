@@ -54,15 +54,6 @@ mavenPublishing {
 //    }
 //}
 
-junitJacoco {
-    jacocoVersion = '0.8.4' // type String
-    includeInstrumentationCoverageInMergedReport = true // type boolean
-    tasks.withType(Test) {
-        jacoco.includeNoLocationClasses = true
-        jacoco.excludes = ['jdk.internal.*']
-    }
-}
-
 
 android {
     //namespace "com.contentstack.sdk"
