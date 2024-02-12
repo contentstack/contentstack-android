@@ -69,6 +69,7 @@ android {
         exclude("META-INF/*.kotlin_module")
     }
 
+
     testOptions {
         unitTests.all {
             jacoco {
