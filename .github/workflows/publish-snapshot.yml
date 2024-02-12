@@ -19,9 +19,11 @@ jobs:
         fi
     - name: Setup Gradle
       uses: gradle/gradle-build-action@v2
-    - name: Publish the SDK - Snapshot
+    - name: Build the SDK - Snapshot
       run: |
         ./gradlew clean build
+    - name: Publish the SDK - Snapshot
+      run: |
         ./gradlew publishAllPublicationsToMavenCentralRepository
       env:
         ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.mavenCentralUsername }}
