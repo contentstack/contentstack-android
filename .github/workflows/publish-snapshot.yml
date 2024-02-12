@@ -20,7 +20,16 @@ jobs:
     - name: Setup Gradle
       uses: gradle/gradle-build-action@v2
     - name: Setup local.properties
-      run: echo "sdk.dir=$ANDROID_HOME" >> local.properties
+      run: |
+        cat << EOF >> local.properties
+        sdk.dir=$ANDROID_HOME
+        host="${{ secrets.HOST }}"
+        APIKey="${{ secrets.API_KEY }}"
+        deliveryToken="${{ secrets.DELIVERY_TOKEN }}"
+        environment="${{ secrets.ENVIRONMENT }}"
+        contentType="${{ secrets.CONTENT_TYPE }}"
+        assetUid="${{ secrets.ASSET_UID }}"
+        EOF
     - name: Build the SDK - Snapshot
       run: |
         ./gradlew clean build
