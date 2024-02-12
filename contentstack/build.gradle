@@ -40,7 +40,6 @@ mavenPublishing {
     }
 }
 
-
 //tasks.register('jacocoTestReport', JacocoReport) {
 //    dependsOn['testDebugUnitTest', 'createDebugCoverageReport']
 //    reports {
