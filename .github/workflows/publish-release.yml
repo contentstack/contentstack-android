@@ -19,8 +19,8 @@ jobs:
       run: |
         ./gradlew publishAndReleaseToMavenCentral --no-configuration-cache
       env:
-        ORG_GRADLE_PROJECT_mavenCentralUsername=${{ secrets.mavenCentralUsername }}
-        ORG_GRADLE_PROJECT_mavenCentralPassword=${{ secrets.mavenCentralPassword }}
-        ORG_GRADLE_PROJECT_signingInMemoryKey=${{ secrets.signingInMemoryKey }}
-        ORG_GRADLE_PROJECT_signingInMemoryKeyId=${{ secrets.signingInMemoryKeyId }}
-        ORG_GRADLE_PROJECT_signingInMemoryKeyPassword=${{ secrets.signingInMemoryKeyPassword }}
+        ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.mavenCentralUsername }}
+        ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.mavenCentralPassword }}
+        ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.signingInMemoryKey }}
+        ORG_GRADLE_PROJECT_signingInMemoryKeyId: ${{ secrets.signingInMemoryKeyId }}
+        ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.signingInMemoryKeyPassword }}
