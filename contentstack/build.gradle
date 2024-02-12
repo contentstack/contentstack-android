@@ -41,19 +41,29 @@ mavenPublishing {
 }
 
 
-tasks.register('jacocoTestReport', JacocoReport) {
-    dependsOn['testDebugUnitTest', 'createDebugCoverageReport']
-    reports {
-        html.enabled = true
-    }
-    afterEvaluate {
-        classDirectories.setFrom(files(classDirectories.files.collect {
-            fileTree(dir: it, exclude: '**com/contentstack/okhttp**')
-            fileTree(dir: it, exclude: '**com/contentstack/okio**')
-            fileTree(dir: it, exclude: '**com/contentstack/txtmark**')
-        }))
+//tasks.register('jacocoTestReport', JacocoReport) {
+//    dependsOn['testDebugUnitTest', 'createDebugCoverageReport']
+//    reports {
+//        html.enabled = true
+//    }
+//    afterEvaluate {
+//        classDirectories.setFrom(files(classDirectories.files.collect {
+//            fileTree(dir: it, exclude: '**com/contentstack/okhttp**')
+//            fileTree(dir: it, exclude: '**com/contentstack/okio**')
+//            fileTree(dir: it, exclude: '**com/contentstack/txtmark**')
+//        }))
+//    }
+//}
+
+junitJacoco {
+    jacocoVersion = '0.8.4' // type String
+    includeInstrumentationCoverageInMergedReport = true // type boolean
+    tasks.withType(Test) {
+        jacoco.includeNoLocationClasses = true
+        jacoco.excludes = ['jdk.internal.*']
     }
 }
+
 
 android {
     //namespace "com.contentstack.sdk"
