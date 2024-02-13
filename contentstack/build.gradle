@@ -10,7 +10,7 @@ android.buildFeatures.buildConfig true
 mavenPublishing {
     publishToMavenCentral(SonatypeHost.DEFAULT)
     signAllPublications()
-    coordinates("com.contentstack.sdk", "android", "3.14.0-SNAPSHOT")
+    coordinates("com.contentstack.sdk", "android", "3.14.0")
 
     pom {
         name = "contentstack-android"
@@ -40,23 +40,7 @@ mavenPublishing {
     }
 }
 
-//tasks.register('jacocoTestReport', JacocoReport) {
-//    dependsOn['testDebugUnitTest', 'createDebugCoverageReport']
-//    reports {
-//        html.enabled = true
-//    }
-//    afterEvaluate {
-//        classDirectories.setFrom(files(classDirectories.files.collect {
-//            fileTree(dir: it, exclude: '**com/contentstack/okhttp**')
-//            fileTree(dir: it, exclude: '**com/contentstack/okio**')
-//            fileTree(dir: it, exclude: '**com/contentstack/txtmark**')
-//        }))
-//    }
-//}
-
-
 android {
-    //namespace "com.contentstack.sdk"
     packagingOptions {
         exclude("META-INF/DEPENDENCIES")
         exclude("META-INF/LICENSE")
@@ -94,7 +78,6 @@ android {
     }
     compileSdk 30
     defaultConfig {
-        // Required when setting minSdkVersion to 20 or lower
         multiDexEnabled true
         minSdkVersion 23
         versionCode 1
@@ -112,7 +95,6 @@ android {
             debuggable true
             testCoverageEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-
             buildConfigField "String", "host", localProperties['host']
             buildConfigField "String", "APIKey", localProperties['APIKey']
             buildConfigField "String", "deliveryToken", localProperties['deliveryToken']
