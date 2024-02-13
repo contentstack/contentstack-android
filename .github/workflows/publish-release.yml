@@ -12,6 +12,17 @@ jobs:
       uses: actions/checkout@v3
     - name: Setup Gradle
       uses: gradle/gradle-build-action@v2
+    - name: Setup local.properties
+      run: |
+        cat << EOF >> local.properties
+        sdk.dir=$ANDROID_HOME
+        host="${{ secrets.HOST }}"
+        APIKey="${{ secrets.API_KEY }}"
+        deliveryToken="${{ secrets.DELIVERY_TOKEN }}"
+        environment="${{ secrets.ENVIRONMENT }}"
+        contentType="${{ secrets.CONTENT_TYPE }}"
+        assetUid="${{ secrets.ASSET_UID }}"
+        EOF
     - name: Gradle build and clean
       run: |
         ./gradlew clean build
