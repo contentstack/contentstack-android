@@ -1,0 +1,44 @@
+name: Publish - Snapshot
+
+on:
+  push:
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout project sources
+      uses: actions/checkout@v3
+    - name: Check whether the version is a snapshot
+      run: |
+        if grep -q "\-SNAPSHOT" ./contentstack/build.gradle
+        then
+          :
+        else
+          exit 1
+        fi
+    - name: Setup Gradle
+      uses: gradle/gradle-build-action@v2
+    - name: Setup local.properties
+      run: |
+        cat << EOF >> local.properties
+        sdk.dir=$ANDROID_HOME
+        host="${{ secrets.HOST }}"
+        APIKey="${{ secrets.API_KEY }}"
+        deliveryToken="${{ secrets.DELIVERY_TOKEN }}"
+        environment="${{ secrets.ENVIRONMENT }}"
+        contentType="${{ secrets.CONTENT_TYPE }}"
+        assetUid="${{ secrets.ASSET_UID }}"
+        EOF
+    - name: Build the SDK - Snapshot
+      run: |
+        ./gradlew clean build
+    - name: Publish the SDK - Snapshot
+      run: |
+        ./gradlew publishAllPublicationsToMavenCentralRepository
+      env:
+        ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.mavenCentralUsername }}
+        ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.mavenCentralPassword }}
+        ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.signingInMemoryKey }}
+        ORG_GRADLE_PROJECT_signingInMemoryKeyId: ${{ secrets.signingInMemoryKeyId }}
+        ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.signingInMemoryKeyPassword }}
