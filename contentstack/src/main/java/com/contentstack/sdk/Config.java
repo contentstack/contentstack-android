@@ -52,6 +52,7 @@ public class Config {
      *                                                         config.setRegion(ContentstackRegion.EU);
      *                                                         config.setRegion(ContentstackRegion.AZURE_EU);
      *                                                         config.setRegion(ContentstackRegion.AZURE_NA);
+     *                                                         config.setRegion(ContentstackRegion.GCP_NA);
      *                                                         }
      *                                                         </pre>
      */
@@ -77,7 +78,7 @@ public class Config {
         return this;
     }
 
-    public enum ContentstackRegion {US, EU, AZURE_NA, AZURE_EU}
+    public enum ContentstackRegion {US, EU, AZURE_NA, AZURE_EU, GCP_NA}
 
     /**
      * Config constructor
