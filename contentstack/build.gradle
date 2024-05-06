@@ -4,12 +4,13 @@ plugins {
 }
 
 import com.vanniktech.maven.publish.SonatypeHost
+
 android.buildFeatures.buildConfig true
 
 mavenPublishing {
     publishToMavenCentral(SonatypeHost.DEFAULT)
     signAllPublications()
-    coordinates("com.contentstack.sdk", "android", "3.14.0")
+    coordinates("com.contentstack.sdk", "android", "3.13.0")
 
     pom {
         name = "contentstack-android"
@@ -39,7 +40,23 @@ mavenPublishing {
     }
 }
 
+
+tasks.register('jacocoTestReport', JacocoReport) {
+    dependsOn['testDebugUnitTest', 'createDebugCoverageReport']
+    reports {
+        html.enabled = true
+    }
+    afterEvaluate {
+        classDirectories.setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it, exclude: '**com/contentstack/okhttp**')
+            fileTree(dir: it, exclude: '**com/contentstack/okio**')
+            fileTree(dir: it, exclude: '**com/contentstack/txtmark**')
+        }))
+    }
+}
+
 android {
+    //namespace "com.contentstack.sdk"
     packagingOptions {
         exclude("META-INF/DEPENDENCIES")
         exclude("META-INF/LICENSE")
@@ -52,12 +69,10 @@ android {
         exclude("META-INF/*.kotlin_module")
     }
 
-
     testOptions {
         unitTests.all {
             jacoco {
                 includeNoLocationClasses = true
-                excludes = ['jdk.internal.*']
             }
         }
     }
@@ -77,6 +92,7 @@ android {
     }
     compileSdk 30
     defaultConfig {
+        // Required when setting minSdkVersion to 20 or lower
         multiDexEnabled true
         minSdkVersion 23
         versionCode 1
@@ -94,6 +110,7 @@ android {
             debuggable true
             testCoverageEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
             buildConfigField "String", "host", localProperties['host']
             buildConfigField "String", "APIKey", localProperties['APIKey']
             buildConfigField "String", "deliveryToken", localProperties['deliveryToken']
@@ -115,12 +132,14 @@ android {
 }
 configurations { archives }
 dependencies {
+    def multidex = "2.0.1"
     def volley = "1.2.1"
     def junit = "4.13.2"
     configurations.configureEach { resolutionStrategy.force 'com.android.support:support-annotations:23.1.0' }
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation "com.android.volley:volley:$volley"
     implementation "junit:junit:$junit"
+    // For AGP 7.4+
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.4'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test:core:1.5.0'
@@ -139,5 +158,6 @@ tasks.register('createJar', Jar) {
     archivesBaseName = "contentstack.jar"
     from('build/contentstack-jar/')
     include 'com/contentstack/'
+    //include 'META-INF/'
 }
 createJar.dependsOn(clearJar, unzip, build)
