@@ -1,5 +1,23 @@
 ﻿# CHANGELOG
 
+## Version 3.14.0
+
+### Date: 13-May-2024
+
+- GCP support implementation
+
+---
+
+## Version 3.13.0
+
+### Date: 02-Feb-2024
+
+- Fixed dependency installing issue
+- Fixed Download Issue
+- Error Status Code added
+- Support of early access headers
+
+---
 
 ## Version 3.12.4
 
