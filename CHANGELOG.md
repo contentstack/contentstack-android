@@ -2,11 +2,12 @@
 
 ## Version 3.14.0
 
-### Date: 10-Feb-2024
+### Date: 13-May-2024
 
 - support of new sync api
 - initSeqSync in stack class
 - seqSync in stack class
+- GCP support implementation
 
 ---
 
