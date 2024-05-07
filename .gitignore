@@ -47,4 +47,4 @@ src/main/res/
 contentstack/src/androidTest/java/com/contentstack/sdk/SyncTestCase.java
 
 # key file
-# key.keystore
+key.keystore
