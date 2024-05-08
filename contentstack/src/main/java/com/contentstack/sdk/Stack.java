@@ -80,6 +80,8 @@ public class Stack implements INotifyClass {
                     URL = "azure-na-cdn.contentstack.com";
                 } else if (region.equalsIgnoreCase("azure_eu")) {
                     URL = "azure-eu-cdn.contentstack.com";
+                } else if (region.equalsIgnoreCase("gcp_na")) {
+                    URL = "gcp-na-cdn.contentstack.com";
                 } else {
                     URL = region + "-" + URL;
                 }
