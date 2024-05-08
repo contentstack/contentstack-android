@@ -76,6 +76,11 @@ android {
             // }
         }
     }
+    // signing {
+    //     // Specify key and other signing details
+    //     useGpgCmd()
+    //     sign configurations.archives
+    // }
     signingConfigs {
         debug {
             storeFile file("../key.keystore")
@@ -98,8 +103,13 @@ android {
         versionCode 1
         versionName "1.0"
         useLibrary 'org.apache.http.legacy'
+<<<<<<< Updated upstream
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
         signingConfig signingConfigs.release
+=======
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+       signingConfig signingConfigs.release
+>>>>>>> Stashed changes
     }
 
 
@@ -111,12 +121,12 @@ android {
             testCoverageEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 
-            buildConfigField "String", "host", localProperties['host']
-            buildConfigField "String", "APIKey", localProperties['APIKey']
-            buildConfigField "String", "deliveryToken", localProperties['deliveryToken']
-            buildConfigField "String", "environment", localProperties['environment']
-            buildConfigField "String", "contentTypeUID", localProperties['contentType']
-            buildConfigField "String", "assetUID", localProperties['assetUid']
+           buildConfigField "String", "host", localProperties['host']
+           buildConfigField "String", "APIKey", localProperties['APIKey']
+           buildConfigField "String", "deliveryToken", localProperties['deliveryToken']
+           buildConfigField "String", "environment", localProperties['environment']
+           buildConfigField "String", "contentTypeUID", localProperties['contentType']
+           buildConfigField "String", "assetUID", localProperties['assetUid']
         }
         release {
             minifyEnabled false
