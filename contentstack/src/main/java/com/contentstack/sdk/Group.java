@@ -2,8 +2,8 @@ package com.contentstack.sdk;
 
 import android.text.TextUtils;
 
-import com.contentstack.txtmark.Configuration;
-import com.contentstack.txtmark.Processor;
+import com.github.rjeschke.txtmark.Configuration;
+import com.github.rjeschke.txtmark.Processor;
 
 import org.json.JSONArray;
 import org.json.JSONObject;

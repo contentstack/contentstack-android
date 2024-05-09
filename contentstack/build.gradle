@@ -10,7 +10,7 @@ android.buildFeatures.buildConfig true
 mavenPublishing {
     publishToMavenCentral(SonatypeHost.DEFAULT)
     signAllPublications()
-    coordinates("com.contentstack.sdk", "android", "3.14.0")
+    coordinates("com.contentstack.sdk", "android", "3.15.0")
 
     pom {
         name = "contentstack-android"
@@ -146,6 +146,9 @@ dependencies {
     androidTestImplementation('androidx.test.espresso:espresso-core:3.1.0', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
+
+//    implementation 'com.squareup.okio:okio:3.9.0'
+    implementation 'com.github.rjeschke:txtmark:0.12'
 }
 tasks.register('clearJar', Delete) { delete 'build/libs/contentstack.jar' }
 tasks.register('unzip', Copy) {
