@@ -178,4 +178,17 @@ public class AssetTestCase {
         stack = Contentstack.stack(appContext, DEFAULT_API_KEY, DEFAULT_DELIVERY_TOKEN, DEFAULT_ENV, config);
     }
 
+    @Test
+    public void test_GCP_NA() throws Exception {
+        Config config = new Config();
+        String DEFAULT_API_KEY = BuildConfig.APIKey;
+        String DEFAULT_DELIVERY_TOKEN = BuildConfig.deliveryToken;
+        String DEFAULT_ENV = BuildConfig.environment;
+        String DEFAULT_HOST = BuildConfig.host;
+        config.setHost(DEFAULT_HOST);
+        config.setRegion(Config.ContentstackRegion.GCP_NA);
+        Context appContext = InstrumentationRegistry.getTargetContext();
+        stack = Contentstack.stack(appContext, DEFAULT_API_KEY, DEFAULT_DELIVERY_TOKEN, DEFAULT_ENV, config);
+    }
+
 }
