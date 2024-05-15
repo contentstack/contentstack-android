@@ -4,9 +4,6 @@
 
 ### Date: 13-May-2024
 
-- support of new sync api
-- initSeqSync in stack class
-- seqSync in stack class
 - GCP support implementation
 
 ---
