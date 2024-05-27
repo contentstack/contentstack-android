@@ -1,12 +1,17 @@
 ﻿# CHANGELOG
 
+## Version 3.15.0
+
+### Date: 20-May-2024
+
+- Fixes and enhancements
+
+---
+
 ## Version 3.14.0
 
 ### Date: 13-May-2024
 
-- support of new sync api
-- initSeqSync in stack class
-- seqSync in stack class
 - GCP support implementation
 
 ---

@@ -3,7 +3,7 @@ on:
   pull_request:
     types: [opened, synchronize, reopened]
 jobs:
-  security:
+  security-sca:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
@@ -19,6 +19,6 @@ jobs:
           assetUid="${{ secrets.ASSET_UID }}"
           EOF
       - uses: snyk/actions/setup@master
-      - run: snyk test
+      - run: snyk test --fail-on=all
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
