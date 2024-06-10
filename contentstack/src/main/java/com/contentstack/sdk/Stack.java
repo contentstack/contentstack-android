@@ -39,6 +39,7 @@ public class Stack implements INotifyClass {
     protected String URL = "cdn.contentstack.io";
     protected String VERSION = "v3";
     protected Config config;
+    protected APIService service;
     protected ArrayMap<String, Object> headerGroupApp;
     protected JSONObject syncParams = null;
     protected String skip = null;
@@ -635,6 +636,9 @@ public class Stack implements INotifyClass {
             HashMap<String, Object> urlParams = getUrlParams(urlQueries);
             new CSBackgroundTask(this, this, SDKController.GET_SYNC, urlString, headers, urlParams, new JSONObject(), cacheFilePath, SDKConstant.callController.SYNC.toString(), false, SDKConstant.RequestMethod.GET, callback);
         }
+    }
+    public Taxonomy taxonomy(){
+        return new Taxonomy(this.service,this.config,this.localHeader);
     }
 
 
