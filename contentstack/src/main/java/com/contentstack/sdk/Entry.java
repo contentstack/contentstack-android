@@ -4,8 +4,8 @@ import android.text.TextUtils;
 import android.util.ArrayMap;
 import android.util.Log;
 
-import com.contentstack.txtmark.Configuration;
-import com.contentstack.txtmark.Processor;
+import com.github.rjeschke.txtmark.Configuration;
+import com.github.rjeschke.txtmark.Processor;
 
 import org.json.JSONArray;
 import org.json.JSONException;
