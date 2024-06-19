@@ -1,5 +1,13 @@
 ﻿# CHANGELOG
 
+## Version 3.15.1
+
+### Date: 24-June-2024
+
+- added support to convert json to html
+
+---
+
 ## Version 3.15.0
 
 ### Date: 20-May-2024
