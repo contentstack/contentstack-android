@@ -103,13 +103,8 @@ android {
         versionCode 1
         versionName "1.0"
         useLibrary 'org.apache.http.legacy'
-<<<<<<< Updated upstream
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
         signingConfig signingConfigs.release
-=======
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-       signingConfig signingConfigs.release
->>>>>>> Stashed changes
     }
 
 
