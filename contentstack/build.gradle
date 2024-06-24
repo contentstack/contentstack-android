@@ -10,7 +10,7 @@ android.buildFeatures.buildConfig true
 mavenPublishing {
     publishToMavenCentral(SonatypeHost.DEFAULT)
     signAllPublications()
-    coordinates("com.contentstack.sdk", "android", "3.15.0")
+    coordinates("com.contentstack.sdk", "android", "3.15.1")
 
     pom {
         name = "contentstack-android"
@@ -76,6 +76,11 @@ android {
             // }
         }
     }
+    // signing {
+    //     // Specify key and other signing details
+    //     useGpgCmd()
+    //     sign configurations.archives
+    // }
     signingConfigs {
         debug {
             storeFile file("../key.keystore")
@@ -111,12 +116,12 @@ android {
             testCoverageEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 
-            buildConfigField "String", "host", localProperties['host']
-            buildConfigField "String", "APIKey", localProperties['APIKey']
-            buildConfigField "String", "deliveryToken", localProperties['deliveryToken']
-            buildConfigField "String", "environment", localProperties['environment']
-            buildConfigField "String", "contentTypeUID", localProperties['contentType']
-            buildConfigField "String", "assetUID", localProperties['assetUid']
+           buildConfigField "String", "host", localProperties['host']
+           buildConfigField "String", "APIKey", localProperties['APIKey']
+           buildConfigField "String", "deliveryToken", localProperties['deliveryToken']
+           buildConfigField "String", "environment", localProperties['environment']
+           buildConfigField "String", "contentTypeUID", localProperties['contentType']
+           buildConfigField "String", "assetUID", localProperties['assetUid']
         }
         release {
             minifyEnabled false
