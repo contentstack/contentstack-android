@@ -118,12 +118,12 @@ android {
             testCoverageEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 
-           buildConfigField "String", "host", localProperties['host']
-           buildConfigField "String", "APIKey", localProperties['APIKey']
-           buildConfigField "String", "deliveryToken", localProperties['deliveryToken']
-           buildConfigField "String", "environment", localProperties['environment']
-           buildConfigField "String", "contentTypeUID", localProperties['contentType']
-           buildConfigField "String", "assetUID", localProperties['assetUid']
+            buildConfigField "String", "host", localProperties['host']
+            buildConfigField "String", "APIKey", localProperties['APIKey']
+            buildConfigField "String", "deliveryToken", localProperties['deliveryToken']
+            buildConfigField "String", "environment", localProperties['environment']
+            buildConfigField "String", "contentTypeUID", localProperties['contentType']
+            buildConfigField "String", "assetUID", localProperties['assetUid']
         }
         release {
             minifyEnabled false
