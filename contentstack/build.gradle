@@ -94,7 +94,7 @@ android {
     defaultConfig {
         // Required when setting minSdkVersion to 20 or lower
         multiDexEnabled true
-        minSdkVersion 23
+        minSdk 24
         versionCode 1
         versionName "1.0"
         useLibrary 'org.apache.http.legacy'
@@ -117,6 +117,12 @@ android {
             buildConfigField "String", "environment", localProperties['environment']
             buildConfigField "String", "contentTypeUID", localProperties['contentType']
             buildConfigField "String", "assetUID", localProperties['assetUid']
+            buildConfigField "String", "variantUID", localProperties['variantUID']
+            buildConfigField "String", "variantEntryUID", localProperties['variantEntryUID']
+
+            def variantsUID = localProperties['variantsUID']?.split(',')?.collect { "\"${it.trim()}\"" }?.join(', ')
+            buildConfigField "String[]", "variantsUID", "{${variantsUID}}"
+
         }
         release {
             minifyEnabled false

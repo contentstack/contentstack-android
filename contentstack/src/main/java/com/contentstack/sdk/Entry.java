@@ -1494,4 +1494,40 @@ public class Entry {
         }
         return this;
     }
+    /**
+     * method variants
+     * memberof Entry
+     * description The variant header will be added to client
+     * returns {Entry}
+     * example
+     *          import contentstack from '@contentstack/delivery-sdk'
+     *
+     *          Stack stack = contentstack.Stack("apiKey", "deliveryToken",
+     *          "environment");
+     *          Entry entry =
+     *          stack.contentType("user").entry("entry_uid").variant("variant_uid").fetch();
+     */
+    public Entry variants(String variants){
+        if (variants != null && variants.length() > 0) {
+            this.localHeader.put("x-cs-variant-uid", variants.trim());
+        }
+        return this;
+
+    }
+    public Entry variants(String[] variants){
+        if (variants != null && variants.length > 0) {
+            List<String> variantList = new ArrayList<>();
+            for (String variant : variants) {
+                if(variant != null && !variant.trim().isEmpty())
+                    variantList.add(variant.trim());
+            }
+            if(!variantList.isEmpty()){
+                this.localHeader.put("x-cs-variant-uid", String.join(", ", variantList));
+            }
+        }
+        return this;
+    }
+    public ArrayMap<String, Object> getHeaders() {
+        return localHeader;
+    }
 }
