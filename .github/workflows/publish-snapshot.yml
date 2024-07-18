@@ -37,7 +37,7 @@ jobs:
         ./gradlew clean build
     - name: Publish the SDK - Snapshot
       run: |
-        ./gradlew publishAllPublicationsToMavenCentralRepository
+       ./gradlew publishAndReleaseToMavenCentral --no-configuration-cache
       env:
         ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.mavenCentralUsername }}
         ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.mavenCentralPassword }}
