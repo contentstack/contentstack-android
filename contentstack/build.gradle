@@ -10,7 +10,7 @@ android.buildFeatures.buildConfig true
 mavenPublishing {
     publishToMavenCentral(SonatypeHost.DEFAULT)
     signAllPublications()
-    coordinates("com.contentstack.sdk", "android", "3.15.1")
+    coordinates("com.contentstack.sdk", "android", "3.15.1-SNAPSHOT")
 
     pom {
         name = "contentstack-android"
@@ -99,7 +99,7 @@ android {
     defaultConfig {
         // Required when setting minSdkVersion to 20 or lower
         multiDexEnabled true
-        minSdkVersion 23
+        minSdk 24
         versionCode 1
         versionName "1.0"
         useLibrary 'org.apache.http.legacy'
