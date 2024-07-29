@@ -52,6 +52,7 @@ public class Stack implements INotifyClass {
     protected String limit = null;
     protected String localeCode;
     private SyncResultCallBack syncCallBack;
+    protected APIService service;
 
 
     protected Stack() {

@@ -139,6 +139,7 @@ android {
 }
 configurations { archives }
 dependencies {
+    androidTestImplementation 'org.junit.jupiter:junit-jupiter:5.8.1'
     def multidex = "2.0.1"
     def volley = "1.2.1"
     def junit = "4.13.2"
@@ -146,6 +147,7 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation "com.android.volley:volley:$volley"
     implementation "junit:junit:$junit"
+
     // For AGP 7.4+
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.4'
     testImplementation 'junit:junit:4.13.2'
