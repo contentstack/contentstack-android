@@ -9,6 +9,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
+import java.net.Proxy;
 import java.net.URLEncoder;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -21,6 +22,11 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.TimeZone;
+
+import okhttp3.ConnectionPool;
+import okhttp3.OkHttpClient;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * To fetch stack level information of your application from Contentstack server.
@@ -41,6 +47,7 @@ public class Stack implements INotifyClass {
     protected Config config;
     protected ArrayMap<String, Object> headerGroupApp;
     protected JSONObject syncParams = null;
+    protected Retrofit retrofit;
     protected String skip = null;
     protected String limit = null;
     protected String localeCode;
@@ -87,8 +94,27 @@ public class Stack implements INotifyClass {
                 }
             }
         }
+        String endpoint = config.PROTOCOL + config.URL;
+        this.config.setEndpoint(endpoint);
+        client(endpoint);
 
     }
+
+    private void client(String endpoint) {
+        Proxy proxy = this.config.getProxy();
+        ConnectionPool pool = this.config.connectionPool;
+        OkHttpClient client = new OkHttpClient.Builder()
+                .proxy(proxy)
+                .connectionPool(pool)
+                .build();
+
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(endpoint)
+                .client(client)
+                .build();
+
+        this.service = retrofit.create(APIService.class);
+    }
+
 
 
     /**
@@ -162,6 +188,15 @@ public class Stack implements INotifyClass {
 
         return library;
     }
+
+    /**
+     * Create {@link Taxonomy} instance.
+     * @return
+     */
+    public Taxonomy taxonomy(){
+        return new Taxonomy(this.service,this.config,this.localHeader);
+    }
+
 
     /**
      * Get stack application key
