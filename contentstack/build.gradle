@@ -67,6 +67,8 @@ android {
         exclude("META-INF/notice.txt")
         exclude("META-INF/ASL2.0")
         exclude("META-INF/*.kotlin_module")
+        exclude("META-INF/LICENSE.md")
+        exclude("META-INF/LICENSE-notice.md")
     }
 
     testOptions {
@@ -99,7 +101,7 @@ android {
     defaultConfig {
         // Required when setting minSdkVersion to 20 or lower
         multiDexEnabled true
-        minSdkVersion 23
+        minSdk 24
         versionCode 1
         versionName "1.0"
         useLibrary 'org.apache.http.legacy'
@@ -154,6 +156,12 @@ dependencies {
 
 //    implementation 'com.squareup.okio:okio:3.9.0'
     implementation 'com.github.rjeschke:txtmark:0.12'
+    // // Retrofit
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    // // OkHttp
+    implementation 'com.squareup.okhttp3:okhttp:4.9.3'
+    // implementation 'com.squareup.okhttp3:logging-interceptor:4.9.3'
 }
 tasks.register('clearJar', Delete) { delete 'build/libs/contentstack.jar' }
 tasks.register('unzip', Copy) {
