@@ -385,8 +385,8 @@ public class Asset {
                 urlQueries.put("environment", headers.get("environment"));
             }
             String mainStringForMD5 = urlEndpoint + new JSONObject().toString() + headers.toString();
-            String md5Value = new SDKUtil().getMD5FromString(mainStringForMD5.trim());
-            File cacheFile = new File(SDKConstant.cacheFolderName + File.separator + md5Value);
+            String shaValue = new SDKUtil().getSHAFromString(mainStringForMD5.trim());
+            File cacheFile = new File(SDKConstant.cacheFolderName + File.separator + shaValue);
 
             switch (cachePolicyForCall) {
                 case IGNORE_CACHE:
