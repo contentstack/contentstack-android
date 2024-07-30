@@ -160,10 +160,25 @@ dependencies {
     implementation 'com.github.rjeschke:txtmark:0.12'
     // // Retrofit
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson'
     // // OkHttp
-    implementation 'com.squareup.okhttp3:okhttp:4.9.3'
+    implementation 'com.squareup.okhttp3:okhttp'
     // implementation 'com.squareup.okhttp3:logging-interceptor:4.9.3'
+
+    constraints {
+        implementation('com.squareup.retrofit2:converter-gson:2.9.0') {
+            because 'gson 2.8.5 used by retrofit has a vulnerability'
+        }
+        implementation('com.google.code.gson:gson@2.8.9') {
+            because 'gson 2.8.5 used by retrofit has a vulnerability'
+        }
+        implementation('com.squareup.okhttp3:okhttp:4.9.3') {
+            because 'kotlin stdlib 1.4.10 used by okhttp has a vulnerability'
+        }
+        implementation('org.jetbrains.kotlin:kotlin-stdlib@1.6.0') {
+            because 'kotlin stdlib 1.4.10 used by okhttp has a vulnerability'
+        }
+    }
 }
 tasks.register('clearJar', Delete) { delete 'build/libs/contentstack.jar' }
 tasks.register('unzip', Copy) {
