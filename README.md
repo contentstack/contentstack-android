@@ -41,7 +41,7 @@ Or,
 
 To add the Contentstack Android SDK to your existing project manually, perform the steps given below:
 
-1. [Download the Android SDK](https://docs.contentstack.com/platforms/android/android_sdk_latest)
+1. [Download the Android SDK](https://github.com/contentstack/contentstack-android/archive/refs/heads/master.zip)
    and extract the ZIP file to your local disk.
 2. Add references/dependencies using Eclipse/Android Studio:
 
