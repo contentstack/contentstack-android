@@ -1,5 +1,13 @@
 ﻿# CHANGELOG
 
+## Version 3.16.0
+
+### Date: 31-July-2024
+
+- Taxonomy Support
+
+---
+
 ## Version 3.15.1
 
 ### Date: 24-June-2024
