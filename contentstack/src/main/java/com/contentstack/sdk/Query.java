@@ -1595,8 +1595,8 @@ public class Query implements INotifyClass {
                 mainJSON.put("query", urlQueries);
                 mainJSON.put("_method", SDKConstant.RequestMethod.GET.toString());
                 String mainStringForMD5 = URL + mainJSON.toString() + headers.toString();
-                String md5Value = new SDKUtil().getMD5FromString(mainStringForMD5.trim());
-                File cacheFile = new File(SDKConstant.cacheFolderName + File.separator + md5Value);
+                String shaValue = new SDKUtil().getSHAFromString(mainStringForMD5.trim());
+                File cacheFile = new File(SDKConstant.cacheFolderName + File.separator + shaValue);
                 CachePolicy cachePolicy = CachePolicy.NETWORK_ONLY;//contentTypeInstance.stackInstance.globalCachePolicyForCall;
                 if (cachePolicyForCall != null) {
                     cachePolicy = cachePolicyForCall;

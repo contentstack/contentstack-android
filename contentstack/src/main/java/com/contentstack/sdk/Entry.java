@@ -1087,9 +1087,9 @@ public class Entry {
                 }
 
                 String mainStringForMD5 = URL + new JSONObject().toString() + headerAll.toString();
-                String md5Value = new SDKUtil().getMD5FromString(mainStringForMD5.trim());
+                String shaValue = new SDKUtil().getSHAFromString(mainStringForMD5.trim());
 
-                File cacheFile = new File(SDKConstant.cacheFolderName + File.separator + md5Value);
+                File cacheFile = new File(SDKConstant.cacheFolderName + File.separator + shaValue);
 
 
                 switch (cachePolicyForCall) {

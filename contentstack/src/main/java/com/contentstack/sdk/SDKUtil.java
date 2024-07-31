@@ -134,15 +134,15 @@ public class SDKUtil {
      * To encrypt given value.
      *
      * @param value string
-     * @return MD5 value
+     * @return SHA-256 value
      */
-    public String getMD5FromString(String value) {
+    public String getSHAFromString(String value) {
         String output;
         output = value.toString().trim();
         if (value.length() > 0) {
             try {
                 // Create MD5 Hash
-                MessageDigest digest = java.security.MessageDigest.getInstance("MD5");
+                MessageDigest digest = java.security.MessageDigest.getInstance("SHA-256");
                 digest.reset();
                 digest.update(output.getBytes());
                 byte messageDigest[] = digest.digest();

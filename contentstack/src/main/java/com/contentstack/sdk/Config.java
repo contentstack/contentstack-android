@@ -2,7 +2,11 @@ package com.contentstack.sdk;
 
 import android.text.TextUtils;
 
+import java.net.Proxy;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
+
+import okhttp3.ConnectionPool;
 
 
 /**
@@ -17,6 +21,10 @@ public class Config {
     protected String environment = null;
     protected String branch = null;
     protected String[] earlyAccess = null;
+    protected Proxy proxy = null;
+    protected ConnectionPool connectionPool = new ConnectionPool();
+    protected String endpoint;
+
 
 
     /**
@@ -177,6 +185,56 @@ public class Config {
      */
     public String getEnvironment() {
         return environment;
+    }
+
+    /**
+     * Proxy can be set like below.
+     *
+     * @param proxy Proxy setting, typically a type (http, socks) and a socket address. A Proxy is an immutable object
+     *              <br>
+     *              <br>
+     *              <b>Example:</b><br>
+     *              <br>
+     *              <code>
+     *              java.net.Proxy proxy = new Proxy(Proxy.Type.HTTP,  new InetSocketAddress("proxyHost", "proxyPort"));
+     *              java.net.Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress("sl.theproxyvpn.io", 80)); Config
+     *              config = new Config(); config.setProxy(proxy);
+     *              </code>
+     */
+    public void setProxy(Proxy proxy) {
+        this.proxy = proxy;
+    }
+
+    /**
+     * Returns the Proxy instance
+     *
+     * @return Proxy
+     */
+    public Proxy getProxy() {
+        return this.proxy;
+    }
+
+    /**
+     * Manages reuse of HTTP and HTTP/2 connections for reduced network latency. HTTP requests that * share the same
+     * {@link okhttp3.Address} may share a {@link okhttp3.Connection}. This class implements the policy * of which
+     * connections to keep open for future use.
+     *
+     * @param maxIdleConnections the maxIdleConnections default value is 5
+     * @param keepAliveDuration  the keepAliveDuration default value is 5
+     * @param timeUnit           the timeUnit default value is TimeUnit. MINUTES
+     * @return ConnectionPool
+     */
+    public ConnectionPool connectionPool(int maxIdleConnections, long keepAliveDuration, TimeUnit timeUnit) {
+        this.connectionPool = new ConnectionPool(maxIdleConnections, keepAliveDuration, timeUnit);
+        return this.connectionPool;
+    }
+
+    protected String getEndpoint() {
+        return endpoint + "/" + getVersion() + "/";
+    }
+
+    protected void setEndpoint(String endpoint) {
+        this.endpoint = endpoint;
     }
 
 
