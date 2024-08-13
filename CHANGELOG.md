@@ -1,5 +1,13 @@
 ﻿# CHANGELOG
 
+## Version 3.16.1
+
+### Date: 21-August-2024
+
+- Fetch Asset by query
+
+---
+
 ## Version 3.16.0
 
 ### Date: 31-July-2024
