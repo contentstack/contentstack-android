@@ -118,7 +118,7 @@ public class ExampleInstrumentedTest {
         Config config = new Config();
         String[] earlyAccess = {"Taxonomy", "Teams", "Terms", "LivePreview"};
         config.earlyAccess(earlyAccess);
-        stack = Contentstack.   stack(ctx, apiKey, deliveryToken, environment, config);
+        stack = Contentstack.stack(ctx, apiKey, deliveryToken, environment, config);
         assertEquals(4, stack.localHeader.keySet().size());
         assertEquals(earlyAccess[1], config.earlyAccess[1]);
         assertTrue(stack.localHeader.containsKey("x-header-ea"));
