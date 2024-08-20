@@ -150,12 +150,9 @@ public class SDKUtil {
                 // Create Hex String
                 // deepcode ignore ApiMigration: <please specify a reason of ignoring this>
                 StringBuffer hexString = new StringBuffer();
-                for (int i = 0; i < messageDigest.length; i++) {
-                    String hex = Integer.toHexString(0xFF & messageDigest[i]);
-                    if (hex.length() == 1) {
-                        hexString.append('0');
-                    }
-                    hexString.append(hex);
+                for (byte b : messageDigest) {
+                    // Format each byte as two-digit hexadecimal
+                    hexString.append(String.format("%02X", b));
                 }
 
                 return hexString.toString();
