@@ -452,5 +452,20 @@ public class AssetLibrary implements INotifyClass {
         }
         return this;
     }
+    public AssetLibrary where(String key, String value) {
+        if (value != null) {
+            try {
+                JSONObject queryParams = new JSONObject();
+                queryParams.put(key, value);
+                urlQueries.put("query", queryParams);
+            } catch (JSONException e) {
+                Log.e(TAG, "JSON error: " + e.getLocalizedMessage());
+            }
+        } else {
+            Log.e(TAG, "Value for key '" + key + "' is null. Skipping addition to query.");
+        }
+        return this;
+    }
+
 
 }
