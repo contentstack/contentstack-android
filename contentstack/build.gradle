@@ -10,7 +10,7 @@ android.buildFeatures.buildConfig true
 mavenPublishing {
     publishToMavenCentral(SonatypeHost.DEFAULT)
     signAllPublications()
-    coordinates("com.contentstack.sdk", "android", "3.16.1")
+    coordinates("com.contentstack.sdk", "android", "3.16.2")
 
     pom {
         name = "contentstack-android"

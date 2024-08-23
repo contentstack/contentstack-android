@@ -1,5 +1,13 @@
 ﻿# CHANGELOG
 
+## Version 3.16.2
+
+### Date: 28-August-2024
+
+- Early access header test
+
+---
+
 ## Version 3.16.1
 
 ### Date: 21-August-2024
