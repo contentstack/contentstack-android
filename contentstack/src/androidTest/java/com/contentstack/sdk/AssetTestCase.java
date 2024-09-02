@@ -9,9 +9,11 @@ import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 import static junit.framework.Assert.assertTrue;
 import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertNotNull;
 
 import androidx.test.InstrumentationRegistry;
 import androidx.test.core.app.ApplicationProvider;
@@ -22,6 +24,8 @@ public class AssetTestCase {
     private final String TAG = AssetTestCase.class.getSimpleName();
     private static String assetUid = BuildConfig.assetUID;
     private static Stack stack;
+    private static CountDownLatch latch;
+
 
     @BeforeClass
     public static void oneTimeSetUp() throws Exception {
@@ -189,6 +193,77 @@ public class AssetTestCase {
         config.setRegion(Config.ContentstackRegion.GCP_NA);
         Context appContext = InstrumentationRegistry.getTargetContext();
         stack = Contentstack.stack(appContext, DEFAULT_API_KEY, DEFAULT_DELIVERY_TOKEN, DEFAULT_ENV, config);
+    }
+
+    @Test
+    public void test_I_fetch_asset_by_title() {
+        final AssetLibrary assetLibrary = stack.assetLibrary().where("title", "iot-icon.png");
+        assetLibrary.fetchAll(new FetchAssetsCallback() {
+            @Override
+            public void onCompletion(ResponseType responseType, List<Asset> assets, Error error) {
+                if (error == null) {
+                    for (Asset asset : assets) {
+                        Log.d("RESULT:", "resp" + asset.json);
+                    }
+                }
+            }
+        });
+    }
+
+    @Test
+    public void test_J_fetch_asset_by_tags() {
+        final AssetLibrary assetLibrary = stack.assetLibrary().where("tags","tag1");
+        assetLibrary.fetchAll(new FetchAssetsCallback() {
+            @Override
+            public void onCompletion(ResponseType responseType, List<Asset> assets, Error error) {
+                if (error == null) {
+                    for( Asset asset : assets){
+                        Log.d("RESULT:", "resp" + asset.json);
+                    }
+                    assertTrue(assets.size()>0);
+                }
+            }
+        });
+    }
+
+    @Test
+    public void test_K_fetch_asset_by_description() {
+        final AssetLibrary assetLibrary= stack.assetLibrary().where("description","Page1");
+        assetLibrary.fetchAll(new FetchAssetsCallback() {
+            @Override
+            public void onCompletion(ResponseType responseType, List<Asset> assets, Error error) {
+                for(Asset asset : assets){
+                    Log.d("RESULT:", "resp" + asset.toJSON());
+                }
+                assertTrue(assets.size()>0);
+            }
+        });
+    }
+
+    @Test
+    public void test_L_fetch_asset_invalid() {
+        final AssetLibrary assetLibrary = stack.assetLibrary().where("title",null);
+        assetLibrary.fetchAll(new FetchAssetsCallback() {
+            @Override
+            public void onCompletion(ResponseType responseType, List<Asset> assets, Error error) {
+                Log.e("RESULT:", "ERROR:"+ error.errorMessage);
+            }
+        });
+
+    }
+
+    @Test
+    public void test_M_fetch_asset_empty_title() {
+        final AssetLibrary assetLibrary = stack.assetLibrary().where("title","");
+        assetLibrary.fetchAll(new FetchAssetsCallback() {
+            @Override
+            public void onCompletion(ResponseType responseType, List<Asset> assets, Error error) {
+                for(Asset asset : assets){
+                    Log.d("RESULT:", "resp: " + asset.toJSON());
+                }
+                assertEquals(0, assets.size());
+            }
+        });
     }
 
 }
