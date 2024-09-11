@@ -112,6 +112,8 @@ android {
 
     def localProperties = new Properties()
     localProperties.load(new FileInputStream(rootProject.file("local.properties")))
+    def variantsArray = localProperties['variantsUID']?.split(",")?.collect { it.trim() }
+    def variantsAsArrayString = 'new String[] {' + variantsArray.collect { "\"$it\"" }.join(", ") + '}'
     buildTypes {
         debug {
             debuggable true
@@ -124,6 +126,9 @@ android {
             buildConfigField "String", "environment", localProperties['environment']
             buildConfigField "String", "contentTypeUID", localProperties['contentType']
             buildConfigField "String", "assetUID", localProperties['assetUid']
+            buildConfigField "String", "variantUID", localProperties['variantUID']
+            buildConfigField "String", "variantEntryUID", localProperties['variantEntryUID']
+            buildConfigField "String[]", "variantsUID", variantsAsArrayString
         }
         release {
             minifyEnabled false
