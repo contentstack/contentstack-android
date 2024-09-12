@@ -2,6 +2,7 @@ package com.contentstack.sdk;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import android.content.Context;
 import android.util.Log;
@@ -98,4 +99,30 @@ public class ExampleInstrumentedTest {
         });
         assertNotNull(stack.syncParams);
     }
+
+    @Test 
+    public void testEarlyAccess() throws Exception {
+        Context ctx = ApplicationProvider.getApplicationContext();
+        Config config = new Config();
+        String[] earlyAccess = {"Taxonomy"};
+        config.earlyAccess(earlyAccess);
+        stack = Contentstack.stack(ctx, apiKey, deliveryToken, environment, config);
+        assertEquals(earlyAccess[0], config.earlyAccess[0]);
+        assertNotNull(stack.localHeader.containsKey("x-header-ea"));
+        assertEquals("Taxonomy", stack.localHeader.get("x-header-ea"));
+    }
+    
+    @Test
+    public void testConfigEarlyAccessMultipleFeature() throws Exception {
+        Context ctx = ApplicationProvider.getApplicationContext();
+        Config config = new Config();
+        String[] earlyAccess = {"Taxonomy", "Teams", "Terms", "LivePreview"};
+        config.earlyAccess(earlyAccess);
+        stack = Contentstack.stack(ctx, apiKey, deliveryToken, environment, config);
+        assertEquals(4, stack.localHeader.keySet().size());
+        assertEquals(earlyAccess[1], config.earlyAccess[1]);
+        assertTrue(stack.localHeader.containsKey("x-header-ea"));
+        assertEquals("Taxonomy,Teams,Terms,LivePreview", stack.localHeader.get("x-header-ea"));
+    }
+    
 }

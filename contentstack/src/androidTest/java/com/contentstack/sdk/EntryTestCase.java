@@ -27,6 +27,9 @@ public class EntryTestCase {
     private static final String CONTENT_TYPE_UID = BuildConfig.contentTypeUID;
     private static CountDownLatch latch;
     private static Stack stack;
+    private static String variantUID = BuildConfig.variantUID;
+    private static String variantEntryUID = BuildConfig.variantEntryUID;
+    private static String[] variantsUID = BuildConfig.variantsUID;
 
 
     @BeforeClass
@@ -317,6 +320,28 @@ public class EntryTestCase {
             }
         });
         latch.await();
+    }
+
+    @Test
+    public void VariantsTestSingleUid(){
+        final Entry entry = stack.contentType("product").entry(variantEntryUID).variants(variantUID);
+        entry.fetch(new EntryResultCallBack() {
+            @Override
+            public void onCompletion(ResponseType responseType, Error error) {
+                assertEquals(variantUID, entry.getHeaders().get("x-cs-variant-uid"));
+                System.out.println(entry.toJSON());
+            }
+        });
+    }
+    @Test
+    public void VariantsTestArray(){
+        final Entry entry = stack.contentType("product").entry(variantEntryUID).variants(variantsUID);
+        entry.fetch(new EntryResultCallBack() {
+            @Override
+            public void onCompletion(ResponseType responseType, Error error) {
+                System.out.println(entry.toJSON());
+            }
+        });
     }
 
 }
