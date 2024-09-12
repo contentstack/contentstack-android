@@ -10,7 +10,7 @@ android.buildFeatures.buildConfig true
 mavenPublishing {
     publishToMavenCentral(SonatypeHost.DEFAULT)
     signAllPublications()
-    coordinates("com.contentstack.sdk", "android", "3.16.1")
+    coordinates("com.contentstack.sdk", "android", "4.0.0")
 
     pom {
         name = "contentstack-android"
@@ -112,18 +112,27 @@ android {
 
     def localProperties = new Properties()
     localProperties.load(new FileInputStream(rootProject.file("local.properties")))
+    def getPropertyOrEmpty = { key ->
+        def value = localProperties.getProperty(key)
+        return value != null ? "$value" : "\"\""
+    }
+    def variantsArray = localProperties.getProperty('variantsUID')?.split(",")?.collect { it.trim() }
+    def variantsAsArrayString = variantsArray ? 'new String[] {' + variantsArray.collect { "\"$it\"" }.join(", ") + '}' : "new String[0]"
     buildTypes {
         debug {
             debuggable true
             testCoverageEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 
-           buildConfigField "String", "host", localProperties['host']
-           buildConfigField "String", "APIKey", localProperties['APIKey']
-           buildConfigField "String", "deliveryToken", localProperties['deliveryToken']
-           buildConfigField "String", "environment", localProperties['environment']
-           buildConfigField "String", "contentTypeUID", localProperties['contentType']
-           buildConfigField "String", "assetUID", localProperties['assetUid']
+            buildConfigField "String", "host", getPropertyOrEmpty('host')
+            buildConfigField "String", "APIKey", getPropertyOrEmpty('APIKey')
+            buildConfigField "String", "deliveryToken", getPropertyOrEmpty('deliveryToken')
+            buildConfigField "String", "environment", getPropertyOrEmpty('environment')
+            buildConfigField "String", "contentTypeUID", getPropertyOrEmpty('contentType')
+            buildConfigField "String", "assetUID", getPropertyOrEmpty('assetUid')
+            buildConfigField "String", "variantUID", getPropertyOrEmpty('variantUID')
+            buildConfigField "String", "variantEntryUID", getPropertyOrEmpty('variantEntryUID')
+            buildConfigField "String[]", "variantsUID", variantsAsArrayString
         }
         release {
             minifyEnabled false
