@@ -324,7 +324,7 @@ public class EntryTestCase {
 
     @Test
     public void VariantsTestSingleUid(){
-        final Entry entry = stack.contentType("author").entry(variantEntryUID).variants(variantUID);
+        final Entry entry = stack.contentType("product").entry(variantEntryUID).variants(variantUID);
         entry.fetch(new EntryResultCallBack() {
             @Override
             public void onCompletion(ResponseType responseType, Error error) {
@@ -335,7 +335,7 @@ public class EntryTestCase {
     }
     @Test
     public void VariantsTestArray(){
-        final Entry entry = stack.contentType("author").entry(variantEntryUID).variants(variantsUID);
+        final Entry entry = stack.contentType("product").entry(variantEntryUID).variants(variantsUID);
         entry.fetch(new EntryResultCallBack() {
             @Override
             public void onCompletion(ResponseType responseType, Error error) {
