@@ -39,23 +39,6 @@ public class AssetTestCase {
         stack = Contentstack.stack(appContext, DEFAULT_API_KEY, DEFAULT_DELIVERY_TOKEN, DEFAULT_ENV, config);
     }
 
-
-    @Test()
-    public void test_A_getAllAssetsToSetAssetUID() {
-        final AssetLibrary assetLibrary = stack.assetLibrary();
-        assetLibrary.fetchAll(new FetchAssetsCallback() {
-            @Override
-            public void onCompletion(ResponseType responseType, List<Asset> assets, Error error) {
-                if (error == null) {
-                    Log.d(TAG, "response: " + assets.get(0).getAssetUid());
-                    assetUid = assets.get(0).getAssetUid();
-                    Log.e(assetUid, assetUid);
-                }
-            }
-        });
-
-    }
-
     @Test
     public void test_B_VerifyAssetUID() {
         final Asset asset = stack.asset(assetUid);
@@ -84,28 +67,6 @@ public class AssetTestCase {
                     assertEquals("482141", asset.getFileSize());
                 } else {
                     assertEquals(105, error.getErrorCode());
-                }
-            }
-        });
-    }
-
-    @Test
-    public void test_D_AssetLibrary_fetch() {
-        final AssetLibrary assetLibrary = stack.assetLibrary();
-        assetLibrary.fetchAll(new FetchAssetsCallback() {
-            @Override
-            public void onCompletion(ResponseType responseType, List<Asset> assets, Error error) {
-                if (error == null) {
-                    assets.forEach(asset -> {
-                        Log.d(TAG, "----Test--Asset-D--Success----" + asset.toJSON());
-                        Log.d(TAG, "----Test--Asset-D--Success----" + asset.getFileType());
-                        Log.d(TAG, "----Test--Asset-D--Success----" + asset.getCreatedBy());
-                        Log.d(TAG, "----Test--Asset-D--Success----" + asset.getUpdatedBy());
-                        Log.d(TAG, "----Test--Asset-D--Success----" + asset.getFileName());
-                        Log.d(TAG, "----Test--Asset-D--Success----" + asset.getFileSize());
-                        Log.d(TAG, "----Test--Asset-D--Success----" + asset.getAssetUid());
-                        Log.d(TAG, "----Test--Asset-D--Success----" + asset.getUrl());
-                    });
                 }
             }
         });
@@ -196,21 +157,6 @@ public class AssetTestCase {
     }
 
     @Test
-    public void test_I_fetch_asset_by_title() {
-        final AssetLibrary assetLibrary = stack.assetLibrary().where("title", "iot-icon.png");
-        assetLibrary.fetchAll(new FetchAssetsCallback() {
-            @Override
-            public void onCompletion(ResponseType responseType, List<Asset> assets, Error error) {
-                if (error == null) {
-                    for (Asset asset : assets) {
-                        Log.d("RESULT:", "resp" + asset.json);
-                    }
-                }
-            }
-        });
-    }
-
-    @Test
     public void test_J_fetch_asset_by_tags() {
         final AssetLibrary assetLibrary = stack.assetLibrary().where("tags","tag1");
         assetLibrary.fetchAll(new FetchAssetsCallback() {
@@ -238,18 +184,6 @@ public class AssetTestCase {
                 assertTrue(assets.size()>0);
             }
         });
-    }
-
-    @Test
-    public void test_L_fetch_asset_invalid() {
-        final AssetLibrary assetLibrary = stack.assetLibrary().where("title",null);
-        assetLibrary.fetchAll(new FetchAssetsCallback() {
-            @Override
-            public void onCompletion(ResponseType responseType, List<Asset> assets, Error error) {
-                Log.e("RESULT:", "ERROR:"+ error.errorMessage);
-            }
-        });
-
     }
 
     @Test

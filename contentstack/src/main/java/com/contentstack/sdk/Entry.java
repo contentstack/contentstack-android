@@ -14,6 +14,7 @@ import org.json.JSONObject;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -50,6 +51,7 @@ public class Entry {
     private JSONObject onlyJsonObject;
     private JSONObject exceptJsonObject;
     private CachePolicy cachePolicyForCall = CachePolicy.NETWORK_ONLY;
+    private Date updatedAt = null;
 
     private long maxCacheTimeForCall = 0; //local cache time interval
     private long defaultCacheTimeInterval = 0;
@@ -139,6 +141,15 @@ public class Entry {
      */
     public String getTitle() {
         return title;
+    }
+    public String getUpdatedAt(String key) {
+        Object value = get(key);
+        if (value != null) {
+            if (value instanceof String) {
+                return (String) value;
+            }
+        }
+        return null;
     }
 
     /**
@@ -313,6 +324,19 @@ public class Entry {
         } catch (Exception e) {
             SDKUtil.showLog(TAG, e.getLocalizedMessage());
             return null;
+        }
+    }
+
+    public Boolean contains(String key) {
+        try {
+            if (resultJson != null && key != null) {
+                return resultJson.has(key);
+            } else {
+                return false;
+            }
+        } catch (Exception e) {
+            SDKUtil.showLog(TAG, e.getLocalizedMessage());
+            return false;
         }
     }
 

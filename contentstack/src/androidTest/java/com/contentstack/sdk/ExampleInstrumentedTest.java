@@ -36,11 +36,11 @@ public class ExampleInstrumentedTest {
     public void testConfig() throws Exception {
         Context ctx = ApplicationProvider.getApplicationContext();
         Config config = new Config();
-        config.setBranch("dev");
+        config.setBranch("main");
         config.setRegion(Config.ContentstackRegion.AZURE_NA);
         stack = Contentstack.stack(ctx, apiKey, deliveryToken, environment, config);
         assertEquals("com.contentstack.sdk.test", ctx.getPackageName().toLowerCase());
-        assertEquals("dev", stack.config.branch);
+        assertEquals("main", stack.config.branch);
         assertEquals("azure_na", stack.config.getRegion().toString().toLowerCase());
     }
 
