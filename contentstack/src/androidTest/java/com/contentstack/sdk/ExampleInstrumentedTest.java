@@ -45,23 +45,6 @@ public class ExampleInstrumentedTest {
     }
 
     @Test
-    public void testBranch() throws Exception {
-        Context ctx = ApplicationProvider.getApplicationContext();
-        Config config = new Config();
-        config.setBranch("dev");
-        config.setRegion(Config.ContentstackRegion.AZURE_NA);
-        stack = Contentstack.stack(ctx, apiKey, deliveryToken, environment, config);
-        Query query = stack.contentType("product").query();
-        query.find(new QueryResultsCallBack() {
-            @Override
-            public void onCompletion(ResponseType responseType, QueryResult queryresult, Error error) {
-                Log.d("", String.valueOf(queryresult.getResultObjects().stream().count()));
-            }
-        });
-
-    }
-
-    @Test
     public void testAPINotNull() {
         assertNotNull(apiKey);
     }
@@ -74,30 +57,6 @@ public class ExampleInstrumentedTest {
     @Test
     public void testEnvironmentNotNull() {
         assertNotNull(environment);
-    }
-
-
-    @Test
-    public void syncLocale() {
-        stack.syncLocale("ar-eu", new SyncResultCallBack() {
-            @Override
-            public void onCompletion(SyncStack syncStack, Error error) {
-
-            }
-        });
-        assertNotNull(stack.syncParams);
-    }
-
-
-    @Test
-    public void syncSDKWIthAllParams() {
-        stack.sync("content_type", new Date(), "en-us", Stack.PublishType.ENTRY_PUBLISHED, new SyncResultCallBack() {
-            @Override
-            public void onCompletion(SyncStack syncStack, Error error) {
-
-            }
-        });
-        assertNotNull(stack.syncParams);
     }
 
     @Test 

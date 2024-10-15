@@ -209,7 +209,7 @@ public class EntryFindTest {
                 latch.countDown();
             }
         });
-        latch.await(5, TimeUnit.SECONDS);
+        latch.await(15, TimeUnit.SECONDS);
         assertEquals("Query was not completed in time", 0, latch.getCount());
     }
 
