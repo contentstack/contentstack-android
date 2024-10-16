@@ -140,7 +140,6 @@ public class TaxonomyTestCase {
         taxonomy.find(new TaxonomyCallback() {
             @Override
             public void onResponse(JSONObject response, Error error) {
-                Log.d("Result",response.toString());
             }
         });
         assertEquals("query={\"taxonomies.color\":{\"$below\":\"red\"}}", req.url().query());
