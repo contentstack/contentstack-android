@@ -2,6 +2,9 @@ package com.contentstack.sdk;
 
 import android.text.TextUtils;
 
+import org.jetbrains.annotations.NotNull;
+import org.json.JSONObject;
+
 import java.net.Proxy;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
@@ -15,6 +18,9 @@ import okhttp3.ConnectionPool;
  * @author contentstack.com, Inc
  */
 public class Config {
+    protected String livePreviewHash = null;
+    protected String livePreviewContentType = null;
+    protected String livePreviewEntryUid = null;
     protected String PROTOCOL = "https://";
     protected String URL = "cdn.contentstack.io";
     protected String VERSION = "v3";
@@ -24,6 +30,11 @@ public class Config {
     protected Proxy proxy = null;
     protected ConnectionPool connectionPool = new ConnectionPool();
     protected String endpoint;
+    protected boolean enableLivePreview = false;
+    protected String livePreviewHost;
+    protected JSONObject livePreviewEntry = null;
+    protected String previewToken;
+    protected String managementToken;
 
 
 
@@ -214,6 +225,54 @@ public class Config {
         return this.proxy;
     }
 
+    /**
+     * Enable live preview config.
+     *
+     * @param enableLivePreview to enable live preview
+     * @return the config
+     */
+    public Config enableLivePreview(boolean enableLivePreview) {
+        this.enableLivePreview = enableLivePreview;
+        return this;
+    }
+
+    /**
+     * Sets live preview host.
+     *
+     * @param livePreviewHost the live preview host
+     * @return the live preview host
+     */
+    public Config setLivePreviewHost( @NotNull String livePreviewHost) {
+        this.livePreviewHost = livePreviewHost;
+        return this;
+    }
+
+    protected Config setLivePreviewEntry(@NotNull JSONObject livePreviewEntry) {
+        this.livePreviewEntry = livePreviewEntry;
+        return this;
+    }
+
+     /**
+     * Sets preview token.
+     *
+     * @param previewToken the preview token
+     * @return the preview token
+     */
+    public Config setPreviewToken(@NotNull String previewToken){
+        this.previewToken = previewToken;
+        return this;
+    }
+
+    /**
+     * Sets management token.
+     *
+     * @param managementToken the management token
+     * @return the management token
+     */
+    public Config setManagementToken(@NotNull String managementToken) {
+        this.managementToken = managementToken;
+        return this;
+    }
     /**
      * Manages reuse of HTTP and HTTP/2 connections for reduced network latency. HTTP requests that * share the same
      * {@link okhttp3.Address} may share a {@link okhttp3.Connection}. This class implements the policy * of which

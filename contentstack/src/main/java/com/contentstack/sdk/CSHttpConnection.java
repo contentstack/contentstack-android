@@ -7,6 +7,7 @@ import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.VolleyError;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.net.URLEncoder;
@@ -31,6 +32,7 @@ class CSHttpConnection implements IURLRequestHTTP {
     private ResultCallBack callBackObject;
     private SDKConstant.RequestMethod requestMethod;
     private JSONObject responseJSON;
+    private Config config;
 
     public HashMap<String, Object> getFormParams() {
         return formParams;
@@ -119,6 +121,9 @@ class CSHttpConnection implements IURLRequestHTTP {
         return responseJSON;
     }
 
+    public void setConfig(Config config) {
+        this.config = config;
+    }
 
     public String setFormParamsGET(HashMap<String, java.lang.Object> params) {
         if (params != null && params.size() > 0) {
@@ -242,6 +247,14 @@ class CSHttpConnection implements IURLRequestHTTP {
         jsonObjectRequest = new JSONUTF8Request(requestId, url, requestJSON, response -> {
             this.responseJSON = response;
             if (this.responseJSON != null) {
+                // Handle Live Preview if applicable
+                if (this.config.livePreviewEntry != null) {
+                    try {
+                        handleJSONArray();
+                    } catch (JSONException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
                 connectionRequest.onRequestFinished(CSHttpConnection.this);
             }
         }, this::generateBuiltError) {
@@ -254,7 +267,103 @@ class CSHttpConnection implements IURLRequestHTTP {
         jsonObjectRequest.setShouldCache(false);
         Contentstack.addToRequestQueue(SDKConstant.PROTOCOL, jsonObjectRequest, info);
     }
+//    void handleJSONArray() throws JSONException {
+//        if (responseJSON.has("entries")) {
+//            Object entriesObj = responseJSON.get("entries");
+//            if (entriesObj instanceof JSONArray) {
+//                JSONArray finalEntries = (JSONArray) entriesObj;
+//                int length = finalEntries.length();
+//                for (int idx = 0; idx < length; idx++) {
+//                    Object obj = finalEntries.get(idx);
+//                    if (obj instanceof JSONObject) {
+//                        handleJSONObject(finalEntries, (JSONObject) obj, idx);
+//                    }
+//                }
+//            }
+//        }
+//
+//        if (responseJSON.has("entry")) {
+//            Object entryObj = responseJSON.get("entry");
+//            if (entryObj instanceof JSONObject) {
+//                JSONObject entry = (JSONObject) entryObj;
+//                if (entry.has("uid")) {
+//                    Object entryUid = entry.get("uid");
+//                    Object previewUid = config.livePreviewEntry.get("uid");
+//
+//                    if (entryUid != null && previewUid != null &&
+//                            entryUid.toString().equals(previewUid.toString())) {
+//                        JSONObject newResponse = new JSONObject();
+//                        newResponse.put("entry", config.livePreviewEntry);
+//                        responseJSON = newResponse;
+//                    }
+//                }
+//            }
+//        }
+//    }
+//
+//    void handleJSONObject(JSONArray arrayEntry, JSONObject jsonObj, int idx) throws JSONException {
+//        if (jsonObj != null && jsonObj.has("uid")) {
+//            Object objUid = jsonObj.get("uid");
+//            Object previewUid = config.livePreviewEntry.get("uid");
+//
+//            if (objUid != null && previewUid != null &&
+//                    objUid.toString().equals(previewUid.toString())) {
+//                // Create temporary array with modified content
+//                JSONArray tempArray = new JSONArray();
+//                int length = arrayEntry.length();
+//                for (int i = 0; i < length; i++) {
+//                    if (i == idx) {
+//                        tempArray.put(config.livePreviewEntry);
+//                    } else {
+//                        tempArray.put(arrayEntry.get(i));
+//                    }
+//                }
+//
+//                // Create new response object
+//                JSONObject newResponse = new JSONObject();
+//                newResponse.put("entries", tempArray);
+//                responseJSON = newResponse;
+//            }
+//        }
+//    }
+    private boolean isValidJSONObjectKey(JSONObject obj, String key) {
+        try {
+            return obj != null && obj.has(key) && obj.get(key) != null;
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
+    void handleJSONArray() throws JSONException {
+    JSONArray finalEntries = responseJSON.optJSONArray("entries");
+    if (finalEntries != null) {
+        for (int idx = 0; idx < finalEntries.length(); idx++) {
+            JSONObject objJSON = finalEntries.optJSONObject(idx);
+            handleJSONObject(finalEntries, objJSON, idx);
+        }
+    }
+
+    JSONObject entry = responseJSON.optJSONObject("entry");
+    if (isValidJSONObjectKey(entry, "uid")) {
+        String entryUid = entry.optString("uid");
+        String previewUid = config.livePreviewEntry.optString("uid");
+
+        if (entryUid.equals(previewUid)) {
+            responseJSON = new JSONObject().put("entry", config.livePreviewEntry);
+        }
+    }
+}
+
+    void handleJSONObject(JSONArray arrayEntry, JSONObject jsonObj, int idx) throws JSONException {
+        if (isValidJSONObjectKey(jsonObj, "uid")) {
+            String objUid = jsonObj.optString("uid");
+            String previewUid = config.livePreviewEntry.optString("uid");
+
+            if (objUid.equals(previewUid)) {
+                arrayEntry.put(idx, config.livePreviewEntry);
+            }
+        }
+    }
 
     private String defaultUserAgent() {
         String agent = System.getProperty("http.agent");

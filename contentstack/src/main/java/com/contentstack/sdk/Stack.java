@@ -8,6 +8,7 @@ import android.util.Log;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.Proxy;
 import java.net.URLEncoder;
@@ -25,6 +26,8 @@ import java.util.TimeZone;
 
 import okhttp3.ConnectionPool;
 import okhttp3.OkHttpClient;
+import okhttp3.ResponseBody;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -37,6 +40,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class Stack implements INotifyClass {
 
     private static final String TAG = "Stack";
+    private static final String LIVE_PREVIEW = "live_preview";
+    private static final String ENTRY_UID = "entry_uid";
+    private static final String CONTENT_TYPE_UID = "content_type_uid";
     private String stackApiKey = null;
     protected ArrayMap<String, Object> localHeader = null;
     private String imageTransformationUrl;
@@ -53,6 +59,7 @@ public class Stack implements INotifyClass {
     protected String localeCode;
     private SyncResultCallBack syncCallBack;
     protected APIService service;
+    protected String livePreviewEndpoint;
 
 
     protected Stack() {
@@ -95,6 +102,7 @@ public class Stack implements INotifyClass {
                 }
             }
         }
+        includeLivePreview();
         String endpoint = config.PROTOCOL + config.URL;
         this.config.setEndpoint(endpoint);
         client(endpoint);
@@ -116,7 +124,86 @@ public class Stack implements INotifyClass {
         this.service = retrofit.create(APIService.class);
     }
 
+    private void includeLivePreview() {
+        if (config.enableLivePreview) {
+            String urlLivePreview = config.livePreviewHost;
+            if(config.region != null && !config.region.name().isEmpty()){
+                if(config.region.name().equalsIgnoreCase("US")){
+                    config.livePreviewHost = urlLivePreview;
+                }else{
+                    String regionPrefix = config.region.name().toLowerCase();
+                    config.livePreviewHost = regionPrefix + "-" + urlLivePreview;
+                }
+            }
+            this.livePreviewEndpoint = "https://".concat(config.livePreviewHost).concat("/v3/content_types/");
+        }
+    }
 
+
+     /**
+     * Live Preview lets content managers preview entry content across multiple channels before saving or publishing it
+     * to a live website. You can edit an entry and preview the content changes side by side in real-time.
+     * <p>
+     * <b>Note:</b> To be able to preview entry content, developers need to first
+     * configure Live Preview for the frontend website and then enable it from the stack settings section in
+     * Contentstack. You can set up the base URL and environment across which you want to preview content.
+     * <p>
+     *
+     * @param query the query of type {@link HashMap}
+     * @return stack
+     * <p>
+     * <b>Example</b>
+     * <p>
+     * stack = contentstack.Stack("apiKey", "deliveryToken", "environment");
+     * <p>
+     * HashMap queryMap = new HashMap();
+     * <p>
+     * stack.livePreviewQuery(queryMap)
+     * <p>
+     * @throws IOException IO Exception
+     */
+    public Stack livePreviewQuery(Map<String, String> query) throws IOException, JSONException {
+        if(config.enableLivePreview){
+        config.livePreviewHash = query.get(LIVE_PREVIEW);
+        config.livePreviewEntryUid = query.get(ENTRY_UID);
+        config.livePreviewContentType = query.get(CONTENT_TYPE_UID);
+
+        String livePreviewUrl = this.livePreviewEndpoint.concat(this.config.livePreviewContentType).concat("/entries/" + this.config.livePreviewEntryUid);
+        if (livePreviewUrl.contains("/null/")) {
+            throw new IllegalStateException("Malformed Query Url");
+        }
+        Response<ResponseBody> response = null;
+        try {
+            LinkedHashMap<String, Object> liveHeader = new LinkedHashMap<>();
+            liveHeader.put("api_key", this.localHeader.get("api_key"));
+
+            if(config.livePreviewHost.equals("rest-preview.contentstack.com"))
+            {   
+                if(config.previewToken != null) { 
+                    liveHeader.put("preview_token", this.config.previewToken);
+                } else{
+                    throw new IllegalAccessError("Provide the Preview Token for the host rest-preview.contentstack.com");
+                }
+            } else { 
+                liveHeader.put("authorization", this.config.managementToken);
+            }
+            response = this.service.getRequest(livePreviewUrl, liveHeader).execute();
+        } catch (IOException e) {
+            throw new IllegalStateException("IO Exception while executing the Live Preview url");
+        }
+        if (response.isSuccessful()) {
+            assert response.body() != null;
+            String resp = response.body().string();
+            if (!resp.isEmpty()) {
+                JSONObject liveResponse = new JSONObject(resp);
+                config.setLivePreviewEntry(liveResponse.getJSONObject("entry"));
+            }
+        }
+    } else { 
+        throw new IllegalStateException("Live Preview is not enabled in Config");
+    }
+        return this;
+    }
 
     /**
      * Represents a {@link ContentType}.<br>

@@ -1584,6 +1584,7 @@ public class Query implements INotifyClass {
             queryResultCallback = callback;
             singleQueryResultCallback = callBack;
             setQueryJson(callback);
+            includeLivePreview();
             ArrayMap<String, Object> headers = getHeader(localHeader);
 
             if (headers.size() < 1) {
@@ -1652,6 +1653,18 @@ public class Query implements INotifyClass {
         } catch (Exception e) {
             throwException("find", SDKConstant.PROVIDE_VALID_PARAMS, e);
         }
+    }
+
+    private void includeLivePreview() {
+        Config ci = contentTypeInstance.stackInstance.config;
+        if (ci.enableLivePreview && ci.livePreviewContentType.equalsIgnoreCase(formName)) {
+            if (ci.previewToken != null && !ci.previewToken.isEmpty()) {
+                ci.livePreviewHash = ci.previewToken;  // Use the preview token for live preview
+            } else if (ci.livePreviewHash == null || ci.livePreviewHash.isEmpty()) {
+                ci.livePreviewHash = "init";  // Default behavior
+                Log.d(TAG, "Live Preview enabled, but preview token is missing. Using default 'init' hash.");
+            }
+        } 
     }
 
     //fetch from network.
