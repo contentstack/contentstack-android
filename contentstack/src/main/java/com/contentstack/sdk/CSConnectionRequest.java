@@ -34,7 +34,7 @@ class CSConnectionRequest implements IRequestModelHTTP {
     private JSONObject responseJSON;
     private INotifyClass notifyClass;
     private INotifyClass assetLibrary;
-
+    private Config config;
     private Stack stackInstance;
     private Entry entryInstance;
     private Query queryInstance;
@@ -112,6 +112,7 @@ class CSConnectionRequest implements IRequestModelHTTP {
         connection = new CSHttpConnection(urlToCall, this);
         connection.setController(controller);
         connection.setHeaders(header);
+        connection.setConfig(config);
         connection.setInfo(requestInfo);
         connection.setFormParamsPOST(paramsJSON);
         connection.setCallBackObject(callBackObject);

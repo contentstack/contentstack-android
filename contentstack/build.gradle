@@ -9,7 +9,9 @@ android.buildFeatures.buildConfig true
 
 mavenPublishing {
     publishToMavenCentral(SonatypeHost.DEFAULT)
-    signAllPublications()
+    if (!project.hasProperty('publishToMavenLocal')) {
+        signAllPublications()
+    }
     coordinates("com.contentstack.sdk", "android", "4.0.1")
 
     pom {

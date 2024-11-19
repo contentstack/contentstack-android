@@ -2,6 +2,7 @@ package com.contentstack.sdk;
 
 import android.text.TextUtils;
 import android.util.ArrayMap;
+import android.util.Log;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.VolleyError;
@@ -219,8 +220,6 @@ class CSHttpConnection implements IURLRequestHTTP {
 
         return urlParams;
     }
-
-
     @Override
     public void send() {
         String url = null;
@@ -248,13 +247,13 @@ class CSHttpConnection implements IURLRequestHTTP {
             this.responseJSON = response;
             if (this.responseJSON != null) {
                 // Handle Live Preview if applicable
-                if (this.config.livePreviewEntry != null) {
-                    try {
-                        handleJSONArray();
-                    } catch (JSONException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
+//                if (this.config.livePreviewEntry != null) {
+//                    try {
+//                        handleJSONArray();
+//                    } catch (JSONException e) {
+//                        throw new RuntimeException(e);
+//                    }
+//                }
                 connectionRequest.onRequestFinished(CSHttpConnection.this);
             }
         }, this::generateBuiltError) {
