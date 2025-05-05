@@ -1,6 +1,9 @@
 threshold: medium
 
 fileignoreconfig:
+- filename: .github/workflows/secrets-scan.yml
+  ignore_detectors:
+    - filecontent
   - filename: contentstack/src/main/java/com/contentstack/okhttp/internal/spdy/Spdy3.java
     checksum: 5f6979f6336684787ff20dc5ccb0ea31665dcb4801845a34770d3bd30387f129
   - filename: contentstack/src/main/java/com/contentstack/okhttp/internal/DiskLruCache.java
