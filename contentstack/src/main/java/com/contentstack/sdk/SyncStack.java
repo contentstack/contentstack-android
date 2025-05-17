@@ -18,9 +18,23 @@ public class SyncStack {
     private int count;
     private String URL;
     private String pagination_token;
-    private String sync_token;
+    private String syncToken;
     private ArrayList<JSONObject> syncItems;
+    private String sequentialToken;
 
+
+    /**
+     * Gets sequential token based on sync response
+     *
+     * @return sequentialToken
+     */
+    public String getSequentialToken() {
+        return sequentialToken;
+    }
+
+    public void setSequentialToken(String sequentialToken) {
+        this.sequentialToken = sequentialToken;
+    }
 
     /**
      * Gets url.
@@ -82,7 +96,7 @@ public class SyncStack {
      * @return the sync token
      */
     public String getSyncToken() {
-        return this.sync_token;
+        return this.syncToken;
     }
 
     /**
@@ -130,12 +144,17 @@ public class SyncStack {
                     if (receiveJson.has("pagination_token")) {
                         this.pagination_token = receiveJson.optString("pagination_token");
                     } else {
-                        this.sync_token = null;
+                        this.syncToken = null;
                     }
                     if (receiveJson.has("sync_token")) {
-                        this.sync_token = receiveJson.optString("sync_token");
+                        this.syncToken = receiveJson.optString("sync_token");
                     } else {
-                        this.sync_token = null;
+                        this.syncToken = null;
+                    }
+                    if (receiveJson.has("last_seq_id")) {
+                        this.sequentialToken = receiveJson.optString("last_seq_id");
+                    } else {
+                        this.sequentialToken = null;
                     }
                 }
             } catch (Exception e) {
