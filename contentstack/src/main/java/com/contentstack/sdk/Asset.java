@@ -607,4 +607,13 @@ public class Asset {
         return this;
     }
 
+    public Asset includeBranch() {
+        try {
+            urlQueries.put("include_branch", true);
+        } catch (JSONException e) {
+            Log.e(TAG, Objects.requireNonNull(e.getLocalizedMessage()));
+        }
+        return this;
+    }
+
 }

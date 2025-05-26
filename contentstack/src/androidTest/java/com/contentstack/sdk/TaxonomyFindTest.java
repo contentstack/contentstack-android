@@ -38,15 +38,15 @@ public class TaxonomyFindTest {
         final CountDownLatch latch = new CountDownLatch(1);
         Taxonomy taxonomy = stack.taxonomy();
         List<String> taxonomyQueryList = new ArrayList<>();
-        taxonomyQueryList.add("term_two");
-        taxonomy.in("taxonomies.two", taxonomyQueryList).find(new TaxonomyCallback() {
+        taxonomyQueryList.add("maroon");
+        taxonomy.in("taxonomies.color", taxonomyQueryList).find(new TaxonomyCallback() {
             @Override
             public void onResponse(JSONObject response, Error error) {
                 assertNull("There should be no error", error);
                 assertNotNull("Entry should have been fetched", response);
                 try {
                     JSONArray entries = (JSONArray)response.get("entries");
-                    assertEquals(2, entries.length());
+                    assertEquals(1, entries.length());
                 } catch (Exception e) {
                     assertNull("Error should be null, fail the test", e);
                 }
@@ -66,9 +66,9 @@ public class TaxonomyFindTest {
         Taxonomy taxonomy = stack.taxonomy();
         List<JSONObject> taxonomyQueryList = new ArrayList<>();
         JSONObject item1 = new JSONObject();
-        item1.put("taxonomies.one", "term_one");
+        item1.put("taxonomies.color", "orange");
         JSONObject item2 = new JSONObject();
-        item2.put("taxonomies.two", "term_two");
+        item2.put("taxonomies.country", "zambia");
         taxonomyQueryList.add(item1);
         taxonomyQueryList.add(item2);
         taxonomy.or(taxonomyQueryList).find(new TaxonomyCallback() {
@@ -98,9 +98,9 @@ public class TaxonomyFindTest {
         Taxonomy taxonomy = stack.taxonomy();
         List<JSONObject> taxonomyQueryList = new ArrayList<>();
         JSONObject item1 = new JSONObject();
-        item1.put("taxonomies.one", "term_one");
+        item1.put("taxonomies.color", "green");
         JSONObject item2 = new JSONObject();
-        item2.put("taxonomies.two", "term_two");
+        item2.put("taxonomies.country", "india");
         taxonomyQueryList.add(item1);
         taxonomyQueryList.add(item2);
         taxonomy.and(taxonomyQueryList).find(new TaxonomyCallback() {
@@ -110,7 +110,7 @@ public class TaxonomyFindTest {
                 assertNotNull("Entry should have been fetched", response);
                 try {
                     JSONArray entries = (JSONArray)response.get("entries");
-                    assertEquals(2, entries.length());
+                    assertEquals(1, entries.length());
                 } catch (Exception e) {
                     assertNull("Error should be null, fail the test", e);
                 }
@@ -128,7 +128,7 @@ public class TaxonomyFindTest {
         // Create a latch to wait for the async operation to complete
         final CountDownLatch latch = new CountDownLatch(1);
         Taxonomy taxonomy = stack.taxonomy();
-        taxonomy.above("taxonomies.one", "term_one_child").find(new TaxonomyCallback() {
+        taxonomy.above("taxonomies.color", "maroon").find(new TaxonomyCallback() {
             @Override
             public void onResponse(JSONObject response, Error error) {
                 assertNull("There should be no error", error);
@@ -153,14 +153,14 @@ public class TaxonomyFindTest {
         // Create a latch to wait for the async operation to complete
         final CountDownLatch latch = new CountDownLatch(1);
         Taxonomy taxonomy = stack.taxonomy();
-        taxonomy.equalAndBelow("taxonomies.one", "term_one_child").find(new TaxonomyCallback() {
+        taxonomy.equalAndBelow("taxonomies.color", "maroon").find(new TaxonomyCallback() {
             @Override
             public void onResponse(JSONObject response, Error error) {
                 assertNull("There should be no error", error);
                 assertNotNull("Entry should have been fetched", response);
                 try {
                     JSONArray entries = (JSONArray)response.get("entries");
-                    assertEquals(2, entries.length());
+                    assertEquals(1, entries.length());
                 } catch (Exception e) {
                     assertNull("Error should be null, fail the test", e);
                 }
@@ -178,7 +178,7 @@ public class TaxonomyFindTest {
         // Create a latch to wait for the async operation to complete
         final CountDownLatch latch = new CountDownLatch(1);
         Taxonomy taxonomy = stack.taxonomy();
-        taxonomy.below("taxonomies.one", "term_one_child").find(new TaxonomyCallback() {
+        taxonomy.below("taxonomies.color", "red").find(new TaxonomyCallback() {
             @Override
             public void onResponse(JSONObject response, Error error) {
                 assertNull("There should be no error", error);
@@ -203,14 +203,14 @@ public class TaxonomyFindTest {
         // Create a latch to wait for the async operation to complete
         final CountDownLatch latch = new CountDownLatch(1);
         Taxonomy taxonomy = stack.taxonomy();
-        taxonomy.equalAndBelow("taxonomies.one", "term_one_child").find(new TaxonomyCallback() {
+        taxonomy.equalAndBelow("taxonomies.color", "red").find(new TaxonomyCallback() {
             @Override
             public void onResponse(JSONObject response, Error error) {
                 assertNull("There should be no error", error);
                 assertNotNull("Entry should have been fetched", response);
                 try {
                     JSONArray entries = (JSONArray)response.get("entries");
-                    assertEquals(2, entries.length());
+                    assertEquals(4, entries.length());
                 } catch (Exception e) {
                     assertNull("Error should be null, fail the test", e);
                 }
