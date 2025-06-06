@@ -41,4 +41,6 @@ public class SDKController {
      * The constant GET_CONTENT_TYPES.
      */
     public static final String GET_CONTENT_TYPES = "getContentTypes";
+
+    public static final String GET_GLOBAL_FIELDS = "getGlobalFields";
 }
