@@ -38,19 +38,40 @@ public class GlobalFieldTestCase {
 
     @Test
     public void test_fetchGlobalField() throws Exception {
-      GlobalField globalField = stack.globalField("specific_gf_uid");
-        globalField.findAll(new GlobalFieldsResultCallback() {
+//      GlobalField globalField = stack.globalField("specific_gf_uid").includeBranch();
+//        globalField.fetch(new GlobalFieldsResultCallback() {
+//            @Override
+//            public void onCompletion(GlobalFieldsModel globalFieldsModel, Error error) {
+//                if (error == null) {
+//                    JSONArray result = globalFieldsModel.getResultArray();
+//                    System.out.println("✅ Global Fields Response: " + result);
+////                    Assertions.assertEquals("main", );
+//                    Log.d(TAG, "✅ Global Fields Response: " + result);
+//                    Assertions.assertNotNull(result);
+//                } else {
+//                    System.out.println("❌ Error: " + error.getErrorMessage());
+//                }
+//                latch.countDown(); // Signal that response arrived
+//            }
+//        });
+        CountDownLatch latch = new CountDownLatch(1); // <- define inside test
+
+        GlobalField globalField = stack.globalField("specific_gf_uid").includeBranch();
+        globalField.fetch(new GlobalFieldsResultCallback() {
             @Override
             public void onCompletion(GlobalFieldsModel globalFieldsModel, Error error) {
                 if (error == null) {
                     JSONArray result = globalFieldsModel.getResultArray();
-                    System.out.println("✅ Global Fields Response: " + result);
+                    Log.d(TAG, "✅ Global Fields Response: " + result);
+                    Assertions.assertNotNull(result);
                 } else {
-                    System.out.println("❌ Error: " + error.getErrorMessage());
+                    Log.e(TAG, "❌ Error: " + error.getErrorMessage());
                 }
-                latch.countDown(); // Signal that response arrived
+                latch.countDown();
             }
         });
+
+        latch.await(10, TimeUnit.SECONDS); // Wait for callback
     }
 
 

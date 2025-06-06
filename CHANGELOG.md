@@ -1,5 +1,21 @@
 ﻿# CHANGELOG
 
+## Version 4.0.1
+
+### Date: 06-June-2024
+
+- Integration tests added
+- Global fields support added
+
+---
+## Version 4.0.0
+
+### Date: 12-Sept-2024
+
+- Added support for the upcoming Feature
+
+---
+
 ## Version 3.16.1
 
 ### Date: 21-August-2024
