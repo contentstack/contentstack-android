@@ -127,26 +127,6 @@ class CSBackgroundTask {
         }
     }
 
-    public CSBackgroundTask(GlobalField globalField, Stack stackInstance, String controller, String url, ArrayMap<String, Object> headers, HashMap<String, Object> urlParams, JSONObject jsonMain, String cacheFilePath, String requestInfo, boolean b, SDKConstant.RequestMethod method, ResultCallBack callback) {
-
-        if (SDKConstant.IS_NETWORK_AVAILABLE) {
-            if (headers != null && headers.size() > 0) {
-
-                String URL = stackInstance.PROTOCOL + stackInstance.URL + url;
-
-                CSConnectionRequest csConnectionRequest = new CSConnectionRequest(globalField);
-                csConnectionRequest.setGlobalFieldInstance(globalField);
-                csConnectionRequest.setURLQueries(urlParams);
-                csConnectionRequest.setParams(URL, method, controller, jsonMain, headers, cacheFilePath, requestInfo, callback);
-
-            } else {
-                sendErrorForHeader(callback);
-            }
-        } else {
-            sendErrorToUser(callback);
-        }
-    }
-
 
     private void sendErrorToUser(ResultCallBack callbackObject) {
         Error error = new Error();

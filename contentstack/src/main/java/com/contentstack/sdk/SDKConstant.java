@@ -31,7 +31,6 @@ public class SDKConstant {
         ASSET,
         SYNC,
         CONTENT_TYPES,
-        GLOBAL_FIELDS,
         ASSET_LIBRARY;
     }
 
@@ -50,7 +49,4 @@ public class SDKConstant {
     public final static String PROVIDE_VALID_PARAMS = "Please provide valid params.";
     public final static String ENTRY_IS_NOT_PRESENT_IN_CACHE = "ENTRY is not present in cache";
     public final static String NETWORK_CALL_RESPONSE = "Error while saving network call response.";
-    public final static String PLEASE_PROVIDE_GLOBAL_FIELD_UID = "Please provide global field uid.";
-
-
 }

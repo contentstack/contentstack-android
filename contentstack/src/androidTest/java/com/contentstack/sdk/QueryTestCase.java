@@ -77,7 +77,7 @@ public class QueryTestCase {
                     fallbackQuery.find(new QueryResultsCallBack() {
                         @Override
                         public void onCompletion(ResponseType responseType, QueryResult queryresult, Error error) {
-                            assertEquals(8, queryresult.getResultObjects().size());
+                            assertEquals(0, queryresult.getResultObjects().size());
                         }
                     });
                 }

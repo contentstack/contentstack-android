@@ -3,7 +3,6 @@ package com.contentstack.sdk;
 import static junit.framework.TestCase.assertEquals;
 
 import android.content.Context;
-import android.util.Log;
 
 import androidx.test.core.app.ApplicationProvider;
 
@@ -14,7 +13,6 @@ import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -46,7 +44,7 @@ public class EntryFindTest {
             public void onCompletion(ResponseType responseType, QueryResult queryResult, Error error) {
                 assertNull("There should be no error", error);
                 assertNotNull("Entry should have been fetched", queryResult);
-                assertEquals("variant-base-product", queryResult.getResultObjects().get(0).getTitle());
+                assertEquals("source5", queryResult.getResultObjects().get(0).getTitle());
                 // Unlock the latch to allow the test to proceed
                 latch.countDown();
             }
@@ -126,9 +124,9 @@ public class EntryFindTest {
     @Test
     public void testFindLessThan() throws InterruptedException {
         final CountDownLatch latch = new CountDownLatch(1);
-        final Query query = stack.contentType(CONTENT_TYPE_UID).query();
-        int value = 90;
-        query.lessThan("price", value);
+        final Query query = stack.contentType("numbers_content_type").query();
+        int value = 11;
+        query.lessThan("num_field", value);
         query.find(new QueryResultsCallBack() {
             @Override
             public void onCompletion(ResponseType responseType, QueryResult queryResult, Error error) {
@@ -136,8 +134,8 @@ public class EntryFindTest {
                 assertNotNull("Entry should have been fetched", queryResult);
                 List<Entry> entries = queryResult.getResultObjects();
                 for (int i = 0; i < entries.size(); i++) {
-                    Integer currNum = (int)entries.get(i).get("price");
-                    assertTrue("Curr price should be less than the value", currNum < value);
+                    Integer currNum = (int)entries.get(i).get("num_field");
+                    assertTrue("Curr num_field should be less than the value", currNum < value);
                 }
                 latch.countDown();
             }
@@ -149,9 +147,9 @@ public class EntryFindTest {
     @Test
     public void testFindLessThanOrEqualTo() throws InterruptedException {
         final CountDownLatch latch = new CountDownLatch(1);
-        final Query query = stack.contentType(CONTENT_TYPE_UID).query();
-        int value = 90;
-        query.lessThanOrEqualTo("price", value);
+        final Query query = stack.contentType("numbers_content_type").query();
+        int value = 11;
+        query.lessThanOrEqualTo("num_field", value);
         query.find(new QueryResultsCallBack() {
             @Override
             public void onCompletion(ResponseType responseType, QueryResult queryResult, Error error) {
@@ -159,8 +157,8 @@ public class EntryFindTest {
                 assertNotNull("Entry should have been fetched", queryResult);
                 List<Entry> entries = queryResult.getResultObjects();
                 for (int i = 0; i < entries.size(); i++) {
-                    Integer currNum = (int)entries.get(i).get("price");
-                    assertTrue("Curr price should be less than or equal to the value", currNum <= value);
+                    Integer currNum = (int)entries.get(i).get("num_field");
+                    assertTrue("Curr num_field should be less than or equal to the value", currNum <= value);
                 }
                 latch.countDown();
             }
@@ -172,9 +170,9 @@ public class EntryFindTest {
     @Test
     public void testFindGreaterThan() throws InterruptedException {
         final CountDownLatch latch = new CountDownLatch(1);
-        final Query query = stack.contentType(CONTENT_TYPE_UID).query();
-        int value = 90;
-        query.greaterThan("price", value);
+        final Query query = stack.contentType("numbers_content_type").query();
+        int value = 11;
+        query.greaterThan("num_field", value);
         query.find(new QueryResultsCallBack() {
             @Override
             public void onCompletion(ResponseType responseType, QueryResult queryResult, Error error) {
@@ -182,8 +180,8 @@ public class EntryFindTest {
                 assertNotNull("Entry should have been fetched", queryResult);
                 List<Entry> entries = queryResult.getResultObjects();
                 for (int i = 0; i < entries.size(); i++) {
-                    Integer currNum = (int)entries.get(i).get("price");
-                    assertTrue("Curr price should be greater than the value", currNum > value);
+                    Integer currNum = (int)entries.get(i).get("num_field");
+                    assertTrue("Curr num_field should be greater than the value", currNum > value);
                 }
                 latch.countDown();
             }
@@ -195,9 +193,9 @@ public class EntryFindTest {
     @Test
     public void testFindGreaterThanOREqualTo() throws InterruptedException {
         final CountDownLatch latch = new CountDownLatch(1);
-        final Query query = stack.contentType(CONTENT_TYPE_UID).query();
-        int value = 90;
-        query.greaterThanOrEqualTo("price", value);
+        final Query query = stack.contentType("numbers_content_type").query();
+        int value = 11;
+        query.greaterThanOrEqualTo("num_field", value);
         query.find(new QueryResultsCallBack() {
             @Override
             public void onCompletion(ResponseType responseType, QueryResult queryResult, Error error) {
@@ -205,8 +203,8 @@ public class EntryFindTest {
                 assertNotNull("Entry should have been fetched", queryResult);
                 List<Entry> entries = queryResult.getResultObjects();
                 for (int i = 0; i < entries.size(); i++) {
-                    Integer currNum = (int)entries.get(i).get("price");
-                    assertTrue("Curr price should be greater than or equal to the value", currNum >= value);
+                    Integer currNum = (int)entries.get(i).get("num_field");
+                    assertTrue("Curr num_field should be greater than or equal to the value", currNum >= value);
                 }
                 latch.countDown();
             }
@@ -219,7 +217,7 @@ public class EntryFindTest {
     public void testFindContainedIn() throws InterruptedException {
         final CountDownLatch latch = new CountDownLatch(1);
         final Query query = stack.contentType(CONTENT_TYPE_UID).query();
-        String[] values = {"kids dress"};
+        String[] values = {"source1"};
         query.containedIn("title", values);
         query.find(new QueryResultsCallBack() {
             @Override
@@ -242,7 +240,7 @@ public class EntryFindTest {
     public void testFindNotContainedIn() throws InterruptedException {
         final CountDownLatch latch = new CountDownLatch(1);
         final Query query = stack.contentType(CONTENT_TYPE_UID).query();
-        String[] values = {"kids dress"};
+        String[] values = {"source1"};
         query.notContainedIn("title", values);
         query.find(new QueryResultsCallBack() {
             @Override
@@ -308,10 +306,10 @@ public class EntryFindTest {
     @Test
     public void testFindOr() throws InterruptedException {
         final CountDownLatch latch = new CountDownLatch(1);
-        String[] values = {"kids dress"};
-        String field = "in_stock";
+        String[] values = {"source1"};
+        String field = "boolean";
         final Query query1 = stack.contentType(CONTENT_TYPE_UID).query().containedIn("title", values);
-        final Query query2 = stack.contentType(CONTENT_TYPE_UID).query().where(field, 300);
+        final Query query2 = stack.contentType(CONTENT_TYPE_UID).query().where(field, true);
         final Query query = stack.contentType(CONTENT_TYPE_UID).query();
         ArrayList<Query> queryList = new ArrayList<>();
         queryList.add(query1);
@@ -364,7 +362,7 @@ public class EntryFindTest {
     @Test
     public void testFindIncludeReference() throws InterruptedException {
         final CountDownLatch latch = new CountDownLatch(1);
-        String field = "image";
+        String field = "reference";
         final Query query = stack.contentType(CONTENT_TYPE_UID).query();
         query.includeReference(field);
         query.find(new QueryResultsCallBack() {
@@ -375,8 +373,15 @@ public class EntryFindTest {
                 List<Entry> entries = queryResult.getResultObjects();
                 for (int i = 0; i < entries.size(); i++) {
                     try {
-                        Log.d("Entry", entries.get(i).get(field).toString());
-                    } catch (Exception e) {
+                        JSONArray ref = (JSONArray)entries.get(i).get(field);
+                        // Convert JSONArray to List
+                        List<String> list = new ArrayList<>();
+                        for (int j = 0; j < ref.length(); j++) {
+                            JSONObject jsonObject = ref.getJSONObject(j);  // Get the first JSONObject
+                            // Title is a mandatory field, so we can test against it being present
+                            assertTrue("One of or should be true", jsonObject.has("title"));
+                        }
+                    } catch (JSONException e) {
                         throw new RuntimeException(e);
                     }
                 }

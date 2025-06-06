@@ -40,8 +40,6 @@ class CSConnectionRequest implements IRequestModelHTTP {
     private Query queryInstance;
     private Asset assetInstance;
     private ContentType contentTypeInstance;
-
-    private GlobalField globalFieldInstance;
     private JSONObject errorJObject;
     private Error errorObject = new Error();
 
@@ -68,10 +66,6 @@ class CSConnectionRequest implements IRequestModelHTTP {
         this.contentTypeInstance = contentType;
     }
 
-    public CSConnectionRequest(GlobalField globalField) {
-        this.globalFieldInstance = globalField;
-    }
-
     public void setQueryInstance(Query queryInstance) {
         this.queryInstance = queryInstance;
     }
@@ -86,10 +80,6 @@ class CSConnectionRequest implements IRequestModelHTTP {
 
     public void setContentTypeInstance(ContentType contentTypeInstance) {
         this.contentTypeInstance = contentTypeInstance;
-    }
-
-    public void setGlobalFieldInstance(GlobalField globalFieldInstance) {
-        this.globalFieldInstance = globalFieldInstance;
     }
 
     public void setParams(Object... objects) {
@@ -258,12 +248,6 @@ class CSConnectionRequest implements IRequestModelHTTP {
             model.setJSON(responseJSON);
             if (request.getCallBackObject() != null) {
                 ((ContentTypesCallback) request.getCallBackObject()).onRequestFinish(model);
-            }
-        } else if (controller.equalsIgnoreCase(SDKController.GET_GLOBAL_FIELDS)) {
-            GlobalFieldsModel model = new GlobalFieldsModel();
-            model.setJSON(responseJSON);
-            if (request.getCallBackObject() != null) {
-                ((GlobalFieldsResultCallback) request.getCallBackObject()).onRequestFinish(model);
             }
         }
     }

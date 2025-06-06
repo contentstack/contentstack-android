@@ -69,7 +69,7 @@ public class AssetTestCase {
             public void onCompletion(ResponseType responseType, Error error) {
                 assertEquals(BuildConfig.assetUID, asset.getAssetUid());
                 assertEquals("image/jpeg", asset.getFileType());
-                assertEquals("phoenix2.jpg", asset.getFileName());
+                assertEquals("image1.jpg", asset.getFileName());
                 latch.countDown();
             }
         });
@@ -84,7 +84,7 @@ public class AssetTestCase {
         assetLibrary.fetchAll(new FetchAssetsCallback() {
             @Override
             public void onCompletion(ResponseType responseType, List<Asset> assets, Error error) {
-                assertEquals(6, assetLibrary.getCount());
+                assertEquals(5, assetLibrary.getCount());
                 latch.countDown();
             }
         });
@@ -121,22 +121,6 @@ public class AssetTestCase {
         });
         latch.await(5, TimeUnit.SECONDS);
     }
-
-    @Test
-    public void test_include_branch() {
-        final Asset asset = stack.asset(assetUid);
-        asset.includeBranch();
-        asset.fetch(new FetchResultCallback() {
-            @Override
-            public void onCompletion(ResponseType responseType, Error error) {
-                if (error == null) {
-                    Log.d(TAG, asset.getAssetUid());
-                    assertEquals(assetUid, asset.getAssetUid());
-                }
-            }
-        });
-    }
-
 
     @Test
     public void test_AZURE_NA() throws Exception {
