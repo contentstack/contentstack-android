@@ -138,6 +138,44 @@ public class Stack implements INotifyClass {
     }
 
 
+
+    /**
+     * Represents a Global field instance.
+     *
+     * <br><br><b>Example :</b><br>
+     * <pre class="prettyprint">
+     * Stack stack = Contentstack.stack(context, "apiKey", "deliveryToken", "stag");
+     * GlobalField globalField = stack.globalField();
+     * </pre>
+     * @return Global field instance
+     */
+
+    public GlobalField globalField(){
+        GlobalField globalField = new GlobalField();
+        globalField.setStackInstance(this);
+        return globalField;
+    }
+
+
+
+    /**
+     * Represents Global Field with a specific global_field_uid
+     * <br><br><b>Example :</b><br>
+     * <pre class="prettyprint">
+     * Stack stack = Contentstack.stack(context, "apiKey", "deliveryToken", "stag");
+     * GlobalField globalField = stack.globalField("global_field_uid");
+     * </pre>
+     * @param global_field_uid
+     * @return
+     */
+    public GlobalField globalField(String global_field_uid){
+        GlobalField globalField = new GlobalField(global_field_uid);
+        globalField.setStackInstance(this);
+        return globalField;
+    }
+
+
+
     /**
      * Create {@link Asset} instance.
      *
