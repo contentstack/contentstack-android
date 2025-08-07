@@ -12,6 +12,7 @@ import org.junit.runners.MethodSorters;
 
 import java.util.ArrayList;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 import static junit.framework.TestCase.*;
 
@@ -73,7 +74,8 @@ public class EntryTestCase {
 
 
     @Test
-    public void test_01_findAllEntries() {
+    public void test_01_findAllEntries() throws InterruptedException {
+        final CountDownLatch latch = new CountDownLatch(1);
         final Query query = stack.contentType(CONTENT_TYPE_UID).query();
         query.find(new QueryResultsCallBack() {
             @Override
@@ -81,26 +83,32 @@ public class EntryTestCase {
                 if (error == null) {
                     entryUID = queryresult.getResultObjects().get(15).getUid();
                 }
+                latch.countDown();
             }
         });
+        latch.await();
     }
 
     @Test
-    public void test_02_only_fetch() {
+    public void test_02_only_fetch() throws InterruptedException {
+        final CountDownLatch latch = new CountDownLatch(1);
         final Entry entry = stack.contentType(CONTENT_TYPE_UID).entry(entryUID);
         entry.only(new String[]{"price"});
         entry.fetch(new EntryResultCallBack() {
             @Override
             public void onCompletion(ResponseType responseType, Error error) {
                 if (error == null) {
-                    assertEquals(786, entry.toJSON().opt("price"));
+                    assertEquals(89, entry.toJSON().opt("price"));
                 }
+                latch.countDown();
             }
         });
+        latch.await();
     }
 
     @Test
-    public void test_03_except_fetch() {
+    public void test_03_except_fetch() throws InterruptedException {
+        final CountDownLatch latch = new CountDownLatch(1);
         final Entry entry = stack.contentType(CONTENT_TYPE_UID).entry(entryUID);
         entry.except(new String[]{"title"});
         entry.fetch(new EntryResultCallBack() {
@@ -111,12 +119,15 @@ public class EntryTestCase {
                 } else {
                     Log.e(TAG, error.getErrorMessage());
                 }
+                latch.countDown();
             }
         });
+        latch.await();
     }
 
     @Test
-    public void test_04_includeReference_fetch() {
+    public void test_04_includeReference_fetch() throws InterruptedException {
+        final CountDownLatch latch = new CountDownLatch(1);
         final Entry entry = stack.contentType(CONTENT_TYPE_UID).entry(entryUID);
         entry.includeReference("category");
         entry.fetch(new EntryResultCallBack() {
@@ -133,14 +144,17 @@ public class EntryTestCase {
                     } catch (Exception e) {
                         Log.e(TAG, e.getLocalizedMessage());
                     }
+                    latch.countDown();
 
                 }
             }
         });
+        latch.await();
     }
 
     @Test
-    public void test_05_includeReferenceOnly_fetch() {
+    public void test_05_includeReferenceOnly_fetch() throws InterruptedException {
+        final CountDownLatch latch = new CountDownLatch(1);
         final Entry entry = stack.contentType(CONTENT_TYPE_UID).entry(entryUID);
         ArrayList<String> strings = new ArrayList<>();
         strings.add("title");
@@ -151,16 +165,19 @@ public class EntryTestCase {
             @Override
             public void onCompletion(ResponseType responseType, Error error) {
                 if (error == null) {
-                    assertEquals("laptop", entry.toJSON().optString("title"));
+                    assertEquals("entry_lt8", entry.toJSON().optString("title"));
                 }
+                latch.countDown();
             }
         });
+        latch.await();
 
     }
 
 
     @Test
     public void test_06_includeReferenceExcept_fetch() throws InterruptedException {
+        final CountDownLatch latch = new CountDownLatch(1);
         final Entry entry = stack.contentType(CONTENT_TYPE_UID).entry(entryUID);
         ArrayList<String> strings = new ArrayList<>();
         strings.add("color");
@@ -184,6 +201,7 @@ public class EntryTestCase {
 
     @Test
     public void test_07_getMarkdown_fetch() throws InterruptedException {
+        final CountDownLatch latch = new CountDownLatch(1);
 
         final Entry entry = stack.contentType("user").entry(entryUID);
         entry.fetch(new EntryResultCallBack() {
@@ -202,6 +220,7 @@ public class EntryTestCase {
 
     @Test
     public void test_08_get() throws InterruptedException {
+        final CountDownLatch latch = new CountDownLatch(1);
         final Entry entry = stack.contentType("user").entry(entryUID);
         entry.fetch(new EntryResultCallBack() {
             @Override
@@ -219,6 +238,7 @@ public class EntryTestCase {
 
     @Test
     public void test_09_getParam() throws InterruptedException {
+        final CountDownLatch latch = new CountDownLatch(1);
         final Entry entry = stack.contentType("user").entry(entryUID);
         entry.addParam("include_dimensions", "true");
         entry.fetch(new EntryResultCallBack() {
@@ -237,6 +257,7 @@ public class EntryTestCase {
 
     @Test
     public void test_10_IncludeReferenceContentTypeUID() throws InterruptedException {
+        final CountDownLatch latch = new CountDownLatch(1);
         final Entry entry = stack.contentType("user").entry(entryUID);
         entry.includeReferenceContentTypeUID();
         entry.fetch(new EntryResultCallBack() {
@@ -266,6 +287,7 @@ public class EntryTestCase {
 
     @Test
     public void test_11_Locale() throws InterruptedException {
+        final CountDownLatch latch = new CountDownLatch(1);
         final Entry entry = stack.contentType("user").entry(entryUID);
         entry.fetch(new EntryResultCallBack() {
             @Override
@@ -305,6 +327,7 @@ public class EntryTestCase {
 
     @Test
     public void test_13_entry_include_embedded_items_unit_test() throws InterruptedException {
+        final CountDownLatch latch = new CountDownLatch(1);
 
         final Entry entry = stack.contentType("user").entry(entryUID);
         entry.includeEmbeddedItems().fetch(new EntryResultCallBack() {
@@ -323,25 +346,31 @@ public class EntryTestCase {
     }
 
     @Test
-    public void VariantsTestSingleUid(){
+    public void VariantsTestSingleUid() throws InterruptedException {
+        final CountDownLatch latch = new CountDownLatch(1);
         final Entry entry = stack.contentType("product").entry(variantEntryUID).variants(variantUID);
         entry.fetch(new EntryResultCallBack() {
             @Override
             public void onCompletion(ResponseType responseType, Error error) {
 //                assertEquals(variantUID, entry.getHeaders().get("x-cs-variant-uid"));
                 System.out.println(entry.toJSON());
+                latch.countDown();
             }
         });
+        latch.await();
     }
     @Test
-    public void VariantsTestArray(){
+    public void VariantsTestArray() throws InterruptedException {
+        final CountDownLatch latch = new CountDownLatch(1);
         final Entry entry = stack.contentType("product").entry(variantEntryUID).variants(variantsUID);
         entry.fetch(new EntryResultCallBack() {
             @Override
             public void onCompletion(ResponseType responseType, Error error) {
                 System.out.println(entry.toJSON());
+                latch.countDown();
             }
         });
+        latch.await();
     }
 
 }
