@@ -13,7 +13,7 @@ package com.contentstack.sdk;
  * <code>
  * public void processInput(String input) throws InvalidInputException {
  * if (input == null || input.isEmpty()) {
- * throw new InvalidInputException("Input cannot be null or empty");
+ * throw new InvalidInputException(ErrorMessages.NULL_OR_EMPTY_INPUT);
  * }
  * // Process the input here
  * }

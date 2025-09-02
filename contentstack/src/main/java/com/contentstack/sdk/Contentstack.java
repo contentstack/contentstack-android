@@ -27,7 +27,7 @@ public class Contentstack {
     private static Contentstack instance;
 
     private Contentstack(Context context) {
-        throw new IllegalStateException("Private constructor not allowed");
+        throw new IllegalStateException(ErrorMessages.PRIVATE_CONSTRUCTOR_NOT_ALLOWED);
     }
 
     /**
