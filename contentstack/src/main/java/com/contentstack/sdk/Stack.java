@@ -78,26 +78,30 @@ public class Stack implements INotifyClass {
         if (!TextUtils.isEmpty(config.environment)) {
             setHeader("environment", config.environment);
         }
+        // Handle region setting first before any host overrides
         if (!config.region.name().isEmpty()) {
             String region = config.region.name().toLowerCase();
             if (!region.equalsIgnoreCase("us")) {
-                if (URL.equalsIgnoreCase("cdn.contentstack.io")) {
-                    URL = "cdn.contentstack.com";
-                }
                 if (region.equalsIgnoreCase("azure_na")) {
-                    URL = "azure-na-cdn.contentstack.com";
+                    config.setHost("azure-na-cdn.contentstack.com");
                 } else if (region.equalsIgnoreCase("azure_eu")) {
-                    URL = "azure-eu-cdn.contentstack.com";
+                    config.setHost("azure-eu-cdn.contentstack.com");
                 } else if (region.equalsIgnoreCase("gcp_na")) {
-                    URL = "gcp-na-cdn.contentstack.com";
+                    config.setHost("gcp-na-cdn.contentstack.com");
+                } else if (region.equalsIgnoreCase("gcp_eu")) {
+                    config.setHost("gcp-eu-cdn.contentstack.com");
+                } else if (region.equalsIgnoreCase("au")) {
+                    config.setHost("au-cdn.contentstack.com");
                 } else {
-                    URL = region + "-" + URL;
+                    config.setHost(region + "-cdn.contentstack.io");
                 }
             }
         }
         String endpoint = config.PROTOCOL + config.URL;
         this.config.setEndpoint(endpoint);
+        System.out.println("Endpoint:" + endpoint);
         client(endpoint);
+
 
     }
 
