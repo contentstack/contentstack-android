@@ -99,7 +99,6 @@ public class Stack implements INotifyClass {
         }
         String endpoint = config.PROTOCOL + config.URL;
         this.config.setEndpoint(endpoint);
-        System.out.println("Endpoint:" + endpoint);
         client(endpoint);
 
 
