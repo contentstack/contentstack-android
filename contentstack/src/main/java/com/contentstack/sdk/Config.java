@@ -86,7 +86,17 @@ public class Config {
         return this;
     }
 
-    public enum ContentstackRegion {US, EU, AZURE_NA, AZURE_EU, GCP_NA}
+    /**
+     * Represents the available Contentstack regions.
+     * US: United States region (default)
+     * EU: European region
+     * AU: Australian region
+     * AZURE_NA: Azure North America region
+     * AZURE_EU: Azure European region
+     * GCP_NA: Google Cloud Platform North America region
+     * GCP_EU: Google Cloud Platform European region
+     */
+    public enum ContentstackRegion {US, EU, AU, AZURE_NA, AZURE_EU, GCP_NA, GCP_EU}
 
     /**
      * Config constructor

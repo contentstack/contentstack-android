@@ -16,6 +16,8 @@ import static junit.framework.Assert.assertTrue;
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertNotNull;
 
+import static java.lang.String.*;
+
 import androidx.test.InstrumentationRegistry;
 import androidx.test.core.app.ApplicationProvider;
 
@@ -149,6 +151,20 @@ public class AssetTestCase {
         config.setRegion(Config.ContentstackRegion.AZURE_NA);
         Context appContext = InstrumentationRegistry.getTargetContext();
         stack = Contentstack.stack(appContext, DEFAULT_API_KEY, DEFAULT_DELIVERY_TOKEN, DEFAULT_ENV, config);
+        assertEquals("azure-na-cdn.contentstack.com", config.getHost());
+    }
+
+    @Test
+    public void test_AU() throws Exception {
+        Config config = new Config();
+        String DEFAULT_API_KEY = BuildConfig.APIKey;
+        String DEFAULT_DELIVERY_TOKEN = BuildConfig.deliveryToken;
+        String DEFAULT_ENV = BuildConfig.environment;
+        config.setRegion(Config.ContentstackRegion.AU);
+        // Host will be set based on region
+        Context appContext = InstrumentationRegistry.getTargetContext();
+        stack = Contentstack.stack(appContext, DEFAULT_API_KEY, DEFAULT_DELIVERY_TOKEN, DEFAULT_ENV, config);
+        assertEquals("au-cdn.contentstack.com", config.getHost());
     }
 
     @Test
@@ -162,6 +178,7 @@ public class AssetTestCase {
         config.setRegion(Config.ContentstackRegion.GCP_NA);
         Context appContext = InstrumentationRegistry.getTargetContext();
         stack = Contentstack.stack(appContext, DEFAULT_API_KEY, DEFAULT_DELIVERY_TOKEN, DEFAULT_ENV, config);
+        assertEquals("gcp-na-cdn.contentstack.com", config.getHost());
     }
 
     @Test

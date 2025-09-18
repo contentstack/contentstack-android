@@ -1,8 +1,14 @@
 ﻿# CHANGELOG
 
+## Version 4.1.0
+
+### Date: 15-Sept-2025
+
+- Added support for Australian (AU) region and GCP-EU region
+
 ## Version 4.0.1
 
-### Date: 06-June-2024
+### Date: 06-June-2025
 
 - Integration tests added
 - Global fields support added
