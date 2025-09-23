@@ -3,12 +3,11 @@ plugins {
     id "com.android.library"
 }
 
-import com.vanniktech.maven.publish.SonatypeHost
-
 android.buildFeatures.buildConfig true
 
 mavenPublishing {
-    publishToMavenCentral("OSSRH")  // Use OSSRH for Sonatype OSSRH (Maven Central)
+    // Use OSSRH staging API for Maven Central publishing
+    publishToMavenCentral("OSSRH", "https://s01.oss.sonatype.org/service/local/")
     signAllPublications()
     coordinates("com.contentstack.sdk", "android", "4.1.0-beta")
 
@@ -56,7 +55,8 @@ tasks.register('jacocoTestReport', JacocoReport) {
 }
 
 android {
-    //namespace "com.contentstack.sdk"
+    namespace "com.contentstack.sdk"
+    compileSdk 34  // Using latest stable Android SDK version
     packagingOptions {
         exclude("META-INF/DEPENDENCIES")
         exclude("META-INF/LICENSE")
