@@ -8,9 +8,9 @@ import com.vanniktech.maven.publish.SonatypeHost
 android.buildFeatures.buildConfig true
 
 mavenPublishing {
-    publishToMavenCentral(SonatypeHost.DEFAULT)
+    publishToMavenCentral("OSSRH")  // Use OSSRH for Sonatype OSSRH (Maven Central)
     signAllPublications()
-    coordinates("com.contentstack.sdk", "android", "4.1.0")
+    coordinates("com.contentstack.sdk", "android", "4.1.0-beta")
 
     pom {
         name = "contentstack-android"
