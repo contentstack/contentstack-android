@@ -2,12 +2,12 @@ plugins {
     id "com.vanniktech.maven.publish" version "0.27.0"
     id "com.android.library"
 }
-
+import com.vanniktech.maven.publish.SonatypeHost
 android.buildFeatures.buildConfig true
 
 mavenPublishing {
-    // Use OSSRH staging API for Maven Central publishing
-    publishToMavenCentral("OSSRH", "https://s01.oss.sonatype.org/service/local/")
+    // Use S01 host for Maven Central publishing
+    publishToMavenCentral(SonatypeHost.S01)
     signAllPublications()
     coordinates("com.contentstack.sdk", "android", "4.1.0-beta")
 
@@ -97,7 +97,6 @@ android {
             keyPassword 'android'
         }
     }
-    compileSdk 30
     defaultConfig {
         // Required when setting minSdkVersion to 20 or lower
         multiDexEnabled true
