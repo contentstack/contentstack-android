@@ -17,3 +17,9 @@ dependencyResolutionManagement {
 }
 rootProject.name = "contentstack-android"
 include ':contentstack'
+
+gradle.beforeProject { project ->
+    if (project.name == "contentstack") {
+        project.ext.ANDROID_VARIANT_TO_PUBLISH = "release"
+    }
+}

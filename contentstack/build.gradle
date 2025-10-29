@@ -1,62 +1,20 @@
 plugins {
-    id "com.vanniktech.maven.publish" version "0.28.0"
     id "com.android.library"
-}
-import com.vanniktech.maven.publish.SonatypeHost
-android.buildFeatures.buildConfig true
-
-mavenPublishing {
-    // Use S01 host for Maven Central publishing
-    publishToMavenCentral(SonatypeHost.S01)
-    signAllPublications()
-    coordinates("com.contentstack.sdk", "android", "4.1.0-beta")
-
-    pom {
-        name = "contentstack-android"
-        description = "The Content Delivery SDK facilitates the retrieval of content from your Contentstack account, enabling seamless delivery to your web or mobile properties.."
-        inceptionYear = "2018"
-        packaging 'aar'
-        url = "https://github.com/contentstack/contentstack-android"
-        licenses {
-            license {
-                name = "The MIT License"
-                url = "https://github.com/contentstack/contentstack-android/blob/master/LICENSE"
-                distribution = "https://github.com/contentstack/contentstack-android/blob/master/LICENSE"
-            }
-        }
-        developers {
-            developer {
-                id = "ishaileshmishra"
-                name = "contentstack"
-                url = "https://github.com/contentstack/contentstack-android"
-            }
-        }
-        scm {
-            url = "scm:git@github.com:contentstack/contentstack-android"
-            connection = "scm:git:git://github.com/contentstack/contentstack-android.git"
-            developerConnection = "scm:git@github.com:contentstack/contentstack-android.git"
-        }
-    }
+    id "com.vanniktech.maven.publish" version "0.33.0"
 }
 
-
-tasks.register('jacocoTestReport', JacocoReport) {
-    dependsOn['testDebugUnitTest', 'createDebugCoverageReport']
-    reports {
-        html.enabled = true
-    }
-    afterEvaluate {
-        classDirectories.setFrom(files(classDirectories.files.collect {
-            fileTree(dir: it, exclude: '**com/contentstack/okhttp**')
-            fileTree(dir: it, exclude: '**com/contentstack/okio**')
-            fileTree(dir: it, exclude: '**com/contentstack/txtmark**')
-        }))
-    }
+ext {
+    PUBLISH_GROUP_ID = 'com.contentstack.sdk'
+    PUBLISH_ARTIFACT_ID = 'android'
+    PUBLISH_VERSION = '4.1.0-beta'
 }
 
 android {
     namespace "com.contentstack.sdk"
     compileSdk 34  // Using latest stable Android SDK version
+    buildFeatures {
+        buildConfig true
+    }
     packagingOptions {
         exclude("META-INF/DEPENDENCIES")
         exclude("META-INF/LICENSE")
@@ -204,3 +162,60 @@ tasks.register('createJar', Jar) {
     //include 'META-INF/'
 }
 createJar.dependsOn(clearJar, unzip, build)
+
+mavenPublishing {
+    // Configure the Maven Central publishing target
+    publishToMavenCentral("CENTRAL_PORTAL")
+    
+    // Sign all publications
+    signAllPublications()
+    
+    coordinates(PUBLISH_GROUP_ID, PUBLISH_ARTIFACT_ID, PUBLISH_VERSION)
+
+    pom {
+        name = "contentstack-android"
+        description = "The Content Delivery SDK facilitates the retrieval of content from your Contentstack account, enabling seamless delivery to your web or mobile properties.."
+        inceptionYear = "2018"
+        packaging 'aar'
+        url = "https://github.com/contentstack/contentstack-android"
+        licenses {
+            license {
+                name = "The MIT License"
+                url = "https://github.com/contentstack/contentstack-android/blob/master/LICENSE"
+                distribution = "https://github.com/contentstack/contentstack-android/blob/master/LICENSE"
+            }
+        }
+        developers {
+            developer {
+                id = "ishaileshmishra"
+                name = "contentstack"
+                url = "https://github.com/contentstack/contentstack-android"
+            }
+        }
+        scm {
+            url = "scm:git@github.com:contentstack/contentstack-android"
+            connection = "scm:git:git://github.com/contentstack/contentstack-android.git"
+            developerConnection = "scm:git@github.com:contentstack/contentstack-android.git"
+        }
+    }
+}
+
+tasks.register('jacocoTestReport', JacocoReport) {
+    dependsOn('testDebugUnitTest', 'createDebugCoverageReport')
+    reports {
+        html.required = true
+    }
+}
+
+// Configure jacocoTestReport after evaluation when classDirectories is available
+project.afterEvaluate {
+    tasks.named('jacocoTestReport', JacocoReport) {
+        classDirectories.setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it, exclude: [
+                '**com/contentstack/okhttp**',
+                '**com/contentstack/okio**',
+                '**com/contentstack/txtmark**'
+            ])
+        }))
+    }
+}
