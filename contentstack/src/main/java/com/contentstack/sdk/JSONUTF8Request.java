@@ -24,9 +24,9 @@ class JSONUTF8Request extends JsonObjectRequest {
             String jsonString = new String(response.data, "UTF-8");
             return Response.success(new JSONObject(jsonString), HttpHeaderParser.parseCacheHeaders(response));
         } catch (UnsupportedEncodingException e) {
-            return Response.error(new ParseError(e));
+            return Response.error(new ParseError(new UnsupportedEncodingException(ErrorMessages.ENCODING_ERROR)));
         } catch (JSONException je) {
-            return Response.error(new ParseError(je));
+            return Response.error(new ParseError(new JSONException(ErrorMessages.JSON_PARSING_ERROR)));
         }
     }
 

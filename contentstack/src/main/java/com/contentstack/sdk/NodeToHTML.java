@@ -4,7 +4,7 @@ import org.json.JSONObject;
 
 public class NodeToHTML {
     private NodeToHTML() {
-        throw new IllegalStateException("Could not create instance of NodeToHTML");
+        throw new IllegalStateException(ErrorMessages.NODE_TO_HTML_INSTANTIATION);
     }
     public static String textNodeToHTML(JSONObject nodeText, Option renderOption) {
         String text = nodeText.optString("text");
