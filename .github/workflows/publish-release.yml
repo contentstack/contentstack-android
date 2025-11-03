@@ -10,8 +10,20 @@ jobs:
     steps:
     - name: Checkout project sources
       uses: actions/checkout@v3
+
+    - name: Set up JDK and Maven Central
+      uses: actions/setup-java@v3
+      with:
+        java-version: '17'
+        distribution: 'adopt'
+        cache: 'gradle'
+        server-id: central
+        server-username: ${{ secrets.MAVEN_USERNAME }}
+        server-password: ${{ secrets.MAVEN_PASSWORD }}
+
     - name: Setup Gradle
       uses: gradle/gradle-build-action@v2
+
     - name: Setup local.properties
       run: |
         cat << EOF >> local.properties
@@ -23,15 +35,17 @@ jobs:
         contentType="${{ secrets.CONTENT_TYPE }}"
         assetUid="${{ secrets.ASSET_UID }}"
         EOF
+
     - name: Gradle build and clean
       run: |
         ./gradlew clean build
-    - name: Publish the SDK
+
+    - name: Publish to Maven Central
       run: |
         ./gradlew publishAndReleaseToMavenCentral --no-configuration-cache
       env:
-        ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.mavenCentralUsername }}
-        ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.mavenCentralPassword }}
+        ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVEN_USERNAME }}
+        ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVEN_PASSWORD }}
         ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.signingInMemoryKey }}
         ORG_GRADLE_PROJECT_signingInMemoryKeyId: ${{ secrets.signingInMemoryKeyId }}
         ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.signingInMemoryKeyPassword }}
