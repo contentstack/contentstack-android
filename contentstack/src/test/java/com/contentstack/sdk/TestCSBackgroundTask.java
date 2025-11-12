@@ -400,7 +400,7 @@ public class TestCSBackgroundTask {
             CSBackgroundTask task = new CSBackgroundTask(
                 query, stack, controller, "test_url", headers, urlParams, jsonMain,
                 "cache", "info", SDKConstant.RequestMethod.GET, callback
-            );
+        );
             assertNotNull(task);
         }
     }
