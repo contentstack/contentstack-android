@@ -4,7 +4,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class ContentstackResultCallbackTest {
+public class TestContentstackResultCallback {
 
     // Simple concrete implementation for testing
     private static class TestCallback extends ContentstackResultCallback {
