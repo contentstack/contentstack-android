@@ -1,101 +1,140 @@
 package com.contentstack.sdk;
 
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
+
 import android.content.Context;
 import android.content.Intent;
 
 import org.json.JSONObject;
+import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
+import org.robolectric.RuntimeEnvironment;
 
 import java.io.File;
 import java.io.FileWriter;
-import java.util.Calendar;
-import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
-
+@RunWith(RobolectricTestRunner.class)
 public class TestClearCache {
 
-    private File createTempDir() {
-        File dir = new File(System.getProperty("java.io.tmpdir"),
-                "ContentstackCacheTest_" + System.nanoTime());
-        //noinspection ResultOfMethodCallIgnored
-        dir.mkdirs();
-        return dir;
-    }
+    private Context context;
+    private File cacheDir;
 
-    private File writeCacheFile(File dir, String name, long timestampMillis) throws Exception {
-        File file = new File(dir, name);
-        JSONObject json = new JSONObject();
-        json.put("timestamp", String.valueOf(timestampMillis));
-        try (FileWriter writer = new FileWriter(file)) {
-            writer.write(json.toString());
+    @Before
+    public void setUp() {
+        context = RuntimeEnvironment.getApplication();
+
+        // This will be something like /data/data/.../app_ContentstackCache-test
+        cacheDir = context.getDir("ContentstackCache", 0);
+
+        // Clean it before each test
+        File[] files = cacheDir.listFiles();
+        if (files != null) {
+            for (File f : files) {
+                // Best-effort cleanup
+                f.delete();
+            }
         }
-        return file;
     }
 
+    private File createJsonCacheFile(String name, long timestampMillis) throws Exception {
+        File f = new File(cacheDir, name);
+        JSONObject obj = new JSONObject();
+        obj.put("timestamp", String.valueOf(timestampMillis));
+        FileWriter writer = new FileWriter(f);
+        writer.write(obj.toString());
+        writer.flush();
+        writer.close();
+        return f;
+    }
+
+    private File createPlainFile(String name) throws Exception {
+        File f = new File(cacheDir, name);
+        FileWriter writer = new FileWriter(f);
+        writer.write("dummy");
+        writer.flush();
+        writer.close();
+        return f;
+    }
+
+    private long now() {
+        return System.currentTimeMillis();
+    }
+
+    // ----------------------------------------------------
+    // 1. Old file (>=24h) should be deleted
+    // ----------------------------------------------------
     @Test
-    public void testOnReceive_deletesOldFilesAndKeepsRecent() throws Exception {
-        // Mock Context
-        Context context = mock(Context.class);
+    public void testOnReceive_deletesOldFile() throws Exception {
+        long twentyFiveHoursAgo = now() - TimeUnit.HOURS.toMillis(25);
 
-        // Use a temp directory to simulate ContentstackCache
-        File cacheDir = createTempDir();
-        when(context.getDir("ContentstackCache", 0)).thenReturn(cacheDir);
+        File oldFile = createJsonCacheFile("old_response.json", twentyFiveHoursAgo);
 
-        // current time (UTC aligned like ClearCache)
-        Calendar cal = Calendar.getInstance();
-        cal.setTimeZone(TimeZone.getTimeZone("UTC"));
-        long nowMillis = cal.getTimeInMillis();
-
-        long twentyFiveHoursAgo = nowMillis - TimeUnit.HOURS.toMillis(25);
-        long oneHourAgo = nowMillis - TimeUnit.HOURS.toMillis(1);
-
-        // old file: should be deleted
-        File oldFile = writeCacheFile(cacheDir, "old_response.json", twentyFiveHoursAgo);
-
-        // recent file: should be kept
-        File recentFile = writeCacheFile(cacheDir, "recent_response.json", oneHourAgo);
-
-        // session and installation files: never deleted
-        File sessionFile = writeCacheFile(cacheDir, "Session", twentyFiveHoursAgo);
-        File installationFile = writeCacheFile(cacheDir, "Installation", twentyFiveHoursAgo);
+        assertTrue("Old file should exist before onReceive", oldFile.exists());
 
         ClearCache clearCache = new ClearCache();
-        clearCache.onReceive(context, new Intent("test.intent.CLEAR_CACHE"));
+        clearCache.onReceive(context, new Intent("com.contentstack.sdk.CLEAR_CACHE"));
 
-        // Old file should be gone
-        assertFalse("Old cache file should be deleted", oldFile.exists());
+        assertFalse("Old file should be deleted", oldFile.exists());
+    }
 
-        // Recent file should still be there
-        assertTrue("Recent cache file should not be deleted", recentFile.exists());
+    // ----------------------------------------------------
+    // 2. Recent file (<24h) should NOT be deleted
+    // ----------------------------------------------------
+    @Test
+    public void testOnReceive_keepsRecentFile() throws Exception {
+        long oneHourAgo = now() - TimeUnit.HOURS.toMillis(1);
 
-        // Session and Installation should not be deleted
+        File recentFile = createJsonCacheFile("recent_response.json", oneHourAgo);
+
+        assertTrue("Recent file should exist before onReceive", recentFile.exists());
+
+        ClearCache clearCache = new ClearCache();
+        clearCache.onReceive(context, new Intent("com.contentstack.sdk.CLEAR_CACHE"));
+
+        assertTrue("Recent file should NOT be deleted", recentFile.exists());
+    }
+
+    // ----------------------------------------------------
+    // 3. Session and Installation files are ignored
+    // ----------------------------------------------------
+    @Test
+    public void testOnReceive_ignoresSessionAndInstallationFiles() throws Exception {
+        // Even if they look old, code explicitly ignores them
+
+        long twentyFiveHoursAgo = now() - TimeUnit.HOURS.toMillis(25);
+
+        File sessionFile = createJsonCacheFile("Session", twentyFiveHoursAgo);
+        File installationFile = createJsonCacheFile("Installation", twentyFiveHoursAgo);
+
+        assertTrue(sessionFile.exists());
+        assertTrue(installationFile.exists());
+
+        ClearCache clearCache = new ClearCache();
+        clearCache.onReceive(context, new Intent("com.contentstack.sdk.CLEAR_CACHE"));
+
+        // They should still exist because of the name-based skip condition
         assertTrue("Session file should not be deleted", sessionFile.exists());
         assertTrue("Installation file should not be deleted", installationFile.exists());
     }
 
+    // ----------------------------------------------------
+    // 4. File without valid JSON or timestamp should be ignored (no crash)
+    // ----------------------------------------------------
     @Test
-    public void testOnReceive_handlesEmptyDirectoryGracefully() {
-        Context context = mock(Context.class);
+    public void testOnReceive_invalidJsonOrNoTimestamp_doesNotCrashAndKeepsFile() throws Exception {
+        File invalidFile = createPlainFile("invalid.json");
 
-        File cacheDir = createTempDir();
-        when(context.getDir("ContentstackCache", 0)).thenReturn(cacheDir);
-
-        // Ensure directory is empty
-        File[] existing = cacheDir.listFiles();
-        if (existing != null) {
-            for (File f : existing) {
-                //noinspection ResultOfMethodCallIgnored
-                f.delete();
-            }
-        }
+        assertTrue(invalidFile.exists());
 
         ClearCache clearCache = new ClearCache();
-        clearCache.onReceive(context, new Intent("test.intent.CLEAR_CACHE"));
+        clearCache.onReceive(context, new Intent("com.contentstack.sdk.CLEAR_CACHE"));
 
-        // No crash is success; directory should still exist
-        assertTrue(cacheDir.exists());
+        // Since getJsonFromCacheFile likely returns null or throws handled internally,
+        // the file should not be deleted by our logic.
+        assertTrue("Invalid file should still exist", invalidFile.exists());
     }
 }

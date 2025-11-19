@@ -17,6 +17,7 @@ android {
     // SDK compiles to Java 17 for JaCoCo compatibility
     // But can be built with Java 21 - tests use Java 17 toolchain
     compileOptions {
+        coreLibraryDesugaringEnabled true
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
     }
