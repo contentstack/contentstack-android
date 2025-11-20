@@ -1,496 +1,449 @@
 package com.contentstack.sdk;
 
-import android.content.Context;
 import android.util.ArrayMap;
 
-import androidx.test.core.app.ApplicationProvider;
-
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.robolectric.RobolectricTestRunner;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+import okhttp3.MediaType;
+import okhttp3.Protocol;
+import okhttp3.Request;
+import okhttp3.ResponseBody;
+import okio.Timeout;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static org.junit.Assert.*;
 
 /**
- * Comprehensive unit tests for Taxonomy class.
+ * Unit tests for {@link Taxonomy}
  */
-@RunWith(RobolectricTestRunner.class)
 public class TestTaxonomy {
 
-    private Context context;
-    private Stack stack;
     private Taxonomy taxonomy;
+    private FakeAPIService fakeService;
+    private Config config;
+    private ArrayMap<String, Object> headers;
+
+    // -------- Fake Call implementation ----------
+
+    private static class FakeCall implements Call<ResponseBody> {
+
+        private final Response<ResponseBody> responseToReturn;
+        private boolean executed = false;
+        private final Timeout timeout = new Timeout(); // okio.Timeout
+
+        FakeCall(Response<ResponseBody> responseToReturn) {
+            this.responseToReturn = responseToReturn;
+        }
+
+        @Override
+        public Response<ResponseBody> execute() throws IOException {
+            executed = true;
+            return responseToReturn;
+        }
+
+        @Override
+        public void enqueue(Callback<ResponseBody> callback) {
+            throw new UnsupportedOperationException("enqueue not supported in FakeCall");
+        }
+
+        @Override
+        public boolean isExecuted() {
+            return executed;
+        }
+
+        @Override
+        public void cancel() {
+            // no-op
+        }
+
+        @Override
+        public boolean isCanceled() {
+            return false;
+        }
+
+        @Override
+        public Call<ResponseBody> clone() {
+            return new FakeCall(responseToReturn);
+        }
+
+        @Override
+        public Request request() {
+            return new Request.Builder()
+                    .url("https://example.com")
+                    .build();
+        }
+
+        @Override
+        public Timeout timeout() {
+            return timeout;
+        }
+    }
+
+    // -------- Fake APIService implementation ----------
+
+    private static class FakeAPIService implements APIService {
+
+        String lastQueryString;
+        Map<String, Object> lastHeaders;
+        Call<ResponseBody> taxonomyCallToReturn;
+
+        @Override
+        public Call<ResponseBody> getTaxonomy(Map<String, Object> headers, String query) {
+            this.lastHeaders = headers;
+            this.lastQueryString = query;
+            return taxonomyCallToReturn;
+        }
+
+        @Override
+        public Call<ResponseBody> getRequest(String url, LinkedHashMap<String, Object> headers) {
+            // Not used in Taxonomy tests, minimal stub
+            return new FakeCall(
+                    Response.success(
+                            ResponseBody.create(
+                                    "{\"dummy\":\"ok\"}",
+                                    MediaType.parse("application/json"))));
+        }
+
+        // If APIService has more abstract methods, stub them similarly as needed.
+    }
+
+    // -------- Setup ----------
 
     @Before
-    public void setUp() throws Exception {
-        context = ApplicationProvider.getApplicationContext();
-        Config config = new Config();
-        stack = Contentstack.stack(context, "test_api_key", "test_delivery_token", "test_env", config);
-        taxonomy = stack.taxonomy();
+    public void setUp() {
+        headers = new ArrayMap<>();
+        headers.put("api_key", "test_key");
+        headers.put("access_token", "test_token");
+
+        config = new Config();
+        fakeService = new FakeAPIService();
+
+        taxonomy = new Taxonomy(fakeService, config, headers);
     }
 
-    // ========== CONSTRUCTOR TESTS ==========
+    // -------- Helper to create successful / error Response ----------
+
+    private Response<ResponseBody> createSuccessResponse(String body) {
+        return Response.success(
+                ResponseBody.create(body, MediaType.parse("application/json")));
+    }
+
+    private Response<ResponseBody> createErrorResponse(int code, String body) {
+        okhttp3.Response raw = new okhttp3.Response.Builder()
+                .code(code)
+                .message("Error")
+                .protocol(Protocol.HTTP_1_1)
+                .request(new Request.Builder().url("https://example.com").build())
+                .build();
+
+        return Response.error(
+                ResponseBody.create(body, MediaType.parse("application/json")),
+                raw);
+    }
+
+    // -------- Tests for query builders ----------
 
     @Test
-    public void testTaxonomyCreation() {
-        assertNotNull(taxonomy);
+    public void testInBuildsCorrectQuery() throws Exception {
+        taxonomy.in("taxonomies.color", Arrays.asList("red", "yellow"));
+
+        JSONObject json = new JSONObject();
+        json.put("entries", new JSONArray());
+        fakeService.taxonomyCallToReturn = new FakeCall(createSuccessResponse(json.toString()));
+
+        taxonomy.find((response, error) -> {
+            assertNull(error);
+            assertNotNull(response);
+        });
+
+        assertNotNull(fakeService.lastQueryString);
+        JSONObject parsed = new JSONObject(fakeService.lastQueryString);
+
+        assertTrue(parsed.has("taxonomies.color"));
+        JSONObject inner = parsed.getJSONObject("taxonomies.color");
+        JSONArray inArray = inner.getJSONArray("$in");
+        assertEquals(2, inArray.length());
+        assertEquals("red", inArray.getString(0));
+        assertEquals("yellow", inArray.getString(1));
     }
 
     @Test
-    public void testTaxonomyCreationFromStack() {
-        Taxonomy tax = stack.taxonomy();
-        assertNotNull(tax);
-    }
+    public void testOrBuildsCorrectQuery() throws Exception {
+        JSONObject obj1 = new JSONObject();
+        obj1.put("taxonomies.color", "yellow");
+        JSONObject obj2 = new JSONObject();
+        obj2.put("taxonomies.size", "small");
 
-    // ========== IN METHOD TESTS ==========
+        taxonomy.or(Arrays.asList(obj1, obj2));
 
-    @Test
-    public void testInWithValidTaxonomy() {
-        List<String> items = new ArrayList<>();
-        items.add("red");
-        items.add("blue");
-        
-        Taxonomy result = taxonomy.in("color", items);
-        assertNotNull(result);
-        assertSame(taxonomy, result);
-    }
+        JSONObject json = new JSONObject();
+        json.put("entries", new JSONArray());
+        fakeService.taxonomyCallToReturn = new FakeCall(createSuccessResponse(json.toString()));
 
-    @Test
-    public void testInWithEmptyList() {
-        List<String> items = new ArrayList<>();
-        
-        Taxonomy result = taxonomy.in("color", items);
-        assertNotNull(result);
-        assertSame(taxonomy, result);
+        taxonomy.find((response, error) -> {
+            assertNull(error);
+            assertNotNull(response);
+        });
+
+        JSONObject parsed = new JSONObject(fakeService.lastQueryString);
+        assertTrue(parsed.has("$or"));
+        JSONArray orArray = parsed.getJSONArray("$or");
+        assertEquals(2, orArray.length());
     }
 
     @Test
-    public void testInWithSingleItem() {
-        List<String> items = new ArrayList<>();
-        items.add("red");
-        
-        Taxonomy result = taxonomy.in("color", items);
-        assertNotNull(result);
+    public void testExistsBuildsCorrectQuery() throws Exception {
+        taxonomy.exists("taxonomies.color", true);
+
+        JSONObject json = new JSONObject();
+        json.put("entries", new JSONArray());
+        fakeService.taxonomyCallToReturn = new FakeCall(createSuccessResponse(json.toString()));
+
+        taxonomy.find((response, error) -> {
+            assertNull(error);
+            assertNotNull(response);
+        });
+
+        JSONObject parsed = new JSONObject(fakeService.lastQueryString);
+        JSONObject existsObj = parsed.getJSONObject("taxonomies.color");
+        assertTrue(existsObj.getBoolean("$exists"));
     }
 
+    // -------- find() behaviour tests ----------
+
     @Test
-    public void testInWithMultipleItems() {
-        List<String> items = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            items.add("item_" + i);
+    public void testFindSuccess() {
+        try {
+            JSONObject responseJson = new JSONObject();
+            responseJson.put("entries", new JSONArray());
+
+            fakeService.taxonomyCallToReturn = new FakeCall(createSuccessResponse(responseJson.toString()));
+
+            final boolean[] callbackCalled = { false };
+
+            taxonomy.find((response, error) -> {
+                callbackCalled[0] = true;
+                assertNull(error);
+                assertNotNull(response);
+                assertTrue(response.has("entries"));
+            });
+
+            assertTrue(callbackCalled[0]);
+        } catch (JSONException e) {
+            fail("JSONException should not be thrown in testFindSuccess: " + e.getMessage());
         }
-        
-        Taxonomy result = taxonomy.in("category", items);
-        assertNotNull(result);
     }
 
     @Test
-    public void testInMethodChaining() {
-        List<String> colors = new ArrayList<>();
-        colors.add("red");
-        colors.add("blue");
-        
-        List<String> sizes = new ArrayList<>();
-        sizes.add("small");
-        sizes.add("large");
-        
-        Taxonomy result = taxonomy.in("color", colors).in("size", sizes);
-        assertNotNull(result);
-        assertSame(taxonomy, result);
+    public void testFindError() {
+        try {
+            JSONObject errorJson = new JSONObject();
+            errorJson.put("error_message", "Something went wrong");
+            errorJson.put("error_code", 123);
+
+            fakeService.taxonomyCallToReturn = new FakeCall(createErrorResponse(400, errorJson.toString()));
+
+            final boolean[] callbackCalled = { false };
+
+            taxonomy.find((response, error) -> {
+                callbackCalled[0] = true;
+                assertNull(response);
+                assertNotNull(error);
+                assertEquals("Something went wrong", error.getErrorMessage());
+                assertEquals(123, error.getErrorCode());
+            });
+
+            assertTrue(callbackCalled[0]);
+        } catch (JSONException e) {
+            fail("JSONException should not be thrown in testFindError: " + e.getMessage());
+        }
     }
 
-    // ========== OR METHOD TESTS ==========
-
     @Test
-    public void testOrWithValidList() throws JSONException {
-        List<JSONObject> items = new ArrayList<>();
-        
+    public void testAndBuildsCorrectQuery() throws Exception {
         JSONObject obj1 = new JSONObject();
         obj1.put("taxonomies.color", "red");
-        items.add(obj1);
-        
         JSONObject obj2 = new JSONObject();
         obj2.put("taxonomies.size", "large");
-        items.add(obj2);
-        
-        Taxonomy result = taxonomy.or(items);
-        assertNotNull(result);
-        assertSame(taxonomy, result);
+
+        taxonomy.and(Arrays.asList(obj1, obj2));
+
+        // trigger makeRequest / find so query gets serialized and we can inspect it
+        JSONObject json = new JSONObject();
+        json.put("entries", new JSONArray());
+        fakeService.taxonomyCallToReturn = new FakeCall(createSuccessResponse(json.toString()));
+
+        taxonomy.find((response, error) -> {
+            assertNull(error);
+            assertNotNull(response);
+        });
+
+        JSONObject parsed = new JSONObject(fakeService.lastQueryString);
+        assertTrue(parsed.has("$and"));
+        JSONArray andArray = parsed.getJSONArray("$and");
+        assertEquals(2, andArray.length());
+        assertEquals(obj1.toString(), andArray.getJSONObject(0).toString());
+        assertEquals(obj2.toString(), andArray.getJSONObject(1).toString());
     }
 
     @Test
-    public void testOrWithEmptyList() {
-        List<JSONObject> items = new ArrayList<>();
-        
-        Taxonomy result = taxonomy.or(items);
-        assertNotNull(result);
+    public void testEqualAndBelowBuildsCorrectQuery() throws Exception {
+        taxonomy.equalAndBelow("taxonomies.color", "blue");
+
+        JSONObject json = new JSONObject();
+        json.put("entries", new JSONArray());
+        fakeService.taxonomyCallToReturn = new FakeCall(createSuccessResponse(json.toString()));
+
+        taxonomy.find((response, error) -> {
+        });
+
+        JSONObject parsed = new JSONObject(fakeService.lastQueryString);
+        assertTrue(parsed.has("taxonomies.color"));
+        JSONObject node = parsed.getJSONObject("taxonomies.color");
+        assertEquals("blue", node.getString("$eq_below"));
     }
 
     @Test
-    public void testOrWithSingleItem() throws JSONException {
-        List<JSONObject> items = new ArrayList<>();
-        JSONObject obj = new JSONObject();
-        obj.put("taxonomies.color", "red");
-        items.add(obj);
-        
-        Taxonomy result = taxonomy.or(items);
-        assertNotNull(result);
-    }
+    public void testBelowBuildsCorrectQuery() throws Exception {
+        taxonomy.below("taxonomies.color", "blue");
 
-    // ========== AND METHOD TESTS ==========
+        JSONObject json = new JSONObject();
+        json.put("entries", new JSONArray());
+        fakeService.taxonomyCallToReturn = new FakeCall(createSuccessResponse(json.toString()));
 
-    @Test
-    public void testAndWithValidList() throws JSONException {
-        List<JSONObject> items = new ArrayList<>();
-        
-        JSONObject obj1 = new JSONObject();
-        obj1.put("taxonomies.color", "red");
-        items.add(obj1);
-        
-        JSONObject obj2 = new JSONObject();
-        obj2.put("taxonomies.size", "large");
-        items.add(obj2);
-        
-        Taxonomy result = taxonomy.and(items);
-        assertNotNull(result);
-        assertSame(taxonomy, result);
+        taxonomy.find((response, error) -> {
+        });
+
+        JSONObject parsed = new JSONObject(fakeService.lastQueryString);
+        assertTrue(parsed.has("taxonomies.color"));
+        JSONObject node = parsed.getJSONObject("taxonomies.color");
+        assertEquals("blue", node.getString("$below"));
     }
 
     @Test
-    public void testAndWithEmptyList() {
-        List<JSONObject> items = new ArrayList<>();
-        
-        Taxonomy result = taxonomy.and(items);
-        assertNotNull(result);
+    public void testEqualAboveBuildsCorrectQuery() throws Exception {
+        taxonomy.equalAbove("taxonomies.appliances", "led");
+
+        JSONObject json = new JSONObject();
+        json.put("entries", new JSONArray());
+        fakeService.taxonomyCallToReturn = new FakeCall(createSuccessResponse(json.toString()));
+
+        taxonomy.find((response, error) -> {
+        });
+
+        JSONObject parsed = new JSONObject(fakeService.lastQueryString);
+        assertTrue(parsed.has("taxonomies.appliances"));
+        JSONObject node = parsed.getJSONObject("taxonomies.appliances");
+        assertEquals("led", node.getString("$eq_above"));
     }
 
     @Test
-    public void testAndWithSingleItem() throws JSONException {
-        List<JSONObject> items = new ArrayList<>();
-        JSONObject obj = new JSONObject();
-        obj.put("taxonomies.color", "red");
-        items.add(obj);
-        
-        Taxonomy result = taxonomy.and(items);
-        assertNotNull(result);
+    public void testAboveBuildsCorrectQuery() throws Exception {
+        taxonomy.above("taxonomies.appliances", "led");
+
+        JSONObject json = new JSONObject();
+        json.put("entries", new JSONArray());
+        fakeService.taxonomyCallToReturn = new FakeCall(createSuccessResponse(json.toString()));
+
+        taxonomy.find((response, error) -> {
+        });
+
+        JSONObject parsed = new JSONObject(fakeService.lastQueryString);
+        assertTrue(parsed.has("taxonomies.appliances"));
+        JSONObject node = parsed.getJSONObject("taxonomies.appliances");
+        assertEquals("led", node.getString("$above"));
     }
 
-    // ========== EXISTS METHOD TESTS ==========
+    // ========== NEGATIVE / EDGE CASE TESTS FOR QUERY BUILDERS ==========
 
     @Test
-    public void testExistsWithTrue() {
-        Taxonomy result = taxonomy.exists("color", true);
-        assertNotNull(result);
-        assertSame(taxonomy, result);
-    }
+    public void testAndWithNullListDoesNotModifyQuery() throws Exception {
+        // call with null
+        taxonomy.and(null);
 
-    @Test
-    public void testExistsWithFalse() {
-        Taxonomy result = taxonomy.exists("color", false);
-        assertNotNull(result);
-        assertSame(taxonomy, result);
-    }
+        // prepare fake response so that find() serializes current query
+        JSONObject json = new JSONObject();
+        json.put("entries", new JSONArray());
+        fakeService.taxonomyCallToReturn = new FakeCall(createSuccessResponse(json.toString()));
 
-    @Test
-    public void testExistsMethodChaining() {
-        Taxonomy result = taxonomy.exists("color", true).exists("size", false);
-        assertNotNull(result);
-        assertSame(taxonomy, result);
-    }
+        taxonomy.find((response, error) -> {
+        });
 
-    // ========== EQUAL AND BELOW METHOD TESTS ==========
-
-    @Test
-    public void testEqualAndBelowWithValidInputs() {
-        Taxonomy result = taxonomy.equalAndBelow("category", "electronics");
-        assertNotNull(result);
-        assertSame(taxonomy, result);
+        // when nothing was added, query should be empty object
+        assertNotNull(fakeService.lastQueryString);
+        JSONObject parsed = new JSONObject(fakeService.lastQueryString);
+        assertEquals(0, parsed.length()); // no $and key present
     }
 
     @Test
-    public void testEqualAndBelowWithEmptyTaxonomy() {
-        Taxonomy result = taxonomy.equalAndBelow("", "term_uid");
-        assertNotNull(result);
+    public void testEqualAndBelowWithEmptyParamsDoesNotModifyQuery() throws Exception {
+        taxonomy.equalAndBelow("", "");
+
+        JSONObject json = new JSONObject();
+        json.put("entries", new JSONArray());
+        fakeService.taxonomyCallToReturn = new FakeCall(createSuccessResponse(json.toString()));
+
+        taxonomy.find((response, error) -> {
+        });
+
+        JSONObject parsed = new JSONObject(fakeService.lastQueryString);
+        assertEquals(0, parsed.length()); // no key added
     }
 
     @Test
-    public void testEqualAndBelowWithEmptyTermUid() {
-        Taxonomy result = taxonomy.equalAndBelow("category", "");
-        assertNotNull(result);
+    public void testBelowWithEmptyParamsDoesNotModifyQuery() throws Exception {
+        taxonomy.below("", "");
+
+        JSONObject json = new JSONObject();
+        json.put("entries", new JSONArray());
+        fakeService.taxonomyCallToReturn = new FakeCall(createSuccessResponse(json.toString()));
+
+        taxonomy.find((response, error) -> {
+        });
+
+        JSONObject parsed = new JSONObject(fakeService.lastQueryString);
+        assertEquals(0, parsed.length());
     }
 
     @Test
-    public void testEqualAndBelowMethodChaining() {
-        Taxonomy result = taxonomy
-            .equalAndBelow("category", "electronics")
-            .equalAndBelow("brand", "apple");
-        assertNotNull(result);
-    }
+    public void testEqualAboveWithEmptyParamsDoesNotModifyQuery() throws Exception {
+        taxonomy.equalAbove("", "");
 
-    // ========== BELOW METHOD TESTS ==========
+        JSONObject json = new JSONObject();
+        json.put("entries", new JSONArray());
+        fakeService.taxonomyCallToReturn = new FakeCall(createSuccessResponse(json.toString()));
 
-    @Test
-    public void testBelowWithValidInputs() {
-        Taxonomy result = taxonomy.below("category", "electronics");
-        assertNotNull(result);
-        assertSame(taxonomy, result);
-    }
+        taxonomy.find((response, error) -> {
+        });
 
-    @Test
-    public void testBelowWithEmptyTaxonomy() {
-        Taxonomy result = taxonomy.below("", "term_uid");
-        assertNotNull(result);
+        JSONObject parsed = new JSONObject(fakeService.lastQueryString);
+        assertEquals(0, parsed.length());
     }
 
     @Test
-    public void testBelowWithEmptyTermUid() {
-        Taxonomy result = taxonomy.below("category", "");
-        assertNotNull(result);
+    public void testAboveWithEmptyParamsDoesNotModifyQuery() throws Exception {
+        taxonomy.above("", "");
+
+        JSONObject json = new JSONObject();
+        json.put("entries", new JSONArray());
+        fakeService.taxonomyCallToReturn = new FakeCall(createSuccessResponse(json.toString()));
+
+        taxonomy.find((response, error) -> {
+        });
+
+        JSONObject parsed = new JSONObject(fakeService.lastQueryString);
+        assertEquals(0, parsed.length());
     }
 
-    @Test
-    public void testBelowMethodChaining() {
-        Taxonomy result = taxonomy
-            .below("category", "electronics")
-            .below("brand", "apple");
-        assertNotNull(result);
-    }
-
-    // ========== EQUAL ABOVE METHOD TESTS ==========
-
-    @Test
-    public void testEqualAboveWithValidInputs() {
-        Taxonomy result = taxonomy.equalAbove("category", "electronics");
-        assertNotNull(result);
-        assertSame(taxonomy, result);
-    }
-
-    @Test
-    public void testEqualAboveWithEmptyTaxonomy() {
-        Taxonomy result = taxonomy.equalAbove("", "term_uid");
-        assertNotNull(result);
-    }
-
-    @Test
-    public void testEqualAboveWithEmptyTermUid() {
-        Taxonomy result = taxonomy.equalAbove("category", "");
-        assertNotNull(result);
-    }
-
-    @Test
-    public void testEqualAboveMethodChaining() {
-        Taxonomy result = taxonomy
-            .equalAbove("category", "electronics")
-            .equalAbove("brand", "apple");
-        assertNotNull(result);
-    }
-
-    // ========== ABOVE METHOD TESTS ==========
-
-    @Test
-    public void testAboveWithValidInputs() {
-        Taxonomy result = taxonomy.above("category", "electronics");
-        assertNotNull(result);
-        assertSame(taxonomy, result);
-    }
-
-    @Test
-    public void testAboveWithEmptyTaxonomy() {
-        Taxonomy result = taxonomy.above("", "term_uid");
-        assertNotNull(result);
-    }
-
-    @Test
-    public void testAboveWithEmptyTermUid() {
-        Taxonomy result = taxonomy.above("category", "");
-        assertNotNull(result);
-    }
-
-    @Test
-    public void testAboveMethodChaining() {
-        Taxonomy result = taxonomy
-            .above("category", "electronics")
-            .above("brand", "apple");
-        assertNotNull(result);
-    }
-
-    // ========== COMPLEX CHAINING TESTS ==========
-
-    @Test
-    public void testComplexMethodChaining() throws JSONException {
-        List<String> colors = new ArrayList<>();
-        colors.add("red");
-        colors.add("blue");
-        
-        List<JSONObject> orConditions = new ArrayList<>();
-        JSONObject obj1 = new JSONObject();
-        obj1.put("taxonomies.size", "large");
-        orConditions.add(obj1);
-        
-        Taxonomy result = taxonomy
-            .in("color", colors)
-            .or(orConditions)
-            .exists("brand", true)
-            .equalAndBelow("category", "electronics")
-            .below("subcategory", "phones")
-            .equalAbove("parent", "tech")
-            .above("root", "products");
-        
-        assertNotNull(result);
-        assertSame(taxonomy, result);
-    }
-
-    @Test
-    public void testMultipleInCalls() {
-        List<String> colors = new ArrayList<>();
-        colors.add("red");
-        
-        List<String> sizes = new ArrayList<>();
-        sizes.add("large");
-        
-        List<String> brands = new ArrayList<>();
-        brands.add("apple");
-        
-        Taxonomy result = taxonomy
-            .in("color", colors)
-            .in("size", sizes)
-            .in("brand", brands);
-        
-        assertNotNull(result);
-    }
-
-    @Test
-    public void testMultipleExistsCalls() {
-        Taxonomy result = taxonomy
-            .exists("color", true)
-            .exists("size", true)
-            .exists("brand", false);
-        
-        assertNotNull(result);
-    }
-
-    // ========== EDGE CASE TESTS ==========
-
-    @Test
-    public void testExistsWithNullBoolean() {
-        Taxonomy result = taxonomy.exists("color", null);
-        assertNotNull(result);
-    }
-
-    // ========== NULL LIST TESTS ==========
-
-    @Test
-    public void testInWithNullList() {
-        try {
-            Taxonomy result = taxonomy.in("color", null);
-            assertNotNull(result);
-        } catch (NullPointerException e) {
-            // Expected behavior
-            assertNotNull(e);
-        }
-    }
-
-    @Test
-    public void testOrWithNullList() {
-        try {
-            Taxonomy result = taxonomy.or(null);
-            assertNotNull(result);
-        } catch (NullPointerException e) {
-            // Expected behavior
-            assertNotNull(e);
-        }
-    }
-
-    @Test
-    public void testAndWithNullList() {
-        try {
-            Taxonomy result = taxonomy.and(null);
-            assertNotNull(result);
-        } catch (NullPointerException e) {
-            // Expected behavior
-            assertNotNull(e);
-        }
-    }
-
-    // ========== SPECIAL CHARACTERS TESTS ==========
-
-    @Test
-    public void testInWithSpecialCharacters() {
-        List<String> items = new ArrayList<>();
-        items.add("red-blue");
-        items.add("color@#$");
-        items.add("size_large");
-        
-        Taxonomy result = taxonomy.in("category", items);
-        assertNotNull(result);
-    }
-
-    @Test
-    public void testEqualAndBelowWithSpecialCharacters() {
-        Taxonomy result = taxonomy.equalAndBelow("category@#$", "term_uid-123");
-        assertNotNull(result);
-    }
-
-    // ========== LARGE DATA TESTS ==========
-
-    @Test
-    public void testInWithLargeList() {
-        List<String> items = new ArrayList<>();
-        for (int i = 0; i < 1000; i++) {
-            items.add("item_" + i);
-        }
-        
-        Taxonomy result = taxonomy.in("large_taxonomy", items);
-        assertNotNull(result);
-    }
-
-    @Test
-    public void testOrWithLargeList() throws JSONException {
-        List<JSONObject> items = new ArrayList<>();
-        for (int i = 0; i < 100; i++) {
-            JSONObject obj = new JSONObject();
-            obj.put("field_" + i, "value_" + i);
-            items.add(obj);
-        }
-        
-        Taxonomy result = taxonomy.or(items);
-        assertNotNull(result);
-    }
-
-    // ========== STATE PRESERVATION TESTS ==========
-
-    @Test
-    public void testMultipleTaxonomyInstances() {
-        Taxonomy tax1 = stack.taxonomy();
-        Taxonomy tax2 = stack.taxonomy();
-        
-        assertNotNull(tax1);
-        assertNotNull(tax2);
-        assertNotSame(tax1, tax2);
-    }
-
-    @Test
-    public void testIndependentQueries() {
-        Taxonomy tax1 = stack.taxonomy();
-        Taxonomy tax2 = stack.taxonomy();
-        
-        List<String> colors1 = new ArrayList<>();
-        colors1.add("red");
-        tax1.in("color", colors1);
-        
-        List<String> colors2 = new ArrayList<>();
-        colors2.add("blue");
-        tax2.in("color", colors2);
-        
-        // Both should be independent
-        assertNotNull(tax1);
-        assertNotNull(tax2);
-    }
 }
-
