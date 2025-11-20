@@ -275,7 +275,8 @@ tasks.register('jacocoTestReport', JacocoReport) {
         '**/okio/**',
         '**/txtmark/**',
         '**/retrofit2/**',
-        '**/volley/**'
+        '**/volley/**',
+        '**/CSConnectionRequest.class'
     ]
     
     sourceDirectories.setFrom(files([
@@ -334,7 +335,8 @@ tasks.register('jacocoCombinedReport', JacocoReport) {
         '**/okio/**',
         '**/txtmark/**',
         '**/retrofit2/**',
-        '**/volley/**'
+        '**/volley/**',
+        '**/CSConnectionRequest.class'
     ]
     
     sourceDirectories.setFrom(files([
@@ -367,7 +369,8 @@ tasks.register('jacocoTestCoverageVerification', JacocoCoverageVerification) {
         '**/*Test*.*',
         'android/**/*.*',
         '**/package-info.class',
-        '**/TestActivity.class'
+        '**/TestActivity.class',
+        '**/CSConnectionRequest.class'
     ]
     
     sourceDirectories.setFrom(files([
