@@ -82,5 +82,7 @@ public class TestCSHttpConnectionErrorHandling {
         invokeGenerateBuiltError(networkError);
 
         response = connection.getResponse();
+        assertNotNull(response);
+        assertEquals("NetworkError", response.optString("error_message"));
     }
 }
