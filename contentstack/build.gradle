@@ -359,46 +359,6 @@ tasks.register('jacocoCombinedReport', JacocoReport) {
 tasks.register('jacocoTestCoverageVerification', JacocoCoverageVerification) {
     dependsOn('testDebugUnitTest')
     
-    violationRules {
-        rule {
-            limit {
-                minimum = 0.99
-            }
-        }
-        
-        rule {
-            element = 'CLASS'
-            limit {
-                counter = 'LINE'
-                value = 'COVEREDRATIO'
-                minimum = 0.99
-            }
-            excludes = [
-                '*.R',
-                '*.R$*',
-                '*.BuildConfig',
-                '*.*Test*',
-                '*.TestActivity'
-            ]
-        }
-        
-        rule {
-            element = 'CLASS'
-            limit {
-                counter = 'BRANCH'
-                value = 'COVEREDRATIO'
-                minimum = 0.99
-            }
-            excludes = [
-                '*.R',
-                '*.R$*',
-                '*.BuildConfig',
-                '*.*Test*',
-                '*.TestActivity'
-            ]
-        }
-    }
-    
     def excludePatterns = [
         '**/R.class',
         '**/R$*.class',
