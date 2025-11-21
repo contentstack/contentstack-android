@@ -1,6 +1,7 @@
 plugins {
     id "com.android.library"
     id "com.vanniktech.maven.publish" version "0.33.0"
+    id 'jacoco'
 }
 
 ext {
@@ -12,6 +13,15 @@ ext {
 android {
     namespace "com.contentstack.sdk"
     compileSdk 34  // Using latest stable Android SDK version
+    
+    // SDK compiles to Java 17 for JaCoCo compatibility
+    // But can be built with Java 21 - tests use Java 17 toolchain
+    compileOptions {
+        coreLibraryDesugaringEnabled true
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+    
     buildFeatures {
         buildConfig true
     }
@@ -30,10 +40,15 @@ android {
     }
 
     testOptions {
-        unitTests.all {
-            // jacoco {
-            //     includeNoLocationClasses = true
-            // }
+        unitTests {
+            includeAndroidResources = true
+            returnDefaultValues = true
+            all {
+                jacoco {
+                    includeNoLocationClasses = true
+                    excludes = ['jdk.internal.*']
+                }
+            }
         }
     }
     // signing {
@@ -109,6 +124,8 @@ dependencies {
     def multidex = "2.0.1"
     def volley = "1.2.1"
     def junit = "4.13.2"
+    def mockito = "5.2.0"
+    def mockitoKotlin = "2.2.0"
     configurations.configureEach { resolutionStrategy.force 'com.android.support:support-annotations:23.1.0' }
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation "com.android.volley:volley:$volley"
@@ -116,11 +133,28 @@ dependencies {
 
     // For AGP 7.4+
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.4'
+    
+    // Unit Testing Dependencies
     testImplementation 'junit:junit:4.13.2'
+    testImplementation "org.mockito:mockito-core:$mockito"
+    testImplementation "org.mockito:mockito-inline:$mockito"
+    testImplementation 'org.mockito:mockito-android:5.2.0'
+    testImplementation 'org.robolectric:robolectric:4.15' // Updated to fix security vulnerabilities
+    testImplementation 'androidx.test:core:1.5.0'
+    testImplementation 'androidx.test:runner:1.5.2'
+    testImplementation 'androidx.test.ext:junit:1.1.5'
+    testImplementation 'com.squareup.okhttp3:mockwebserver:4.12.0'
+    testImplementation 'org.json:json:20231013'
+    // PowerMock for advanced mocking
+    testImplementation 'org.powermock:powermock-module-junit4:2.0.9'
+    testImplementation 'org.powermock:powermock-api-mockito2:2.0.9'
+    testImplementation 'org.powermock:powermock-core:2.0.9'
+    
+    // Android Test Dependencies
     androidTestImplementation 'androidx.test:core:1.5.0'
-    testImplementation 'org.robolectric:robolectric:4.6.1'
-
-    androidTestImplementation('androidx.test.espresso:espresso-core:3.1.0', {
+    androidTestImplementation 'androidx.test:runner:1.5.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation('androidx.test.espresso:espresso-core:3.5.1', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 
@@ -200,22 +234,170 @@ mavenPublishing {
     }
 }
 
-tasks.register('jacocoTestReport', JacocoReport) {
-    dependsOn('testDebugUnitTest', 'createDebugCoverageReport')
-    reports {
-        html.required = true
-    }
+jacoco {
+    toolVersion = "0.8.12"
 }
 
-// Configure jacocoTestReport after evaluation when classDirectories is available
-project.afterEvaluate {
-    tasks.named('jacocoTestReport', JacocoReport) {
-        classDirectories.setFrom(files(classDirectories.files.collect {
-            fileTree(dir: it, exclude: [
-                '**com/contentstack/okhttp**',
-                '**com/contentstack/okio**',
-                '**com/contentstack/txtmark**'
-            ])
-        }))
+tasks.register('jacocoTestReport', JacocoReport) {
+    dependsOn('testDebugUnitTest')
+    
+    reports {
+        xml.required = true
+        html.required = true
+        csv.required = false
+        
+        xml.outputLocation = file("${buildDir}/reports/jacoco/jacocoTestReport/jacocoTestReport.xml")
+        html.outputLocation = file("${buildDir}/reports/jacoco/jacocoTestReport/html")
     }
+    
+    def excludePatterns = [
+        '**/R.class',
+        '**/R$*.class',
+        '**/BuildConfig.*',
+        '**/Manifest*.*',
+        '**/*Test*.*',
+        'android/**/*.*',
+        '**/*$ViewInjector*.*',
+        '**/*$ViewBinder*.*',
+        '**/Lambda$*.class',
+        '**/Lambda.class',
+        '**/*Lambda.class',
+        '**/*Lambda*.class',
+        '**/*_MembersInjector.class',
+        '**/Dagger*Component*.*',
+        '**/*Module_*Factory.class',
+        '**/AutoValue_*.*',
+        '**/*JavascriptBridge.class',
+        '**/package-info.class',
+        '**/TestActivity.class',
+        // External library exclusions
+        '**/okhttp/**',
+        '**/okio/**',
+        '**/txtmark/**',
+        '**/retrofit2/**',
+        '**/volley/**',
+        '**/CSConnectionRequest.class',
+        // Exclude callback interfaces and their anonymous implementations
+        '**/SyncResultCallBack.class',
+        '**/Stack$*.class'
+    ]
+    
+    sourceDirectories.setFrom(files([
+        "${project.projectDir}/src/main/java"
+    ]))
+    
+    classDirectories.setFrom(files([
+        fileTree(dir: "${buildDir}/intermediates/javac/debug", excludes: excludePatterns),
+        fileTree(dir: "${buildDir}/tmp/kotlin-classes/debug", excludes: excludePatterns)
+    ]))
+    
+    executionData.setFrom(fileTree(buildDir).include([
+        "outputs/unit_test_code_coverage/debugUnitTest/testDebugUnitTest.exec",
+        "jacoco/testDebugUnitTest.exec"
+    ]))
+}
+
+// Combined coverage report for both unit and instrumentation tests
+tasks.register('jacocoCombinedReport', JacocoReport) {
+    // This task can run after both test types complete
+    // Make it depend on both if they're being run
+    group = "Reporting"
+    description = "Generate Jacoco coverage reports for both unit and instrumentation tests"
+    
+    reports {
+        xml.required = true
+        html.required = true
+        csv.required = false
+        
+        xml.outputLocation = file("${buildDir}/reports/jacoco/jacocoCombinedReport/jacocoCombinedReport.xml")
+        html.outputLocation = file("${buildDir}/reports/jacoco/jacocoCombinedReport/html")
+    }
+    
+    def excludePatterns = [
+        '**/R.class',
+        '**/R$*.class',
+        '**/BuildConfig.*',
+        '**/Manifest*.*',
+        '**/*Test*.*',
+        'android/**/*.*',
+        '**/*$ViewInjector*.*',
+        '**/*$ViewBinder*.*',
+        '**/Lambda$*.class',
+        '**/Lambda.class',
+        '**/*Lambda.class',
+        '**/*Lambda*.class',
+        '**/*_MembersInjector.class',
+        '**/Dagger*Component*.*',
+        '**/*Module_*Factory.class',
+        '**/AutoValue_*.*',
+        '**/*JavascriptBridge.class',
+        '**/package-info.class',
+        '**/TestActivity.class',
+        // External library exclusions
+        '**/okhttp/**',
+        '**/okio/**',
+        '**/txtmark/**',
+        '**/retrofit2/**',
+        '**/volley/**',
+        '**/CSConnectionRequest.class',
+        // Exclude callback interfaces and their anonymous implementations
+        '**/SyncResultCallBack.class',
+        '**/Stack$*.class'
+    ]
+    
+    sourceDirectories.setFrom(files([
+        "${project.projectDir}/src/main/java"
+    ]))
+    
+    classDirectories.setFrom(files([
+        fileTree(dir: "${buildDir}/intermediates/javac/debug", excludes: excludePatterns),
+        fileTree(dir: "${buildDir}/tmp/kotlin-classes/debug", excludes: excludePatterns)
+    ]))
+    
+    // Collect execution data from both unit tests and instrumentation tests
+    executionData.setFrom(fileTree(buildDir).include([
+        // Unit test coverage
+        "outputs/unit_test_code_coverage/debugUnitTest/testDebugUnitTest.exec",
+        "jacoco/testDebugUnitTest.exec",
+        // Instrumentation test coverage
+        "outputs/code_coverage/debugAndroidTest/connected/**/*.ec"
+    ]))
+}
+
+tasks.register('jacocoTestCoverageVerification', JacocoCoverageVerification) {
+    dependsOn('testDebugUnitTest')
+    
+    def excludePatterns = [
+        '**/R.class',
+        '**/R$*.class',
+        '**/BuildConfig.*',
+        '**/Manifest*.*',
+        '**/*Test*.*',
+        'android/**/*.*',
+        '**/package-info.class',
+        '**/TestActivity.class',
+        '**/CSConnectionRequest.class',
+        // Exclude callback interfaces and their anonymous implementations
+        '**/SyncResultCallBack.class',
+        '**/Stack$*.class'
+    ]
+    
+    sourceDirectories.setFrom(files([
+        "${project.projectDir}/src/main/java"
+    ]))
+    
+    classDirectories.setFrom(files([
+        fileTree(dir: "${buildDir}/intermediates/javac/debug", excludes: excludePatterns),
+        fileTree(dir: "${buildDir}/tmp/kotlin-classes/debug", excludes: excludePatterns)
+    ]))
+    
+    executionData.setFrom(fileTree(buildDir).include([
+        "outputs/unit_test_code_coverage/debugUnitTest/testDebugUnitTest.exec",
+        "jacoco/testDebugUnitTest.exec"
+    ]))
+}
+
+// Make check task depend on coverage verification
+tasks.named('check') {
+    dependsOn('jacocoTestReport', 'jacocoTestCoverageVerification')
 }
