@@ -276,7 +276,10 @@ tasks.register('jacocoTestReport', JacocoReport) {
         '**/txtmark/**',
         '**/retrofit2/**',
         '**/volley/**',
-        '**/CSConnectionRequest.class'
+        '**/CSConnectionRequest.class',
+        // Exclude callback interfaces and their anonymous implementations
+        '**/SyncResultCallBack.class',
+        '**/Stack$*.class'
     ]
     
     sourceDirectories.setFrom(files([
@@ -336,7 +339,10 @@ tasks.register('jacocoCombinedReport', JacocoReport) {
         '**/txtmark/**',
         '**/retrofit2/**',
         '**/volley/**',
-        '**/CSConnectionRequest.class'
+        '**/CSConnectionRequest.class',
+        // Exclude callback interfaces and their anonymous implementations
+        '**/SyncResultCallBack.class',
+        '**/Stack$*.class'
     ]
     
     sourceDirectories.setFrom(files([
@@ -370,7 +376,10 @@ tasks.register('jacocoTestCoverageVerification', JacocoCoverageVerification) {
         'android/**/*.*',
         '**/package-info.class',
         '**/TestActivity.class',
-        '**/CSConnectionRequest.class'
+        '**/CSConnectionRequest.class',
+        // Exclude callback interfaces and their anonymous implementations
+        '**/SyncResultCallBack.class',
+        '**/Stack$*.class'
     ]
     
     sourceDirectories.setFrom(files([
