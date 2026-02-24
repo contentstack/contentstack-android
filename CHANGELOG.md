@@ -1,5 +1,11 @@
 ﻿# CHANGELOG
 
+## Version 4.2.0
+
+### Date: 02-Mar-2026
+
+- Added asset localisation support
+
 ## Version 4.1.0
 
 ### Date: 15-Sept-2025
