@@ -14,8 +14,10 @@ import android.util.ArrayMap;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
-import static org.mockito.Mockito.*;
+import java.util.concurrent.atomic.AtomicReference;
+
 @RunWith(RobolectricTestRunner.class)
 @Config(sdk = 28, manifest = Config.NONE)
 public class TestContentType {
@@ -336,27 +338,8 @@ public class TestContentType {
         return new ContentType(contentTypeUid);
     }
 
-    private ContentType createContentTypeWithStackAndHeaders(String contentTypeUid) throws Exception {
-        ContentType contentType = new ContentType(contentTypeUid);
-
-        // mock Stack and inject a stackHeader / localHeader field if present
-        Stack mockStack = mock(Stack.class);
-
-        // We will inject "localHeader" field into Stack if it exists
-        try {
-            Field localHeaderField = Stack.class.getDeclaredField("localHeader");
-            localHeaderField.setAccessible(true);
-            ArrayMap<String, Object> stackHeaders = new ArrayMap<>();
-            stackHeaders.put("environment", "prod-env");
-            stackHeaders.put("stackKey", "stackVal");
-            localHeaderField.set(mockStack, stackHeaders);
-        } catch (NoSuchFieldException ignored) {
-            // If Stack doesn't have localHeader, getHeader will just use localHeader or
-            // null.
-        }
-
-        contentType.setStackInstance(mockStack);
-        return contentType;
+    private ContentType createContentTypeWithStackAndHeaders(String contentTypeUid) {
+        return stack.contentType(contentTypeUid);
     }
 
     private ArrayMap<String, Object> getLocalHeader(ContentType contentType) throws Exception {
@@ -484,82 +467,68 @@ public class TestContentType {
     @Test
     public void testFetchWithEmptyContentTypeNameCallsOnRequestFail() throws Exception {
         ContentType contentType = createBareContentType("");
+        contentType.setStackInstance(stack);
 
-        // make sure stackInstance is not null
-        contentType.setStackInstance(mock(Stack.class));
-
-        ContentTypesCallback callback = mock(ContentTypesCallback.class);
+        final AtomicReference<Error> errorRef = new AtomicReference<>();
+        ContentTypesCallback callback = new ContentTypesCallback() {
+            @Override
+            public void onCompletion(ContentTypesModel contentTypesModel, Error error) {
+                if (error != null) {
+                    errorRef.set(error);
+                }
+            }
+        };
 
         contentType.fetch(new JSONObject(), callback);
 
-        verify(callback).onRequestFail(eq(ResponseType.UNKNOWN), any(Error.class));
+        assertNotNull(errorRef.get());
     }
 
     @Test
     public void testFetchExceptionCallsOnRequestFail() throws Exception {
         ContentType contentType = createBareContentType("blog");
-        contentType.setStackInstance(mock(Stack.class));
+        contentType.setStackInstance(stack);
 
-        // Force an exception by using bad JSONObject for params
-        JSONObject badParams = mock(JSONObject.class);
-        when(badParams.keys()).thenThrow(new RuntimeException("boom"));
+        final AtomicReference<Error> errorRef = new AtomicReference<>();
+        ContentTypesCallback callback = new ContentTypesCallback() {
+            @Override
+            public void onCompletion(ContentTypesModel contentTypesModel, Error error) {
+                if (error != null) {
+                    errorRef.set(error);
+                }
+            }
+        };
 
-        ContentTypesCallback callback = mock(ContentTypesCallback.class);
+        contentType.fetch(new ThrowingJSONObject(), callback);
 
-        contentType.fetch(badParams, callback);
-
-        verify(callback).onRequestFail(eq(ResponseType.UNKNOWN), any(Error.class));
+        assertNotNull(errorRef.get());
     }
 
     @Test
     public void testFetchNullParamsAndEnvironmentHeader() throws Exception {
         ContentType contentType = createBareContentType("blog");
+        contentType.setStackInstance(stack);
 
-        // Create a fake Stack with environment in its localHeader (so getHeader picks
-        // it)
-        Stack mockStack = mock(Stack.class);
+        ContentTypesCallback callback = new ContentTypesCallback() {
+            @Override
+            public void onCompletion(ContentTypesModel contentTypesModel, Error error) {}
+        };
 
-        // Inject stack.localHeader if it exists
-        try {
-            Field localHeaderField = Stack.class.getDeclaredField("localHeader");
-            localHeaderField.setAccessible(true);
-            ArrayMap<String, Object> stackHeaders = new ArrayMap<>();
-            stackHeaders.put("environment", "prod-env");
-            localHeaderField.set(mockStack, stackHeaders);
-        } catch (NoSuchFieldException ignored) {
-        }
-
-        // Inject VERSION field if exists so URL is built properly (not strictly
-        // necessary for coverage)
-        try {
-            Field versionField = Stack.class.getDeclaredField("VERSION");
-            versionField.setAccessible(true);
-            versionField.set(mockStack, "v3");
-        } catch (NoSuchFieldException ignored) {
-        }
-
-        contentType.setStackInstance(mockStack);
-
-        ContentTypesCallback callback = mock(ContentTypesCallback.class);
-
-        // this will hit:
-        // if (params == null) params = new JSONObject();
-        // then iterate keys (none)
-        // then add environment if headers contains it
         contentType.fetch(null, callback);
-
-        // We don't verify callback interactions here; this is just to cover branches.
     }
 
     @Test
     public void testFetchNormalCallDoesNotCrash() throws Exception {
         ContentType contentType = createBareContentType("blog");
-        contentType.setStackInstance(mock(Stack.class));
+        contentType.setStackInstance(stack);
 
         JSONObject params = new JSONObject();
         params.put("limit", 3);
 
-        ContentTypesCallback callback = mock(ContentTypesCallback.class);
+        ContentTypesCallback callback = new ContentTypesCallback() {
+            @Override
+            public void onCompletion(ContentTypesModel contentTypesModel, Error error) {}
+        };
 
         contentType.fetch(params, callback);
     }
@@ -592,5 +561,13 @@ public class TestContentType {
         JSONObject empty = new JSONObject();
         HashMap<String, Object> resultEmpty = invokeGetUrlParams(contentType, empty);
         assertNull(resultEmpty);
+    }
+
+    /** JSONObject that throws when keys() is called – used to trigger exception path in fetch() without Mockito. */
+    private static class ThrowingJSONObject extends JSONObject {
+        @Override
+        public Iterator<String> keys() {
+            throw new RuntimeException("boom");
+        }
     }
 }
