@@ -125,6 +125,22 @@ public class AssetTestCase {
     }
 
     @Test
+    public void test_setLocale_fetch() throws InterruptedException {
+        final CountDownLatch latch = new CountDownLatch(1);
+        final Asset asset = stack.asset(assetUid);
+        asset.setLocale("en-us");
+        asset.fetch(new FetchResultCallback() {
+            @Override
+            public void onCompletion(ResponseType responseType, Error error) {
+                assertNotNull(asset.getAssetUid());
+                latch.countDown();
+            }
+        });
+        latch.await(5, TimeUnit.SECONDS);
+        assertEquals("Query was not completed in time", 0, latch.getCount());
+    }
+
+    @Test
     public void test_include_branch() {
         final Asset asset = stack.asset(assetUid);
         asset.includeBranch();
