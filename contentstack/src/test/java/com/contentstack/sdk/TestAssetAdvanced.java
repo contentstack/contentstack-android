@@ -189,6 +189,37 @@ public class TestAssetAdvanced {
         assertNotNull(asset);
     }
 
+    // ==================== SET LOCALE Tests ====================
+
+    @Test
+    public void testSetLocale() {
+        Asset result = asset.setLocale("en-us");
+        assertNotNull(result);
+        assertSame(asset, result);
+        assertEquals("en-us", asset.urlQueries.optString("locale", ""));
+    }
+
+    @Test
+    public void testSetLocaleReturnsThis() {
+        Asset result = asset.setLocale("en-hi");
+        assertSame(asset, result);
+    }
+
+    @Test
+    public void testSetLocaleWithNull() {
+        asset.setLocale("en-us");
+        Asset result = asset.setLocale(null);
+        assertSame(asset, result);
+        assertEquals("en-us", asset.urlQueries.optString("locale", ""));
+    }
+
+    @Test
+    public void testSetLocaleChainedWithFetch() {
+        asset.setLocale("en-us").includeFallback();
+        assertTrue(asset.urlQueries.has("locale"));
+        assertEquals("en-us", asset.urlQueries.optString("locale", ""));
+    }
+
     // ==================== GET METHODS Tests ====================
 
     @Test
