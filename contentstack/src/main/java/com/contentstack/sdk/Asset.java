@@ -616,4 +616,22 @@ public class Asset {
         return this;
     }
 
+     /**
+     * <p>
+     * <br><br><b>Example :</b><br>
+     * <pre class="prettyprint">
+     * Asset asset = asset.setLocale("en-hi");
+     * </pre>
+     * </p>
+     */
+    public Asset setLocale(String locale) {
+        if (locale != null) {
+            try {
+                urlQueries.put("locale", locale);
+            } catch (JSONException e) {
+                Log.e(TAG, e.getLocalizedMessage());
+            }
+        }
+        return this;
+    }
 }
