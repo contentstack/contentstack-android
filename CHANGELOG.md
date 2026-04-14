@@ -1,5 +1,11 @@
 ﻿# CHANGELOG
 
+## Version 4.2.1
+
+### Date: 14-Apr-2026
+
+- Security: mark manifest-declared broadcast receivers as non-exported to prevent other apps from sending spoofed broadcasts.
+
 ## Version 4.2.0
 
 ### Date: 02-Mar-2026
