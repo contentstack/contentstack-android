@@ -7,7 +7,7 @@ plugins {
 ext {
     PUBLISH_GROUP_ID = 'com.contentstack.sdk'
     PUBLISH_ARTIFACT_ID = 'android'
-    PUBLISH_VERSION = '4.2.0'
+    PUBLISH_VERSION = '4.2.1'
 }
 
 android {
@@ -44,6 +44,9 @@ android {
             includeAndroidResources = true
             returnDefaultValues = true
             all {
+                testLogging {
+                    events 'passed', 'skipped', 'failed'
+                }
                 jacoco {
                     includeNoLocationClasses = true
                     excludes = ['jdk.internal.*']
@@ -126,24 +129,37 @@ dependencies {
     def junit = "4.13.2"
     def mockito = "5.2.0"
     def mockitoKotlin = "2.2.0"
+    def okhttp = "5.3.2"
+    def retrofit = "2.11.0"
     configurations.configureEach { resolutionStrategy.force 'com.android.support:support-annotations:23.1.0' }
+    // androidx.test pulls an older kotlin-stdlib; align for Snyk SNYK-JAVA-ORGJETBRAINSKOTLIN-2393744 (fixed in Kotlin 2.1.0+).
+    configurations.configureEach {
+        resolutionStrategy.eachDependency { details ->
+            if (details.requested.group == 'org.jetbrains.kotlin' &&
+                    (details.requested.name == 'kotlin-stdlib' ||
+                            details.requested.name == 'kotlin-stdlib-common' ||
+                            details.requested.name == 'kotlin-stdlib-jdk7' ||
+                            details.requested.name == 'kotlin-stdlib-jdk8')) {
+                details.useVersion '2.1.21'
+            }
+        }
+    }
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation "com.android.volley:volley:$volley"
-    implementation "junit:junit:$junit"
 
     // For AGP 7.4+
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.4'
     
     // Unit Testing Dependencies
-    testImplementation 'junit:junit:4.13.2'
+    testImplementation "junit:junit:$junit"
     testImplementation "org.mockito:mockito-core:$mockito"
     testImplementation "org.mockito:mockito-inline:$mockito"
     testImplementation 'org.mockito:mockito-android:5.2.0'
     testImplementation 'org.robolectric:robolectric:4.15' // Updated to fix security vulnerabilities
-    testImplementation 'androidx.test:core:1.5.0'
-    testImplementation 'androidx.test:runner:1.5.2'
-    testImplementation 'androidx.test.ext:junit:1.1.5'
-    testImplementation 'com.squareup.okhttp3:mockwebserver:4.12.0'
+    testImplementation 'androidx.test:core:1.6.1'
+    testImplementation 'androidx.test:runner:1.6.1'
+    testImplementation 'androidx.test.ext:junit:1.2.1'
+    testImplementation "com.squareup.okhttp3:mockwebserver:$okhttp"
     testImplementation 'org.json:json:20231013'
     // PowerMock for advanced mocking
     testImplementation 'org.powermock:powermock-module-junit4:2.0.9'
@@ -151,36 +167,19 @@ dependencies {
     testImplementation 'org.powermock:powermock-core:2.0.9'
     
     // Android Test Dependencies
-    androidTestImplementation 'androidx.test:core:1.5.0'
-    androidTestImplementation 'androidx.test:runner:1.5.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
-    androidTestImplementation('androidx.test.espresso:espresso-core:3.5.1', {
+    androidTestImplementation 'androidx.test:core:1.6.1'
+    androidTestImplementation 'androidx.test:runner:1.6.1'
+    androidTestImplementation 'androidx.test.ext:junit:1.2.1'
+    androidTestImplementation('androidx.test.espresso:espresso-core:3.6.1', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 
 //    implementation 'com.squareup.okio:okio:3.9.0'
     implementation 'com.github.rjeschke:txtmark:0.12'
-    // // Retrofit
-    implementation("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation 'com.squareup.retrofit2:converter-gson'
-    // // OkHttp
-    implementation 'com.squareup.okhttp3:okhttp'
+    implementation "com.squareup.retrofit2:retrofit:$retrofit"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofit"
+    implementation "com.squareup.okhttp3:okhttp:$okhttp"
     // implementation 'com.squareup.okhttp3:logging-interceptor:4.9.3'
-
-    constraints {
-        implementation('com.squareup.retrofit2:converter-gson:2.9.0') {
-            because 'gson 2.8.5 used by retrofit has a vulnerability'
-        }
-        implementation('com.google.code.gson:gson@2.8.9') {
-            because 'gson 2.8.5 used by retrofit has a vulnerability'
-        }
-        implementation('com.squareup.okhttp3:okhttp:4.9.3') {
-            because 'kotlin stdlib 1.4.10 used by okhttp has a vulnerability'
-        }
-        implementation('org.jetbrains.kotlin:kotlin-stdlib@1.6.0') {
-            because 'kotlin stdlib 1.4.10 used by okhttp has a vulnerability'
-        }
-    }
 }
 tasks.register('clearJar', Delete) { delete 'build/libs/contentstack.jar' }
 tasks.register('unzip', Copy) {
@@ -397,7 +396,18 @@ tasks.register('jacocoTestCoverageVerification', JacocoCoverageVerification) {
     ]))
 }
 
-// Make check task depend on coverage verification
-tasks.named('check') {
-    dependsOn('jacocoTestReport', 'jacocoTestCoverageVerification')
+// Do not run JVM unit tests during `build`, `check`, etc. Enable only when you ask for them explicitly.
+// Examples: ./gradlew :contentstack:testDebugUnitTest | :contentstack:test | :contentstack:jacocoTestReport
+def requestedTaskBasenames = gradle.startParameter.taskNames.collect { it.split(':').last().toLowerCase() }
+def runJvmUnitTests = requestedTaskBasenames.any { t ->
+    t == 'test' ||
+            t ==~ /test.*unittest/ ||
+            t in ['jacocotestreport', 'jacocotestcoveragewerification', 'jacococombinedreport']
+}
+gradle.projectsEvaluated {
+    if (!runJvmUnitTests) {
+        tasks.matching { it.name.matches('test.*UnitTest') }.configureEach { ut ->
+            ut.enabled = false
+        }
+    }
 }

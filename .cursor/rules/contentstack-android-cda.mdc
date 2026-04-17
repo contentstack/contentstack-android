@@ -1,0 +1,34 @@
+---
+description: Contentstack CDA patterns – Stack/Config, HTTP, retry, callbacks, Content Delivery API
+globs: "contentstack/src/main/java/com/contentstack/sdk/**/*.java", "contentstack/src/main/java/com/contentstack/sdk/**/*.kt"
+---
+
+# Contentstack Android CDA – SDK Rules
+
+Apply when editing the SDK core (`com.contentstack.sdk`). Keep behavior aligned with the [Content Delivery API](https://www.contentstack.com/docs/apis/content-delivery-api/).
+
+## Stack and Config
+
+- **Entry point:** `Contentstack.stack(Context, apiKey, deliveryToken, environment)` returns a `Stack`. Use `Config` for optional settings (host, version, region, branch, proxy, connection pool).
+- **Default host:** `cdn.contentstack.io`; **API version:** `v3` (see `Config`).
+- **Config options:** host, version, environment, branch, region (`ContentstackRegion`), proxy, connection pool, endpoint. Set these via `Config` before building the stack.
+- **Region/branch:** Support `Config.setRegion()` and `Config.setBranch()` for regional and branch-specific delivery.
+
+## HTTP layer
+
+- **Requests** use **`CSHttpConnection`** (Volley) and/or **Retrofit** + **OkHttp** (e.g. `Stack`, `APIService`). Do not bypass these for CDA calls.
+- **Headers:** Use the same headers and User-Agent as the rest of the SDK (see constants and request setup in `CSHttpConnection` and Stack/APIService).
+- **Errors:** Map API errors to the SDK **`Error`** class and pass to **`ResultCallBack`** or equivalent callback.
+
+## Retry and resilience
+
+- **Retry:** Volley uses `DefaultRetryPolicy` (e.g. in `CSHttpConnection`); constants in `SDKConstant` (e.g. `TimeOutDuration`, `NumRetry`, `BackOFMultiplier`). Keep retry/timeout behavior consistent when changing the HTTP layer.
+
+## Callbacks and async
+
+- Use existing callback types (e.g. **`ResultCallBack`**, **`EntryResultCallBack`**, **`QueryResultsCallBack`**) for async results. Do not introduce incompatible callback signatures without considering backward compatibility.
+- Pass **`Error`** and response data through the same callback patterns used elsewhere in the SDK.
+
+## CDA concepts
+
+- **Entry,** **Query,** **Asset,** **Content Type,** **Sync** – follow existing class and method names and the CDA API semantics (query params, response parsing). When adding new CDA features, align with the official Content Delivery API documentation.
