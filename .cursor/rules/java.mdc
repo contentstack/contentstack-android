@@ -1,0 +1,41 @@
+---
+description: Java/Kotlin style and com.contentstack.sdk conventions for the Android CDA SDK
+globs: "**/*.java", "**/*.kt"
+---
+
+# Java / Kotlin Standards – Contentstack Android CDA SDK
+
+Apply these conventions when editing Java (or Kotlin) code in this repository.
+
+## Language and runtime
+
+- **Java:** Target **Java 8** compatibility for the library (see `contentstack/build.gradle` compileOptions). Avoid language or API features that require a higher version without updating the module.
+- **Kotlin:** If present, follow existing Kotlin style and interop with `com.contentstack.sdk`; prefer null-safety and idiomatic Kotlin where it does not break public API.
+- Avoid raw types; use proper generics where applicable.
+
+## Package and layout
+
+- All SDK code lives under **`com.contentstack.sdk`** (see `contentstack/src/main/java/com/contentstack/sdk/`).
+- Keep the existing package structure; do not introduce new top-level packages without alignment with the rest of the SDK.
+
+## Naming
+
+- **Classes:** PascalCase (e.g. `CSHttpConnection`, `Config`).
+- **Methods/variables:** camelCase.
+- **Constants:** UPPER_SNAKE_CASE (e.g. in `SDKConstant`, `ErrorMessages`).
+- **Test classes:** `Test*` for unit tests; instrumented tests in `androidTest` (see **testing.mdc**).
+
+## Logging
+
+- Use **Android `Log`** or project logging as in `CSHttpConnection` (TAG-based). Obtain loggers with a class-named TAG.
+- Log at appropriate levels (e.g. `Log.w` for recoverable issues, `Log.d` for debug).
+
+## Null-safety and annotations
+
+- Use **`@NonNull`** / **`@Nullable`** (Android or JetBrains) where the project already does, to document nullability for public API.
+- Validate or document parameters for public methods where NPEs would be surprising.
+
+## General
+
+- Prefer immutability where practical (e.g. final fields, defensive copies for collections).
+- Document public API with Javadoc; keep examples in Javadoc in sync with actual usage (e.g. `Contentstack.stack(...)`, `Config`).

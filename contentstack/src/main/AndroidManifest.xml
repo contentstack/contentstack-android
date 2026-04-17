@@ -10,7 +10,7 @@
         <receiver
             android:name="com.contentstack.sdk.ConnectionStatus"
             android:enabled="true"
-            android:exported="true">
+            android:exported="false">
             <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>
@@ -18,7 +18,7 @@
         <receiver
             android:name="com.contentstack.sdk.ClearCache"
             android:enabled="true"
-            android:exported="true">
+            android:exported="false">
             <intent-filter>
                 <action android:name="StartContentStackClearingCache" />
             </intent-filter>

@@ -1,0 +1,33 @@
+---
+description: JUnit 4, Robolectric, androidTest, test naming, JaCoCo
+globs: "contentstack/src/test/**/*.java", "contentstack/src/test/**/*.kt", "contentstack/src/androidTest/**/*.java", "contentstack/src/androidTest/**/*.kt"
+---
+
+# Testing Rules – Contentstack Android CDA SDK
+
+Apply when writing or editing tests. The project uses **JUnit 4**, **Robolectric** (unit), **AndroidX Test** / **Espresso** (instrumented), and **JaCoCo** (see `contentstack/build.gradle`).
+
+## Test naming and layout
+
+- **Unit tests:** Class name prefix **`Test`** (e.g. `TestEntry`, `TestStack`). Place in `contentstack/src/test/java/com/contentstack/sdk/`.
+- **Instrumented tests:** Place in `contentstack/src/androidTest/java/com/contentstack/sdk/`. Use **AndroidJUnitRunner**; naming may use `*TestCase` or `Test*` as in the project (e.g. `AssetTestCase`, `EntryTestCase`).
+
+## JUnit 4 usage
+
+- Use **JUnit 4** APIs: `@Test`, `@Before`, `@After`, `@BeforeClass`, `@AfterClass`.
+- Use **assertions** from `org.junit.Assert` (e.g. `assertEquals`, `assertNotNull`).
+- For unit tests on JVM, **Robolectric** provides Android context; use `Robolectric.buildService(...)` or equivalent where a Context is needed.
+
+## Unit vs instrumented
+
+- **Unit tests** (`src/test/`): Run on JVM with Robolectric; use **MockWebServer** (OkHttp) for HTTP when appropriate; mock dependencies with Mockito/PowerMock as needed.
+- **Instrumented tests** (`src/androidTest/`): Run on device/emulator; may use real stack credentials from `BuildConfig` / `local.properties`; avoid flakiness (timeouts, IdlingResource if using Espresso).
+
+## Test data and credentials
+
+- **Credentials:** Instrumented tests may use `BuildConfig` fields (APIKey, deliveryToken, environment, host) populated from `local.properties`. Do not commit real tokens; document required keys in README or test docs.
+- **Fixtures:** Use existing test assets and JSON under `src/test/` where applicable.
+
+## Coverage
+
+- **JaCoCo** is configured in `contentstack/build.gradle`. Run `./gradlew :contentstack:jacocoTestReport` for unit-test coverage (e.g. `contentstack/build/reports/jacoco/`). Maintain or improve coverage when adding or changing production code.
