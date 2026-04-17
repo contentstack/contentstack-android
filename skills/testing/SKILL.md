@@ -1,49 +1,29 @@
 ---
 name: testing
-description: Use when writing or refactoring tests – JUnit 4, Robolectric, androidTest, naming, MockWebServer, JaCoCo
+description: Use for JVM unit tests, Robolectric, AndroidX Test, and JaCoCo in contentstack-android.
 ---
 
-# Testing – Contentstack Android CDA SDK
-
-Use this skill when adding or refactoring tests in the Android CDA SDK.
+# Testing – contentstack-android
 
 ## When to use
 
-- Writing new unit or instrumented tests.
-- Refactoring test layout, base classes, or test utilities.
-- Adjusting test configuration (e.g. timeouts, Robolectric, JaCoCo) or coverage.
+- Adding tests under `contentstack/src/test/`
+- Debugging JaCoCo or unit-test-only failures
 
 ## Instructions
 
-### JUnit 4 and layout
+### Unit tests
 
-- Use **JUnit 4** (junit:junit). Dependencies are in `contentstack/build.gradle`.
-- **Unit tests:** Class name should start with **`Test`** (e.g. `TestEntry`, `TestStack`). Place under `contentstack/src/test/java/com/contentstack/sdk/`.
-- **Instrumented tests:** Place under `contentstack/src/androidTest/java/com/contentstack/sdk/`. Use **AndroidJUnitRunner**; naming may follow existing style (e.g. `*TestCase`).
+- Prefer **`testDebugUnitTest`** for fast feedback; Robolectric enables Android APIs on JVM where configured.
 
-### Robolectric and unit tests
+### Instrumentation
 
-- **Robolectric** provides Android context on the JVM. Use it where tests need `Context` (e.g. `Contentstack.stack(context, ...)`).
-- For HTTP mocking in unit tests, use **OkHttp MockWebServer** where the SDK uses OkHttp/Retrofit; mock or stub Volley/CSHttpConnection where appropriate.
+- **`androidTest`** exists for on-device tests—run on emulator/CI when changing UI-adjacent or integration paths.
 
-### Instrumented tests and credentials
+### Coverage
 
-- **BuildConfig:** Instrumented tests can use `BuildConfig` fields (APIKey, deliveryToken, environment, host) from `local.properties` (see `contentstack/build.gradle`). Do not commit real credentials; document required variables.
-- Use **AndroidX Test** and **Espresso** as in the project; avoid flaky tests (timeouts, IdlingResource if needed).
+- Debug builds enable **`testCoverageEnabled`**—JaCoCo outputs feed into reporting tasks defined in the module `build.gradle`.
 
-### Naming and structure
+### Hygiene
 
-- One test class per production class when possible (e.g. `TestEntry` for `Entry`).
-- Keep tests deterministic and readable; prefer meaningful assertions over large blocks of setup.
-
-### Coverage and execution
-
-- **JaCoCo** is configured in `contentstack/build.gradle`. Run `./gradlew :contentstack:jacocoTestReport` for unit-test coverage (e.g. `contentstack/build/reports/jacoco/`).
-- **Unit tests:** `./gradlew :contentstack:testDebugUnitTest`
-- **Instrumented:** `./gradlew :contentstack:connectedDebugAndroidTest`
-- Maintain or improve coverage when changing production code; add tests for new or modified behavior.
-
-## References
-
-- `contentstack/build.gradle` – test dependencies, testOptions, jacoco
-- Project rule: `.cursor/rules/testing.mdc`
+- Use **`MockWebserver`** and fixtures for HTTP; avoid embedding real stack credentials in the repo.
