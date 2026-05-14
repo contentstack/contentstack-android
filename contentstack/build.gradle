@@ -108,6 +108,7 @@ android {
             buildConfigField "String", "variantUID", getPropertyOrEmpty('variantUID')
             buildConfigField "String", "variantEntryUID", getPropertyOrEmpty('variantEntryUID')
             buildConfigField "String[]", "variantsUID", variantsAsArrayString
+            buildConfigField "String", "variantBranch", getPropertyOrEmpty('variantBranch')
         }
         release {
             minifyEnabled false

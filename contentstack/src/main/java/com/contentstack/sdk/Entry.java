@@ -1551,6 +1551,38 @@ public class Entry {
         }
         return this;
     }
+
+    /**
+     * Sets the variant UID and scopes the request to the given branch.
+     * Sets {@code x-cs-variant-uid} and {@code branch} request headers.
+     *
+     * @param variantUid single variant UID
+     * @param branch     branch name to scope the request
+     * @return {@link Entry}
+     */
+    public Entry variants(String variantUid, String branch) {
+        variants(variantUid);
+        if (branch != null && !branch.trim().isEmpty()) {
+            this.localHeader.put("branch", branch.trim());
+        }
+        return this;
+    }
+
+    /**
+     * Sets multiple variant UIDs and scopes the request to the given branch.
+     * Sets {@code x-cs-variant-uid} and {@code branch} request headers.
+     *
+     * @param variantUids array of variant UIDs
+     * @param branch      branch name to scope the request
+     * @return {@link Entry}
+     */
+    public Entry variants(String[] variantUids, String branch) {
+        variants(variantUids);
+        if (branch != null && !branch.trim().isEmpty()) {
+            this.localHeader.put("branch", branch.trim());
+        }
+        return this;
+    }
     public ArrayMap<String, Object> getHeaders() {
         return localHeader;
     }

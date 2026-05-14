@@ -31,6 +31,7 @@ public class EntryTestCase {
     private static String variantUID = BuildConfig.variantUID;
     private static String variantEntryUID = BuildConfig.variantEntryUID;
     private static String[] variantsUID = BuildConfig.variantsUID;
+    private static String variantBranch = BuildConfig.variantBranch;
 
 
     @BeforeClass
@@ -363,6 +364,34 @@ public class EntryTestCase {
     public void VariantsTestArray() throws InterruptedException {
         final CountDownLatch latch = new CountDownLatch(1);
         final Entry entry = stack.contentType("product").entry(variantEntryUID).variants(variantsUID);
+        entry.fetch(new EntryResultCallBack() {
+            @Override
+            public void onCompletion(ResponseType responseType, Error error) {
+                System.out.println(entry.toJSON());
+                latch.countDown();
+            }
+        });
+        latch.await();
+    }
+
+    @Test
+    public void VariantsTestSingleUidWithBranch() throws InterruptedException {
+        final CountDownLatch latch = new CountDownLatch(1);
+        final Entry entry = stack.contentType("product").entry(variantEntryUID).variants(variantUID, variantBranch);
+        entry.fetch(new EntryResultCallBack() {
+            @Override
+            public void onCompletion(ResponseType responseType, Error error) {
+                System.out.println(entry.toJSON());
+                latch.countDown();
+            }
+        });
+        latch.await();
+    }
+
+    @Test
+    public void VariantsTestArrayWithBranch() throws InterruptedException {
+        final CountDownLatch latch = new CountDownLatch(1);
+        final Entry entry = stack.contentType("product").entry(variantEntryUID).variants(variantsUID, variantBranch);
         entry.fetch(new EntryResultCallBack() {
             @Override
             public void onCompletion(ResponseType responseType, Error error) {

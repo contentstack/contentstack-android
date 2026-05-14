@@ -353,6 +353,50 @@ public class TestEntryComprehensive {
         assertNotNull(result);
     }
 
+    @Test
+    public void testVariantsSingleWithBranch() {
+        Entry result = entry.variants("xyz", "branch_name");
+        assertNotNull(result);
+        assertEquals("xyz", entry.getHeaders().get("x-cs-variant-uid"));
+        assertEquals("branch_name", entry.getHeaders().get("branch"));
+    }
+
+    @Test
+    public void testVariantsArrayWithBranch() {
+        Entry result = entry.variants(new String[]{"variant1", "variant2"}, "branch_name");
+        assertNotNull(result);
+        assertEquals("variant1, variant2", entry.getHeaders().get("x-cs-variant-uid"));
+        assertEquals("branch_name", entry.getHeaders().get("branch"));
+    }
+
+    @Test
+    public void testVariantsArrayWithBranchFiltersNullsAndBlanks() {
+        entry.variants(new String[]{"v1", null, "  ", "v2"}, "staging");
+        assertEquals("v1, v2", entry.getHeaders().get("x-cs-variant-uid"));
+        assertEquals("staging", entry.getHeaders().get("branch"));
+    }
+
+    @Test
+    public void testVariantsSingleNullBranchDoesNotSetBranchHeader() {
+        entry.variants("xyz", null);
+        assertEquals("xyz", entry.getHeaders().get("x-cs-variant-uid"));
+        assertNull(entry.getHeaders().get("branch"));
+    }
+
+    @Test
+    public void testVariantsArrayNullBranchDoesNotSetBranchHeader() {
+        entry.variants(new String[]{"v1", "v2"}, null);
+        assertEquals("v1, v2", entry.getHeaders().get("x-cs-variant-uid"));
+        assertNull(entry.getHeaders().get("branch"));
+    }
+
+    @Test
+    public void testVariantsSingleEmptyBranchDoesNotSetBranchHeader() {
+        entry.variants("xyz", "  ");
+        assertEquals("xyz", entry.getHeaders().get("x-cs-variant-uid"));
+        assertNull(entry.getHeaders().get("branch"));
+    }
+
     // ==================== Locale ====================
 
     @Test

@@ -17,6 +17,9 @@ public class QueryTestCase {
 
     private static final String TAG = AssetTestCase.class.getSimpleName();
     private static final String contentTypeUID = BuildConfig.contentTypeUID;
+    private static final String variantUID = BuildConfig.variantUID;
+    private static final String[] variantsUID = BuildConfig.variantsUID;
+    private static final String variantBranch = BuildConfig.variantBranch;
     private static Query query;
 
     static {
@@ -112,6 +115,58 @@ public class QueryTestCase {
 //                }
 //                boolean hasEmbeddedItemKey = query.mainJSON.has("include_embedded_items[]");
 //                Assert.assertTrue(hasEmbeddedItemKey);
+            }
+        });
+    }
+
+    @Test
+    public void test_42_variants_single_uid_find() throws Exception {
+        final Query q = TestCred.stack().contentType(contentTypeUID).query();
+        q.variants(variantUID).find(new QueryResultsCallBack() {
+            @Override
+            public void onCompletion(ResponseType responseType, QueryResult queryresult, Error error) {
+                if (error == null) {
+                    Log.d(TAG, "variants single find: " + queryresult.getResultObjects().size() + " entries");
+                }
+            }
+        });
+    }
+
+    @Test
+    public void test_43_variants_array_find() throws Exception {
+        final Query q = TestCred.stack().contentType(contentTypeUID).query();
+        q.variants(variantsUID).find(new QueryResultsCallBack() {
+            @Override
+            public void onCompletion(ResponseType responseType, QueryResult queryresult, Error error) {
+                if (error == null) {
+                    Log.d(TAG, "variants array find: " + queryresult.getResultObjects().size() + " entries");
+                }
+            }
+        });
+    }
+
+    @Test
+    public void test_44_variants_single_uid_with_branch_find() throws Exception {
+        final Query q = TestCred.stack().contentType(contentTypeUID).query();
+        q.variants(variantUID, variantBranch).find(new QueryResultsCallBack() {
+            @Override
+            public void onCompletion(ResponseType responseType, QueryResult queryresult, Error error) {
+                if (error == null) {
+                    Log.d(TAG, "variants single+branch find: " + queryresult.getResultObjects().size() + " entries");
+                }
+            }
+        });
+    }
+
+    @Test
+    public void test_45_variants_array_with_branch_find() throws Exception {
+        final Query q = TestCred.stack().contentType(contentTypeUID).query();
+        q.variants(variantsUID, variantBranch).find(new QueryResultsCallBack() {
+            @Override
+            public void onCompletion(ResponseType responseType, QueryResult queryresult, Error error) {
+                if (error == null) {
+                    Log.d(TAG, "variants array+branch find: " + queryresult.getResultObjects().size() + " entries");
+                }
             }
         });
     }
