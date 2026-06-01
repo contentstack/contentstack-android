@@ -5,7 +5,7 @@ Use this as the standard workflow when contributing to the Android CDA SDK.
 ## Branches
 
 - Use feature branches for changes (e.g. `feat/...`, `fix/...`).
-- Base work off the appropriate long-lived branch (e.g. `staging`, `development`) per team norms.
+- Base work off the appropriate long-lived branch (e.g. `development`) per team norms.
 
 ## Running tests
 
