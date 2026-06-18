@@ -272,4 +272,16 @@ public class TestEndpoint {
         String url = Endpoint.getContentstackEndpoint("na", "contentDelivery");
         assertEquals("https://cdn.contentstack.io", url);
     }
+
+    // ── proxy-aware resolution ────────────────────────────────────────────────
+
+    @Test
+    public void testProxyOverloadResolvesBundledRegion() {
+        // A bundled region never triggers the live download, so the proxy is unused but the
+        // proxy-aware overload must still resolve correctly.
+        java.net.Proxy proxy = new java.net.Proxy(
+                java.net.Proxy.Type.HTTP, new java.net.InetSocketAddress("127.0.0.1", 8080));
+        assertEquals("eu-cdn.contentstack.com",
+                Endpoint.getContentstackEndpoint("eu", "contentDelivery", true, proxy));
+    }
 }

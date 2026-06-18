@@ -84,7 +84,9 @@ public class Stack implements INotifyClass {
         if (!config.hostOverridden && !config.region.name().isEmpty()) {
             String regionId = config.region.name().toLowerCase();
             try {
-                config.URL = Endpoint.getContentstackEndpoint(regionId, "contentDelivery", true);
+                // Route the live-refresh fallback through any configured proxy so region
+                // resolution still works in proxy-only / VPN environments.
+                config.URL = Endpoint.getContentstackEndpoint(regionId, "contentDelivery", true, config.getProxy());
             } catch (IllegalArgumentException e) {
                 // Unrecognised region: apply the legacy prefix pattern for backward compatibility
                 if (!regionId.equalsIgnoreCase("us")) {

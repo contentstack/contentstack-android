@@ -6,6 +6,7 @@ import org.json.JSONObject;
 
 import java.io.InputStream;
 import java.net.HttpURLConnection;
+import java.net.Proxy;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Iterator;
@@ -66,10 +67,20 @@ public class Endpoint {
     }
 
     public static String getContentstackEndpoint(String region, String service, boolean omitHttps) {
+        return getContentstackEndpoint(region, service, omitHttps, null);
+    }
+
+    /**
+     * Internal variant that routes the live-refresh fallback through the given {@code proxy}
+     * (typically the one configured on {@link Config}). Used by {@link Stack} so region
+     * resolution still works in proxy-only / VPN environments. A {@code null} proxy uses a
+     * direct connection.
+     */
+    static String getContentstackEndpoint(String region, String service, boolean omitHttps, Proxy proxy) {
         if (region == null || region.trim().isEmpty()) {
             throw new IllegalArgumentException("Empty region provided. Please provide a valid region.");
         }
-        JSONObject regionRow = resolveRegion(region);
+        JSONObject regionRow = resolveRegion(region, proxy);
         try {
             JSONObject endpoints = regionRow.getJSONObject("endpoints");
             if (!endpoints.has(service)) {
@@ -91,7 +102,7 @@ public class Endpoint {
         if (region == null || region.trim().isEmpty()) {
             throw new IllegalArgumentException("Empty region provided. Please provide a valid region.");
         }
-        JSONObject regionRow = resolveRegion(region);
+        JSONObject regionRow = resolveRegion(region, null);
         try {
             JSONObject endpoints = regionRow.getJSONObject("endpoints");
             Map<String, String> result = new LinkedHashMap<>();
@@ -112,13 +123,13 @@ public class Endpoint {
         liveRefreshDone = false;
     }
 
-    private static JSONObject resolveRegion(String region) {
-        JSONArray regions = loadRegions();
+    private static JSONObject resolveRegion(String region, Proxy proxy) {
+        JSONArray regions = loadRegions(proxy);
         try {
             return findRegion(regions, region);
         } catch (IllegalArgumentException notInBundled) {
             if (!liveRefreshDone) {
-                JSONArray fresh = tryLiveRefresh();
+                JSONArray fresh = tryLiveRefresh(proxy);
                 if (fresh != null) {
                     try {
                         return findRegion(fresh, region);
@@ -131,7 +142,7 @@ public class Endpoint {
         }
     }
 
-    private static synchronized JSONArray loadRegions() {
+    private static synchronized JSONArray loadRegions(Proxy proxy) {
         if (regionsCache != null) {
             return regionsCache;
         }
@@ -147,7 +158,7 @@ public class Endpoint {
             }
         }
         logger.warning("Bundled regions.json not found in classpath — attempting live download.");
-        JSONArray downloaded = tryLiveRefresh();
+        JSONArray downloaded = tryLiveRefresh(proxy);
         if (downloaded != null) {
             return downloaded;
         }
@@ -156,7 +167,7 @@ public class Endpoint {
                         + REGIONS_URL + ". Ensure the SDK was built correctly, or check network access.");
     }
 
-    private static synchronized JSONArray tryLiveRefresh() {
+    private static synchronized JSONArray tryLiveRefresh(Proxy proxy) {
         if (liveRefreshDone) {
             return regionsCache;
         }
@@ -164,7 +175,9 @@ public class Endpoint {
         try {
             logger.info("Refreshing regions from " + REGIONS_URL);
             URL url = new URL(REGIONS_URL);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            HttpURLConnection conn = (HttpURLConnection) (proxy != null
+                    ? url.openConnection(proxy)
+                    : url.openConnection());
             conn.setRequestMethod("GET");
             conn.setConnectTimeout(5_000);
             conn.setReadTimeout(10_000);
