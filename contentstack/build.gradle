@@ -411,3 +411,15 @@ gradle.projectsEvaluated {
         }
     }
 }
+// Refresh the bundled regions.json from the Contentstack artifact registry.
+// Run whenever Contentstack adds new regions or service keys, then commit the
+// updated contentstack/src/main/resources/assets/regions.json.
+//
+// Usage:
+//   ./gradlew :contentstack:refreshRegions
+tasks.register('refreshRegions', Exec) {
+    description = 'Download the latest regions.json from the Contentstack artifact registry.'
+    group = 'contentstack'
+    workingDir = rootProject.projectDir
+    commandLine 'bash', "${rootProject.projectDir}/scripts/download-regions.sh"
+}

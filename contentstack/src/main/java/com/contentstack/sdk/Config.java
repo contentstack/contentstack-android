@@ -17,6 +17,7 @@ import okhttp3.ConnectionPool;
 public class Config {
     protected String PROTOCOL = "https://";
     protected String URL = "cdn.contentstack.io";
+    protected boolean hostOverridden = false;
     protected String VERSION = "v3";
     protected String environment = null;
     protected String branch = null;
@@ -125,6 +126,7 @@ public class Config {
     public void setHost(String hostName) {
         if (!TextUtils.isEmpty(hostName)) {
             URL = hostName;
+            hostOverridden = true;
         }
     }
 
