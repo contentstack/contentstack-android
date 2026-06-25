@@ -162,9 +162,8 @@ public class AssetTestCase {
         String DEFAULT_API_KEY = BuildConfig.APIKey;
         String DEFAULT_DELIVERY_TOKEN = BuildConfig.deliveryToken;
         String DEFAULT_ENV = BuildConfig.environment;
-        String DEFAULT_HOST = BuildConfig.host;
-        config.setHost(DEFAULT_HOST);
         config.setRegion(Config.ContentstackRegion.AZURE_NA);
+        // Host is resolved from the region; no explicit setHost() so region resolution applies
         Context appContext = InstrumentationRegistry.getTargetContext();
         stack = Contentstack.stack(appContext, DEFAULT_API_KEY, DEFAULT_DELIVERY_TOKEN, DEFAULT_ENV, config);
         assertEquals("azure-na-cdn.contentstack.com", config.getHost());
@@ -189,9 +188,8 @@ public class AssetTestCase {
         String DEFAULT_API_KEY = BuildConfig.APIKey;
         String DEFAULT_DELIVERY_TOKEN = BuildConfig.deliveryToken;
         String DEFAULT_ENV = BuildConfig.environment;
-        String DEFAULT_HOST = BuildConfig.host;
-        config.setHost(DEFAULT_HOST);
         config.setRegion(Config.ContentstackRegion.GCP_NA);
+        // Host is resolved from the region; no explicit setHost() so region resolution applies
         Context appContext = InstrumentationRegistry.getTargetContext();
         stack = Contentstack.stack(appContext, DEFAULT_API_KEY, DEFAULT_DELIVERY_TOKEN, DEFAULT_ENV, config);
         assertEquals("gcp-na-cdn.contentstack.com", config.getHost());

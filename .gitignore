@@ -48,3 +48,5 @@ contentstack/src/androidTest/java/com/contentstack/sdk/SyncTestCase.java
 
 # key file
 key.keystore
+
+contentstack/src/main/resources/assets/regions.json
