@@ -78,22 +78,19 @@ public class Stack implements INotifyClass {
         if (!TextUtils.isEmpty(config.environment)) {
             setHeader("environment", config.environment);
         }
-        // Handle region setting first before any host overrides
-        if (!config.region.name().isEmpty()) {
-            String region = config.region.name().toLowerCase();
-            if (!region.equalsIgnoreCase("us")) {
-                if (region.equalsIgnoreCase("azure_na")) {
-                    config.setHost("azure-na-cdn.contentstack.com");
-                } else if (region.equalsIgnoreCase("azure_eu")) {
-                    config.setHost("azure-eu-cdn.contentstack.com");
-                } else if (region.equalsIgnoreCase("gcp_na")) {
-                    config.setHost("gcp-na-cdn.contentstack.com");
-                } else if (region.equalsIgnoreCase("gcp_eu")) {
-                    config.setHost("gcp-eu-cdn.contentstack.com");
-                } else if (region.equalsIgnoreCase("au")) {
-                    config.setHost("au-cdn.contentstack.com");
-                } else {
-                    config.setHost(region + "-cdn.contentstack.io");
+        // Explicit host (set via Config.setHost()) always takes precedence over region resolution.
+        // When no host was explicitly set, resolve the content-delivery host from regions.json via
+        // Endpoint so that new regions are picked up without SDK changes.
+        if (!config.hostOverridden && !config.region.name().isEmpty()) {
+            String regionId = config.region.name().toLowerCase();
+            try {
+                // Route the live-refresh fallback through any configured proxy so region
+                // resolution still works in proxy-only / VPN environments.
+                config.URL = Endpoint.getContentstackEndpoint(regionId, "contentDelivery", true, config.getProxy());
+            } catch (IllegalArgumentException e) {
+                // Unrecognised region: apply the legacy prefix pattern for backward compatibility
+                if (!regionId.equalsIgnoreCase("us")) {
+                    config.URL = regionId.replace("_", "-") + "-cdn.contentstack.com";
                 }
             }
         }

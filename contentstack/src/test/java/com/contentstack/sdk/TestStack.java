@@ -382,7 +382,7 @@ public class TestStack {
     @Test
     public void testNonUsRegionsSetsCorrectStackURL() throws Exception {
         Map<com.contentstack.sdk.Config.ContentstackRegion, String> expectedHosts = new HashMap<>();
-        expectedHosts.put(com.contentstack.sdk.Config.ContentstackRegion.EU,       "eu-cdn.contentstack.io");
+        expectedHosts.put(com.contentstack.sdk.Config.ContentstackRegion.EU,       "eu-cdn.contentstack.com");
         expectedHosts.put(com.contentstack.sdk.Config.ContentstackRegion.AU,       "au-cdn.contentstack.com");
         expectedHosts.put(com.contentstack.sdk.Config.ContentstackRegion.AZURE_NA, "azure-na-cdn.contentstack.com");
         expectedHosts.put(com.contentstack.sdk.Config.ContentstackRegion.AZURE_EU, "azure-eu-cdn.contentstack.com");

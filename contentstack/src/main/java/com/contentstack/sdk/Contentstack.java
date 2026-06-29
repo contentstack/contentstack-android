@@ -8,6 +8,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 
 import java.io.File;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -89,6 +90,60 @@ public class Contentstack {
         }
     }
 
+
+    /**
+     * Returns the Contentstack API URL for the given region and service.
+     *
+     * <p>Delegates to {@link Endpoint#getContentstackEndpoint(String, String)} — provided as a
+     * convenience so callers can reach endpoint resolution through the same top-level class they
+     * use to create stacks.
+     *
+     * @param region  region ID or alias (e.g. {@code "na"}, {@code "eu"}, {@code "azure-na"})
+     * @param service service key (e.g. {@code "contentDelivery"}, {@code "contentManagement"})
+     * @return full URL including {@code https://} scheme
+     * @throws IllegalArgumentException if the region or service is not recognised
+     */
+    public static String getContentstackEndpoint(String region, String service) {
+        return Endpoint.getContentstackEndpoint(region, service);
+    }
+
+    /**
+     * Returns the Contentstack API URL for the given region and service, optionally stripping
+     * the {@code https://} scheme.
+     *
+     * @param region    region ID or alias
+     * @param service   service key
+     * @param omitHttps when {@code true}, returns the bare host without {@code https://}
+     * @return URL or bare host
+     * @throws IllegalArgumentException if the region or service is not recognised
+     */
+    public static String getContentstackEndpoint(String region, String service, boolean omitHttps) {
+        return Endpoint.getContentstackEndpoint(region, service, omitHttps);
+    }
+
+    /**
+     * Returns all service endpoints for the given region as an ordered map of service key to URL.
+     *
+     * @param region region ID or alias
+     * @return map of service key → full URL
+     * @throws IllegalArgumentException if the region is not recognised
+     */
+    public static Map<String, String> getContentstackEndpoints(String region) {
+        return Endpoint.getAllEndpoints(region);
+    }
+
+    /**
+     * Returns all service endpoints for the given region, optionally stripping the
+     * {@code https://} scheme from every URL.
+     *
+     * @param region    region ID or alias
+     * @param omitHttps when {@code true}, returns bare hosts without {@code https://}
+     * @return map of service key → URL or bare host
+     * @throws IllegalArgumentException if the region is not recognised
+     */
+    public static Map<String, String> getContentstackEndpoints(String region, boolean omitHttps) {
+        return Endpoint.getAllEndpoints(region, omitHttps);
+    }
 
     private static Stack initializeStack(Context appContext, String apiKey, String deliveryToken, Config config) {
         Stack stack = new Stack(apiKey.trim());
