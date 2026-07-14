@@ -1,5 +1,25 @@
 ﻿# CHANGELOG
 
+## Version 4.3.0
+
+### Date: 29-Jun-2026
+
+### Enhancement
+
+- Feature: Dynamic endpoint resolution via `Endpoint.getContentstackEndpoint()` and `Builder.setRegion()` backed by the Contentstack Regions Registry.
+
+## Version 4.2.2
+
+### Date: 01-Jun-2026
+
+- Fix: resolved data fetch failure for non-US regions (AZURE_NA, EU, AU, AZURE_EU, GCP_NA, GCP_EU) when connected via VPN by ensuring Stack.URL is correctly synced with the region-specific CDN host after config initialisation.
+
+## Version 4.2.1
+
+### Date: 20-Apr-2026
+
+- Security: mark manifest-declared broadcast receivers as non-exported to prevent other apps from sending spoofed broadcasts.
+
 ## Version 4.2.0
 
 ### Date: 02-Mar-2026

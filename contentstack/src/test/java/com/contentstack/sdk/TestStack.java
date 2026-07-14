@@ -13,7 +13,9 @@ import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.Map;
 
 import static org.junit.Assert.*;
 
@@ -360,12 +362,42 @@ public class TestStack {
     @Test
     public void testStackWithDifferentRegions() throws Exception {
         com.contentstack.sdk.Config.ContentstackRegion[] regions = com.contentstack.sdk.Config.ContentstackRegion.values();
-        
+
         for (com.contentstack.sdk.Config.ContentstackRegion region : regions) {
             com.contentstack.sdk.Config config = new com.contentstack.sdk.Config();
             config.setRegion(region);
             Stack regionalStack = Contentstack.stack(mockContext, "api_key", "token", "env", config);
             assertNotNull("Stack should not be null for region " + region, regionalStack);
+        }
+    }
+
+    @Test
+    public void testAzureNaRegionSetsCorrectURL() throws Exception {
+        com.contentstack.sdk.Config config = new com.contentstack.sdk.Config();
+        config.setRegion(com.contentstack.sdk.Config.ContentstackRegion.AZURE_NA);
+        Stack regionalStack = Contentstack.stack(mockContext, "api_key", "token", "env", config);
+        assertEquals("azure-na-cdn.contentstack.com", regionalStack.URL);
+    }
+
+    @Test
+    public void testNonUsRegionsSetsCorrectStackURL() throws Exception {
+        Map<com.contentstack.sdk.Config.ContentstackRegion, String> expectedHosts = new HashMap<>();
+        expectedHosts.put(com.contentstack.sdk.Config.ContentstackRegion.EU,       "eu-cdn.contentstack.com");
+        expectedHosts.put(com.contentstack.sdk.Config.ContentstackRegion.AU,       "au-cdn.contentstack.com");
+        expectedHosts.put(com.contentstack.sdk.Config.ContentstackRegion.AZURE_NA, "azure-na-cdn.contentstack.com");
+        expectedHosts.put(com.contentstack.sdk.Config.ContentstackRegion.AZURE_EU, "azure-eu-cdn.contentstack.com");
+        expectedHosts.put(com.contentstack.sdk.Config.ContentstackRegion.GCP_NA,   "gcp-na-cdn.contentstack.com");
+        expectedHosts.put(com.contentstack.sdk.Config.ContentstackRegion.GCP_EU,   "gcp-eu-cdn.contentstack.com");
+
+        for (Map.Entry<com.contentstack.sdk.Config.ContentstackRegion, String> entry : expectedHosts.entrySet()) {
+            com.contentstack.sdk.Config config = new com.contentstack.sdk.Config();
+            config.setRegion(entry.getKey());
+            Stack regionalStack = Contentstack.stack(mockContext, "api_key", "token", "env", config);
+            assertEquals(
+                "Stack.URL mismatch for region " + entry.getKey(),
+                entry.getValue(),
+                regionalStack.URL
+            );
         }
     }
 
