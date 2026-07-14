@@ -1532,7 +1532,7 @@ public class Entry {
      *          stack.contentType("user").entry("entry_uid").variant("variant_uid").fetch();
      */
     public Entry variants(String variants){
-        if (variants != null && variants.length() > 0) {
+        if (variants != null && !variants.trim().isEmpty()) {
             this.localHeader.put("x-cs-variant-uid", variants.trim());
         }
         return this;

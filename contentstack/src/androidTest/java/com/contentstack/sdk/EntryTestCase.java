@@ -376,8 +376,14 @@ public class EntryTestCase {
 
     @Test
     public void VariantsTestSingleUidWithBranch() throws InterruptedException {
+        Assume.assumeFalse("variantEntryUID not configured", variantEntryUID == null || variantEntryUID.trim().isEmpty());
+        Assume.assumeFalse("variantUID not configured", variantUID == null || variantUID.trim().isEmpty());
+        Assume.assumeFalse("variantBranch not configured", variantBranch == null || variantBranch.trim().isEmpty());
         final CountDownLatch latch = new CountDownLatch(1);
         final Entry entry = stack.contentType("product").entry(variantEntryUID).variants(variantUID, variantBranch);
+        assertEquals(variantUID.trim(), entry.getHeaders().get("x-cs-variant-uid"));
+        assertEquals(variantBranch.trim(), entry.getHeaders().get("branch"));
+
         entry.fetch(new EntryResultCallBack() {
             @Override
             public void onCompletion(ResponseType responseType, Error error) {
@@ -385,13 +391,19 @@ public class EntryTestCase {
                 latch.countDown();
             }
         });
-        latch.await();
+        assertTrue("fetch() callback timed out", latch.await(30, TimeUnit.SECONDS));
     }
 
     @Test
     public void VariantsTestArrayWithBranch() throws InterruptedException {
+        Assume.assumeFalse("variantEntryUID not configured", variantEntryUID == null || variantEntryUID.trim().isEmpty());
+        Assume.assumeFalse("variantsUID not configured", variantsUID == null || variantsUID.length == 0);
+        Assume.assumeFalse("variantBranch not configured", variantBranch == null || variantBranch.trim().isEmpty());
         final CountDownLatch latch = new CountDownLatch(1);
         final Entry entry = stack.contentType("product").entry(variantEntryUID).variants(variantsUID, variantBranch);
+        assertNotNull(entry.getHeaders().get("x-cs-variant-uid"));
+        assertEquals(variantBranch.trim(), entry.getHeaders().get("branch"));
+
         entry.fetch(new EntryResultCallBack() {
             @Override
             public void onCompletion(ResponseType responseType, Error error) {
@@ -399,7 +411,7 @@ public class EntryTestCase {
                 latch.countDown();
             }
         });
-        latch.await();
+        assertTrue("fetch() callback timed out", latch.await(30, TimeUnit.SECONDS));
     }
 
 }
