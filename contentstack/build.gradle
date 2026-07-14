@@ -7,7 +7,7 @@ plugins {
 ext {
     PUBLISH_GROUP_ID = 'com.contentstack.sdk'
     PUBLISH_ARTIFACT_ID = 'android'
-    PUBLISH_VERSION = '4.3.0'
+    PUBLISH_VERSION = '4.4.0'
 }
 
 android {
@@ -145,6 +145,10 @@ dependencies {
             }
         }
     }
+    // androidx.test/espresso pull bcprov-jdk18on 1.80 (test-only); force the patched
+    // release for Snyk SNYK-JAVA-ORGBOUNCYCASTLE-16074612 (CVE-2026-5598, Timing Attack)
+    // and SNYK-JAVA-ORGBOUNCYCASTLE-16075266 (CVE-2025-14813). Not shipped in the AAR.
+    configurations.configureEach { resolutionStrategy.force 'org.bouncycastle:bcprov-jdk18on:1.85' }
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation "com.android.volley:volley:$volley"
 
