@@ -584,5 +584,78 @@ public class TestQuery {
             assertNotNull("Query should not be null for locale " + locale, result);
         }
     }
+
+    // ---------------- VARIANTS ----------------
+
+    @Test
+    public void testVariantsSingle() {
+        Query result = query.variants("variantA");
+        assertNotNull(result);
+        assertEquals("variantA", query.getHeaders().get("x-cs-variant-uid"));
+        assertNull(query.getHeaders().get("branch"));
+    }
+
+    @Test
+    public void testVariantsArray() {
+        Query result = query.variants(new String[]{"v1", "v2", "v3"});
+        assertNotNull(result);
+        assertEquals("v1, v2, v3", query.getHeaders().get("x-cs-variant-uid"));
+        assertNull(query.getHeaders().get("branch"));
+    }
+
+    @Test
+    public void testVariantsArrayFiltersNullsAndBlanks() {
+        query.variants(new String[]{"v1", null, "  ", "v2"});
+        assertEquals("v1, v2", query.getHeaders().get("x-cs-variant-uid"));
+    }
+
+    @Test
+    public void testVariantsSingleWithBranch() {
+        Query result = query.variants("variantA", "my-branch");
+        assertNotNull(result);
+        assertEquals("variantA", query.getHeaders().get("x-cs-variant-uid"));
+        assertEquals("my-branch", query.getHeaders().get("branch"));
+    }
+
+    @Test
+    public void testVariantsArrayWithBranch() {
+        Query result = query.variants(new String[]{"v1", "v2"}, "feature-branch");
+        assertNotNull(result);
+        assertEquals("v1, v2", query.getHeaders().get("x-cs-variant-uid"));
+        assertEquals("feature-branch", query.getHeaders().get("branch"));
+    }
+
+    @Test
+    public void testVariantsSingleWithNullBranchDoesNotSetBranchHeader() {
+        query.variants("variantA", null);
+        assertEquals("variantA", query.getHeaders().get("x-cs-variant-uid"));
+        assertNull(query.getHeaders().get("branch"));
+    }
+
+    @Test
+    public void testVariantsArrayWithNullBranchDoesNotSetBranchHeader() {
+        query.variants(new String[]{"v1", "v2"}, null);
+        assertEquals("v1, v2", query.getHeaders().get("x-cs-variant-uid"));
+        assertNull(query.getHeaders().get("branch"));
+    }
+
+    @Test
+    public void testVariantsSingleWithEmptyBranchDoesNotSetBranchHeader() {
+        query.variants("variantA", "  ");
+        assertEquals("variantA", query.getHeaders().get("x-cs-variant-uid"));
+        assertNull(query.getHeaders().get("branch"));
+    }
+
+    @Test
+    public void testVariantsNullSingleDoesNotSetHeader() {
+        query.variants((String) null);
+        assertNull(query.getHeaders().get("x-cs-variant-uid"));
+    }
+
+    @Test
+    public void testVariantsEmptyArrayDoesNotSetHeader() {
+        query.variants(new String[]{});
+        assertNull(query.getHeaders().get("x-cs-variant-uid"));
+    }
 }
 

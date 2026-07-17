@@ -9,14 +9,19 @@ import org.junit.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
-import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.*;
 
 
 public class QueryTestCase {
 
     private static final String TAG = AssetTestCase.class.getSimpleName();
     private static final String contentTypeUID = BuildConfig.contentTypeUID;
+    private static final String variantUID = BuildConfig.variantUID;
+    private static final String[] variantsUID = BuildConfig.variantsUID;
+    private static final String variantBranch = BuildConfig.variantBranch;
     private static Query query;
 
     static {
@@ -114,6 +119,92 @@ public class QueryTestCase {
 //                Assert.assertTrue(hasEmbeddedItemKey);
             }
         });
+    }
+
+    @Test
+    public void test_42_variants_single_uid_find() throws Exception {
+        Assume.assumeFalse("variantUID not configured", variantUID == null || variantUID.trim().isEmpty());
+        final Query q = TestCred.stack().contentType(contentTypeUID).query();
+        q.variants(variantUID);
+        assertEquals(variantUID.trim(), q.getHeaders().get("x-cs-variant-uid"));
+        assertNull(q.getHeaders().get("branch"));
+
+        final CountDownLatch latch = new CountDownLatch(1);
+        q.find(new QueryResultsCallBack() {
+            @Override
+            public void onCompletion(ResponseType responseType, QueryResult queryresult, Error error) {
+                if (error == null) {
+                    Log.d(TAG, "variants single find: " + queryresult.getResultObjects().size() + " entries");
+                }
+                latch.countDown();
+            }
+        });
+        assertTrue("find() callback timed out", latch.await(30, TimeUnit.SECONDS));
+    }
+
+    @Test
+    public void test_43_variants_array_find() throws Exception {
+        Assume.assumeFalse("variantsUID not configured", variantsUID == null || variantsUID.length == 0);
+        final Query q = TestCred.stack().contentType(contentTypeUID).query();
+        q.variants(variantsUID);
+        assertNotNull(q.getHeaders().get("x-cs-variant-uid"));
+        assertNull(q.getHeaders().get("branch"));
+
+        final CountDownLatch latch = new CountDownLatch(1);
+        q.find(new QueryResultsCallBack() {
+            @Override
+            public void onCompletion(ResponseType responseType, QueryResult queryresult, Error error) {
+                if (error == null) {
+                    Log.d(TAG, "variants array find: " + queryresult.getResultObjects().size() + " entries");
+                }
+                latch.countDown();
+            }
+        });
+        assertTrue("find() callback timed out", latch.await(30, TimeUnit.SECONDS));
+    }
+
+    @Test
+    public void test_44_variants_single_uid_with_branch_find() throws Exception {
+        Assume.assumeFalse("variantUID not configured", variantUID == null || variantUID.trim().isEmpty());
+        Assume.assumeFalse("variantBranch not configured", variantBranch == null || variantBranch.trim().isEmpty());
+        final Query q = TestCred.stack().contentType(contentTypeUID).query();
+        q.variants(variantUID, variantBranch);
+        assertEquals(variantUID.trim(), q.getHeaders().get("x-cs-variant-uid"));
+        assertEquals(variantBranch.trim(), q.getHeaders().get("branch"));
+
+        final CountDownLatch latch = new CountDownLatch(1);
+        q.find(new QueryResultsCallBack() {
+            @Override
+            public void onCompletion(ResponseType responseType, QueryResult queryresult, Error error) {
+                if (error == null) {
+                    Log.d(TAG, "variants single+branch find: " + queryresult.getResultObjects().size() + " entries");
+                }
+                latch.countDown();
+            }
+        });
+        assertTrue("find() callback timed out", latch.await(30, TimeUnit.SECONDS));
+    }
+
+    @Test
+    public void test_45_variants_array_with_branch_find() throws Exception {
+        Assume.assumeFalse("variantsUID not configured", variantsUID == null || variantsUID.length == 0);
+        Assume.assumeFalse("variantBranch not configured", variantBranch == null || variantBranch.trim().isEmpty());
+        final Query q = TestCred.stack().contentType(contentTypeUID).query();
+        q.variants(variantsUID, variantBranch);
+        assertNotNull(q.getHeaders().get("x-cs-variant-uid"));
+        assertEquals(variantBranch.trim(), q.getHeaders().get("branch"));
+
+        final CountDownLatch latch = new CountDownLatch(1);
+        q.find(new QueryResultsCallBack() {
+            @Override
+            public void onCompletion(ResponseType responseType, QueryResult queryresult, Error error) {
+                if (error == null) {
+                    Log.d(TAG, "variants array+branch find: " + queryresult.getResultObjects().size() + " entries");
+                }
+                latch.countDown();
+            }
+        });
+        assertTrue("find() callback timed out", latch.await(30, TimeUnit.SECONDS));
     }
 
 }
