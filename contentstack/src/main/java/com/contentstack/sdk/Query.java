@@ -2025,5 +2025,75 @@ public class Query implements INotifyClass {
         return this;
     }
 
+    /**
+     * Sets the variant UID for this query via the {@code x-cs-variant-uid} request header.
+     *
+     * @param variantUid single variant UID
+     * @return {@link Query}
+     */
+    public Query variants(String variantUid) {
+        if (variantUid != null && !variantUid.trim().isEmpty()) {
+            localHeader.put("x-cs-variant-uid", variantUid.trim());
+        }
+        return this;
+    }
+
+    /**
+     * Sets multiple variant UIDs for this query via the {@code x-cs-variant-uid} request header.
+     *
+     * @param variantUids array of variant UIDs
+     * @return {@link Query}
+     */
+    public Query variants(String[] variantUids) {
+        if (variantUids != null && variantUids.length > 0) {
+            List<String> variantList = new ArrayList<>();
+            for (String variant : variantUids) {
+                if (variant != null && !variant.trim().isEmpty()) {
+                    variantList.add(variant.trim());
+                }
+            }
+            if (!variantList.isEmpty()) {
+                localHeader.put("x-cs-variant-uid", String.join(", ", variantList));
+            }
+        }
+        return this;
+    }
+
+    /**
+     * Sets the variant UID and scopes the query to the given branch.
+     * Sets {@code x-cs-variant-uid} and {@code branch} request headers.
+     *
+     * @param variantUid single variant UID
+     * @param branch     branch name to scope the request
+     * @return {@link Query}
+     */
+    public Query variants(String variantUid, String branch) {
+        variants(variantUid);
+        if (branch != null && !branch.trim().isEmpty()) {
+            localHeader.put("branch", branch.trim());
+        }
+        return this;
+    }
+
+    /**
+     * Sets multiple variant UIDs and scopes the query to the given branch.
+     * Sets {@code x-cs-variant-uid} and {@code branch} request headers.
+     *
+     * @param variantUids array of variant UIDs
+     * @param branch      branch name to scope the request
+     * @return {@link Query}
+     */
+    public Query variants(String[] variantUids, String branch) {
+        variants(variantUids);
+        if (branch != null && !branch.trim().isEmpty()) {
+            localHeader.put("branch", branch.trim());
+        }
+        return this;
+    }
+
+    public ArrayMap<String, Object> getHeaders() {
+        return localHeader;
+    }
+
 }
 

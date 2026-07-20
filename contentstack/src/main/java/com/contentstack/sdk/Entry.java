@@ -1532,7 +1532,7 @@ public class Entry {
      *          stack.contentType("user").entry("entry_uid").variant("variant_uid").fetch();
      */
     public Entry variants(String variants){
-        if (variants != null && variants.length() > 0) {
+        if (variants != null && !variants.trim().isEmpty()) {
             this.localHeader.put("x-cs-variant-uid", variants.trim());
         }
         return this;
@@ -1548,6 +1548,38 @@ public class Entry {
             if(!variantList.isEmpty()){
                 this.localHeader.put("x-cs-variant-uid", String.join(", ", variantList));
             }
+        }
+        return this;
+    }
+
+    /**
+     * Sets the variant UID and scopes the request to the given branch.
+     * Sets {@code x-cs-variant-uid} and {@code branch} request headers.
+     *
+     * @param variantUid single variant UID
+     * @param branch     branch name to scope the request
+     * @return {@link Entry}
+     */
+    public Entry variants(String variantUid, String branch) {
+        variants(variantUid);
+        if (branch != null && !branch.trim().isEmpty()) {
+            this.localHeader.put("branch", branch.trim());
+        }
+        return this;
+    }
+
+    /**
+     * Sets multiple variant UIDs and scopes the request to the given branch.
+     * Sets {@code x-cs-variant-uid} and {@code branch} request headers.
+     *
+     * @param variantUids array of variant UIDs
+     * @param branch      branch name to scope the request
+     * @return {@link Entry}
+     */
+    public Entry variants(String[] variantUids, String branch) {
+        variants(variantUids);
+        if (branch != null && !branch.trim().isEmpty()) {
+            this.localHeader.put("branch", branch.trim());
         }
         return this;
     }
