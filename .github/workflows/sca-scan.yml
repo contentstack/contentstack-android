@@ -10,12 +10,40 @@ jobs:
       pull-requests: write
     steps:
       - uses: actions/checkout@master
-      - name: Run Snyk to check for vulnerabilities
-        uses: snyk/actions/gradle@master
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+          cache: 'gradle'
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+        with:
+          packages: 'tools platform-tools platforms;android-34 build-tools;34.0.0'
+
+      - name: Setup local.properties
+        run: |
+           cat << EOF >> local.properties
+           sdk.dir=$ANDROID_HOME
+           host="${{ secrets.HOST }}"
+           APIKey="${{ secrets.API_KEY }}"
+           deliveryToken="${{ secrets.DELIVERY_TOKEN }}"
+           environment="${{ secrets.ENVIRONMENT }}"
+           contentType="${{ secrets.CONTENT_TYPE }}"
+           assetUid="${{ secrets.ASSET_UID }}"
+           EOF
+
+      - name: Set up Snyk
+        uses: snyk/actions/setup@master
+        with:
+          snyk-version: latest
+
+      - name: Run Snyk
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        with:
-          args: --fail-on=all --all-sub-projects
-          json: true
+        run: snyk test --fail-on=all --all-sub-projects --json > snyk.json
         continue-on-error: true
+
       - uses: contentstack/sca-policy@main
