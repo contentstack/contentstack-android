@@ -283,6 +283,7 @@ public class TestError {
     public void testValidationErrorScenario() {
         HashMap<String, Object> validationErrors = new HashMap<>();
         validationErrors.put("email", "Invalid email format");
+        // deepcode ignore HardcodedPassword: test fixture value, not a real secret
         validationErrors.put("password", "Password too short");
         
         error.setErrorMessage("Validation failed");
