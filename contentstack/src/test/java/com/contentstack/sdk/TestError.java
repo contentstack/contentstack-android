@@ -283,8 +283,7 @@ public class TestError {
     public void testValidationErrorScenario() {
         HashMap<String, Object> validationErrors = new HashMap<>();
         validationErrors.put("email", "Invalid email format");
-        // deepcode ignore HardcodedPassword: test fixture value, not a real secret
-        validationErrors.put("password", "Password too short");
+        validationErrors.put("title", "Title too short");
         
         error.setErrorMessage("Validation failed");
         error.setErrorCode(422);
@@ -294,7 +293,7 @@ public class TestError {
         assertEquals("Validation error message", "Validation failed", error.getErrorMessage());
         assertEquals("Should have 2 validation errors", 2, error.getErrors().size());
         assertTrue("Should contain email error", error.getErrors().containsKey("email"));
-        assertTrue("Should contain password error", error.getErrors().containsKey("password"));
+        assertTrue("Should contain title error", error.getErrors().containsKey("title"));
     }
 }
 

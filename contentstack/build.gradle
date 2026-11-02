@@ -148,7 +148,19 @@ dependencies {
     // androidx.test/espresso pull bcprov-jdk18on 1.80 (test-only); force the patched
     // release for Snyk SNYK-JAVA-ORGBOUNCYCASTLE-16074612 (CVE-2026-5598, Timing Attack)
     // and SNYK-JAVA-ORGBOUNCYCASTLE-16075266 (CVE-2025-14813). Not shipped in the AAR.
-    configurations.configureEach { resolutionStrategy.force 'org.bouncycastle:bcprov-jdk18on:1.85' }
+    configurations.configureEach { resolutionStrategy.force 'org.bouncycastle:bcprov-jdk18on:1.86' }
+    // Robolectric 4.15 (test-only) pulls guava 33.4.8 and asm 9.8, and the Gradle jacoco ant task pulls asm 9.2;
+    // align to patched releases for the Snyk findings on those test/build-time dependencies. Not shipped in the AAR.
+    configurations.configureEach {
+        resolutionStrategy.eachDependency { details ->
+            if (details.requested.group == 'com.google.guava' && details.requested.name == 'guava') {
+                details.useVersion '33.7.2-jre'
+            }
+            if (details.requested.group == 'org.ow2.asm') {
+                details.useVersion '9.11.1'
+            }
+        }
+    }
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation "com.android.volley:volley:$volley"
 
